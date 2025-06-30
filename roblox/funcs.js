@@ -732,11 +732,11 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     txtColor: "text-yellow-500",
     accentColor: "from-yellow-600 to-yellow-700",
     premium: false,
-    href: "https://www.reddit.com/r/robloxhackers/comments/1lnp8p3/is_fatal_legitsafe/",
+    href: "https://fatal.best",
     priceHref: "",
     hide: false,
     hasKeySystem: false,
-    uncbuttonlink: "https://www.reddit.com/r/robloxhackers/comments/1lnp8p3/is_fatal_legitsafe/",
+    uncbuttonlink: "https://fatal.best",
     warning: true,
           info: "## Background information\n- Absolute degen in the community, here is a screenshot of him talking to his 'fans':\n\n![alt ](/assets/fatal.png)",
     warningInfo:
