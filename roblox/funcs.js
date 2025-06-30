@@ -985,7 +985,6 @@ class APIClient {
         this.jwtToken = data.data.jwt_token || '';
         this.securityLevel = data.data.security_level || 'maximum';
         this.initialized = true;
-        console.log('Enhanced API client initialized with security level:', this.securityLevel);
     }
 
     startBehavioralTracking() {
@@ -1182,6 +1181,8 @@ class APIClient {
             const errorData = await response.json();
             if (errorData.data && errorData.data.challenge_type === 'pow') {
                 powNonce = await this.solveAdvancedProofOfWork();
+                
+                headers['X-PoW-Token'] = this.powToken;
                 headers['X-PoW-Nonce'] = powNonce;
                 
                 const retryResponse = await fetch(`${this.apiUrl}?action=get_token`, {
