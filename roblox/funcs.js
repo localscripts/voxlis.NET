@@ -936,7 +936,502 @@ async function computeFingerprint() {
     return fpData;
 }
 
-let globalClickCounts={};class APIClient{constructor(){this.apiUrl='https://api.voxlis.net/api.php';this.sessionId='';this.sessionSecret='';this.nonce='';this.token='';this.tokenExpiry=0;this.initialized=false;this.powToken='';this.jwtToken='';this.securityLevel='maximum';this.mouseMovements=[];this.timingData={};this.startTime=Date.now()}async initialize(){if(this.initialized)return;this.startBehavioralTracking();const response=await fetch(`${this.apiUrl}?action=init_session`,{method:'GET',credentials:'include',headers:{'X-Browser-Fingerprint':await this.generateAdvancedFingerprint(),'X-Canvas-Hash':await this.generateCanvasFingerprint(),'X-WebGL-Hash':await this.generateWebGLFingerprint(),'X-Audio-Hash':await this.generateAudioFingerprint()}});if(!response.ok){const errorText=await response.text();throw new Error(`Session init failed: ${response.status} - ${errorText}`)}const data=await response.json();if(!data.success)throw new Error('Invalid session response');this.sessionId=data.data.session_id;this.sessionSecret=data.data.session_secret;this.nonce=data.data.nonce;this.powToken=data.data.pow_token||'';this.jwtToken=data.data.jwt_token||'';this.securityLevel=data.data.security_level||'maximum';this.initialized=true;console.log('Enhanced API client initialized with security level:',this.securityLevel)}startBehavioralTracking(){document.addEventListener('mousemove',e=>{this.mouseMovements.push({x:e.clientX,y:e.clientY,timestamp:Date.now()});if(this.mouseMovements.length>100){this.mouseMovements=this.mouseMovements.slice(-100)}});this.timingData={page_load_time:Date.now()-this.startTime,intervals:[],click_to_submit:0};document.addEventListener('click',()=>{const now=Date.now();if(this.timingData.intervals.length>0){const last=this.timingData.intervals[this.timingData.intervals.length-1];this.timingData.intervals.push(now-last)}else{this.timingData.intervals.push(now-this.startTime)}})}async generateAdvancedFingerprint(){try{const fingerprint={screen_width:screen.width,screen_height:screen.height,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,language:navigator.language,platform:navigator.platform,hardware_concurrency:navigator.hardwareConcurrency||0,device_memory:navigator.deviceMemory||0,color_depth:screen.colorDepth,pixel_ratio:window.devicePixelRatio||1,touch_support:'ontouchstart'in window,plugins:Array.from(navigator.plugins).map(p=>p.name),vendor:navigator.vendor||'',webdriver:navigator.webdriver||false,selenium:typeof window.selenium!=='undefined',phantomjs:typeof window.callPhantom!=='undefined'};const fingerprintStr=JSON.stringify(fingerprint);const encoder=new TextEncoder();const data=encoder.encode(fingerprintStr);const hashBuffer=await crypto.subtle.digest('SHA-256',data);const hashArray=Array.from(new Uint8Array(hashBuffer));const hashHex=hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');return JSON.stringify({...fingerprint,hash:hashHex})}catch(e){console.warn('Fingerprint generation failed:',e);return JSON.stringify({screen_width:screen.width,screen_height:screen.height,timezone:'unknown',language:navigator.language,platform:navigator.platform,hash:'fallback-'+Math.random().toString(36).substr(2,10)})}}async generateCanvasFingerprint(){try{const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');canvas.width=200;canvas.height=50;ctx.textBaseline='top';ctx.font='14px Arial';ctx.fillStyle='#f60';ctx.fillRect(125,1,62,20);ctx.fillStyle='#069';ctx.fillText('Canvas fingerprint test 🔒',2,15);ctx.fillStyle='rgba(102, 204, 0, 0.7)';ctx.fillText('Canvas fingerprint test 🔒',4,17);const dataUrl=canvas.toDataURL();const encoder=new TextEncoder();const data=encoder.encode(dataUrl);const hashBuffer=await crypto.subtle.digest('SHA-256',data);const hashArray=Array.from(new Uint8Array(hashBuffer));return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('')}catch(e){return'canvas-unavailable'}}async generateWebGLFingerprint(){try{const canvas=document.createElement('canvas');const gl=canvas.getContext('webgl')||canvas.getContext('experimental-webgl');if(!gl)return'webgl-unavailable';const renderer=gl.getParameter(gl.RENDERER);const vendor=gl.getParameter(gl.VENDOR);const version=gl.getParameter(gl.VERSION);const extensions=gl.getSupportedExtensions();const webglStr=`${renderer}|${vendor}|${version}|${extensions.join(',')}`;const encoder=new TextEncoder();const data=encoder.encode(webglStr);const hashBuffer=await crypto.subtle.digest('SHA-256',data);const hashArray=Array.from(new Uint8Array(hashBuffer));return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('')}catch(e){return'webgl-error'}}async generateAudioFingerprint(){try{const audioContext=new(window.AudioContext||window.webkitAudioContext)();const oscillator=audioContext.createOscillator();const analyser=audioContext.createAnalyser();const gain=audioContext.createGain();const processor=audioContext.createScriptProcessor(4096,1,1);oscillator.type='triangle';oscillator.frequency.setValueAtTime(10000,audioContext.currentTime);gain.gain.setValueAtTime(0,audioContext.currentTime);oscillator.connect(analyser);analyser.connect(processor);processor.connect(gain);gain.connect(audioContext.destination);oscillator.start(0);const frequencyData=new Float32Array(analyser.frequencyBinCount);analyser.getFloatFrequencyData(frequencyData);oscillator.stop();audioContext.close();const frequencyStr=Array.from(frequencyData).slice(0,50).join(',');const encoder=new TextEncoder();const data=encoder.encode(frequencyStr);const hashBuffer=await crypto.subtle.digest('SHA-256',data);const hashArray=Array.from(new Uint8Array(hashBuffer));return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('')}catch(e){return'audio-unavailable'}}async generateSignature(data){if(!this.sessionSecret)throw new Error('Session secret not available');const encoder=new TextEncoder();const keyData=encoder.encode(this.sessionSecret);const cryptoKey=await crypto.subtle.importKey('raw',keyData,{name:'HMAC',hash:'SHA-384'},false,['sign']);const signature=await crypto.subtle.sign('HMAC',cryptoKey,encoder.encode(data));return Array.from(new Uint8Array(signature)).map(b=>b.toString(16).padStart(2,'0')).join('')}async getToken(){if(!this.initialized)await this.initialize();let powNonce='';if(this.powToken){powNonce=await this.solveAdvancedProofOfWork()}const signature=await this.generateSignature(this.nonce);const headers={'X-Session-Token':this.sessionId,'X-Nonce':this.nonce,'X-Signature':signature};if(this.powToken&&powNonce){headers['X-PoW-Token']=this.powToken;headers['X-PoW-Nonce']=powNonce}const response=await fetch(`${this.apiUrl}?action=get_token`,{method:'GET',credentials:'include',headers:headers});if(response.status===403){const errorData=await response.json();if(errorData.data&&errorData.data.challenge_type==='pow'){powNonce=await this.solveAdvancedProofOfWork();headers['X-PoW-Nonce']=powNonce;const retryResponse=await fetch(`${this.apiUrl}?action=get_token`,{method:'GET',credentials:'include',headers:headers});if(!retryResponse.ok){const errorText=await retryResponse.text();throw new Error(`Token fetch failed: ${retryResponse.status} - ${errorText}`)}const data=await retryResponse.json();return this.processTokenResponse(data)}}if(!response.ok){const errorText=await response.text();throw new Error(`Token fetch failed: ${response.status} - ${errorText}`)}const data=await response.json();return this.processTokenResponse(data)}processTokenResponse(data){if(!data.success)throw new Error('Invalid token response');this.token=data.data.token;this.tokenExpiry=data.data.expires;this.nonce=data.data.nonce;if(data.data.jwt_payload)this.jwtToken=data.data.jwt_payload;return this.token}async solveAdvancedProofOfWork(){if(!this.powToken)return'';try{const powData=JSON.parse(atob(this.powToken));const difficulty=powData.difficulty||4;const prefix='0'.repeat(difficulty);const encoder=new TextEncoder();let nonce=0;const maxAttempts=1000000;while(nonce<maxAttempts){const nonceStr=nonce.toString();const data=encoder.encode(this.powToken+nonceStr);const hashBuffer=await crypto.subtle.digest('SHA-256',data);const hashArray=Array.from(new Uint8Array(hashBuffer));const hashHex=hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');if(hashHex.startsWith(prefix)){console.log(`PoW solved after ${nonce} attempts`);return nonceStr}nonce++}throw new Error('PoW solving failed - max attempts reached')}catch(e){console.error('PoW solving error:',e);return''}}async trackClick(item,buttonType){if(!this.initialized)await this.initialize();if(!this.token||Date.now()>=this.tokenExpiry*1000){await this.getToken()}const fingerprint=await this.generateAdvancedFingerprint();const mousePath=JSON.stringify(this.mouseMovements.slice(-20));const timingData=JSON.stringify({...this.timingData,click_to_submit:Date.now()-this.startTime});let powNonce='';if(this.powToken){powNonce=await this.solveAdvancedProofOfWork()}const headers={'Content-Type':'application/json','Authorization':`Bearer ${this.token}`,'X-Session-Token':this.sessionId,'X-Nonce':this.nonce,'X-Browser-Fingerprint':fingerprint,'X-Mouse-Path':mousePath,'X-Timing-Data':timingData,'X-Canvas-Hash':await this.generateCanvasFingerprint(),'X-WebGL-Hash':await this.generateWebGLFingerprint(),'X-Audio-Hash':await this.generateAudioFingerprint()};if(this.powToken&&powNonce){headers['X-PoW-Token']=this.powToken;headers['X-PoW-Nonce']=powNonce}if(this.jwtToken){headers['X-JWT-Token']=this.jwtToken}const response=await fetch(this.apiUrl,{method:'POST',credentials:'include',headers:headers,body:JSON.stringify({item:item,button_type:buttonType,fingerprint:fingerprint,mouse_path:mousePath,timing_data:timingData})});if(response.status===401){await this.getToken();return this.trackClick(item,buttonType)}if(response.status===403){const errorData=await response.json();if(errorData.data&&errorData.data.challenge_type){throw new Error(`Challenge required: ${errorData.data.challenge_type}`)}throw new Error('Access forbidden - security check failed')}if(!response.ok){const errorText=await response.text();throw new Error(`API error: ${response.status} - ${errorTex_*
+let globalClickCounts = {};
+
+class APIClient {
+    constructor() {
+        this.apiUrl = 'https://api.voxlis.net/api.php';
+        this.sessionId = '';
+        this.sessionSecret = '';
+        this.nonce = '';
+        this.token = '';
+        this.tokenExpiry = 0;
+        this.initialized = false;
+        this.powToken = '';
+        this.jwtToken = '';
+        this.securityLevel = 'maximum';
+        this.mouseMovements = [];
+        this.timingData = {};
+        this.startTime = Date.now();
+    }
+
+    async initialize() {
+        if (this.initialized) return;
+        this.startBehavioralTracking();
+        
+        const response = await fetch(`${this.apiUrl}?action=init_session`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'X-Browser-Fingerprint': await this.generateAdvancedFingerprint(),
+                'X-Canvas-Hash': await this.generateCanvasFingerprint(),
+                'X-WebGL-Hash': await this.generateWebGLFingerprint(),
+                'X-Audio-Hash': await this.generateAudioFingerprint()
+            }
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Session init failed: ${response.status} - ${errorText}`);
+        }
+        
+        const data = await response.json();
+        if (!data.success) throw new Error('Invalid session response');
+        
+        this.sessionId = data.data.session_id;
+        this.sessionSecret = data.data.session_secret;
+        this.nonce = data.data.nonce;
+        this.powToken = data.data.pow_token || '';
+        this.jwtToken = data.data.jwt_token || '';
+        this.securityLevel = data.data.security_level || 'maximum';
+        this.initialized = true;
+        console.log('Enhanced API client initialized with security level:', this.securityLevel);
+    }
+
+    startBehavioralTracking() {
+        document.addEventListener('mousemove', e => {
+            this.mouseMovements.push({
+                x: e.clientX,
+                y: e.clientY,
+                timestamp: Date.now()
+            });
+            if (this.mouseMovements.length > 100) {
+                this.mouseMovements = this.mouseMovements.slice(-100);
+            }
+        });
+        
+        this.timingData = {
+            page_load_time: Date.now() - this.startTime,
+            intervals: [],
+            click_to_submit: 0
+        };
+        
+        document.addEventListener('click', () => {
+            const now = Date.now();
+            if (this.timingData.intervals.length > 0) {
+                const last = this.timingData.intervals[this.timingData.intervals.length - 1];
+                this.timingData.intervals.push(now - last);
+            } else {
+                this.timingData.intervals.push(now - this.startTime);
+            }
+        });
+    }
+
+    async generateAdvancedFingerprint() {
+        try {
+            const fingerprint = {
+                screen_width: screen.width,
+                screen_height: screen.height,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                language: navigator.language,
+                platform: navigator.platform,
+                hardware_concurrency: navigator.hardwareConcurrency || 0,
+                device_memory: navigator.deviceMemory || 0,
+                color_depth: screen.colorDepth,
+                pixel_ratio: window.devicePixelRatio || 1,
+                touch_support: 'ontouchstart' in window,
+                plugins: Array.from(navigator.plugins).map(p => p.name),
+                vendor: navigator.vendor || '',
+                webdriver: navigator.webdriver || false,
+                selenium: typeof window.selenium !== 'undefined',
+                phantomjs: typeof window.callPhantom !== 'undefined'
+            };
+            
+            const fingerprintStr = JSON.stringify(fingerprint);
+            const encoder = new TextEncoder();
+            const data = encoder.encode(fingerprintStr);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            
+            return JSON.stringify({...fingerprint, hash: hashHex});
+        } catch (e) {
+            console.warn('Fingerprint generation failed:', e);
+            return JSON.stringify({
+                screen_width: screen.width,
+                screen_height: screen.height,
+                timezone: 'unknown',
+                language: navigator.language,
+                platform: navigator.platform,
+                hash: 'fallback-' + Math.random().toString(36).substr(2, 10)
+            });
+        }
+    }
+
+    async generateCanvasFingerprint() {
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 200;
+            canvas.height = 50;
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillStyle = '#f60';
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = '#069';
+            ctx.fillText('Canvas fingerprint test 🔒', 2, 15);
+            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+            ctx.fillText('Canvas fingerprint test 🔒', 4, 17);
+            
+            const dataUrl = canvas.toDataURL();
+            const encoder = new TextEncoder();
+            const data = encoder.encode(dataUrl);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch (e) {
+            return 'canvas-unavailable';
+        }
+    }
+
+    async generateWebGLFingerprint() {
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (!gl) return 'webgl-unavailable';
+            
+            const renderer = gl.getParameter(gl.RENDERER);
+            const vendor = gl.getParameter(gl.VENDOR);
+            const version = gl.getParameter(gl.VERSION);
+            const extensions = gl.getSupportedExtensions();
+            const webglStr = `${renderer}|${vendor}|${version}|${extensions.join(',')}`;
+            
+            const encoder = new TextEncoder();
+            const data = encoder.encode(webglStr);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch (e) {
+            return 'webgl-error';
+        }
+    }
+
+    async generateAudioFingerprint() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const analyser = audioContext.createAnalyser();
+            const gain = audioContext.createGain();
+            const processor = audioContext.createScriptProcessor(4096, 1, 1);
+            
+            oscillator.type = 'triangle';
+            oscillator.frequency.setValueAtTime(10000, audioContext.currentTime);
+            gain.gain.setValueAtTime(0, audioContext.currentTime);
+            oscillator.connect(analyser);
+            analyser.connect(processor);
+            processor.connect(gain);
+            gain.connect(audioContext.destination);
+            oscillator.start(0);
+            
+            const frequencyData = new Float32Array(analyser.frequencyBinCount);
+            analyser.getFloatFrequencyData(frequencyData);
+            oscillator.stop();
+            audioContext.close();
+            
+            const frequencyStr = Array.from(frequencyData).slice(0, 50).join(',');
+            const encoder = new TextEncoder();
+            const data = encoder.encode(frequencyStr);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch (e) {
+            return 'audio-unavailable';
+        }
+    }
+
+    async generateSignature(data) {
+        if (!this.sessionSecret) throw new Error('Session secret not available');
+        
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(this.sessionSecret);
+        const cryptoKey = await crypto.subtle.importKey(
+            'raw', keyData, {name: 'HMAC', hash: 'SHA-384'}, false, ['sign']
+        );
+        
+        const signature = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(data));
+        return Array.from(new Uint8Array(signature)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async getToken() {
+        if (!this.initialized) await this.initialize();
+        
+        let powNonce = '';
+        if (this.powToken) {
+            powNonce = await this.solveAdvancedProofOfWork();
+        }
+        
+        const signature = await this.generateSignature(this.nonce);
+        const headers = {
+            'X-Session-Token': this.sessionId,
+            'X-Nonce': this.nonce,
+            'X-Signature': signature
+        };
+        
+        if (this.powToken && powNonce) {
+            headers['X-PoW-Token'] = this.powToken;
+            headers['X-PoW-Nonce'] = powNonce;
+        }
+        
+        const response = await fetch(`${this.apiUrl}?action=get_token`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: headers
+        });
+        
+        if (response.status === 403) {
+            const errorData = await response.json();
+            if (errorData.data && errorData.data.challenge_type === 'pow') {
+                powNonce = await this.solveAdvancedProofOfWork();
+                headers['X-PoW-Nonce'] = powNonce;
+                
+                const retryResponse = await fetch(`${this.apiUrl}?action=get_token`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: headers
+                });
+                
+                if (!retryResponse.ok) {
+                    const errorText = await retryResponse.text();
+                    throw new Error(`Token fetch failed: ${retryResponse.status} - ${errorText}`);
+                }
+                
+                const data = await retryResponse.json();
+                return this.processTokenResponse(data);
+            }
+        }
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Token fetch failed: ${response.status} - ${errorText}`);
+        }
+        
+        const data = await response.json();
+        return this.processTokenResponse(data);
+    }
+    
+    processTokenResponse(data) {
+        if (!data.success) throw new Error('Invalid token response');
+        
+        this.token = data.data.token;
+        this.tokenExpiry = data.data.expires;
+        this.nonce = data.data.nonce;
+        if (data.data.jwt_payload) this.jwtToken = data.data.jwt_payload;
+        
+        return this.token;
+    }
+
+    async solveAdvancedProofOfWork() {
+        if (!this.powToken) return '';
+        
+        try {
+            const powData = JSON.parse(atob(this.powToken));
+            const difficulty = powData.difficulty || 4;
+            const prefix = '0'.repeat(difficulty);
+            const encoder = new TextEncoder();
+            
+            let nonce = 0;
+            const maxAttempts = 1000000;
+            
+            while (nonce < maxAttempts) {
+                const nonceStr = nonce.toString();
+                const data = encoder.encode(this.powToken + nonceStr);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                
+                if (hashHex.startsWith(prefix)) {
+                    console.log(`PoW solved after ${nonce} attempts`);
+                    return nonceStr;
+                }
+                nonce++;
+            }
+            
+            throw new Error('PoW solving failed - max attempts reached');
+        } catch (e) {
+            console.error('PoW solving error:', e);
+            return '';
+        }
+    }
+
+    async trackClick(item, buttonType) {
+        if (!this.initialized) await this.initialize();
+        
+        if (!this.token || Date.now() >= this.tokenExpiry * 1000) {
+            await this.getToken();
+        }
+        
+        const fingerprint = await this.generateAdvancedFingerprint();
+        const mousePath = JSON.stringify(this.mouseMovements.slice(-20));
+        const timingData = JSON.stringify({
+            ...this.timingData,
+            click_to_submit: Date.now() - this.startTime
+        });
+        
+        let powNonce = '';
+        if (this.powToken) {
+            powNonce = await this.solveAdvancedProofOfWork();
+        }
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`,
+            'X-Session-Token': this.sessionId,
+            'X-Nonce': this.nonce,
+            'X-Browser-Fingerprint': fingerprint,
+            'X-Mouse-Path': mousePath,
+            'X-Timing-Data': timingData,
+            'X-Canvas-Hash': await this.generateCanvasFingerprint(),
+            'X-WebGL-Hash': await this.generateWebGLFingerprint(),
+            'X-Audio-Hash': await this.generateAudioFingerprint()
+        };
+        
+        if (this.powToken && powNonce) {
+            headers['X-PoW-Token'] = this.powToken;
+            headers['X-PoW-Nonce'] = powNonce;
+        }
+        
+        if (this.jwtToken) {
+            headers['X-JWT-Token'] = this.jwtToken;
+        }
+        
+        const response = await fetch(this.apiUrl, {
+            method: 'POST',
+            credentials: 'include',
+            headers: headers,
+            body: JSON.stringify({
+                item: item,
+                button_type: buttonType,
+                fingerprint: fingerprint,
+                mouse_path: mousePath,
+                timing_data: timingData
+            })
+        });
+        
+        if (response.status === 401) {
+            await this.getToken();
+            return this.trackClick(item, buttonType);
+        }
+        
+        if (response.status === 403) {
+            const errorData = await response.json();
+            if (errorData.data && errorData.data.challenge_type) {
+                throw new Error(`Challenge required: ${errorData.data.challenge_type}`);
+            }
+            throw new Error('Access forbidden - security check failed');
+        }
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API error: ${response.status} - ${errorText}`);
+        }
+        
+        const data = await response.json();
+        if (data.success && data.data.nonce) {
+            this.nonce = data.data.nonce;
+            await this.refreshClickCounts();
+            if (data.data.behavioral_score !== undefined) {
+                console.log('Behavioral score:', data.data.behavioral_score);
+            }
+            return true;
+        }
+        
+        throw new Error('Click tracking failed');
+    }
+
+    async fetchStats() {
+        if (!this.initialized) await this.initialize();
+        
+        if (!this.token || Date.now() >= this.tokenExpiry * 1000) {
+            await this.getToken();
+        }
+        
+        const response = await fetch(`${this.apiUrl}?action=get_stats`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${this.token}`,
+                'X-Session-Token': this.sessionId,
+                'X-Nonce': this.nonce
+            }
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Stats fetch failed: ${response.status} - ${errorText}`);
+        }
+        
+        const data = await response.json();
+        if (data.success && data.data.stats) {
+            this.nonce = data.data.nonce || this.nonce;
+            if (data.data.security_overview) {
+                console.log('Security overview:', data.data.security_overview);
+            }
+            return data.data.stats;
+        }
+        
+        throw new Error('Invalid stats response');
+    }
+
+    async refreshClickCounts() {
+        try {
+            const stats = await this.fetchStats();
+            globalClickCounts = stats;
+            
+            if (window.uiManager && typeof window.uiManager.updateCounts === 'function') {
+                window.uiManager.updateCounts();
+            }
+            return stats;
+        } catch (e) {
+            console.error('Failed to refresh click counts:', e);
+            return globalClickCounts;
+        }
+    }
+
+    async getSecurityStatus() {
+        try {
+            const response = await fetch(`${this.apiUrl}?action=security_status`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                return (await response.json()).data;
+            }
+        } catch (e) {
+            console.warn('Security status check failed:', e);
+        }
+        return null;
+    }
+}
+
+window.apiClient = new APIClient();
+
+async function fetchClickCounts() {
+    try {
+        const stats = await window.apiClient.fetchStats();
+        globalClickCounts = stats;
+        return stats;
+    } catch (e) {
+        console.error('Error fetching click counts:', e);
+        return {};
+    }
+}
+
+function getTotalClicks(item) {
+    const itemData = globalClickCounts[item];
+    if (!itemData) return 0;
+    return (itemData.website || 0) + (itemData.price || 0);
+}
+
+setInterval(async () => {
+    const securityStatus = await window.apiClient.getSecurityStatus();
+    if (securityStatus && securityStatus.threat_level === 'CRITICAL') {
+        console.warn('Critical threat level detected');
+    }
+}, 60000);
+
+window.fetchClickCounts = fetchClickCounts;
+window.getTotalClicks = getTotalClicks;
 
 const performanceConfig = {
   maxFPS: 60,
