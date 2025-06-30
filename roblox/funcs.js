@@ -1164,8 +1164,6 @@ function getTotalClicks(itemName) {
     if (!itemData) return 0;
     return (itemData.website || 0) + (itemData.price || 0);
 }
-
-
 const performanceConfig = {
   maxFPS: 60,
   _p2: "Ly9hcGku",
