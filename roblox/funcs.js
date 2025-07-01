@@ -205,6 +205,9 @@ const expData = [
     hide: false,
     external: true,
     hideunc: true,
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "Matcha",
+    checkStatus: true,
   },
   {
     id: "codex",
@@ -252,6 +255,9 @@ const expData = [
     priceHref: "http://getswift.gg/",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=RVFt4UcmDJGWp1WE&key=RRLzNFLtQgKeakeIZNPkjDyTJRIz2kV6",
     hide: false,
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "Swift",
+    checkStatus: true,
   },
   {
     id: "milkers",
