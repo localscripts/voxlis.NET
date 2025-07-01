@@ -390,6 +390,9 @@ const expData = [
     hide: false,
     hasKeySystem: false,
     free: true,
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "Solara",
+    checkStatus: true,
   },
   {
     id: "delta",
