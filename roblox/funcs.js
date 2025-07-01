@@ -23,6 +23,11 @@ const expData = [
     priceHref: "https://bloxproducts.com/?affiliate_key=1270744029168009258#Zenith",
     uncbuttonlink: "https://melon.nu/s/2kYfimVy1N",
     hide: false,
+    statuslink: "https://zenith.win/api/v1/status",
+    statusstring: "up",
+    versionstring: "roblox_version",  
+    checkStatus: true,
+    checkVersion: true
   },
   {
     id: "ronin",
@@ -337,6 +342,11 @@ const expData = [
     warning: false,
     warningInfo: "Due to Bunni's owner blocking all connections to voxlis.NET—after LX63 copied from Visual and gained 30% more clicks (via api.voxlis.net)—voxlis.NET can no longer track the latest data for this executor. Until Peyton contacts us directly, updates will not resume.",
     free: true,
+    statuslink: "https://https://getbunni.lol/beta/version.json.win/api/v1/status",
+    statusstring: "status",
+    versionstring: "roblox_version",  
+    checkStatus: false,
+    checkVersion: false
   },
   {
     id: "krnl",
@@ -921,234 +931,345 @@ const configData = {
   timeout: 5000,
 }
 
-async function computeFingerprint() {
-    const fpData = [
-        navigator.userAgent,
-        navigator.language,
-        screen.width + 'x' + screen.height,
-        Intl.DateTimeFormat().resolvedOptions().timeZone || '',
-        navigator.platform
-    ].join('||');
-    if (window.crypto && crypto.subtle && crypto.subtle.digest) {
-        const enc = new TextEncoder();
-        const buf = await crypto.subtle.digest('SHA-256', enc.encode(fpData));
-        const arr = Array.from(new Uint8Array(buf));
-        return arr.map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-    return fpData;
+const robloxVersionData = {
+  windows: null,
+  lastUpdated: null,
 }
 
-let globalClickCounts = {};
+async function computeFingerprint() {
+  const fpData = [
+    navigator.userAgent,
+    navigator.language,
+    screen.width + "x" + screen.height,
+    Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+    navigator.platform,
+  ].join("||")
+  if (window.crypto && crypto.subtle && crypto.subtle.digest) {
+    const enc = new TextEncoder()
+    const buf = await crypto.subtle.digest("SHA-256", enc.encode(fpData))
+    const arr = Array.from(new Uint8Array(buf))
+    return arr.map((b) => b.toString(16).padStart(2, "0")).join("")
+  }
+  return fpData
+}
+
+let globalClickCounts = {}
+
+async function fetchRobloxVersion() {
+  try {
+    const altProxyUrl = "https://corsproxy.io/?"
+    const targetUrl = "https://clientsettingscdn.roblox.com/v2/client-version/WindowsPlayer/channel/LIVE"
+    const response = await fetch(altProxyUrl + encodeURIComponent(targetUrl))
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    robloxVersionData.windows = data.clientVersionUpload
+    robloxVersionData.lastUpdated = new Date().toISOString()
+
+    console.log("Roblox version fetched (fallback):", data.clientVersionUpload)
+    return data.clientVersionUpload
+  } catch (fallbackError) {
+    console.error("Failed:", fallbackError)
+    return null
+  }
+}
+
+function extractRobloxVersionFromResponse(responseText, versionstring) {
+  try {
+    if (!versionstring) return null
+
+    const functionPattern = new RegExp(
+      `function\\s+${versionstring}\\s*\$$\\s*\$$\\s*{[^}]*return\\s*["']([^"']+)["'][^}]*}`,
+      "i",
+    )
+    const functionMatch = responseText.match(functionPattern)
+    if (functionMatch) {
+      return functionMatch[1]
+    }
+
+    const altMatch1 = new RegExp(`${versionstring}\\s*=\\s*["']([^"']+)["']`, "i")
+    const altResult1 = responseText.match(altMatch1)
+    if (altResult1) {
+      return altResult1[1]
+    }
+
+    const altMatch2 = new RegExp(`["']${versionstring}["']\\s*:\\s*["']([^"']+)["']`, "i")
+    const altResult2 = responseText.match(altMatch2)
+    if (altResult2) {
+      return altResult2[1]
+    }
+
+    return null
+  } catch (error) {
+    console.error("Error extracting version:", error)
+    return null
+  }
+}
+
+async function checkExploitStatusWithPriority(exploit) {
+  if (!exploit.statuslink) {
+    return "untracked"
+  }
+
+  if (!exploit.checkStatus && !exploit.checkVersion) {
+    return "unknown"
+  }
+
+  try {
+    if (!robloxVersionData.windows) {
+      await fetchRobloxVersion()
+    }
+
+    const response = await fetch(exploit.statuslink)
+    const data = await response.text()
+
+    let finalStatus = null
+
+    if (exploit.checkVersion && exploit.versionstring) {
+      const exploitVersion = extractRobloxVersionFromResponse(data, exploit.versionstring)
+      const robloxVersion = robloxVersionData.windows
+
+      if (exploitVersion && robloxVersion) {
+        if (exploitVersion === robloxVersion) {
+          finalStatus = "updated"
+        } else {
+          finalStatus = "down"
+        }
+      }
+    }
+
+    if (finalStatus === null && exploit.checkStatus) {
+      const isOnline = data.toLowerCase().includes(exploit.statusstring.toLowerCase())
+      finalStatus = isOnline ? "updated" : "down"
+    }
+
+    if (finalStatus === null) {
+      finalStatus = "unknown"
+    }
+
+    return finalStatus
+  } catch (error) {
+    console.error(`Failed to check status for ${exploit.name}:`, error)
+    return "down"
+  }
+}
+
+async function updateExploitStatusAndVersion(exploit) {
+  return await checkExploitStatusWithPriority(exploit)
+}
 
 class APIClient {
-    constructor() {
-        this.apiUrl = 'https://api.voxlis.net/api.php';
-        this.sessionId = '';
-        this.sessionSecret = '';
-        this.nonce = '';
-        this.token = '';
-        this.tokenExpiry = 0;
-        this.initialized = false;
-        this.powToken = '';
-    }
+  constructor() {
+    this.apiUrl = "https://api.voxlis.net/api.php"
+    this.sessionId = ""
+    this.sessionSecret = ""
+    this.nonce = ""
+    this.token = ""
+    this.tokenExpiry = 0
+    this.initialized = false
+    this.powToken = ""
+  }
 
-    async initialize() {
-        if (this.initialized) return;
-        const res = await fetch(`${this.apiUrl}?action=init_session`, {
-            method: 'GET',
-            credentials: 'include'
-        });
-        if (!res.ok) throw new Error(`Session init failed: ${res.status}`);
-        const data = await res.json();
-        if (!data.success) throw new Error('Invalid session response');
-        this.sessionId = data.data.session_id;
-        this.sessionSecret = data.data.session_secret;
-        this.nonce = data.data.nonce;
-        this.powToken = data.data.pow_token || '';
-        this.initialized = true;
-    }
+  async initialize() {
+    if (this.initialized) return
+    const res = await fetch(`${this.apiUrl}?action=init_session`, {
+      method: "GET",
+      credentials: "include",
+    })
+    if (!res.ok) throw new Error(`Session init failed: ${res.status}`)
+    const data = await res.json()
+    if (!data.success) throw new Error("Invalid session response")
+    this.sessionId = data.data.session_id
+    this.sessionSecret = data.data.session_secret
+    this.nonce = data.data.nonce
+    this.powToken = data.data.pow_token || ""
+    this.initialized = true
+  }
 
-    async generateSignature(data) {
-        if (!this.sessionSecret) throw new Error('Session secret not available');
-        const encoder = new TextEncoder();
-        const key = await crypto.subtle.importKey(
-            'raw',
-            encoder.encode(this.sessionSecret),
-            { name: 'HMAC', hash: 'SHA-384' },
-            false,
-            ['sign']
-        );
-        const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(data));
-        return Array.from(new Uint8Array(signature))
-            .map(b => b.toString(16).padStart(2, '0'))
-            .join('');
-    }
+  async generateSignature(data) {
+    if (!this.sessionSecret) throw new Error("Session secret not available")
+    const encoder = new TextEncoder()
+    const key = await crypto.subtle.importKey(
+      "raw",
+      encoder.encode(this.sessionSecret),
+      { name: "HMAC", hash: "SHA-384" },
+      false,
+      ["sign"],
+    )
+    const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(data))
+    return Array.from(new Uint8Array(signature))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("")
+  }
 
-    async getToken() {
-        if (!this.initialized) await this.initialize();
-        const signature = await this.generateSignature(this.nonce);
-        const headers = {
-            'X-Session-Token': this.sessionId,
-            'X-Nonce': this.nonce,
-            'X-Signature': signature
-        };
-        const res = await fetch(`${this.apiUrl}?action=get_token`, {
-            method: 'GET',
-            credentials: 'include',
-            headers
-        });
-        if (!res.ok) throw new Error(`Token fetch failed: ${res.status}`);
-        const data = await res.json();
-        if (!data.success) throw new Error('Invalid token response');
-        this.token = data.data.token;
-        this.tokenExpiry = data.data.expires;
-        this.nonce = data.data.nonce;
-        return this.token;
+  async getToken() {
+    if (!this.initialized) await this.initialize()
+    const signature = await this.generateSignature(this.nonce)
+    const headers = {
+      "X-Session-Token": this.sessionId,
+      "X-Nonce": this.nonce,
+      "X-Signature": signature,
     }
+    const res = await fetch(`${this.apiUrl}?action=get_token`, {
+      method: "GET",
+      credentials: "include",
+      headers,
+    })
+    if (!res.ok) throw new Error(`Token fetch failed: ${res.status}`)
+    const data = await res.json()
+    if (!data.success) throw new Error("Invalid token response")
+    this.token = data.data.token
+    this.tokenExpiry = data.data.expires
+    this.nonce = data.data.nonce
+    return this.token
+  }
 
-    async solveProofOfWork() {
-        if (!this.powToken) return '';
-        const difficulty = 4;
-        const target = '0'.repeat(difficulty);
-        const encoder = new TextEncoder();
-        let nonceInt = 0;
-        while (true) {
-            const attempt = nonceInt.toString();
-            const data = encoder.encode(this.powToken + attempt);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            if (hashHex.startsWith(target)) {
-                return attempt;
-            }
-            nonceInt++;
-        }
+  async solveProofOfWork() {
+    if (!this.powToken) return ""
+    const difficulty = 4
+    const target = "0".repeat(difficulty)
+    const encoder = new TextEncoder()
+    let nonceInt = 0
+    while (true) {
+      const attempt = nonceInt.toString()
+      const data = encoder.encode(this.powToken + attempt)
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data)
+      const hashArray = Array.from(new Uint8Array(hashBuffer))
+      const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("")
+      if (hashHex.startsWith(target)) {
+        return attempt
+      }
+      nonceInt++
     }
+  }
 
-    async trackClick(itemName, buttonType) {
-        if (!this.initialized) await this.initialize();
-        if (!this.token || Date.now() >= this.tokenExpiry * 1000) {
-            await this.getToken();
-        }
-        const fingerprint = await this.generateFingerprint();
-        let powNonce = '';
-        if (this.powToken) {
-            powNonce = await this.solveProofOfWork();
-        }
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.token}`,
-            'X-Session-Token': this.sessionId,
-            'X-Nonce': this.nonce
-        };
-        try {
-            const signature = await this.generateSignature(this.nonce);
-            headers['X-Signature'] = signature;
-        } catch (e) {
-            console.error('Signature generation failed:', e);
-            throw new Error('Security handshake failed');
-        }
-        if (this.powToken && powNonce) {
-            headers['X-PoW-Token'] = this.powToken;
-            headers['X-PoW-Nonce'] = powNonce;
-        }
-        const res = await fetch(this.apiUrl, {
-            method: 'POST',
-            credentials: 'include',
-            headers,
-            body: JSON.stringify({
-                item: itemName,
-                button_type: buttonType,
-                fingerprint: fingerprint
-            })
-        });
-        if (res.status === 401) {
-            await this.getToken();
-            return this.trackClick(itemName, buttonType);
-        }
-        if (res.status === 403) {
-            throw new Error('Challenge required');
-        }
-        if (!res.ok) throw new Error(`API error: ${res.status}`);
-        const data = await res.json();
-        if (data.success && data.data.nonce) {
-            this.nonce = data.data.nonce;
-            await this.refreshClickCounts();
-            return true;
-        }
-        throw new Error('Click tracking failed');
+  async trackClick(itemName, buttonType) {
+    if (!this.initialized) await this.initialize()
+    if (!this.token || Date.now() >= this.tokenExpiry * 1000) {
+      await this.getToken()
     }
+    const fingerprint = await this.generateFingerprint()
+    let powNonce = ""
+    if (this.powToken) {
+      powNonce = await this.solveProofOfWork()
+    }
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${this.token}`,
+      "X-Session-Token": this.sessionId,
+      "X-Nonce": this.nonce,
+    }
+    try {
+      const signature = await this.generateSignature(this.nonce)
+      headers["X-Signature"] = signature
+    } catch (e) {
+      console.error("Signature generation failed:", e)
+      throw new Error("Security handshake failed")
+    }
+    if (this.powToken && powNonce) {
+      headers["X-PoW-Token"] = this.powToken
+      headers["X-PoW-Nonce"] = powNonce
+    }
+    const res = await fetch(this.apiUrl, {
+      method: "POST",
+      credentials: "include",
+      headers,
+      body: JSON.stringify({
+        item: itemName,
+        button_type: buttonType,
+        fingerprint: fingerprint,
+      }),
+    })
+    if (res.status === 401) {
+      await this.getToken()
+      return this.trackClick(itemName, buttonType)
+    }
+    if (res.status === 403) {
+      throw new Error("Challenge required")
+    }
+    if (!res.ok) throw new Error(`API error: ${res.status}`)
+    const data = await res.json()
+    if (data.success && data.data.nonce) {
+      this.nonce = data.data.nonce
+      await this.refreshClickCounts()
+      return true
+    }
+    throw new Error("Click tracking failed")
+  }
 
-    async fetchStats() {
-        if (!this.initialized) await this.initialize();
-        if (!this.token || Date.now() >= this.tokenExpiry * 1000) {
-            await this.getToken();
-        }
-        const res = await fetch(`${this.apiUrl}?action=get_stats`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${this.token}`,
-                'X-Session-Token': this.sessionId,
-                'X-Nonce': this.nonce
-            }
-        });
-        if (!res.ok) throw new Error(`Stats fetch failed: ${res.status}`);
-        const data = await res.json();
-        if (data.success && data.data.stats) {
-            this.nonce = data.data.nonce || this.nonce;
-            return data.data.stats;
-        }
-        throw new Error('Invalid stats response');
+  async fetchStats() {
+    if (!this.initialized) await this.initialize()
+    if (!this.token || Date.now() >= this.tokenExpiry * 1000) {
+      await this.getToken()
     }
+    const res = await fetch(`${this.apiUrl}?action=get_stats`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+        "X-Session-Token": this.sessionId,
+        "X-Nonce": this.nonce,
+      },
+    })
+    if (!res.ok) throw new Error(`Stats fetch failed: ${res.status}`)
+    const data = await res.json()
+    if (data.success && data.data.stats) {
+      this.nonce = data.data.nonce || this.nonce
+      return data.data.stats
+    }
+    throw new Error("Invalid stats response")
+  }
 
-    async refreshClickCounts() {
-        const stats = await this.fetchStats();
-        globalClickCounts = stats;
-        if (window.uiManager && typeof window.uiManager.updateCounts === 'function') {
-            window.uiManager.updateCounts();
-        }
-        return stats;
+  async refreshClickCounts() {
+    const stats = await this.fetchStats()
+    globalClickCounts = stats
+    if (window.uiManager && typeof window.uiManager.updateCounts === "function") {
+      window.uiManager.updateCounts()
     }
+    return stats
+  }
 
-    async generateFingerprint() {
-        try {
-            const parts = [
-                navigator.userAgent,
-                navigator.platform,
-                screen.width + 'x' + screen.height,
-                new Date().getTimezoneOffset(),
-                navigator.hardwareConcurrency || '',
-                navigator.deviceMemory || '',
-                screen.colorDepth
-            ].join('|');
-            const buffer = new TextEncoder().encode(parts);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        } catch {
-            return 'fp-' + Math.random().toString(36).substr(2, 10);
-        }
+  async generateFingerprint() {
+    try {
+      const parts = [
+        navigator.userAgent,
+        navigator.platform,
+        screen.width + "x" + screen.height,
+        new Date().getTimezoneOffset(),
+        navigator.hardwareConcurrency || "",
+        navigator.deviceMemory || "",
+        screen.colorDepth,
+      ].join("|")
+      const buffer = new TextEncoder().encode(parts)
+      const hashBuffer = await crypto.subtle.digest("SHA-256", buffer)
+      const hashArray = Array.from(new Uint8Array(hashBuffer))
+      return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("")
+    } catch {
+      return "fp-" + Math.random().toString(36).substr(2, 10)
     }
+  }
 }
 
-window.apiClient = new APIClient();
+window.apiClient = new APIClient()
 
 async function fetchClickCounts() {
-    try {
-        const stats = await window.apiClient.fetchStats();
-        globalClickCounts = stats;
-        return stats;
-    } catch (e) {
-        console.error('Error fetching click counts:', e);
-        return {};
-    }
+  try {
+    const stats = await window.apiClient.fetchStats()
+    globalClickCounts = stats
+    return stats
+  } catch (e) {
+    console.error("Error fetching click counts:", e)
+    return {}
+  }
 }
 
 function getTotalClicks(itemName) {
-    const itemData = globalClickCounts[itemName];
-    if (!itemData) return 0;
-    return (itemData.website || 0) + (itemData.price || 0);
+  const itemData = globalClickCounts[itemName]
+  if (!itemData) return 0
+  return (itemData.website || 0) + (itemData.price || 0)
 }
 
 const performanceConfig = {
@@ -1297,7 +1418,7 @@ class ClickTracker {
     if (titleElement) {
       const fullText = titleElement.textContent || titleElement.innerText || ""
       itemName = fullText
-        .replace(/Verified|Premium|Warning/g, "")
+        .replace(/Verified|Premium|Warning|Updated|Down|Unknown|Untracked/g, "")
         .replace(/\s+/g, " ")
         .trim()
 
@@ -1318,7 +1439,7 @@ class ClickTracker {
   }
 
   async trackClick(itemName, buttonType) {
-      return window.apiClient.trackClick(itemName, buttonType);
+    return window.apiClient.trackClick(itemName, buttonType)
   }
 
   showClickFeedback(button, itemName, buttonType) {
@@ -1752,6 +1873,7 @@ class AppState {
     this.executorOnly = false
     this.keySystemOnly = false
     this.noKeySystemOnly = false
+    this.updatedOnly = false
     this.sortBy = "most-popular"
     this.filteredData = []
     this.performanceMonitor = new PerformanceMonitor().start()
@@ -1762,10 +1884,12 @@ class AppState {
     this.isFilterDrawerOpen = false
     this.clickTracker = new ClickTracker()
     this.clickDataLoaded = false
+    this.exploitStatuses = new Map()
   }
 
   async init() {
     this.clickTracker.init()
+
     try {
       await fetchClickCounts()
       this.clickDataLoaded = true
@@ -1773,10 +1897,41 @@ class AppState {
       this.clickDataLoaded = false
     }
 
+    try {
+      await fetchRobloxVersion()
+    } catch (error) {
+      console.warn("Failed to fetch Roblox version data:", error)
+    }
+
+    await this.updateAllExploitStatuses()
+
     this.filteredData = expData.filter((exp) => exp.hide !== true)
     this.filterExploits()
 
     return this
+  }
+
+  async updateAllExploitStatuses() {
+    const statusPromises = expData.map(async (exploit) => {
+      try {
+        const status = await updateExploitStatusAndVersion(exploit)
+        if (status) {
+          this.exploitStatuses.set(exploit.id, status)
+        } else {
+          this.exploitStatuses.set(exploit.id, "unknown")
+        }
+      } catch (error) {
+        console.warn(`Failed to update status for ${exploit.name}:`, error)
+        this.exploitStatuses.set(exploit.id, "unknown")
+      }
+    })
+
+    await Promise.allSettled(statusPromises)
+  }
+
+  getExploitStatus(exploitId) {
+    const status = this.exploitStatuses.get(exploitId)
+    return status || "unknown"
   }
 
   filterExploits() {
@@ -1858,6 +2013,13 @@ class AppState {
             return false
           }
           if (exp.price !== "FREE" && !exp.free) {
+            return false
+          }
+        }
+
+        if (this.updatedOnly) {
+          const status = this.getExploitStatus(exp.id)
+          if (status !== "updated") {
             return false
           }
         }
@@ -2019,6 +2181,8 @@ class UIManager {
       mobileKeySwitch: "#mobKeySwch",
       noKeySwitch: "#noKeySwch",
       mobileNoKeySwitch: "#mobNoKeySwch",
+      updatedSwitch: "#updatedSwch",
+      mobileUpdatedSwitch: "#mobUpdatedSwch",
       sortSelect: "#srtSel",
       mobileSortSelect: "#mobSortSel",
       resetButton: "#rstFltrs",
@@ -2363,6 +2527,7 @@ class UIManager {
     setupSwitchPair(this.getElement("executorSwitch"), this.getElement("mobileExecutorSwitch"), "executorOnly")
     setupSwitchPair(this.getElement("keySwitch"), this.getElement("mobileKeySwitch"), "keySystemOnly")
     setupSwitchPair(this.getElement("noKeySwitch"), this.getElement("mobileNoKeySwitch"), "noKeySystemOnly")
+    setupSwitchPair(this.getElement("updatedSwitch"), this.getElement("mobileUpdatedSwitch"), "updatedOnly")
   }
 
   setupSortSelects() {
@@ -2397,6 +2562,7 @@ class UIManager {
       this.appState.executorOnly = false
       this.appState.keySystemOnly = false
       this.appState.noKeySystemOnly = false
+      this.appState.updatedOnly = false 
 
       document.querySelectorAll(".cstm-chkbx input, .mob-pltf-chkbx input").forEach((cb) => {
         cb.checked = false
@@ -2437,6 +2603,8 @@ class UIManager {
         "mobileKeySwitch",
         "noKeySwitch",
         "mobileNoKeySwitch",
+        "updatedSwitch",
+        "mobileUpdatedSwitch",
       ]
 
       switches.forEach((switchKey) => {
@@ -2457,7 +2625,6 @@ class UIManager {
       if (button) {
         button.addEventListener("click", resetFilters)
       }
-    
     })
   }
 
@@ -2549,6 +2716,49 @@ class UIManager {
       levelDisplay = `<div class="lvl-bdg ${exploit.txtColor}">Level ${exploit.lvl}</div>`
     }
 
+    const status = this.appState.getExploitStatus(exploit.id)
+    let statusBadge = ""
+
+    let statusIcon, statusText, statusClass
+
+    if (!exploit.statuslink) {
+      statusIcon = "fas fa-minus-circle"
+      statusText = "Untracked"
+      statusClass = "untracked"
+    } else if (status) {
+      switch (status) {
+        case "updated":
+          statusIcon = "fas fa-check-circle"
+          statusText = "Updated"
+          statusClass = "updated"
+          break
+        case "down":
+          statusIcon = "fas fa-times-circle"
+          statusText = "Down"
+          statusClass = "down"
+          break
+        case "unknown":
+          statusIcon = "fas fa-question-circle"
+          statusText = "Unknown"
+          statusClass = "unknown"
+          break
+        case "untracked":
+          statusIcon = "fas fa-minus-circle"
+          statusText = "Untracked"
+          statusClass = "untracked"
+          break
+        default:
+          statusIcon = "fas fa-question-circle"
+          statusText = "Unknown"
+          statusClass = "unknown"
+      }
+    } else {
+      statusIcon = "fas fa-question-circle"
+      statusText = "Unknown"
+      statusClass = "unknown"
+    }
+    statusBadge = `<span class="status-bdg ${statusClass}"><i class="${statusIcon}"></i>${statusText}</span>`
+
     card.innerHTML = `
   <div class="crd-acnt ${accentColor}"></div>
   <div class="crd-hdr">
@@ -2559,6 +2769,7 @@ class UIManager {
           ${exploit.verified ? `<span class="vrf-bdg"><i class="fas fa-check"></i>Verified</span>` : ""}
           ${exploit.premium ? `<span class="prem-bdg"><i class="fas fa-crown"></i>Premium</span>` : ""}
           ${exploit.warning ? `<span class="warn-bdg"><i class="fas fa-exclamation-triangle"></i>Warning</span>` : ""}
+          ${statusBadge}
         </h3>
         <p class="crd-desc">${exploit.desc}</p>
       </div>
@@ -2906,7 +3117,7 @@ class UIManager {
     const nameElement = element.querySelector(".crd-ttl") || element.querySelector(".lst-itm-ttl")
     if (nameElement) {
       const fullText = nameElement.textContent.trim()
-      const cleanName = fullText.replace(/Verified|Premium|Warning/g, "").trim()
+      const cleanName = fullText.replace(/Verified|Premium|Warning|Updated|Down|Unknown|Untracked/g, "").trim()
 
       let exploit = expData.find((exp) => exp.name === cleanName)
 
@@ -3188,8 +3399,7 @@ class ModalManager {
     modalContainer.style.display = "none"
 
     modalContainer.innerHTML = `
-  <div
-    class="unc-modal-overlay" id="uncModalOverlay"></div>
+  <div class="unc-modal-overlay" id="uncModalOverlay"></div>
   <div class="unc-modal">
     <div class="unc-modal-header">
       <h2 class="unc-modal-title" id="uncModalTitle">UNC Code</h2>
@@ -4000,12 +4210,14 @@ class OptimizedHeartAnimation {
         img: this.heartImage,
         x: e.clientX + (Math.random() * 40 - 20),
         y: e.clientY + (Math.random() * 40 - 20),
-        dx: Math.random() * 1 - 0.5,
-        dy: Math.random() * 0.5 - 1,
-        size: Math.random() * 40 + 60,
-        rotation: Math.random() * 0.2 - 0.1,
-        rotationSpeed: Math.random() * 0.01 - 0.005,
-        opacity: Math.random() * 0.3 + 0.7,
+        dx: Math.random() * 2 - 1,
+        dy: Math.random() * -2 - 1,
+        size: Math.random() * 20 + 20,
+        rotation: Math.random() * 0.4 - 0.2,
+        rotationSpeed: Math.random() * 0.02 - 0.01,
+        opacity: 1,
+        isClickHeart: true,
+        life: 60,
       })
     }
   }
