@@ -2457,7 +2457,7 @@ class UIManager {
       if (button) {
         button.addEventListener("click", resetFilters)
       }
-
+    
     })
   }
 
@@ -4112,7 +4112,7 @@ window.addEventListener("load", () => {
     const perfData = performance.getEntriesByType("navigation")[0]
     console.log("Page load performance:", {
       domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
-      loadComplete: perfData.loadEventEnd - perfData.loadEventStart,More actions
+      loadComplete: perfData.loadEventEnd - perfData.loadEventStart,
       totalTime: perfData.loadEventEnd - perfData.fetchStart,
     })
   }
