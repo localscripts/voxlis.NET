@@ -205,9 +205,6 @@ const expData = [
     hide: false,
     external: true,
     hideunc: true,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Matcha",
-    checkStatus: true,
   },
   {
     id: "codex",
@@ -255,9 +252,6 @@ const expData = [
     priceHref: "http://getswift.gg/",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=RVFt4UcmDJGWp1WE&key=RRLzNFLtQgKeakeIZNPkjDyTJRIz2kV6",
     hide: false,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Swift",
-    checkStatus: true,
   },
   {
     id: "milkers",
@@ -396,9 +390,6 @@ const expData = [
     hide: false,
     hasKeySystem: false,
     free: true,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Solara",
-    checkStatus: true,
   },
   {
     id: "delta",
@@ -547,8 +538,6 @@ const expData = [
     href: "https://volcano.best",
     priceHref: "https://yap.com/",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=LQ8uphMkPlKrqKgY&key=wE4Rjq07vQ4dfsHh6a0dxX4A47q1ijaE",
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Volcano",
     info: "## Exploit Performance\n- Oops! 🤭,Looks like we had not gathered the information yet on this Exploit! This could take some time to finish... If you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!\n\n## Background Information\n- Oops! 🤭,Looks like we had not gathered the information yet on this Exploit! This could take some time to finish... If you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!\n\n\n## Developers Background Information\n- Oops! 🤭,Looks like we had not gathered the information yet on this Exploit! This could take some time to finish... If you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!\n\n> Sources: [reddit.com/r/robloxhackers](), WeAreDevs.NET, Old V3rmillion.net",
     hasKeySystem: true,
     free: true,
@@ -897,18 +886,16 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     price: "FREE",
     plat: ["windows", "macos", "ios", "android", "windows", "macos", "ios", "android"],
     pros: [],
-    neutral: ["Is a module for one game", "71% UNC", "Level 2"],
+    neutral: ["Is a module for one game", "53% sUNC", "Level 2"],
     cons: [],
     verified: true,
     editor: "Realirist",
     txtColor: "text-purple-500",
     accentColor: "from-blue-600 to-blue-700",
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Kernel",
     info: "## Exploit Performance  \n- [Kernel](/) functions similarly to the [LuaU // CSVM](/) executor, as it shares the same LuaU VM. The main distinction is that [Kernel](/) is actively maintained, whereas [LuaU // CSVM](/) is probably not gonna get any more updates in the future. [Kernel](/) has fast execution speeds, scoring the \"very fast\" score on the sUNC test. [Kernel]() is technically [LuaU // CSVM](), so they might perform similarly. \n  \n\n## Background Information  \n- Before [Kernel](/), an executor - [Realirist's executor](/) launched in early 2023 and officially released around that same time, as an in-game serverside executor.  \n- On September 23, 2024, [Realirist's executor](/) vanished, later becoming the rebrand called [Kernel](/), with clientside and \"Mixed\" execution, which later became only clientside.\n\n## Developers Background Information\n- There is little background information available about the owner, [@Realirist](/), aside from their primary role in working on the UI for [Krnl Remake](/), an [Arcadia](/) paste. \n- [@Realirist](/) had made a [PowerShell](/) script called [trolo.ps1](/), which could send pop-ups to your computer, and shut it down anytime, which could be considered [RAT](/) behavior, even though it was not harmful.\n\n\n> Source: [@Realirist](/)",
     premium: false,
-    href: "https://kernels.space",
-    priceHref: "https://kernels.space",
+    href: "https://dylanvn23607.github.io/Kernel/",
+    priceHref: "https://dylanvn23607.github.io/Kernel/",
     uncbuttonlink: "https://rubis.app/view/?scrap=AdbtZX2pP9CxpyTD",
     hide: false,
   },
@@ -935,9 +922,6 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     uncbuttonlink: "https://r.sunc.su/bRy3Cuwd8W",
     free: true,
     warning: false,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "lx63",
-    checkStatus: true,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
   },
@@ -955,6 +939,10 @@ const robloxVersionData = {
   windows: null,
   lastUpdated: null,
 }
+
+let globalStatusCache = new Map()
+let statusCacheTimestamp = 0
+const STATUS_CACHE_DURATION = 5 * 60 * 1000
 
 async function computeFingerprint() {
   const fpData = [
@@ -975,36 +963,60 @@ async function computeFingerprint() {
 
 let globalClickCounts = {}
 
-async function checkExploitStatusWithPriority(exploit) {
-  if (!exploit.statuslink) {
-    return "untracked"
+async function fetchAllExploitStatuses() {
+  const now = Date.now()
+  
+  if (globalStatusCache.size > 0 && (now - statusCacheTimestamp) < STATUS_CACHE_DURATION) {
+    return globalStatusCache
   }
 
-  if (!exploit.checkStatus) {
-    return "unknown"
-  }
-
+  const statusEndpoint = "https://api.voxlis.net/list.php"
+  
   try {
-    const response = await fetch(exploit.statuslink)
-
+    const response = await fetch(statusEndpoint)
+    
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
 
     const data = await response.json()
-
-    if (exploit.statusstring && data.hasOwnProperty(exploit.statusstring)) {
-      return data[exploit.statusstring] === true ? "updated" : "down"
+    
+    globalStatusCache.clear()
+    statusCacheTimestamp = now
+    
+    for (const exploit of expData) {
+      if (data.hasOwnProperty(exploit.id)) {
+        globalStatusCache.set(exploit.id, data[exploit.id] === true ? "updated" : "down")
+      } else {
+        globalStatusCache.set(exploit.id, "untracked")
+      }
     }
-
-    return "unknown"
+    
+    return globalStatusCache
+    
   } catch (error) {
-    console.error(`Failed to check status for ${exploit.name}:`, error)
-    return "down"
+    console.error("Failed to fetch exploit statuses:", error)
+    
+    for (const exploit of expData) {
+      globalStatusCache.set(exploit.id, "unknown")
+    }
+    
+    return globalStatusCache
   }
 }
+
+async function getExploitStatus(exploitId) {
+  if (globalStatusCache.has(exploitId)) {
+    return globalStatusCache.get(exploitId)
+  }
+  
+  await fetchAllExploitStatuses()
+  
+  return globalStatusCache.get(exploitId) || "unknown"
+}
+
 async function updateExploitStatusAndVersion(exploit) {
-  return await checkExploitStatusWithPriority(exploit)
+  return await getExploitStatus(exploit.id)
 }
 
 class APIClient {
@@ -1831,6 +1843,7 @@ class AppState {
     this.clickTracker = new ClickTracker()
     this.clickDataLoaded = false
     this.exploitStatuses = new Map()
+    this.statusLoadTime = 0
   }
 
   async init() {
@@ -1849,7 +1862,9 @@ class AppState {
       console.warn("Failed to fetch Roblox version data:", error)
     }
 
+    const statusStartTime = performance.now()
     await this.updateAllExploitStatuses()
+    this.statusLoadTime = performance.now() - statusStartTime
 
     this.filteredData = expData.filter((exp) => exp.hide !== true)
     this.filterExploits()
@@ -1858,21 +1873,20 @@ class AppState {
   }
 
   async updateAllExploitStatuses() {
-    const statusPromises = expData.map(async (exploit) => {
-      try {
-        const status = await updateExploitStatusAndVersion(exploit)
-        if (status) {
-          this.exploitStatuses.set(exploit.id, status)
-        } else {
-          this.exploitStatuses.set(exploit.id, "unknown")
-        }
-      } catch (error) {
-        console.warn(`Failed to update status for ${exploit.name}:`, error)
+    try {
+      const statusMap = await fetchAllExploitStatuses()
+      
+      for (const [exploitId, status] of statusMap) {
+        this.exploitStatuses.set(exploitId, status)
+      }
+      
+    } catch (error) {
+      console.warn("Failed to update exploit statuses:", error)
+      
+      for (const exploit of expData) {
         this.exploitStatuses.set(exploit.id, "unknown")
       }
-    })
-
-    await Promise.allSettled(statusPromises)
+    }
   }
 
   getExploitStatus(exploitId) {
@@ -2667,11 +2681,7 @@ class UIManager {
 
     let statusIcon, statusText, statusClass
 
-    if (!exploit.statuslink) {
-      statusIcon = "fas fa-minus-circle"
-      statusText = "Untracked"
-      statusClass = "untracked"
-    } else if (status) {
+    if (status) {
       switch (status) {
         case "updated":
           statusIcon = "fas fa-check-circle"
@@ -4204,11 +4214,12 @@ class LoadingManager {
           if (progress < 30) {
             this.loadingText.textContent = `Loading click data (${deviceTier} mode)...`
           } else if (progress < 60) {
-            this.loadingText.textContent = `Preparing exploits (${deviceTier} mode)...`
+            this.loadingText.textContent = `Loading exploits status (${deviceTier} mode)...`
           } else if (progress < 90) {
             this.loadingText.textContent = `Almost ready (${deviceTier} mode)...`
           } else {
-            this.loadingText.textContent = `Welcome to voxlis.NET (${deviceTier} mode)`
+            const totalTime = performance.now() - startTime
+            this.loadingText.textContent = `Loaded in ${totalTime.toFixed(0)}ms (${deviceTier} mode)`
           }
         }
       } else {
