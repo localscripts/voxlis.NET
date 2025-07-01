@@ -931,6 +931,9 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     uncbuttonlink: "https://r.sunc.su/bRy3Cuwd8W",
     free: true,
     warning: false,
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "lx63",
+    checkStatus: true,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
   },
