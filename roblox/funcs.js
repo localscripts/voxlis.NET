@@ -50,6 +50,9 @@ const expData = [
     free: false,
     external: true,
     hideunc: true,
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "Ronin",
+    checkStatus: true,
   },
   {
     id: "cryptic",
