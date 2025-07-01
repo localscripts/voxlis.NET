@@ -936,13 +936,13 @@ const robloxVersionData = {
   lastUpdated: null,
 }
 
-const CUSTOM_USER_AGENT = "VoxlisNET/1.0"
+const user_agent = "VoxlisNET/1.0"
 
 function createFetchOptions(options = {}) {
   return {
     ...options,
     headers: {
-      'User-Agent': CUSTOM_USER_AGENT,
+      'User-Agent': user_agent,
       ...options.headers
     }
   }
