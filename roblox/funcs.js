@@ -595,7 +595,7 @@ const expData = [
     hasKeySystem: false,
     free: true,
   },
-  
+
   {
     id: "sirhurt",
     name: "SirHurt",
@@ -718,8 +718,8 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     pricegray: true,
   },
       {
-    id: "summer",
-    name: "Summer",
+    id: "fatal",
+    name: "Fatal",
     desc: "A ratted Level 8 executor.",
     lvl: 8,
     price: "FREE",
@@ -732,15 +732,17 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     txtColor: "text-yellow-500",
     accentColor: "from-yellow-600 to-yellow-700",
     premium: false,
-    href: "https://getsummer.click",
+    href: "https://www.reddit.com/r/robloxhackers/comments/1lnp8p3/is_fatal_legitsafe/",
+    href: "https://fatal.best",
     priceHref: "",
     hide: false,
     hasKeySystem: false,
-    uncbuttonlink: "https://getsummer.click",
+    uncbuttonlink: "https://www.reddit.com/r/robloxhackers/comments/1lnp8p3/is_fatal_legitsafe/",
+    uncbuttonlink: "https://fatal.best",
     warning: true,
           info: "## Background information\n- Absolute degen in the community, here is a screenshot of him talking to his 'fans':\n\n![alt ](/assets/fatal.png)",
     warningInfo:
-      "⚠️ This executor has exit scammed $10,000–$35,000+ ⚠️ — steer clear of Summer and help spread the warning.",
+      "⚠️ This executor has exit scammed $10,000–$35,000+ ⚠️ — steer clear of Fatal; it's a rebranded copy of Fatality.win using a fake 'invite-only' scheme to appear exclusive — don't be fooled, and help spread the warning.",
   },
     {
     id: "cloudy",
@@ -840,29 +842,6 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
   },
-    {
-      id: "severe",
-      name: "Severe",
-      desc: "A good external exploit.",
-      external: true,
-      price: "$19.99",
-      period: "lifetime",
-      plat: ["windows"],
-      pros: ["Custom LUA enviroment"],
-      neutral: [],
-      cons: [],
-      verified: true,
-      editor: "voxlis.NET",
-      txtColor: "text-yellow-500",
-      accentColor: "from-purple-600 to-purple-700",
-info: "## Exploit Performance  \n- [Severe](/) gained recognition as the first undetected external  following the rollout of [Hyperion](/) in November 2023. Since then, it has undergone continuous improvements, focusing on stability, performance, and a user-friendly interface with clean, modern visuals.  \n- The custom [Luau](/) environment built into [Severe](/) is optimized for speed and deep memory interaction, offering advanced low-level capabilities rarely seen in external executors.\n\n## Background Information  \n- [Severe](/) originated as [v-severe](/), an internal executor that began development before [Hyperion](/) was introduced, sometime around 2021.  \n- It now includes unique features such as a 3D radar and in-menu chat — with additional enhancements planned for future releases.\n\n## Developers Background Information  \n- [Severe](/) is developed by [@BACKWOODS](/), who started his journey creating and redesigning UIs in C#. He later transitioned into exploit development, releasing [Sona](/) and [Sona One](/), two prior executors known for providing Level 6–7 execution performance.\n\n> Sources: [Severe](), internal testing, and developer notes\n",
-      premium: false,
-      href: "https://discord.gg/4QmWjQCgzV",
-      priceHref: "https://discord.gg/4QmWjQCgzV",
-      hide: false,
-      hideunc: true,
-      pricegray: true,
-    },
   {
       id: "assembly",
       name: "Assembly",
@@ -1062,6 +1041,13 @@ class APIClient {
             'X-Session-Token': this.sessionId,
             'X-Nonce': this.nonce
         };
+        try {
+            const signature = await this.generateSignature(this.nonce);
+            headers['X-Signature'] = signature;
+        } catch (e) {
+            console.error('Signature generation failed:', e);
+            throw new Error('Security handshake failed');
+        }
         if (this.powToken && powNonce) {
             headers['X-PoW-Token'] = this.powToken;
             headers['X-PoW-Nonce'] = powNonce;
@@ -1164,6 +1150,7 @@ function getTotalClicks(itemName) {
     if (!itemData) return 0;
     return (itemData.website || 0) + (itemData.price || 0);
 }
+
 const performanceConfig = {
   maxFPS: 60,
   _p2: "Ly9hcGku",
@@ -2470,7 +2457,7 @@ class UIManager {
       if (button) {
         button.addEventListener("click", resetFilters)
       }
-    
+
     })
   }
 
@@ -4125,7 +4112,7 @@ window.addEventListener("load", () => {
     const perfData = performance.getEntriesByType("navigation")[0]
     console.log("Page load performance:", {
       domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
-      loadComplete: perfData.loadEventEnd - perfData.loadEventStart,
+      loadComplete: perfData.loadEventEnd - perfData.loadEventStart,More actions
       totalTime: perfData.loadEventEnd - perfData.fetchStart,
     })
   }
