@@ -23,11 +23,9 @@ const expData = [
     priceHref: "https://bloxproducts.com/?affiliate_key=1270744029168009258#Zenith",
     uncbuttonlink: "https://melon.nu/s/2kYfimVy1N",
     hide: false,
-    statuslink: "https://zenith.win/api/v1/status",
-    statusstring: "up",
-    versionstring: "roblox_version",  
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "Zenith",
     checkStatus: true,
-    checkVersion: true
   },
   {
     id: "ronin",
@@ -342,9 +340,9 @@ const expData = [
     warning: false,
     warningInfo: "Due to Bunni's owner blocking all connections to voxlis.NET—after LX63 copied from Visual and gained 30% more clicks (via api.voxlis.net)—voxlis.NET can no longer track the latest data for this executor. Until Peyton contacts us directly, updates will not resume.",
     free: true,
-    statuslink: "https://https://getbunni.lol/beta/version.json.win/api/v1/status",
-    statusstring: "status",
-    versionstring: "roblox_version",  
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "Bunni",
+    versionstring: "Bunni",  
     checkStatus: true,
     checkVersion: true
   },
@@ -452,6 +450,9 @@ const expData = [
     info: "## Exploit Performance  \n- [Velocity](/) is a stable and powerful free executor with a modern backend, custom key system, and active maintenance. It delivers fast performance, regular updates, and a smooth user experience driven by community feedback.\n\n## Background Information  \n- [Velocity](/) started as [CGHub](/), a tool by [CG](/), and later became [Sonar](/). Originally a test project, it gained 20,000 users in its first week, leading to its full release and rebrand to [Velocity](/) on January 9, 2025.\n\n## Discord Server & Community  \n- Early support was unorganized with tickets flooding chat, later fixed by a dedicated server. After a short decline, new staff restored order. The community played a big role early on, and [Korabi](/) later overhauled the project with a new site, backend, key system, and moderation—pushing [Velocity](/) to the top.\n\n> Sources: [reddit.com/r/robloxhackers](), Velocity Developers\n",    hide: false,
     hasKeySystem: false,
     free: true,
+    statuslink: "https://api.voxlis.net/list.php",
+    statusstring: "Velocity",
+    checkStatus: true,
   },
   {
     id: "CSVM",
@@ -936,18 +937,6 @@ const robloxVersionData = {
   lastUpdated: null,
 }
 
-const user_agent = "VoxlisNET/1.0"
-
-function createFetchOptions(options = {}) {
-  return {
-    ...options,
-    headers: {
-      'User-Agent': user_agent,
-      ...options.headers
-    }
-  }
-}
-
 async function computeFingerprint() {
   const fpData = [
     navigator.userAgent,
@@ -967,108 +956,34 @@ async function computeFingerprint() {
 
 let globalClickCounts = {}
 
-async function fetchRobloxVersion() {
+async function checkExploitStatusWithPriority(exploit) {
+  if (!exploit.statuslink) {
+    return "untracked"
+  }
+
+  if (!exploit.checkStatus) {
+    return "unknown"
+  }
+
   try {
-    const altProxyUrl = "https://corsproxy.io/?"
-    const targetUrl = "https://clientsettingscdn.roblox.com/v2/client-version/WindowsPlayer/channel/LIVE"
-    const response = await fetch(altProxyUrl + encodeURIComponent(targetUrl))
+    const response = await fetch(exploit.statuslink)
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
 
     const data = await response.json()
-    robloxVersionData.windows = data.clientVersionUpload
-    robloxVersionData.lastUpdated = new Date().toISOString()
 
-    console.log("Roblox version fetched:", data.clientVersionUpload)
-    return data.clientVersionUpload
-  } catch (fallbackError) {
-    console.error("Failed:", fallbackError)
-    return null
-  }
-}
-
-function extractRobloxVersionFromResponse(responseText, versionstring) {
-  try {
-    if (!versionstring) return null
-
-    const functionPattern = new RegExp(
-      `function\\s+${versionstring}\\s*\$$\\s*\$$\\s*{[^}]*return\\s*["']([^"']+)["'][^}]*}`,
-      "i",
-    )
-    const functionMatch = responseText.match(functionPattern)
-    if (functionMatch) {
-      return functionMatch[1]
+    if (exploit.statusstring && data.hasOwnProperty(exploit.statusstring)) {
+      return data[exploit.statusstring] === true ? "updated" : "down"
     }
 
-    const altMatch1 = new RegExp(`${versionstring}\\s*=\\s*["']([^"']+)["']`, "i")
-    const altResult1 = responseText.match(altMatch1)
-    if (altResult1) {
-      return altResult1[1]
-    }
-
-    const altMatch2 = new RegExp(`["']${versionstring}["']\\s*:\\s*["']([^"']+)["']`, "i")
-    const altResult2 = responseText.match(altMatch2)
-    if (altResult2) {
-      return altResult2[1]
-    }
-
-    return null
-  } catch (error) {
-    console.error("Error extracting version:", error)
-    return null
-  }
-}
-
-async function checkExploitStatusWithPriority(exploit) {
-  if (!exploit.statuslink) {
-    return "untracked"
-  }
-
-  if (!exploit.checkStatus && !exploit.checkVersion) {
     return "unknown"
-  }
-
-  try {
-    if (!robloxVersionData.windows) {
-      await fetchRobloxVersion()
-    }
-
-    const response = await fetch(exploit.statuslink)
-    const data = await response.text()
-
-    let finalStatus = null
-
-    if (exploit.checkVersion && exploit.versionstring) {
-      const exploitVersion = extractRobloxVersionFromResponse(data, exploit.versionstring)
-      const robloxVersion = robloxVersionData.windows
-
-      if (exploitVersion && robloxVersion) {
-        if (exploitVersion === robloxVersion) {
-          finalStatus = "updated"
-        } else {
-          finalStatus = "down"
-        }
-      }
-    }
-
-    if (finalStatus === null && exploit.checkStatus) {
-      const isOnline = data.toLowerCase().includes(exploit.statusstring.toLowerCase())
-      finalStatus = isOnline ? "updated" : "down"
-    }
-
-    if (finalStatus === null) {
-      finalStatus = "unknown"
-    }
-
-    return finalStatus
   } catch (error) {
     console.error(`Failed to check status for ${exploit.name}:`, error)
     return "down"
   }
 }
-
 async function updateExploitStatusAndVersion(exploit) {
   return await checkExploitStatusWithPriority(exploit)
 }
