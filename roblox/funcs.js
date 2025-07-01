@@ -345,8 +345,8 @@ const expData = [
     statuslink: "https://https://getbunni.lol/beta/version.json.win/api/v1/status",
     statusstring: "status",
     versionstring: "roblox_version",  
-    checkStatus: false,
-    checkVersion: false
+    checkStatus: true,
+    checkVersion: true
   },
   {
     id: "krnl",
@@ -936,6 +936,18 @@ const robloxVersionData = {
   lastUpdated: null,
 }
 
+const CUSTOM_USER_AGENT = "VoxlisNET/1.0"
+
+function createFetchOptions(options = {}) {
+  return {
+    ...options,
+    headers: {
+      'User-Agent': CUSTOM_USER_AGENT,
+      ...options.headers
+    }
+  }
+}
+
 async function computeFingerprint() {
   const fpData = [
     navigator.userAgent,
@@ -969,7 +981,7 @@ async function fetchRobloxVersion() {
     robloxVersionData.windows = data.clientVersionUpload
     robloxVersionData.lastUpdated = new Date().toISOString()
 
-    console.log("Roblox version fetched (fallback):", data.clientVersionUpload)
+    console.log("Roblox version fetched:", data.clientVersionUpload)
     return data.clientVersionUpload
   } catch (fallbackError) {
     console.error("Failed:", fallbackError)
