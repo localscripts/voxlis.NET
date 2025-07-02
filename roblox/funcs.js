@@ -640,7 +640,7 @@ const expData = [
     href: "https://wearedevs.net/d/Drift",
     priceHref: "",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=JSxQ34jzoGih0I0H&key=Ur05SQl3jlZvjGyEBPLm7ByYVHMV1NFA",
-    hide: false,
+    hide: true,
     hasKeySystem: true,
   },
   {
@@ -735,7 +735,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     href: "https://www.reddit.com/r/robloxhackers/comments/1lnp8p3/is_fatal_legitsafe/",
     href: "https://fatal.best",
     priceHref: "",
-    hide: false,
+    hide: true,
     hasKeySystem: false,
     uncbuttonlink: "https://www.reddit.com/r/robloxhackers/comments/1lnp8p3/is_fatal_legitsafe/",
     uncbuttonlink: "https://fatal.best",
