@@ -23,9 +23,6 @@ const expData = [
     priceHref: "https://bloxproducts.com/?affiliate_key=1270744029168009258#Zenith",
     uncbuttonlink: "https://melon.nu/s/2kYfimVy1N",
     hide: false,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Zenith",
-    checkStatus: true,
   },
   {
     id: "ronin",
@@ -50,9 +47,6 @@ const expData = [
     free: false,
     external: true,
     hideunc: true,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Ronin",
-    checkStatus: true,
   },
   {
     id: "cryptic",
@@ -343,11 +337,6 @@ const expData = [
     warning: false,
     warningInfo: "Due to Bunni's owner blocking all connections to voxlis.NET—after LX63 copied from Visual and gained 30% more clicks (via api.voxlis.net)—voxlis.NET can no longer track the latest data for this executor. Until Peyton contacts us directly, updates will not resume.",
     free: true,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Bunni",
-    versionstring: "Bunni",  
-    checkStatus: true,
-    checkVersion: true
   },
   {
     id: "krnl",
@@ -453,9 +442,6 @@ const expData = [
     info: "## Exploit Performance  \n- [Velocity](/) is a stable and powerful free executor with a modern backend, custom key system, and active maintenance. It delivers fast performance, regular updates, and a smooth user experience driven by community feedback.\n\n## Background Information  \n- [Velocity](/) started as [CGHub](/), a tool by [CG](/), and later became [Sonar](/). Originally a test project, it gained 20,000 users in its first week, leading to its full release and rebrand to [Velocity](/) on January 9, 2025.\n\n## Discord Server & Community  \n- Early support was unorganized with tickets flooding chat, later fixed by a dedicated server. After a short decline, new staff restored order. The community played a big role early on, and [Korabi](/) later overhauled the project with a new site, backend, key system, and moderation—pushing [Velocity](/) to the top.\n\n> Sources: [reddit.com/r/robloxhackers](), Velocity Developers\n",    hide: false,
     hasKeySystem: false,
     free: true,
-    statuslink: "https://api.voxlis.net/list.php",
-    statusstring: "Velocity",
-    checkStatus: true,
   },
   {
     id: "CSVM",
@@ -899,29 +885,6 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     uncbuttonlink: "https://rubis.app/view/?scrap=AdbtZX2pP9CxpyTD",
     hide: false,
   },
-      {
-      id: "severe",
-      name: "Severe",
-      desc: "A good external exploit.",
-      external: true,
-      price: "$19.99",
-      period: "lifetime",
-      plat: ["windows"],
-      pros: ["Custom LUA enviroment"],
-      neutral: [],
-      cons: [],
-      verified: true,
-      editor: "voxlis.NET",
-      txtColor: "text-yellow-500",
-      accentColor: "from-purple-600 to-purple-700",
-info: "## Exploit Performance  \n- [Severe](/) gained recognition as the first undetected external  following the rollout of [Hyperion](/) in November 2023. Since then, it has undergone continuous improvements, focusing on stability, performance, and a user-friendly interface with clean, modern visuals.  \n- The custom [Luau](/) environment built into [Severe](/) is optimized for speed and deep memory interaction, offering advanced low-level capabilities rarely seen in external executors.\n\n## Background Information  \n- [Severe](/) originated as [v-severe](/), an internal executor that began development before [Hyperion](/) was introduced, sometime around 2021.  \n- It now includes unique features such as a 3D radar and in-menu chat — with additional enhancements planned for future releases.\n\n## Developers Background Information  \n- [Severe](/) is developed by [@BACKWOODS](/), who started his journey creating and redesigning UIs in C#. He later transitioned into exploit development, releasing [Sona](/) and [Sona One](/), two prior executors known for providing Level 6–7 execution performance.\n\n> Sources: [Severe](), internal testing, and developer notes\n",
-      premium: false,
-      href: "https://discord.gg/4QmWjQCgzV",
-      priceHref: "https://discord.gg/4QmWjQCgzV",
-      hide: false,
-      hideunc: true,
-      pricegray: true,
-    },
     {
     id: "lx63",
     name: "LX63",
@@ -993,7 +956,7 @@ async function fetchAllExploitStatuses() {
     return globalStatusCache
   }
 
-  const statusEndpoint = "https://api.voxlis.net/list.php"
+  const statusEndpoint = "https://api.voxlis.net/list"
   
   try {
     const response = await fetch(statusEndpoint)
