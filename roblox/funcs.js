@@ -320,7 +320,7 @@ const expData = [
     desc: "The free Level 8 exploit to use.",
     lvl: 8,
     price: "FREE",
-    plat: ["windows"],
+    plat: ["windows", "macos"],
     pros: ["Has a decompiler", "100% sUNC", "Level 8"],
     neutral: ["Has a keysystem"],
     cons: [],
