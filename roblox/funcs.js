@@ -926,7 +926,7 @@ const robloxVersionData = {
   lastUpdated: null,
 }
 
-let globalStatusCache = new Map()
+const globalStatusCache = new Map()
 let statusCacheTimestamp = 0
 const STATUS_CACHE_DURATION = 5 * 60 * 1000
 
@@ -950,44 +950,44 @@ async function computeFingerprint() {
 let globalClickCounts = {}
 
 async function fetchAllExploitStatuses() {
-  const now = Date.now()
-  
-  if (globalStatusCache.size > 0 && (now - statusCacheTimestamp) < STATUS_CACHE_DURATION) {
-    return globalStatusCache
+  const now = Date.now();
+
+  if (globalStatusCache.size > 0 && now - statusCacheTimestamp < STATUS_CACHE_DURATION) {
+    return globalStatusCache;
   }
 
-  const statusEndpoint = "https://api.voxlis.net/list"
-  
+  const statusEndpoint = "https://api.voxlis.net/list";
+
   try {
-    const response = await fetch(statusEndpoint)
-    
+    const response = await fetch(statusEndpoint);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const platformFirstData = await response.json();
+    globalStatusCache.clear();
+    statusCacheTimestamp = now;
+
+    for (const exploit of expData) {
+      const exploitStatuses = {};
+      
+      for (const platform of exploit.plat) {
+        if (platformFirstData.hasOwnProperty(platform) && platformFirstData[platform].hasOwnProperty(exploit.id)) {
+          exploitStatuses[platform] = platformFirstData[platform][exploit.id] === true;
+        } else {
+
+        }
+      }
+      globalStatusCache.set(exploit.id, exploitStatuses);
     }
 
-    const data = await response.json()
-    
-    globalStatusCache.clear()
-    statusCacheTimestamp = now
-    
-    for (const exploit of expData) {
-      if (data.hasOwnProperty(exploit.id)) {
-        globalStatusCache.set(exploit.id, data[exploit.id] === true ? "updated" : "down")
-      } else {
-        globalStatusCache.set(exploit.id, "untracked")
-      }
-    }
-    
-    return globalStatusCache
-    
+    return globalStatusCache;
   } catch (error) {
-    console.error("Failed to fetch exploit statuses:", error)
-    
+    console.error("Failed to fetch exploit statuses:", error);
+
     for (const exploit of expData) {
-      globalStatusCache.set(exploit.id, "unknown")
+      globalStatusCache.set(exploit.id, "unknown");
     }
-    
-    return globalStatusCache
+    return globalStatusCache;
   }
 }
 
@@ -995,9 +995,9 @@ async function getExploitStatus(exploitId) {
   if (globalStatusCache.has(exploitId)) {
     return globalStatusCache.get(exploitId)
   }
-  
+
   await fetchAllExploitStatuses()
-  
+
   return globalStatusCache.get(exploitId) || "unknown"
 }
 
@@ -1382,7 +1382,8 @@ class ClickTracker {
     return null
   }
 
-  async trackClick(itemName, buttonType) {
+  async
+  trackClick(itemName, buttonType) {
     return window.apiClient.trackClick(itemName, buttonType)
   }
 
@@ -1422,7 +1423,8 @@ class ClickTracker {
     }
   }
 
-  async retryFailedClicks() {
+  async
+  retryFailedClicks() {
     this.log("Attempting to retry failed clicks...")
 
     try {
@@ -1436,7 +1438,7 @@ class ClickTracker {
 
       const retryPromises = failedClicks.map((click) => this.trackClick(click.item, click.button_type))
 
-      await Promise.allSettled(retryPromises)
+      Promise.allSettled(retryPromises)
       localStorage.removeItem("failed_clicks")
       this.log("✅ Finished retrying failed clicks")
     } catch (error) {
@@ -1861,14 +1863,13 @@ class AppState {
   async updateAllExploitStatuses() {
     try {
       const statusMap = await fetchAllExploitStatuses()
-      
+
       for (const [exploitId, status] of statusMap) {
         this.exploitStatuses.set(exploitId, status)
       }
-      
     } catch (error) {
       console.warn("Failed to update exploit statuses:", error)
-      
+
       for (const exploit of expData) {
         this.exploitStatuses.set(exploit.id, "unknown")
       }
@@ -1876,8 +1877,25 @@ class AppState {
   }
 
   getExploitStatus(exploitId) {
-    const status = this.exploitStatuses.get(exploitId)
-    return status || "unknown"
+    const rawStatus = this.exploitStatuses.get(exploitId)
+
+    if (rawStatus === "unknown") {
+      return "unknown"
+    }
+    if (typeof rawStatus === "boolean") {
+      return rawStatus ? "updated" : "down"
+    }
+    if (typeof rawStatus === "object" && rawStatus !== null) {
+      const hasUpdatedPlatform = Object.values(rawStatus).some((status) => status === true)
+      const allPlatformsDown = Object.values(rawStatus).every((status) => status === false)
+
+      if (hasUpdatedPlatform) {
+        return "updated"
+      } else if (allPlatformsDown && Object.keys(rawStatus).length > 0) {
+        return "down"
+      }
+    }
+    return "unknown"
   }
 
   filterExploits() {
@@ -2508,7 +2526,7 @@ class UIManager {
       this.appState.executorOnly = false
       this.appState.keySystemOnly = false
       this.appState.noKeySystemOnly = false
-      this.appState.updatedOnly = false 
+      this.appState.updatedOnly = false
 
       document.querySelectorAll(".cstm-chkbx input, .mob-pltf-chkbx input").forEach((cb) => {
         cb.checked = false
@@ -2663,78 +2681,53 @@ class UIManager {
     }
 
     const status = this.appState.getExploitStatus(exploit.id)
-    let statusBadge = ""
-
-    let statusIcon, statusText, statusClass
-
-    if (status) {
-      switch (status) {
-        case "updated":
-          statusIcon = "fas fa-check-circle"
-          statusText = "Updated"
-          statusClass = "updated"
-          break
-        case "down":
-          statusIcon = "fas fa-times-circle"
-          statusText = "Down"
-          statusClass = "down"
-          break
-        case "unknown":
-          statusIcon = "fas fa-question-circle"
-          statusText = "Unknown"
-          statusClass = "unknown"
-          break
-        case "untracked":
-          statusIcon = "fas fa-minus-circle"
-          statusText = "Untracked"
-          statusClass = "untracked"
-          break
-        default:
-          statusIcon = "fas fa-question-circle"
-          statusText = "Unknown"
-          statusClass = "unknown"
-      }
-    } else {
-      statusIcon = "fas fa-question-circle"
-      statusText = "Unknown"
-      statusClass = "unknown"
+    let statusClass = "untracked"
+    switch (status) {
+      case "updated":
+        statusClass = "updated"
+        break
+      case "down":
+        statusClass = "down"
+        break
+      case "unknown":
+        statusClass = "unknown"
+        break
     }
-    statusBadge = `<span class="status-bdg ${statusClass}"><i class="${statusIcon}"></i>${statusText}</span>`
+    card.classList.add(`status-${statusClass}`)
 
     card.innerHTML = `
-  <div class="crd-acnt ${accentColor}"></div>
-  <div class="crd-hdr">
-    <div class="crd-hdr-cntnt">
-      <div class="crd-ttl-cntr">
-        <h3 class="crd-ttl">
-          ${exploit.name}
-          ${exploit.verified ? `<span class="vrf-bdg"><i class="fas fa-check"></i>Verified</span>` : ""}
-          ${exploit.premium ? `<span class="prem-bdg"><i class="fas fa-crown"></i>Premium</span>` : ""}
-          ${exploit.warning ? `<span class="warn-bdg"><i class="fas fa-exclamation-triangle"></i>Warning</span>` : ""}
-          ${statusBadge}
-        </h3>
-        <p class="crd-desc">${exploit.desc}</p>
-      </div>
-      <div class="pltf-bdgs">
-        ${this.renderPlatformBadges(exploit)}
-      </div>
+<div class="crd-acnt ${accentColor}"></div>
+<div class="crd-hdr">
+  <div class="crd-hdr-cntnt">
+    <div class="crd-ttl-cntr">
+      <h3 class="crd-ttl">
+        ${exploit.name}
+        ${exploit.verified ? `<span class="vrf-bdg"><i class="fas fa-check"></i>Verified</span>` : ""}
+        ${exploit.premium ? `<span class="prem-bdg"><i class="fas fa-crown"></i>Premium</span>` : ""}
+        ${exploit.warning ? `<span class="warn-bdg"><i class="fas fa-exclamation-triangle"></i>Warning</span>` : ""}
+      </h3>
+      <p class="crd-desc">${exploit.desc}</p>
+    </div>
+    <div class="pltf-bdgs">
+      ${this.renderPlatformBadges(exploit)}
     </div>
   </div>
-  <div class="crd-bdy">
-    <div class="crd-meta">
-      ${levelDisplay}
-      <div class="meta-sep"></div>
-      <div class="edr-info">Last edited by ${exploit.editor}</div>
-    </div>
-    <div class="crd-cntnt cstm-scrlbr">
-      ${this.renderFeatureSection(exploit.pros, "pros", "+")}
-      ${this.renderFeatureSection(exploit.neutral, "ntrl", "•")}
-      ${this.renderFeatureSection(exploit.cons, "cons", "-")}
-    </div>
+</div>
+<div class="crd-bdy">
+  <div class="crd-meta">
+    ${levelDisplay}
+    <div class="meta-sep"></div>
+    <div class="edr-info">Last edited by ${exploit.editor}</div>
   </div>
-  <div class="crd-ftr">
-    ${this.renderCardFooter(exploit)}
+  <div class="crd-cntnt cstm-scrlbr">
+    ${this.renderFeatureSection(exploit.pros, "pros", "+")}
+    ${this.renderFeatureSection(exploit.neutral, "ntrl", "•")}
+    ${this.renderFeatureSection(exploit.cons, "cons", "-")}
   </div>
+</div>
+<div class="crd-ftr">
+  ${this.renderCardFooter(exploit)}
+</div>
 `
 
     return card
@@ -2742,22 +2735,49 @@ class UIManager {
 
   renderPlatformBadges(exploit) {
     let badges = ""
+    const statuses = this.appState.exploitStatuses.get(exploit.id) || {}
 
-    if (exploit.plat.includes("windows")) {
-      badges += `<div class="pltf-bdg" title="Windows"><i class="fab fa-windows"></i></div>`
+    const getStatusClass = (platform) => {
+      let status = "untracked"
+      if (typeof statuses === "object" && statuses !== null && statuses.hasOwnProperty(platform)) {
+        status = statuses[platform] ? "updated" : "down"
+      } else if (statuses === true) {
+        status = "updated"
+      } else if (statuses === false) {
+        status = "down"
+      }
+      return `status-${status}`
     }
 
-    if (exploit.plat.includes("macos")) {
-      badges += `<div class="pltf-bdg" title="macOS"><i class="fab fa-apple"></i></div>`
-    }
+    const uniquePlatforms = [...new Set(exploit.plat)]
 
-    if (exploit.plat.includes("android")) {
-      badges += `<div class="pltf-bdg" title="Android"><i class="fab fa-android"></i></div>`
-    }
+    uniquePlatforms.forEach((platform) => {
+      const statusClass = getStatusClass(platform)
+      let iconClass = ""
+      let title = ""
 
-    if (exploit.plat.includes("ios")) {
-      badges += `<div class="pltf-bdg" title="iOS"><i class="fab fa-apple"></i></div>`
-    }
+      switch (platform) {
+        case "windows":
+          iconClass = "fab fa-windows"
+          title = "Windows"
+          break
+        case "macos":
+          iconClass = "fab fa-apple"
+          title = "macOS"
+          break
+        case "android":
+          iconClass = "fab fa-android"
+          title = "Android"
+          break
+        case "ios":
+          iconClass = "fab fa-apple"
+          title = "iOS"
+          break
+      }
+      if (iconClass) {
+        badges += `<div class="pltf-bdg ${statusClass}" title="${title}"><i class="${iconClass}"></i></div>`
+      }
+    })
 
     if (exploit.hasKeySystem) {
       badges += `<div class="pltf-bdg key-system" title="Key System"><i class="fas fa-key"></i></div>`
@@ -2770,15 +2790,15 @@ class UIManager {
     if (!features || features.length === 0) return ""
 
     return `
-  <div class="feat-sec ${className}">
-    <h4 class="feat-hdng">
-      <span class="feat-ico">${icon}</span>
-      ${className === "pros" ? "Pros" : className === "ntrl" ? "Neutral" : "Cons"}
-    </h4>
-    <ul class="feat-lst">
-      ${features.map((feature) => `<li class="feat-itm">${feature}</li>`).join("")}
-    </ul>
-  </div>
+<div class="feat-sec ${className}">
+  <h4 class="feat-hdng">
+    <span class="feat-ico">${icon}</span>
+    ${className === "pros" ? "Pros" : className === "ntrl" ? "Neutral" : "Cons"}
+  </h4>
+  <ul class="feat-lst">
+    ${features.map((feature) => `<li class="feat-itm">${feature}</li>`).join("")}
+  </ul>
+</div>
 `
   }
 
@@ -2786,37 +2806,37 @@ class UIManager {
     if (exploit.price === "FREE") {
       if (exploit.hideunc === true) {
         return `
-          <div class="btn-grid free-program-grid">
-            <button class="crd-btn info-btn full-width">
-              <div class="text-container">
-                <span class="text-switch visible" data-text="info">INFO</span>
-                <span class="text-switch hidden" data-text="more">MORE</span>
-              </div>
-              <i class="fas fa-info-circle"></i>
-            </button>
-          </div>
-          <button class="crd-btn web-btn full-width">
-            ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
+        <div class="btn-grid free-program-grid">
+          <button class="crd-btn info-btn full-width">
+            <div class="text-container">
+              <span class="text-switch visible" data-text="info">INFO</span>
+              <span class="text-switch hidden" data-text="more">MORE</span>
+            </div>
+            <i class="fas fa-info-circle"></i>
           </button>
-        `
+        </div>
+        <button class="crd-btn web-btn full-width">
+          ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
+        </button>
+      `
       } else {
         return `
-          <div class="btn-grid free-program-grid">
-            <button class="crd-btn unc-btn expanded">
-              UNC <i class="fas fa-code"></i>
-            </button>
-            <button class="crd-btn info-btn expanded">
-              <div class="text-container">
-                <span class="text-switch visible" data-text="info">INFO</span>
-                <span class="text-switch hidden" data-text="more">MORE</span>
-              </div>
-              <i class="fas fa-info-circle"></i>
-            </button>
-          </div>
-          <button class="crd-btn web-btn full-width">
-            ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
+        <div class="btn-grid free-program-grid">
+          <button class="crd-btn unc-btn expanded">
+            UNC <i class="fas fa-code"></i>
           </button>
-        `
+          <button class="crd-btn info-btn expanded">
+            <div class="text-container">
+              <span class="text-switch visible" data-text="info">INFO</span>
+              <span class="text-switch hidden" data-text="more">MORE</span>
+            </div>
+            <i class="fas fa-info-circle"></i>
+          </button>
+        </div>
+        <button class="crd-btn web-btn full-width">
+          ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
+        </button>
+      `
       }
     } else {
       const baseClasses = ["crd-btn", "prc-btn-new"]
@@ -2824,53 +2844,53 @@ class UIManager {
 
       if (exploit.hideunc === true) {
         return `
-          <div class="btn-grid">
-            <button class="crd-btn web-btn expanded">
-              ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
-            </button>
-            <button class="crd-btn info-btn expanded">
-              <div class="text-container">
-                <span class="text-switch visible" data-text="info">INFO</span>
-                <span class="text-switch hidden" data-text="more">MORE</span>
-              </div>
-              <i class="fas fa-info-circle"></i>
-            </button>
-          </div>
-          <button class="${finalPriceButtonClasses}">
-            <div class="default-text">
-              <i class="fas fa-tag"></i> BUY
-            </div>
-            <div class="price-text">
-              <i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}
-            </div>
+        <div class="btn-grid">
+          <button class="crd-btn web-btn expanded">
+            ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
           </button>
-        `
+          <button class="crd-btn info-btn expanded">
+            <div class="text-container">
+              <span class="text-switch visible" data-text="info">INFO</span>
+              <span class="text-switch hidden" data-text="more">MORE</span>
+            </div>
+            <i class="fas fa-info-circle"></i>
+          </button>
+        </div>
+        <button class="${finalPriceButtonClasses}">
+          <div class="default-text">
+            <i class="fas fa-tag"></i> BUY
+          </div>
+          <div class="price-text">
+            <i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}
+          </div>
+        </button>
+      `
       } else {
         return `
-          <div class="btn-grid">
-            <button class="crd-btn web-btn expanded">
-              ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
-            </button>
-            <button class="crd-btn unc-btn">
-              UNC <i class="fas fa-code"></i>
-            </button>
-            <button class="crd-btn info-btn expanded">
-              <div class="text-container">
-                <span class="text-switch visible" data-text="info">INFO</span>
-                <span class="text-switch hidden" data-text="more">MORE</span>
-              </div>
-              <i class="fas fa-info-circle"></i>
-            </button>
-          </div>
-          <button class="${finalPriceButtonClasses}">
-            <div class="default-text">
-              <i class="fas fa-tag"></i> BUY
-            </div>
-            <div class="price-text">
-              <i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}
-            </div>
+        <div class="btn-grid">
+          <button class="crd-btn web-btn expanded">
+            ${exploit.websitetofree ? "Free" : "Website"} <i class="fas fa-external-link-alt"></i>
           </button>
-        `
+          <button class="crd-btn unc-btn">
+            UNC <i class="fas fa-code"></i>
+          </button>
+          <button class="crd-btn info-btn expanded">
+            <div class="text-container">
+              <span class="text-switch visible" data-text="info">INFO</span>
+              <span class="text-switch hidden" data-text="more">MORE</span>
+            </div>
+            <i class="fas fa-info-circle"></i>
+          </button>
+        </div>
+        <button class="${finalPriceButtonClasses}">
+          <div class="default-text">
+            <i class="fas fa-tag"></i> BUY
+          </div>
+          <div class="price-text">
+            <i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}
+          </div>
+        </button>
+      `
       }
     }
   }
@@ -3035,15 +3055,15 @@ class UIManager {
     document.head.insertAdjacentHTML(
       "beforeend",
       `
-  <style>
-    .crd-btn.expanded {
-      flex: 1;
-      min-width: 0;
-    }
-    .crd-btn.full-width {
-      width: 100%;
-    }
-  </style>
+<style>
+  .crd-btn.expanded {
+    flex: 1;
+    min-width: 0;
+  }
+  .crd-btn.full-width {
+    width: 100%;
+  }
+</style>
 `,
     )
   }
@@ -3341,42 +3361,42 @@ class ModalManager {
     modalContainer.style.display = "none"
 
     modalContainer.innerHTML = `
-  <div class="unc-modal-overlay" id="uncModalOverlay"></div>
-  <div class="unc-modal">
-    <div class="unc-modal-header">
-      <h2 class="unc-modal-title" id="uncModalTitle">UNC Code</h2>
-    </div>
-    <div class="unc-modal-content">
-      <div class="unc-modal-info">
-        <div class="unc-modal-exploit-info" id="uncModalExploitInfo">
-          <div class="unc-modal-exploit-name" id="uncModalExploitName"></div>
-          <div class="unc-modal-exploit-desc" id="uncModalExploitDesc"></div>
-        </div>
-      </div>
-      <div class="unc-modal-code-container">
-        <div class="unc-modal-code-header">
-          <div class="unc-modal-code-title">UNC Code</div>
-          <button class="unc-modal-copy-btn" id="uncModalCopyBtn">
-            <i class="fas fa-copy"></i> Copy
-          </button>
-        </div>
-        <pre class="unc-modal-code" id="uncModalCode"></pre>
-      </div>
-      <div class="unc-modal-loading" id="uncModalLoading">
-        <div class="unc-modal-spinner"></div>
-        <div class="unc-modal-loading-text">Loading UNC data...</div>
-      </div>
-      <div class="unc-modal-error" id="uncModalError">
-        <i class="fas fa-exclamation-triangle"></i>
-        <div class="unc-modal-error-text" id="uncModalErrorText">Failed to load UNC data</div>
+<div class="unc-modal-overlay" id="uncModalOverlay"></div>
+<div class="unc-modal">
+  <div class="unc-modal-header">
+    <h2 class="unc-modal-title" id="uncModalTitle">UNC Code</h2>
+  </div>
+  <div class="unc-modal-content">
+    <div class="unc-modal-info">
+      <div class="unc-modal-exploit-info" id="uncModalExploitInfo">
+        <div class="unc-modal-exploit-name" id="uncModalExploitName"></div>
+        <div class="unc-modal-exploit-desc" id="uncModalExploitDesc"></div>
       </div>
     </div>
-    <div class="unc-modal-footer">
-      <button class="unc-modal-btn unc-modal-btn-primary" id="uncModalCloseBtn">
-        <i class="fas fa-times"></i> Close
-      </button>
+    <div class="unc-modal-code-container">
+      <div class="unc-modal-code-header">
+        <div class="unc-modal-code-title">UNC Code</div>
+        <button class="unc-modal-copy-btn" id="uncModalCopyBtn">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+      <pre class="unc-modal-code" id="uncModalCode"></pre>
+    </div>
+    <div class="unc-modal-loading" id="uncModalLoading">
+      <div class="unc-modal-spinner"></div>
+      <div class="unc-modal-loading-text">Loading UNC data...</div>
+    </div>
+    <div class="unc-modal-error" id="uncModalError">
+      <i class="fas fa-exclamation-triangle"></i>
+      <div class="unc-modal-error-text" id="uncModalErrorText">Failed to load UNC data</div>
     </div>
   </div>
+  <div class="unc-modal-footer">
+    <button class="unc-modal-btn unc-modal-btn-primary" id="uncModalCloseBtn">
+      <i class="fas fa-times"></i> Close
+    </button>
+  </div>
+</div>
 `
 
     document.body.appendChild(modalContainer)
@@ -3424,74 +3444,74 @@ class ModalManager {
     modalContainer.style.display = "none"
 
     modalContainer.innerHTML = `
-  <div class="warning-modal-overlay"></div>
-  <div class="warning-modal">
-    <div class="warning-modal-header">
-      <h2 class="warning-modal-title">Warning</h2>
-    </div>
-    <div class="warning-modal-content">
-      <div class="warning-modal-icon">
-        <i class="fas fa-exclamation-triangle"></i>
-      </div>
-      <p id="warningModalText" class="warning-modal-text">Are you sure you want to visit this website?</p>
-    </div>
-    <div class="warning-modal-footer">
-      <button id="warningModalCancel" class="warning-modal-btn warning-modal-btn-cancel">Cancel</button>
-      <button id="warningModalOkay" class="warning-modal-btn warning-modal-btn-okay">Okay</button>
-    </div>
+<div class="warning-modal-overlay"></div>
+<div class="warning-modal">
+  <div class="warning-modal-header">
+    <h2 class="warning-modal-title">Warning</h2>
   </div>
+  <div class="warning-modal-content">
+    <div class="warning-modal-icon">
+      <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <p id="warningModalText" class="warning-modal-text">Are you sure you want to visit this website?</p>
+  </div>
+  <div class="warning-modal-footer">
+    <button id="warningModalCancel" class="warning-modal-btn warning-modal-btn-cancel">Cancel</button>
+    <button id="warningModalOkay" class="warning-modal-btn warning-modal-btn-okay">Okay</button>
+  </div>
+</div>
 `
 
     document.body.appendChild(modalContainer)
   }
 
-  static openUncModal(exploit) {
-    const modalContainer = document.getElementById("uncModalContainer")
+static openUncModal(exploit) {
+  const modalContainer = document.getElementById("uncModalContainer")
 
-    if (!modalContainer) {
-      ModalManager.createUncModal()
-    }
-
-    const modalContainer2 = document.getElementById("uncModalContainer")
-    const modalTitle = document.getElementById("uncModalTitle")
-    const modalExploitName = document.getElementById("uncModalExploitName")
-    const modalExploitDesc = document.getElementById("uncModalExploitDesc")
-    const modalCode = document.getElementById("uncModalCode")
-    const modalLoading = document.getElementById("uncModalLoading")
-    const modalError = document.getElementById("uncModalError")
-
-    modalContainer2.style.display = "flex"
-    modalTitle.textContent = `${exploit.name} UNC Code`
-    modalExploitName.textContent = exploit.name
-    modalExploitDesc.textContent = exploit.desc
-
-    modalLoading.style.display = "flex"
-    modalCode.style.display = "none"
-    modalError.style.display = "none"
-
-    ModalManager.fetchUncData(exploit.id, exploit.name)
-      .then((data) => {
-        modalLoading.style.display = "none"
-        modalCode.style.display = "block"
-        modalCode.textContent = data.code || "-- No UNC code available"
-
-        if (window.hljs) {
-          window.hljs.highlightElement(modalCode)
-        }
-      })
-      .catch((error) => {
-        modalLoading.style.display = "none"
-        modalError.style.display = "flex"
-        document.getElementById("uncModalErrorText").textContent =
-          `Failed to load UNC data: ${error.message || "Unknown error"}`
-      })
-
-    setTimeout(() => {
-      document.querySelector(".unc-modal").classList.add("show")
-    }, 10)
-
-    document.body.style.overflow = "hidden"
+  if (!modalContainer) {
+    ModalManager.createUncModal()
   }
+
+  const modalContainer2 = document.getElementById("uncModalContainer")
+  const modalTitle = document.getElementById("uncModalTitle")
+  const modalExploitName = document.getElementById("uncModalExploitName")
+  const modalExploitDesc = document.getElementById("uncModalExploitDesc")
+  const modalCode = document.getElementById("uncModalCode")
+  const modalLoading = document.getElementById("uncModalLoading")
+  const modalError = document.getElementById("uncModalError")
+
+  modalContainer2.style.display = "flex"
+  modalTitle.textContent = `${exploit.name} UNC Code`
+  modalExploitName.textContent = exploit.name
+  modalExploitDesc.textContent = exploit.desc
+
+  modalLoading.style.display = "flex"
+  modalCode.style.display = "none"
+  modalError.style.display = "none"
+
+  ModalManager.fetchUncData(exploit.id, exploit.name)
+    .then((data) => {
+      modalLoading.style.display = "none"
+      modalCode.style.display = "block"
+      modalCode.textContent = data.code || "-- No UNC code available"
+
+      if (window.hljs) {
+        window.hljs.highlightElement(modalCode)
+      }
+    })
+    .catch((error) => {
+      modalLoading.style.display = "none"
+      modalError.style.display = "flex"
+      document.getElementById("uncModalErrorText").textContent =
+        `Failed to load UNC data: ${error.message || "Unknown error"}`
+    })
+
+  setTimeout(() => {
+    document.querySelector(".unc-modal").classList.add("show")
+  }, 10)
+
+  document.body.style.overflow = "hidden"
+}
 
   static closeUncModal() {
     const modal = document.querySelector(".unc-modal")
@@ -3827,7 +3847,6 @@ class ThemeManager {
           this.currentTheme = theme
           this.updateSelectedTheme(theme)
           localStorage.setItem("voxlis-theme", theme)
-          themeDropdown.classList.remove("active")
           this.createThemeChangeEffect(theme)
           setTimeout(() => this.updateThemeElements(), 100)
         })
