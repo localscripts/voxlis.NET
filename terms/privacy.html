@@ -1,16 +1,290 @@
-1. Information We Collect
-We collect minimal operational data to improve our services. This includes:
 
-- Anonymous usage statistics (e.g. For click tracking)
-- Performance metrics
-- Error reports
-We do not collect personal information, and no registration or login system is in place to store your data.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - SENSE, inc. Documentation forum</title>
+    <style>
+        :root {
+            --background: #0a0a0f;
+            --card-bg: rgba(16, 17, 27, 0.4);
+            --text: #ffffff;
+            --text-secondary: #a8b3cf;
+            --border: rgba(42, 43, 62, 0.5);
+            --accent: #606fee;
+            --transition: all 0.2s ease;
+        }
 
-2. Data Security
-Since we do not collect personal information, we do not store or manage sensitive data. Any operational data we collect is used solely for the purpose of enhancing the user experience and troubleshooting.
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-3. Cookies and Tracking Technologies
-Our services may use cookies or similar technologies to improve user experience and track usage statistics. You can control cookie settings via your browser preferences. No personal information is linked to these technologies.
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
 
-4. Changes to This Policy
-We may update this policy periodically. The latest version will always be available on this page.
+        #background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-color: var(--background);
+        }
+
+        #background::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, rgba(10, 10, 15, 0.5), var(--background));
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            color: var(--text);
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        .tag {
+            display: inline-flex;
+            padding: 0.375rem 0.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .policy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 3rem;
+        }
+
+        .policy-section {
+            margin-bottom: 3rem;
+        }
+
+        .policy-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .policy-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .policy-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .policy-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .policy-section li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .policy-section li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .site-footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-maintained {
+            color: var(--text-secondary);
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-right a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-right a:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .policy-content {
+                padding: 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-left {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .footer-right {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+    <div class="container">
+        <a href="https://voxlis.net" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Home
+        </a>
+
+        <header>
+            <div class="tag">Legal</div>
+            <h1>Privacy Policy</h1>
+        </header>
+
+        <div class="policy-content">
+            <div class="last-updated">Last Updated: 09/07/2025</div>
+        
+            <div class="policy-section">
+                <h2>1. Information We Collect</h2>
+                <p>We collect minimal operational data to improve our services. This includes:</p>
+                <ul>
+                    <li>Anonymous usage statistics (e.g. click tracking)</li>
+                    <li>Performance metrics</li>
+                    <li>Error reports</li>
+                </ul>
+                <p>We do not collect personal information, and no registration or login system is in place to store your data.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>2. Data Security</h2>
+                <p>Since we do not collect personal information, we do not store or manage sensitive data. Any operational data we collect is used solely for the purpose of enhancing the user experience and troubleshooting.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>3. Cookies and Tracking Technologies</h2>
+                <p>Our services may use cookies or similar technologies to improve user experience and track usage statistics. You can control cookie settings via your browser preferences. No personal information is linked to these technologies.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>4. Changes to This Policy</h2>
+                <p>We may update this policy periodically. The latest version will always be available on this page.</p>
+            </div>
+        </div>        
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>© 2025 voxlis.NET</span>
+                </div>
+                <div class="footer-right">
+                    <a href="https://voxlis.net/terms/terms">Terms of Service</a>
+                    <a href="https://voxlis.net/terms/privacy">Privacy Policy</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        const elements = document.querySelectorAll(".container > *")
+            elements.forEach((element, index) => {
+            element.style.opacity = "0"
+            element.style.transform = "translateY(20px)"
+            element.style.transition = "opacity 0.5s ease, transform 0.5s ease"
+        
+            setTimeout(() => {
+                element.style.opacity = "1"
+                element.style.transform = "translateY(0)"
+            }, index * 100)
+            })
+    </script>
+</body>
+</html>
+
