@@ -1,31 +1,315 @@
-1. Acceptance of Terms
-By accessing or using this service, you acknowledge and agree to abide by these Terms of Service (the "Agreement"). Even if you do not explicitly accept these terms, your continued use of the service constitutes your consent to be bound by them. If you do not agree to any part of these terms, you must refrain from using the service.
 
-2. Compliance with Applicable Laws
-You agree to comply with all applicable laws, regulations, and third-party rights when using the service. This includes, but is not limited to, respecting privacy, intellectual property, and local laws related to your use of the service.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - SENSE, inc. Documentation forum</title>
+    <style>
+        :root {
+            --background: #0a0a0f;
+            --card-bg: rgba(16, 17, 27, 0.4);
+            --text: #ffffff;
+            --text-secondary: #a8b3cf;
+            --border: rgba(42, 43, 62, 0.5);
+            --accent: #606fee;
+            --transition: all 0.2s ease;
+        }
 
-3. User Content
-You retain full ownership of the content you create, upload, or submit to the service. However, by submitting content, you grant us a worldwide, royalty-free, non-exclusive license to use, display, and distribute your content within the platform for the purpose of facilitating the operation and functionality of the service. You represent and warrant that you hold all necessary rights and permissions for the content you submit.
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-4. No Warranty
-The service is provided on an "as is" and "as available" basis. We make no representations or warranties, express or implied, regarding the service, its functionality, or its availability. We are not liable for any damages or losses, including but not limited to, direct, indirect, incidental, or consequential damages, arising from the use of, or inability to use, the service.
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
 
-5. Prohibited Conduct
-You agree not to engage in any activity that may:
+        #background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-color: var(--background);
+        }
 
-- Violate any applicable law or regulation.
-- Infringe on the intellectual property rights of others.
-- Reverse engineer, decompile, disassemble, or exploit the service for any unauthorized purposes.
-- Disrupt, interfere with, or impair the functionality of the service or other users' experience.
+        #background::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent, rgba(10, 10, 15, 0.5), var(--background));
+        }
 
-6. Termination of Access
-We reserve the right to suspend or terminate your access to the service at our discretion, with or without cause, and without notice. Termination may occur for any violation of these Terms of Service, including but not limited to unlawful use, infringement of intellectual property rights, or failure to comply with the guidelines set forth in this agreement.
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-7. Platform Guidelines Compliance
-As a user, you agree to adhere to the specific guidelines and community standards of the platform, as updated from time to time. Any violations of these guidelines may result in the immediate suspension or termination of your account and access to the service.
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
 
-8. Limitation of Liability
-In no event shall we, or our affiliates, be liable for any direct, indirect, incidental, special, punitive, or consequential damages, or any loss of data, revenue, or profits, arising out of or in connection with your use of the service.
+        .back-link:hover {
+            color: var(--text);
+        }
 
-9. Modifications to the Terms
-We reserve the right to modify or update these Terms of Service at any time. Any changes will be effective upon posting to this page. Continued use of the service after such modifications constitutes your acceptance of the updated terms.
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        .tag {
+            display: inline-flex;
+            padding: 0.375rem 0.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(8px);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .policy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 3rem;
+        }
+
+        .policy-section {
+            margin-bottom: 3rem;
+        }
+
+        .policy-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .policy-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .policy-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .policy-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .policy-section li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .policy-section li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .site-footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .footer-maintained {
+            color: var(--text-secondary);
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-right a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-right a:hover {
+            color: var(--text);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .policy-content {
+                padding: 1.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .footer-left {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .footer-right {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+    <div class="container">
+        <a href="https://voxlis.net" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back to Home
+        </a>
+
+        <header>
+            <div class="tag">Legal</div>
+            <h1>Terms of Service</h1>
+        </header>
+
+        <div class="policy-content">
+            <div class="last-updated">Last Updated: 09/07/2025</div>
+        
+            <div class="policy-section">
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using this service, you acknowledge and agree to abide by these Terms of Service (the "Agreement"). Even if you do not explicitly accept these terms, your continued use of the service constitutes your consent to be bound by them. If you do not agree to any part of these terms, you must refrain from using the service.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>2. Compliance with Applicable Laws</h2>
+                <p>You agree to comply with all applicable laws, regulations, and third-party rights when using the service. This includes, but is not limited to, respecting privacy, intellectual property, and local laws related to your use of the service.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>3. User Content</h2>
+                <p>You retain full ownership of the content you create, upload, or submit to the service. However, by submitting content, you grant us a worldwide, royalty-free, non-exclusive license to use, display, and distribute your content within the platform for the purpose of facilitating the operation and functionality of the service. You represent and warrant that you hold all necessary rights and permissions for the content you submit.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>4. No Warranty</h2>
+                <p>The service is provided on an "as is" and "as available" basis. We make no representations or warranties, express or implied, regarding the service, its functionality, or its availability. We are not liable for any damages or losses, including but not limited to, direct, indirect, incidental, or consequential damages, arising from the use of, or inability to use, the service.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>5. Prohibited Conduct</h2>
+                <p>You agree not to engage in any activity that may:</p>
+                <ul>
+                    <li>Violate any applicable law or regulation.</li>
+                    <li>Infringe on the intellectual property rights of others.</li>
+                    <li>Reverse engineer, decompile, disassemble, or exploit the service for any unauthorized purposes.</li>
+                    <li>Disrupt, interfere with, or impair the functionality of the service or other users' experience.</li>
+                </ul>
+            </div>
+        
+            <div class="policy-section">
+                <h2>6. Termination of Access</h2>
+                <p>We reserve the right to suspend or terminate your access to the service at our discretion, with or without cause, and without notice. Termination may occur for any violation of these Terms of Service, including but not limited to unlawful use, infringement of intellectual property rights, or failure to comply with the guidelines set forth in this agreement.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>7. Platform Guidelines Compliance</h2>
+                <p>As a user, you agree to adhere to the specific guidelines and community standards of the platform, as updated from time to time. Any violations of these guidelines may result in the immediate suspension or termination of your account and access to the service.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>8. Limitation of Liability</h2>
+                <p>In no event shall we, or our affiliates, be liable for any direct, indirect, incidental, special, punitive, or consequential damages, or any loss of data, revenue, or profits, arising out of or in connection with your use of the service.</p>
+            </div>
+        
+            <div class="policy-section">
+                <h2>9. Modifications to the Terms</h2>
+                <p>We reserve the right to modify or update these Terms of Service at any time. Any changes will be effective upon posting to this page. Continued use of the service after such modifications constitutes your acceptance of the updated terms.</p>
+            </div>
+        </div>      
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>© 2025 voxlis.NET</span>
+                </div>
+                <div class="footer-right">
+                    <a href="https://voxlis.net/terms/terms">Terms of Service</a>
+                    <a href="https://voxlis.net/terms/privacy">Privacy Policy</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+    const elements = document.querySelectorAll(".container > *")
+        elements.forEach((element, index) => {
+        element.style.opacity = "0"
+        element.style.transform = "translateY(20px)"
+        element.style.transition = "opacity 0.5s ease, transform 0.5s ease"
+    
+        setTimeout(() => {
+            element.style.opacity = "1"
+            element.style.transform = "translateY(0)"
+        }, index * 100)
+        })
+    </script>
+</body>
+</html>
+
