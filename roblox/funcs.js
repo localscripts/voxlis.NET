@@ -7,7 +7,7 @@ const expData = [
     price: "$6.49",
     period: "weekly",
     plat: ["windows", "windows"],
-    pros: ["Updated (ignore 'Down')", "Has a decompiler", "100% sUNC", "Level 8"],
+    pros: ["Has a decompiler", "100% sUNC", "Level 8"],
     neutral: [],
     cons: [],
     verified: true,
