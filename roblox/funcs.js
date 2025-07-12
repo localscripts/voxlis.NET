@@ -2757,56 +2757,56 @@ class UIManager {
   }
 
   renderPlatformBadges(exploit) {
-    let badges = ""
-    const statuses = this.appState.exploitStatuses.get(exploit.id) || {}
+    let badges = "";
+    const statuses = this.appState.exploitStatuses.get(exploit.id) || {};
 
     const getStatusClass = (platform) => {
-      let status = "untracked"
+      let status = "untracked";
       if (typeof statuses === "object" && statuses !== null && statuses.hasOwnProperty(platform)) {
-        status = statuses[platform] ? "updated" : "down"
+        status = statuses[platform] ? "updated" : "down";
       } else if (statuses === true) {
-        status = "updated"
+        status = "updated";
       } else if (statuses === false) {
-        status = "down"
+        status = "down";
       }
-      return `status-${status}`
-    }
+      return `status-${status}`;
+    };
 
-    const uniquePlatforms = [...new Set(exploit.plat)]
+    const uniquePlatforms = [...new Set(exploit.plat)];
 
     uniquePlatforms.forEach((platform) => {
-      const statusClass = getStatusClass(platform)
-      let iconClass = ""
-      let title = ""
+      const statusClass = getStatusClass(platform);
+      let iconHtml = "";
+      let title = "";
 
       switch (platform) {
         case "windows":
-          iconClass = "fab fa-windows"
-          title = "Windows"
-          break
+          iconHtml = `<i class="fab fa-windows"></i>`;
+          title = "Windows";
+          break;
         case "macos":
-          iconClass = "fab fa-apple"
-          title = "macOS"
-          break
+          iconHtml = `<img src="/assets/macos.png" alt="macOS Icon" style="width: 1.2em; height: 1.2em; vertical-align: middle; position: relative; top: -0.1em;">`;
+          title = "macOS";
+          break;
         case "android":
-          iconClass = "fab fa-android"
-          title = "Android"
-          break
+          iconHtml = `<i class="fab fa-android"></i>`;
+          title = "Android";
+          break;
         case "ios":
-          iconClass = "fab fa-apple"
-          title = "iOS"
-          break
+          iconHtml = `<i class="fab fa-apple"></i>`;
+          title = "iOS";
+          break;
       }
-      if (iconClass) {
-        badges += `<div class="pltf-bdg ${statusClass}" title="${title}"><i class="${iconClass}"></i></div>`
+      if (iconHtml) {
+        badges += `<div class="pltf-bdg ${statusClass}" title="${title}">${iconHtml}</div>`;
       }
-    })
+    });
 
     if (exploit.hasKeySystem) {
-      badges += `<div class="pltf-bdg key-system" title="Key System"><i class="fas fa-key"></i></div>`
+      badges += `<div class="pltf-bdg key-system" title="Key System"><i class="fas fa-key"></i></div>`;
     }
 
-    return badges
+    return badges;
   }
 
   renderFeatureSection(features, className, icon) {
