@@ -5319,8 +5319,8 @@ h6:not(.hero-ttl-grd):not(.fltr-ttl),
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0,0,0,255);
+  border: 1px solid rgba(26,27,27,255);
   border-radius: 8px;
   color: #ffffff;
   font-size: 0.875rem;
@@ -5333,7 +5333,7 @@ h6:not(.hero-ttl-grd):not(.fltr-ttl),
 
 .pagination-btn:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(26,27,27,255);
   transform: translateY(-1px);
 }
 
@@ -5361,8 +5361,8 @@ h6:not(.hero-ttl-grd):not(.fltr-ttl),
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0,0,0,255);
+  border: 1px solid rgba(26,27,27,255);
   border-radius: 8px;
   color: #ffffff;
   font-size: 0.875rem;
@@ -5549,9 +5549,9 @@ h6:not(.hero-ttl-grd):not(.fltr-ttl),
 }
 
 .pltf-bdg.status-down {
-  background-color: rgba(25,7,6,255);
-  border-color: rgba(89,24,24,255); 
-  color: rgba(239, 68, 68, 1);
+  background-color: rgba(30,21,11,255);
+  border-color: rgba(94,62,10,255); 
+  color: rgba(255, 115, 0, 1);
 }
 
 .terms-of-service {
@@ -5579,4 +5579,17 @@ h6:not(.hero-ttl-grd):not(.fltr-ttl),
 
 .terms-of-service a:hover {
   color: #ffffff;
+}
+
+.pltf-bdg.key-system {
+  background-color: rgba(15, 8, 25, 1);
+  border: 1px solid rgba(53, 34, 90, 1);
+  color: #c084fc;
+}
+
+.bottom-ad-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 2rem;
+    margin: 2rem 0 4rem;
 }
