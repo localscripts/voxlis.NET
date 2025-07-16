@@ -42,7 +42,7 @@ const expData = [
     hasKeySystem: false,
     free: true,
     pricegray: false,
-    info: "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
+    info: "# Exploit Performance\n\n[Pure](/) stands out as the best free keyless executor with consistent updates. With **100% sUNC** and an **advanced injector**, it gives you the *purest* quality of execution available. \n\n# Background Information\n* [Pure](/) has been operational for 7 months, meaning it is as a stable and reliable executor. The executor has maintained consistent performance throughout this period, demonstrating the development team’s **commitment to *pure* quality** and user experience.\n\n# Developers Background Information\n* [Pure](/) is backed by one of the most skilled developer in the exploiting community. \n* The development team’s deep understanding of Roblox’s architecture allows them to implement advanced exploitation techniques while maintaining the executor’s keyless nature, providing users with *pure* execution for free. **The development team consists of:** [@.theonlyducks](/), [@c4rguy.](/), [@xc3vh](/) and [@yg07.](/). [@.7te.](/) has contributed money to the server and the developer.\n\n> [@c4rguy.](/) and [@.winssdss](/) own the executor.\n > Sources: [Pure Development Team](/)",
     href: "https://getpure.xyz",
     uncbuttonlink: "https://melon.nu/s/4LHQGefSlc",
     hide: false,
