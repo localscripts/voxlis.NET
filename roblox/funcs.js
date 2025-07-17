@@ -896,7 +896,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     lvl: 2,
     price: "FREE",
     plat: ["windows", "macos", "ios", "android"],
-    pros: ["87% sUNC (v1)"],
+    pros: ["92% sUNC (v1)"],
     neutral: ["Is a module for two games", "Level 2"],
     cons: [],
     verified: true,
