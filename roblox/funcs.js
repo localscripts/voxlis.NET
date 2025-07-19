@@ -351,7 +351,7 @@ const expData = [
     editor: "voxlis.NET",
     txtColor: "text-red-500",
     accentColor: "from-red-600 to-red-700",
-    href: "https://getbunni.lol",
+    href: "https://realbunni.com",
     priceHref: "https://getvisual.cc",
     info: "## Exploit Performance  \n- [Bunni](/) is a newly released exploit with limited commentary at this time, as the current build is not yet stable.\n\n## Background Information  \n- [Bunni](/) is a relatively new exploit with limited public information available. It was originally named [Visual](/) before being rebranded to Bunni. Interestingly, the name [Bunni](/) was previously used by [Swift](/) before it underwent its own rebrand.  \n- The developer [@Peyton](/), known for owning both [Swift](/) and [MacSploit](/), is also behind [Bunni](/). Further details about their involvement can be found in the respective cards for [Swift]() and [MacSploit]().\n\n\n## Developer Information  \n- [@Peyton](/), the project’s creator, is an experienced and respected developer in the exploit community. His track record includes continued leadership on [Swift](/), while now also overseeing [Bunni's]() direction. [Blinx](/), the UI designer behind both the original [Swift]() interface and [Bunni’s]() current look, brings a clean and consistent visual identity across projects. [Reveny](/) and [Viz](/), both software engineering majors and longtime collaborators of Peyton, contribute to the development of [Bunni](). Though not publicly known in the community, their technical expertise ensures the project is both scalable and dependable.\n\n> Sources: [reddit.com/r/robloxhackers](), Swift Discord, Bunni Discord",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=B4Ncu7DK6uE9c02B&key=HdQmPJr7tCL9E4Vbc1nwhioJv66pCpX5",
