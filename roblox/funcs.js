@@ -908,7 +908,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     href: "https://kernels.space/",
     priceHref: "https://kernels.space/",
     uncbuttonlink: "https://rubis.app/view/?scrap=AdbtZX2pP9CxpyTD",
-    hide: false,
+    hide: true,
   },
     {
     id: "lx63",
