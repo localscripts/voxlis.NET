@@ -254,7 +254,7 @@ const expData = [
     lvl: 8,
     price: "FREE",
     plat: ["windows"],
-    pros: ["Has a decompiler", "No keysystem", "100% sUNC", "Level 8"],
+    pros: ["Has a decompiler", "100% sUNC", "Level 8"],
     neutral: [],
     cons: [],
     verified: true,
