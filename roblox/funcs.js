@@ -32,7 +32,7 @@ const expData = [
       price: "$19.99",
       period: "lifetime",
       plat: ["windows"],
-      pros: ["Has a decompiler & code explorer", "Kernel product"],
+      pros: ["Has a Luau environment", "Kernel product"],
       neutral: [],
       cons: [],
       verified: true,
