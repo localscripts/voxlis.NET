@@ -507,7 +507,7 @@ const expData = [
     free: true,
     warning: true,
     warningInfo:
-      "The owner of Ronix—formerly known as Nexam—has a documented history of community warnings and prior involvement in exit scams. For more information, please refer to the 'MORE INFO' section if available. Would you still like to proceed to Ronix?",
+      "Previously known as Nexam, Ronix has multiple community warnings for threats, doxxing attempts, and targeting projects like Pulsery.net. For more information, please refer to the 'MORE INFO' section if available. Would you still like to proceed to Ronix?",
   },
   {
     id: "vegax",
