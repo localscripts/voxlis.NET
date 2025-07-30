@@ -671,6 +671,7 @@ const expData = [
     id: "aimmy",
     name: "Aimmy",
     desc: "An AI-based exploit with support for multiple games.",
+    external: true,
     price: "FREE",
     plat: ["windows"],
     pros: ["Supports other games", "No keysystem", "Safe to use", "AI-based"],
