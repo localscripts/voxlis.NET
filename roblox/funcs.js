@@ -325,7 +325,7 @@ const expData = [
     pros: ["Has a decompiler", "100% sUNC", "Level 8"],
     neutral: [],
     cons: [],
-    verified: true,
+    verified: false,
     editor: "voxlis.NET",
     txtColor: "text-red-500",
     accentColor: "from-red-600 to-red-700",
