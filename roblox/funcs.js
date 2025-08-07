@@ -851,11 +851,12 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     hasKeySystem: false,
     hideunc: true,
     free: false,
-    pricegrey: true,
     warning: true,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for ArceusX NEO so you know what you’re getting. Would you like to continue to ArceusX NEO's website anyway?",
+    pricegray: true,
   },
+
   {
     id: "Plutora",
     name: "Plutora",
@@ -927,7 +928,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
       priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
       hide: false,
       hideunc: true,
-      pricegrey: true,
+      pricegray: true,
     },
   {
     id: "kernel",
@@ -4540,6 +4541,5 @@ window.addEventListener("load", () => {
     })
   }
 })
-
 
 
