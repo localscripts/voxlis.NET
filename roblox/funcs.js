@@ -926,6 +926,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
       priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
       hide: false,
       hideunc: true,
+      pricegray: true,
     },
   {
     id: "kernel",
@@ -4538,4 +4539,5 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
