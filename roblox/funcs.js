@@ -2833,10 +2833,11 @@ ${this.renderCardFooter(exploit)}
           iconHtml = `<i class="fab fa-windows"></i>`
           platformName = "Windows"
           break
-        case "macos":
-          iconHtml = `<img src="/assets/macos.png" alt="macOS Icon" style="width: 1.2em; height: 1.2em; vertical-align: middle; position: relative; top: -0.1em;">`
-          platformName = "macOS"
-          break
+case "macos":
+  iconHtml = `<img src="/assets/macos.svg" alt="macOS" style="width:16px; height:16px; vertical-align:middle;">`
+  platformName = "macos"
+  break
+
         case "android":
           iconHtml = `<i class="fab fa-android"></i>`
           platformName = "Android"

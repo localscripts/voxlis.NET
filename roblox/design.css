@@ -5690,3 +5690,9 @@ body.has-top-warning {
   opacity: 1;
   transform: translateX(-85%) translateY(0);
 }
+
+.platform-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
