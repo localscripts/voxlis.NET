@@ -977,6 +977,26 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
   },
+    {
+      id: "Gogu",
+      name: "Gogu",
+      desc: "Gogu",
+      lvl: 1,
+      price: "FREE",
+      plat: [],
+      pros: ["40 UNC", "Undetected"],
+      neutral: ["Has no decompiler"],
+      cons: ["Level 1"],
+      verified: true,
+      editor: "voxlis.NET",
+      txtColor: "text-red-500",
+      accentColor: "from-red-600 to-red-700",
+      info: "Gogu",
+      premium: false,
+      href: "https://yap.com/",
+      priceHref: "https://yap.com/",
+      hide: false,
+    }
 ]
 
 
@@ -4542,5 +4562,6 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
 
