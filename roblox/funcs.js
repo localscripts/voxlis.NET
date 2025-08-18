@@ -23,6 +23,9 @@ const expData = [
     priceHref: "https://bloxproducts.com/?affiliate_key=1270744029168009258#Zenith",
     uncbuttonlink: "https://melon.nu/s/2kYfimVy1N",
     hide: false,
+    scrapId: "5zqrO9zJvAj7tE9S",
+    key: "nqZfYyWSLt37gqeNNgT4XZy1EHovYSTm",
+    widget: true
   },
        {
       id: "severe",
@@ -978,7 +981,6 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
   },
 ]
-
 
 const configData = {
   theme: "dark",
@@ -2256,21 +2258,14 @@ class UIManager {
   }
 
   setupEventListeners() {
-    window.addEventListener(
-      "scroll",
-      this.debounce(
-        () => {
-          const heroHeight = this.getElement("hero") ? this.getElement("hero").offsetHeight : 0
-          if (window.scrollY > heroHeight / 2) {
-            this.getElement("header").classList.add("scrolled")
-          } else {
-            this.getElement("header").classList.remove("scrolled")
-          }
-        },
-        50,
-        "scroll",
-      ),
-    )
+    window.addEventListener("scroll", () => {
+      const heroHeight = this.getElement("hero") ? this.getElement("hero").offsetHeight : 0
+      if (window.scrollY > 0) {
+        this.getElement("header").classList.add("scrolled")
+      } else {
+        this.getElement("header").classList.remove("scrolled")
+      }
+    })
 
     const menuToggle = this.getElement("menuToggle")
     const menu = this.getElement("menu")
@@ -2986,6 +2981,7 @@ case "macos":
 
       if (priceButton && exploit) {
         if (exploit.pricegray === true) {
+          priceButton.classList.add('pricegray-disabled');
           const webButton = cardElement.querySelector(".web-btn")
           if (webButton) {
             const webButtonComputedStyle = window.getComputedStyle(webButton)
@@ -3037,11 +3033,16 @@ case "macos":
             const card = button.closest(".exp-crd") || button.closest(".exp-lst-itm")
             const exploit = this.findExploitByCardElement(card)
 
+
             if (exploit) {
-              if (exploit.uncbuttonlink && exploit.uncbuttonlink.length > 0) {
-                window.open(exploit.uncbuttonlink, "_blank")
+              if (exploit.widget === true) {
+                ModalManager.openSuncWidget(exploit)
               } else {
-                ModalManager.openUncModal(exploit)
+                if (exploit.uncbuttonlink && exploit.uncbuttonlink.length > 0) {
+                  window.open(exploit.uncbuttonlink, "_blank")
+                } else {
+                  ModalManager.openUncModal(exploit)
+                }
               }
             }
           }
@@ -3506,6 +3507,86 @@ class ModalManager {
     })
   }
 
+  static openSuncWidget(exploit) {
+    const modalContainer = document.getElementById("suncWidgetModalContainer")
+
+    if (!modalContainer) {
+      ModalManager.createSuncWidgetModal()
+    }
+
+    const modalContainer2 = document.getElementById("suncWidgetModalContainer")
+    const widgetIframe = document.getElementById("suncWidgetIframe")
+
+    modalContainer2.style.display = "flex"
+
+    widgetIframe.src = "https://sunc.rubis.app/widget"
+    widgetIframe.setAttribute('data-scrap-id', exploit.scrapId || '')
+    widgetIframe.setAttribute('data-key', exploit.key || '')
+
+    widgetIframe.onload = () => {
+      if (exploit.scrapId && exploit.key) {
+        ModalManager.postMessageToWidget(widgetIframe, {
+          type: "sunc-widget:loadScrap",
+          payload: {
+            scrapId: exploit.scrapId,
+            key: exploit.key
+          }
+        })
+      }
+    }
+
+    setTimeout(() => {
+      document.querySelector(".sunc-widget-modal").classList.add("show")
+    }, 10)
+
+    document.body.style.overflow = "hidden"
+  }
+
+  static closeSuncWidget() {
+    const modal = document.querySelector(".sunc-widget-modal")
+    
+    if (modal) {
+      modal.classList.remove("show")
+      
+      setTimeout(() => {
+        const container = document.getElementById("suncWidgetModalContainer")
+        if (container) {
+          container.style.display = "none"
+        }
+        document.body.style.overflow = ""
+      }, 300)
+    }
+  }
+
+  static createSuncWidgetModal() {
+    const modalContainer = document.createElement("div")
+    modalContainer.className = "sunc-widget-modal-container"
+    modalContainer.id = "suncWidgetModalContainer"
+    modalContainer.style.display = "none"
+
+    modalContainer.innerHTML = `
+  <div class="sunc-widget-modal-overlay" onclick="ModalManager.closeSuncWidget()"></div>
+  <div class="sunc-widget-modal">
+    <button class="sunc-widget-close-btn" onclick="ModalManager.closeSuncWidget()">
+      <i class="fas fa-times"></i>
+    </button>
+    <iframe 
+      id="suncWidgetIframe"
+      class="sunc-widget-iframe-modal"
+      frameborder="0">
+    </iframe>
+  </div>
+  `
+    
+    document.body.appendChild(modalContainer)
+  }
+
+  static postMessageToWidget(iframe, message) {
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(message, "https://sunc.rubis.app")
+    }
+  }
+
   static createInfoModal() {
     const modalContainer = document.getElementById("infoModalContainer")
 
@@ -3898,6 +3979,7 @@ class ThemeManager {
   init() {
     document.documentElement.setAttribute("data-theme", this.currentTheme)
 
+    this.updateLogo()
     this.setupThemeDropdown()
     this.updateThemeElements()
 
@@ -3932,7 +4014,7 @@ class ThemeManager {
           this.updateSelectedTheme(theme)
           localStorage.setItem("voxlis-theme", theme)
           this.createThemeChangeEffect(theme)
-          setTimeout(() => this.updateThemeElements(), 100)
+          setTimeout(() => this.updateThemeElements(), this.updateLogo(), 100)
         })
       })
     }
@@ -3990,6 +4072,27 @@ class ThemeManager {
     setTimeout(() => {
       ripple.remove()
     }, 800)
+  }
+
+  updateLogo() {
+    const logoImg = document.querySelector('.logo img, .hdr-logo img, [src*="voxlis"]')
+    
+    if (logoImg) {
+      const themeLogoPath = `/assets/${this.currentTheme}-voxlis.png`
+      const defaultLogoPath = '/assets/red-voxlis.png'
+      
+      const testImg = new Image()
+      
+      testImg.onload = () => {
+        logoImg.src = themeLogoPath
+      }
+      
+      testImg.onerror = () => {
+        logoImg.src = defaultLogoPath
+      }
+      
+      testImg.src = themeLogoPath
+    }
   }
 
   updateThemeElements() {
@@ -4362,19 +4465,9 @@ class FloatingWarningSystem {
   this.setupScrollListener();
  }
 
- setupScrollListener() {
-  let ticking = false;
-  window.addEventListener("scroll", () => {
-   if (!ticking) {
-    window.requestAnimationFrame(() => {
-     this.handleScroll();
-     ticking = false;
-    });
-    ticking = true;
-   }
-  });
- }
-
+setupScrollListener() {
+  
+}
  handleScroll() {
   if (this.userClosed) return;
   const currentScrollY = window.pageYOffset;
@@ -4419,9 +4512,7 @@ class TopWarningBar {
   this.warningBar = document.getElementById("topWarningBar");
   if (!this.warningBar) return;
 
-  this.isVisible = false;
   this.userClosed = false;
-  this.topThreshold = 10;
   this.warningBarHeight = 0;
 
   this.init();
@@ -4437,12 +4528,8 @@ class TopWarningBar {
 
   this.warningBarHeight = this.warningBar.offsetHeight;
   document.documentElement.style.setProperty("--warning-bar-height", `${this.warningBarHeight}px`);
-
-  if (window.pageYOffset <= this.topThreshold) {
-   this.showWarning();
-  }
-  this.setupScrollListener();
-  this.setupTransitionListener();
+  
+  document.body.classList.add("has-top-warning");
  }
 
  setupScrollListener() {
@@ -4458,30 +4545,29 @@ class TopWarningBar {
   });
  }
 
- setupTransitionListener() {
-  this.warningBar.addEventListener("transitionend", () => {
-   if (!this.isVisible) {
-    document.body.classList.remove("has-top-warning");
-   }
-  });
- }
+  setupTransitionListener() {
+    this.warningBar.addEventListener("transitionend", (e) => {
+    if (e.propertyName === 'transform' && !this.isVisible) {
+      document.body.classList.remove("has-top-warning");
+    }
+    });
+  }
 
- handleScroll() {
+  handleScroll() {
   if (this.userClosed) return;
   const isAtTop = window.pageYOffset <= this.topThreshold;
   if (isAtTop && !this.isVisible) {
-   this.showWarning();
-  } else if (!isAtTop && this.isVisible) {
-   this.hideWarning();
+  this.showWarning();
   }
  }
 
- showWarning() {
-  if (this.isVisible || this.userClosed) return;
-  document.body.classList.add("has-top-warning");
-  this.warningBar.classList.add("is-visible");
-  this.isVisible = true;
- }
+  showWarning() {
+    if (this.isVisible || this.userClosed) return;
+    document.body.classList.add("has-top-warning");
+    this.warningBar.offsetHeight;
+    this.warningBar.classList.add("is-visible");
+    this.isVisible = true;
+  }
 
  hideWarning() {
   if (!this.isVisible) return;
@@ -4542,6 +4628,4 @@ window.addEventListener("load", () => {
     })
   }
 })
-
-
 
