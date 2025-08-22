@@ -189,7 +189,7 @@ const expData = [
     txtColor: "text-purple-500",
     accentColor: "from-purple-600 to-purple-700",
     href: "https://valex.io/",
-    priceHref: "https://1cheats.com/store/category/69-valex-executor/?&_rid=20903",
+    priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
     uncbuttonlink: "https://r.sunc.su/b33T6aRXwG",
     hideunc: false,
     info: "### **Exploit Performance**\n\n* [Valex]() is a high-performance internal executor for Roblox built for speed, stability, and advanced execution. It’s fully standalone—just one executable with no setup or config files required. [Valex]() uses a custom injection method unlike any other executor on the market, enabling smoother performance, fewer crashes, and high compatibility. It offers broad feature support, and receives updates faster than most competitors. Every version is optimized to ensure maximum performance and reliability.\n\n\n### **Background Information**\n\n* [Valex]() was originally launched as [Nezur]() in 2023 under [1Cheats](), the team behind well-known Roblox and Fortnite cheats. Originally started as an experiment to improve internal injection, [Valex]() quickly gained attention for its low detection rate, solid performance, and reliable updates. With its latest release, it introduced a redesigned core and UI, giving users advanced functionality previously limited to high-end paid exploits. Although internal, [Valex]() is simple to use and acts as a one-click solution for both casual and advanced users. It also runs on a fully custom backend with secure authentication, entirely owned and managed by the [Valex]() team.\n\n\n### **Developer Info**\n\n* [Valex]() is developed by a skilled and experienced team with backgrounds in C++, Java, and full-stack development. The project is led by a developer active in the exploit scene since 2019, known for creating several public scripthubs and tools. The team keeps a low profile but consistently delivers fast updates, prioritizes security, and ensures a smooth user experience. Future plans for [Valex]() include deeper internal integration, more per-game tools, and continued efforts to remain fully working.\n\n> Sources: [reddit.com/r/robloxhackers](), Valex Team",
@@ -368,7 +368,8 @@ const expData = [
     name: "Bunni",
     desc: "The free Level 8 exploit to use.",
     lvl: 8,
-    price: "FREE",
+    price: "$34.99",
+    period: "lifetime",
     plat: ["windows", "macos"],
     pros: ["Has a decompiler", "100% sUNC", "Level 8"],
     neutral: ["Has a keysystem"],
@@ -377,6 +378,7 @@ const expData = [
     txtColor: "text-red-500",
     accentColor: "from-red-600 to-red-700",
     href: "https://realbunni.com",
+    priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
     info: "## Exploit Performance  \n- [Bunni](/) is a newly released exploit with limited commentary at this time, as the current build is not yet stable.\n\n## Background Information  \n- [Bunni](/) is a relatively new exploit with limited public information available. It was originally named [Visual](/) before being rebranded to Bunni. Interestingly, the name [Bunni](/) was previously used by [Swift](/) before it underwent its own rebrand.  \n- The developer [@Peyton](/), known for owning both [Swift](/) and [MacSploit](/), is also behind [Bunni](/). Further details about their involvement can be found in the respective cards for [Swift]() and [MacSploit]().\n\n\n## Developer Information  \n- [@Peyton](/), the project’s creator, is an experienced and respected developer in the exploit community. His track record includes continued leadership on [Swift](/), while now also overseeing [Bunni's]() direction. [Blinx](/), the UI designer behind both the original [Swift]() interface and [Bunni’s]() current look, brings a clean and consistent visual identity across projects. [Reveny](/) and [Viz](/), both software engineering majors and longtime collaborators of Peyton, contribute to the development of [Bunni](). Though not publicly known in the community, their technical expertise ensures the project is both scalable and dependable.\n\n> Sources: [reddit.com/r/robloxhackers](), Swift Discord, Bunni Discord",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=8LLgUuLKzHbPaasF&key=UZ8OSOv0MKjLjLDCfsFyi4SySArz4L14",
     hasKeySystem: true,
@@ -529,7 +531,8 @@ const expData = [
     name: "Ronix",
     desc: "A new exploit with high UNC percentage.",
     lvl: 8,
-    price: "FREE",
+    price: "$4.99",
+    period: "lifetime",
     plat: ["windows", "android", "ios"],
     pros: ["2 day long keys", "99% UNC", "Level 8"],
     neutral: ["New exploit", "Includes a Key System"],
@@ -539,7 +542,7 @@ const expData = [
     txtColor: "text-red-500",
     accentColor: "from-red-600 to-red-700",
     href: "https://ronixstudios.com",
-    priceHref: "https://yap.com/",
+    priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
     info: "## Exploit Performance  \n- [Ronix Android](/) and [Ronix Mac](/) are the two primary executors in the Ronix lineup. Both are actively maintained and offer fast, stable performance across supported platforms. [Ronix Android](/) is packaged as a clean `.apk` file, while [Ronix Mac](/) uses a lightweight `.sh` installer — no bloated `.zip` archives or complex configurations. Both prioritize speed, stability, and simple script execution without unnecessary extras.  \n\n## Background Information  \n- [Ronix](/) was created on December 18, 2024, following the deletion of the original [Nexam](/) server. While some believed [Nexam](/) was terminated, it was actually manually deleted for safety. Before this, the [Ronix](/) founder was targeted by the exploit community, facing death threats, Nazi-themed harassment, and personal leaks including IP addresses and real-life photos.  \n- After stepping away from the scene, the founder briefly joined [Latte](/) to escape the harassment. Ultimately, [Ronix](/) was founded as a new, safer continuation of [Nexam](/), rebranding many of its original scripts to keep development going and enable faster updates.  \n\n## Developers Background Information  \n- [@Bdokkx](/) handled key scripts like Fisch and Bloxfruits. [@Noppedout](/) developed the [Ronix Android](/) executor from scratch. [@rangeronver](/), the founder of both [Nexam](/) and [Ronix](/), persisted through extensive community-wide harassment.  \n\n> Sources: [Ronix Development Team](), internal logs, and firsthand accounts\n",    hide: false,
     hasKeySystem: true,
     free: true,
@@ -4628,4 +4631,5 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
