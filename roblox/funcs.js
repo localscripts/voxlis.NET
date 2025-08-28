@@ -547,6 +547,7 @@ const expData = [
     info: "## Exploit Performance  \n- [Ronix Android](/) and [Ronix Mac](/) are the two primary executors in the Ronix lineup. Both are actively maintained and offer fast, stable performance across supported platforms. [Ronix Android](/) is packaged as a clean `.apk` file, while [Ronix Mac](/) uses a lightweight `.sh` installer — no bloated `.zip` archives or complex configurations. Both prioritize speed, stability, and simple script execution without unnecessary extras.  \n\n## Background Information  \n- [Ronix](/) was created on December 18, 2024, following the deletion of the original [Nexam](/) server. While some believed [Nexam](/) was terminated, it was actually manually deleted for safety. Before this, the [Ronix](/) founder was targeted by the exploit community, facing death threats, Nazi-themed harassment, and personal leaks including IP addresses and real-life photos.  \n- After stepping away from the scene, the founder briefly joined [Latte](/) to escape the harassment. Ultimately, [Ronix](/) was founded as a new, safer continuation of [Nexam](/), rebranding many of its original scripts to keep development going and enable faster updates.  \n\n## Developers Background Information  \n- [@Bdokkx](/) handled key scripts like Fisch and Bloxfruits. [@Noppedout](/) developed the [Ronix Android](/) executor from scratch. [@rangeronver](/), the founder of both [Nexam](/) and [Ronix](/), persisted through extensive community-wide harassment.  \n\n> Sources: [Ronix Development Team](), internal logs, and firsthand accounts\n",    hide: false,
     hasKeySystem: true,
     free: true,
+    pricegray: true,
     warning: true,
     warningInfo:
       "Previously known as Nexam, Ronix has multiple community warnings for threats, doxxing attempts, and targeting projects like Pulsery.net. For more information, please refer to the 'MORE INFO' section if available. Would you still like to proceed to Ronix?",
@@ -4632,6 +4633,7 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
 
 
