@@ -3978,7 +3978,7 @@ static openUncModal(exploit) {
 
 class ThemeManager {
   constructor() {
-    this.currentTheme = localStorage.getItem("voxlis-theme") || "classic"
+    this.currentTheme = localStorage.getItem("voxlis-theme") || "red"
   }
 
   init() {
@@ -3997,7 +3997,7 @@ class ThemeManager {
     const themeDropdownOptions = document.getElementById("themeDropdownOptions")
 
     if (themeDropdown && themeDropdownSelected && themeDropdownOptions) {
-      this.updateSelectedTheme(document.documentElement.getAttribute("data-theme") || "classic")
+      this.updateSelectedTheme(document.documentElement.getAttribute("data-theme") || "red")
 
       themeDropdownSelected.addEventListener("click", () => {
         themeDropdown.classList.toggle("active")
@@ -4080,26 +4080,49 @@ class ThemeManager {
   }
 
   updateLogo() {
-    const logoImg = document.querySelector('.logo img, .hdr-logo img, [src*="voxlis"]')
+    const logoSelectors = [
+      '.logo-img',
+      '.footer-logo-img', 
+      '.loading-logo-img'
+    ]
     
-    if (logoImg) {
-      const themeLogoPath = `/assets/${this.currentTheme}-voxlis.png`
-      const defaultLogoPath = '/assets/red-voxlis.png'
-      
-      const testImg = new Image()
-      
-      testImg.onload = () => {
-        logoImg.src = themeLogoPath
-      }
-      
-      testImg.onerror = () => {
-        logoImg.src = defaultLogoPath
-      }
-      
-      testImg.src = themeLogoPath
-    }
-  }
+    const adSelectors = [
+      'img[src*="voxlis_big"]',
+      'img[src*="voxlis_small"]',
+      'img[src*="ad-red-voxlis"]',
+      'img[src*="ad-purple-voxlis"]'
+    ]
 
+    if (window.heartAnimation && typeof window.heartAnimation.updateHeartImage === 'function') {
+      window.heartAnimation.updateHeartImage(this.currentTheme);
+    }
+    
+    logoSelectors.forEach(selector => {
+      const logoImg = document.querySelector(selector)
+      if (logoImg) {
+        const themeLogoPath = `/assets/${this.currentTheme}-voxlis.png`
+        const defaultLogoPath = '/assets/red-voxlis.png'
+        
+        const testImg = new Image()
+        testImg.onload = () => { logoImg.src = themeLogoPath }
+        testImg.onerror = () => { logoImg.src = defaultLogoPath }
+        testImg.src = themeLogoPath
+      }
+    })
+    
+    adSelectors.forEach(selector => {
+      const adImgs = document.querySelectorAll(selector)
+      adImgs.forEach(adImg => {
+        const themeAdPath = `/assets/ads/ad-${this.currentTheme}-voxlis.png`
+        const defaultAdPath = '/assets/ads/ad-red-voxlis.png'
+        
+        const testImg = new Image()
+        testImg.onload = () => { adImg.src = themeAdPath }
+        testImg.onerror = () => { adImg.src = defaultAdPath }
+        testImg.src = themeAdPath
+      })
+    })
+  }
   updateThemeElements() {
     const theme = this.currentTheme
     let bgColor, textColor, borderColor
@@ -4228,7 +4251,7 @@ class OptimizedHeartAnimation {
     if (!this.canvas) return
 
     this.ctx = this.canvas.getContext("2d")
-    this.heartImageSrc = "/assets/heart.svg"
+    this.heartImageSrc = "/assets/red-heart.svg"
     this.hearts = []
     this.heartImage = new Image()
     this.isRunning = false
@@ -4258,6 +4281,28 @@ class OptimizedHeartAnimation {
     }
 
     this.canvas.addEventListener("click", this.handleClick.bind(this))
+  }
+
+  updateHeartImage(theme) {
+    const themeHeartPath = `/assets/${theme}-heart.svg`;
+    const defaultHeartPath = '/assets/red-heart.svg';
+    
+    const testImg = new Image();
+    testImg.onload = () => {
+      this.heartImageSrc = themeHeartPath;
+      this.heartImage.src = themeHeartPath;
+      this.hearts.forEach(heart => {
+        heart.img = this.heartImage;
+      });
+    };
+    testImg.onerror = () => {
+      this.heartImageSrc = defaultHeartPath;
+      this.heartImage.src = defaultHeartPath;
+      this.hearts.forEach(heart => {
+        heart.img = this.heartImage;
+      });
+    };
+    testImg.src = themeHeartPath;
   }
 
   calculateNumHearts() {
@@ -4603,7 +4648,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const uiManager = new UIManager(appState).init()
   const themeManager = new ThemeManager().init()
   const loadingManager = new LoadingManager(appState).init()
-  const heartAnimation = new OptimizedHeartAnimation()
+  window.heartAnimation = new OptimizedHeartAnimation()
 
   clickTracker = appState.clickTracker
 
@@ -4633,7 +4678,4 @@ window.addEventListener("load", () => {
     })
   }
 })
-
-
-
 
