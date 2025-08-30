@@ -36,43 +36,6 @@
   --smooth-duration: 0.45s;
 }
 
-[data-theme="classic"] {
-  --bg: #000000;
-  --prim: #ef4444;
-  --prim-hvr: #dc2626;
-  --prim-grd: linear-gradient(to right, #ef4444, #dc2626);
-  --prim-glw: rgba(239, 68, 68, 0.5);
-  --sec-hvr: rgba(239, 68, 68, 0.1);
-  --sec-hvr-bdr: rgba(239, 68, 68, 0.5);
-  --theme-color: #ef4444;
-  --social-hover: #ef4444;
-  --card-hover: #ef4444;
-  --ad-color: #ef4444;
-  --ad2-color: #ef4444;
-  --ad3-color: linear-gradient(90deg, #ef4444, #dc2626);
-  --inp-color: rgba(239, 68, 68, 0.5);
-  --inp2-color: rgba(239, 68, 68, 0.3);
-  --lbl-color: #ef4444;
-  --lbl2-color: white;
-  --checkbx-color: rgba(239, 68, 68, 0.1);
-  --checkbx2-color: rgba(239, 68, 68, 0.3);
-  --prim-rgb: 239, 68, 68;
-  --warning-bg: linear-gradient(135deg, #ef4444, #dc2626);
-  --bdg-b-color: rgba(239, 68, 68, 0.2); 
-  --bdg-color: rgba(239, 68, 68, 0.3); 
-}
-
-[data-theme="classic"] canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #000000 !important;
-  z-index: -1;
-  display: block;
-}
-
 [data-theme="red"] canvas {
   position: fixed;
   top: 0;
@@ -562,7 +525,7 @@ button {
   position: sticky;
   top: 0;
   z-index: 50;
-  transition: all var(--smooth-duration) var(--smooth-ease);
+  background-color: #000;
 }
 
 .hdr.scrolled {
@@ -613,23 +576,21 @@ body.navbar-scrolled .top-warning-bar {
   width: auto;
   max-width: calc(100% - 300px);
   z-index: 5;
-  transition: all var(--smooth-duration) var(--smooth-ease);
 }
 
 .hdr-ctr.icon-only-mode {
   cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #000;
   border-radius: var(--rad);
   height: 2.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--sec-bdr);
-  transition: all var(--smooth-duration) var(--smooth-ease);
 }
 
 .hdr-ctr.icon-only-mode:hover {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #111;
   border-color: rgba(239, 68, 68, 0.3);
 }
 
@@ -659,7 +620,6 @@ body.navbar-scrolled .top-warning-bar {
   height: 1px;
   background: linear-gradient(to right, transparent, var(--prim), transparent);
   opacity: 0;
-  transition: opacity var(--smooth-duration) var(--smooth-ease);
 }
 
 .hdr-nav:hover::after {
@@ -675,7 +635,6 @@ body.navbar-scrolled .top-warning-bar {
 .srch-cntr {
   position: relative;
   width: 100%;
-  transition: all var(--smooth-duration) var(--smooth-ease);
 }
 
 .nav-btn {
@@ -683,7 +642,6 @@ body.navbar-scrolled .top-warning-bar {
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: var(--rad);
-  transition: all var(--smooth-duration) var(--smooth-ease);
   white-space: nowrap;
   position: relative;
   overflow: hidden;
@@ -5188,6 +5146,7 @@ h6:not(.hero-ttl-grd):not(.fltr-ttl),
   border-radius: 0.75rem; 
   z-index: 20;
 }
+
 .promo-header {
   display: flex;
   align-items: center;
