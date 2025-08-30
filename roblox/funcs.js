@@ -4153,7 +4153,7 @@ class ThemeManager {
         textColor = "#c084fc"
         borderColor = "#c084fc66"
         break
-      case "red":
+      case "classic":
       default:
         bgColor = "#000000"
         textColor = "#ef4444"
