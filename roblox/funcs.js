@@ -4088,7 +4088,6 @@ class ThemeManager {
     
     const adSelectors = [
       'img[src*="voxlis_big"]',
-      'img[src*="voxlis_small"]',
       'img[src*="ad-red-voxlis"]',
       'img[src*="ad-purple-voxlis"]'
     ]
