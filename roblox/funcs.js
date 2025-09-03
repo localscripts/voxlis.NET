@@ -845,7 +845,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     period: "monthly",
     plat: ["ios", "android"],
     pros: ["VNG Support", "Level 8"],
-    neutral: ["Paid version only", "Fails sUNC checks"],
+    neutral: ["Fails sUNC checks"],
     cons: [],
     verified: false,
     editor: "voxlis.NET",
@@ -856,9 +856,9 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     href: "https://spdmteam.com/",
     priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
     hide: false,
-    hasKeySystem: false,
+    hasKeySystem: true,
     hideunc: true,
-    free: false,
+    free: true,
     warning: true,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for ArceusX NEO so you know what you’re getting. Would you like to continue to ArceusX NEO's website anyway?",
@@ -4676,5 +4676,6 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
 
