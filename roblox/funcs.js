@@ -478,7 +478,7 @@ const expData = [
     editor: "voxlis.NET",
     txtColor: "text-blue-500",
     accentColor: "from-blue-600 to-blue-700",
-    href: "https://getvelocity.live/",
+    href: "https://getvelocity.lol/",
     priceHref: "https://yap.com/",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=6FDtZtu9TkmK4Brn&key=pfNjgR1vhCircX6AI2i54oOBtBIzYbWk",
     info: "## Exploit Performance  \n- [Velocity](/) is a stable and powerful free executor with a modern backend, custom key system, and active maintenance. It delivers fast performance, regular updates, and a smooth user experience driven by community feedback.\n\n## Background Information  \n- [Velocity](/) started as [CGHub](/), a tool by [CG](/), and later became [Sonar](/). Originally a test project, it gained 20,000 users in its first week, leading to its full release and rebrand to [Velocity](/) on January 9, 2025.\n\n## Discord Server & Community  \n- Early support was unorganized with tickets flooding chat, later fixed by a dedicated server. After a short decline, new staff restored order. The community played a big role early on, and [Korabi](/) later overhauled the project with a new site, backend, key system, and moderation—pushing [Velocity](/) to the top.\n\n> Sources: [reddit.com/r/robloxhackers](), Velocity Developers\n",    hide: false,
@@ -4676,6 +4676,7 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
 
 
