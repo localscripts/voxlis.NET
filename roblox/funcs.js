@@ -4242,170 +4242,182 @@ class ThemeManager {
 }
 
 class OptimizedHeartAnimation {
-  constructor() {
-    this.canvas = document.getElementById("heartRainCanvas")
-    this.loader = document.getElementById("loader")
+  constructor({ heartCount = 30, minHearts = 20 } = {}) {
+    this.canvas = document.getElementById("heartRainCanvas");
+    this.loader = document.getElementById("loader");
+    if (!this.canvas) return;
 
-    if (!this.canvas) return
+    this.ctx = this.canvas.getContext("2d");
+    this.heartImageSrc = "/assets/red-heart.svg";
+    this.hearts = [];
+    this.heartImage = new Image();
+    this.isRunning = false;
+    this.lastFrameTime = 0;
+    this.lastFpsUpdate = 0;
+    this.frameCount = 0;
+    this.fps = 0;
+    this.targetFps = 30;
+    this.fpsInterval = 1000 / this.targetFps;
 
-    this.ctx = this.canvas.getContext("2d")
-    this.heartImageSrc = "/assets/red-heart.svg"
-    this.hearts = []
-    this.heartImage = new Image()
-    this.isRunning = false
-    this.lastFrameTime = 0
-    this.lastFpsUpdate = 0
-    this.frameCount = 0
-    this.fps = 0
-    this.targetFps = 30
-    this.fpsInterval = 1000 / this.targetFps
+    this.baseHeartCount = heartCount;
+    this.minHearts = minHearts;
 
-    this.resizeCanvas()
-    window.addEventListener("resize", this.resizeCanvas.bind(this))
+    this.cssWidth = 0;
+    this.cssHeight = 0;
 
-    this.heartImage.src = this.heartImageSrc
-    this.heartImage.onload = () => {
-      if (this.loader) this.loader.style.display = "none"
-      this.numHearts = this.calculateNumHearts()
-      for (let i = 0; i < this.numHearts; i++) {
-        this.hearts.push(this.createHeart())
-      }
-      this.start()
+    this.resizeCanvas();
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(() => this.resizeCanvas()).observe(this.canvas);
+    } else {
+      window.addEventListener("resize", this.resizeCanvas.bind(this));
     }
+
+    this.heartImage.src = this.heartImageSrc;
+    this.heartImage.onload = () => {
+      if (this.loader) this.loader.style.display = "none";
+      const target = this.getEffectiveBaseCount();
+      for (let i = 0; i < target; i++) this.hearts.push(this.createHeart());
+      this.start();
+    };
 
     this.heartImage.onerror = () => {
-      console.error(`Failed to load heart image: ${this.heartImageSrc}`)
-      if (this.loader) this.loader.textContent = "Failed to load animation assets."
-    }
+      console.error(`Failed to load heart image: ${this.heartImageSrc}`);
+      if (this.loader) this.loader.textContent = "Failed to load animation assets.";
+    };
 
-    this.canvas.addEventListener("click", this.handleClick.bind(this))
+    this.canvas.addEventListener("click", this.handleClick.bind(this));
+  }
+
+  getEffectiveBaseCount() {
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    return Math.max(this.minHearts, Math.round(this.baseHeartCount / dpr));
   }
 
   updateHeartImage(theme) {
     const themeHeartPath = `/assets/${theme}-heart.svg`;
-    const defaultHeartPath = '/assets/red-heart.svg';
-    
+    const defaultHeartPath = "/assets/red-heart.svg";
     const testImg = new Image();
     testImg.onload = () => {
       this.heartImageSrc = themeHeartPath;
       this.heartImage.src = themeHeartPath;
-      this.hearts.forEach(heart => {
-        heart.img = this.heartImage;
-      });
+      this.hearts.forEach((h) => (h.img = this.heartImage));
     };
     testImg.onerror = () => {
       this.heartImageSrc = defaultHeartPath;
       this.heartImage.src = defaultHeartPath;
-      this.hearts.forEach(heart => {
-        heart.img = this.heartImage;
-      });
+      this.hearts.forEach((h) => (h.img = this.heartImage));
     };
     testImg.src = themeHeartPath;
   }
 
-  calculateNumHearts() {
-    const area = this.canvas.width * this.canvas.height
-    const density = 90000
-    return Math.max(10, Math.round(area / density))
-  }
-
   resizeCanvas() {
-    if (!this.canvas) return
-    const oldWidth = this.canvas.width || window.innerWidth
-    const oldHeight = this.canvas.height || window.innerHeight
-    this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight
-    if (this.hearts.length && oldWidth && oldHeight) {
-      const scaleX = this.canvas.width / oldWidth
-      const scaleY = this.canvas.height / oldHeight
-      this.hearts.forEach((heart) => {
-        heart.x *= scaleX
-        heart.y *= scaleY
-      })
+    if (!this.canvas) return;
+
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+    const oldCssWidth = this.cssWidth || this.canvas.clientWidth || window.innerWidth;
+    const oldCssHeight = this.cssHeight || this.canvas.clientHeight || window.innerHeight;
+
+    this.cssWidth = this.canvas.clientWidth || window.innerWidth;
+    this.cssHeight = this.canvas.clientHeight || window.innerHeight;
+
+    this.canvas.width = Math.floor(this.cssWidth * dpr);
+    this.canvas.height = Math.floor(this.cssHeight * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    if (this.hearts.length && oldCssWidth && oldCssHeight) {
+      const scaleX = this.cssWidth / oldCssWidth;
+      const scaleY = this.cssHeight / oldCssHeight;
+      this.hearts.forEach((h) => { h.x *= scaleX; h.y *= scaleY; });
     }
-    const newCount = this.calculateNumHearts()
-    if (newCount > this.hearts.length) {
-      const toAdd = newCount - this.hearts.length
-      for (let i = 0; i < toAdd; i++) {
-        this.hearts.push(this.createHeart())
+
+    // Adjust ONLY base hearts to DPR-scaled target
+    const target = this.getEffectiveBaseCount();
+    const baseHearts = this.hearts.filter((h) => !h.isClickHeart);
+
+    if (baseHearts.length < target) {
+      for (let i = 0, add = target - baseHearts.length; i < add; i++) {
+        this.hearts.push(this.createHeart());
       }
-    } else if (newCount < this.hearts.length) {
-      this.hearts.splice(newCount)
+    } else if (baseHearts.length > target) {
+      let remove = baseHearts.length - target;
+      for (let i = this.hearts.length - 1; i >= 0 && remove > 0; i--) {
+        if (!this.hearts[i].isClickHeart) {
+          this.hearts.splice(i, 1);
+          remove--;
+        }
+      }
     }
-    this.numHearts = newCount
   }
 
   createHeart() {
     return {
       img: this.heartImage,
-      x: Math.random() * this.canvas.width,
-      y: Math.random() * this.canvas.height,
+      x: Math.random() * (this.cssWidth || window.innerWidth),
+      y: Math.random() * (this.cssHeight || window.innerHeight),
       dx: Math.random() * 0.4 - 0.2,
       dy: Math.random() * 0.3 + 0.2,
       size: Math.random() * 15 + 15,
       rotation: Math.random() * 0.2 - 0.1,
       rotationSpeed: Math.random() * 0.005 - 0.0025,
       opacity: Math.random() * 0.3 + 0.7,
-    }
+      isClickHeart: false,
+    };
   }
 
-  start() {
-    if (this.isRunning) return
-    this.isRunning = true
-    this.lastFrameTime = performance.now()
-    this.lastFpsUpdate = this.lastFrameTime
-    requestAnimationFrame(this.animate.bind(this))
-  }
-
-  stop() {
-    this.isRunning = false
-  }
+  start() { if (!this.isRunning) { this.isRunning = true; this.lastFrameTime = performance.now(); this.lastFpsUpdate = this.lastFrameTime; requestAnimationFrame(this.animate.bind(this)); } }
+  stop() { this.isRunning = false; }
 
   animate(timestamp) {
-    if (!this.isRunning) return
-    const elapsed = timestamp - this.lastFrameTime
+    if (!this.isRunning) return;
+    const elapsed = timestamp - this.lastFrameTime;
     if (elapsed > this.fpsInterval) {
-      this.lastFrameTime = timestamp - (elapsed % this.fpsInterval)
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      this.lastFrameTime = timestamp - (elapsed % this.fpsInterval);
+      this.ctx.clearRect(0, 0, this.cssWidth, this.cssHeight);
 
-      for (const heart of this.hearts) {
-        heart.x += heart.dx
-        heart.y += heart.dy
-        heart.rotation += heart.rotationSpeed
+      for (let i = this.hearts.length - 1; i >= 0; i--) {
+        const h = this.hearts[i];
+        h.x += h.dx; h.y += h.dy; h.rotation += h.rotationSpeed;
 
-        if (heart.y > this.canvas.height + heart.size) {
-          heart.y = -heart.size
-          heart.x = Math.random() * this.canvas.width
-          heart.dy = Math.random() * 0.3 + 0.2
+        if (h.isClickHeart) {
+          h.life -= 1;
+          h.opacity = Math.max(0, h.life / h.maxLife);
+          h.dy += 0.03;
+          if (h.life <= 0) { this.hearts.splice(i, 1); continue; }
+        } else {
+          const limitX = this.cssWidth + h.size;
+          const limitY = this.cssHeight + h.size;
+          if (h.y > limitY) { h.y = -h.size; h.x = Math.random() * this.cssWidth; h.dy = Math.random() * 0.3 + 0.2; }
+          if (h.x < -h.size) h.x = this.cssWidth + h.size;
+          if (h.x > this.cssWidth + h.size) h.x = -h.size;
         }
-        if (heart.x < -heart.size) heart.x = this.canvas.width + heart.size
-        if (heart.x > this.canvas.width + heart.size) heart.x = -heart.size
 
-        this.ctx.save()
-        this.ctx.translate(heart.x, heart.y)
-        this.ctx.rotate(heart.rotation)
-        this.ctx.globalAlpha = heart.opacity
-        this.ctx.drawImage(heart.img, -heart.size / 2, -heart.size / 2, heart.size, heart.size)
-        this.ctx.restore()
+        this.ctx.save();
+        this.ctx.translate(h.x, h.y);
+        this.ctx.rotate(h.rotation);
+        this.ctx.globalAlpha = h.opacity;
+        this.ctx.drawImage(h.img, -h.size / 2, -h.size / 2, h.size, h.size);
+        this.ctx.restore();
       }
 
-      this.frameCount++
+      this.frameCount++;
       if (timestamp - this.lastFpsUpdate > 1000) {
-        this.fps = Math.round((this.frameCount * 1000) / (timestamp - this.lastFpsUpdate))
-        this.frameCount = 0
-        this.lastFpsUpdate = timestamp
+        this.fps = Math.round((this.frameCount * 1000) / (timestamp - this.lastFpsUpdate));
+        this.frameCount = 0; this.lastFpsUpdate = timestamp;
       }
     }
-    requestAnimationFrame(this.animate.bind(this))
+    requestAnimationFrame(this.animate.bind(this));
   }
 
   handleClick(e) {
-    const clickHeartsCount = Math.floor(Math.random() * 3) + 3
-    for (let i = 0; i < clickHeartsCount; i++) {
+    const rect = this.canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left, y = e.clientY - rect.top;
+    const n = Math.floor(Math.random() * 3) + 3;
+    for (let i = 0; i < n; i++) {
+      const maxLife = 60 + Math.floor(Math.random() * 30);
       this.hearts.push({
         img: this.heartImage,
-        x: e.clientX + (Math.random() * 40 - 20),
-        y: e.clientY + (Math.random() * 40 - 20),
+        x: x + (Math.random() * 40 - 20),
+        y: y + (Math.random() * 40 - 20),
         dx: Math.random() * 2 - 1,
         dy: Math.random() * -2 - 1,
         size: Math.random() * 20 + 20,
@@ -4413,11 +4425,13 @@ class OptimizedHeartAnimation {
         rotationSpeed: Math.random() * 0.02 - 0.01,
         opacity: 1,
         isClickHeart: true,
-        life: 60,
-      })
+        life: maxLife,
+        maxLife,
+      });
     }
   }
 }
+
 
 class LoadingManager {
   constructor(appState) {
@@ -4676,6 +4690,4 @@ window.addEventListener("load", () => {
     })
   }
 })
-
-
 
