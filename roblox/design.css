@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap");
 
 :root {
-  --bg: #030712;
+  --bg: #000000;
   --fg: #ffffff;
   --crd-bg: rgba(0, 0, 0, 0.4);
   --crd-bdr: rgba(255, 255, 255, 0.1);
