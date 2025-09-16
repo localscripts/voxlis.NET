@@ -4305,7 +4305,7 @@ class OptimizedHeartAnimation {
 
   calculateNumHearts() {
     const area = this.canvas.width * this.canvas.height
-    const density = 30000
+    const density = 90000
     return Math.max(10, Math.round(area / density))
   }
 
@@ -4676,5 +4676,6 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
 
