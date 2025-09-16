@@ -152,7 +152,7 @@ const expData = [
     price: "$7.49",
     period: "weekly",
     plat: ["windows"],
-    pros: ["Has a decompiler", "100% sUNC", "Level 8"],
+    pros: ["Has a decompiler", "94% sUNC", "Level 8"],
     neutral: [],
     cons: [],
     verified: true,
@@ -166,7 +166,7 @@ const expData = [
     info: "## Exploit Performance\n- [Wave]() works like a normal executor, has good uptime, but has its issues like random crashes, UI not saving tabs after closing the program, and the workspace folder not saving after updates. [Wave]() offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information\n- In March 2022, [@lxnny]() — the owner of [Delta]() — reposted the CW (community warning) on [WeAreDevs.NET](), exposing ArceusX for ratting users and massively scamming their developers.\n- Originally, [Wave's]() launch was delayed and teased multiple times in their Discord server.\n  It eventually released around April 5–9, but saw very few updates early on.\n  For example, when Roblox updated on a Wednesday, Wave wouldn't get updated until Friday.\n  This pattern continued up until December 2024, sometimes with even bigger delays. Since December, [Wave]() has shown better performance and has been more consistent.\n  However, the UI and other features haven't seen much attention or updates since then.\n\n## Developers Background Information\n- Currently owned by [@Tiahh](). Developer background information is limited. Previous developers were reportedly scammed in 2021 by [ArceusX]() owners at the time, and details about the current development team are largely unknown.\n\n> Sources: [reddit.com/r/robloxhackers](), WeAreDevs.NET, Old V3rmillion.net",
     hasKeySystem: false,
     free: false,
-    uncbuttonlink: "https://sunc.rubis.app/?scrap=Jj3ISSJNwBweEGOj&key=CT7BbwDzZjWVJd3EeyoiT9zoZA92a4xl",
+    uncbuttonlink: "https://sunc.rubis.app/?scrap=uAgymFmiWxyIX10Z&key=urAxMZ9DKS8p6aw5vbqyUUqRADF374Rl",
     warning: false,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for Wave so you know what you’re getting. Would you like to continue to Wave’s website anyway?",
@@ -478,7 +478,7 @@ const expData = [
     editor: "voxlis.NET",
     txtColor: "text-blue-500",
     accentColor: "from-blue-600 to-blue-700",
-    href: "https://getvelocity.lol/",
+    href: "https://getvelocity.live/",
     priceHref: "https://yap.com/",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=6FDtZtu9TkmK4Brn&key=pfNjgR1vhCircX6AI2i54oOBtBIzYbWk",
     info: "## Exploit Performance  \n- [Velocity](/) is a stable and powerful free executor with a modern backend, custom key system, and active maintenance. It delivers fast performance, regular updates, and a smooth user experience driven by community feedback.\n\n## Background Information  \n- [Velocity](/) started as [CGHub](/), a tool by [CG](/), and later became [Sonar](/). Originally a test project, it gained 20,000 users in its first week, leading to its full release and rebrand to [Velocity](/) on January 9, 2025.\n\n## Discord Server & Community  \n- Early support was unorganized with tickets flooding chat, later fixed by a dedicated server. After a short decline, new staff restored order. The community played a big role early on, and [Korabi](/) later overhauled the project with a new site, backend, key system, and moderation—pushing [Velocity](/) to the top.\n\n> Sources: [reddit.com/r/robloxhackers](), Velocity Developers\n",    hide: false,
@@ -521,7 +521,7 @@ const expData = [
   txtColor: "text-blue-500",
   accentColor: "from-red-600 to-red-700",
   info: "# Exploit Performance\n\n[Serotonin ](url) is an external cheat that has quickly gained a strong reputation from a development standpoint. It offers many unique features, including a **3D ESP Preview**, a **first** for external cheats on Roblox, which is fully modular, allowing all elements to be adjusted. Other notable features include a **Player Avatar/Mesh preview** to visualize meshes and players which has **never been done before**, and **Highlight/Mesh chams** that rival internal visuals. [Serotonin ](url)also provides a **globally functional vis check** and lighting modules that work in almost all games. The development team maintains a consistent weekly update schedule.\n\n## Background Information\n\n[Serotonin ](url)was launched by developer [@Auti](url), who branched off from a previous private project called **Melatonin**. During a year and a half at Melatonin, [Auti ](url)developed cheats for **Roblox, FiveM, Battlefield, CS:S, Rust DMA, and Apex DMA**. While there, [Auti](url) was responsible for releasing the **first external visibility check** to the public and enabling access to Instance Attributes through the external's Lua VM. When starting [Serotonin](url), [Auti](url) partnered with his friend [@Fope](url), who is the UI creator and designer for the menu. [Fope](url) plans on releasing his **CS:2** Product and eventually expanding onto other games.\n\n## Developer Insight\n\n- [Serotonin ](url)Roblox is developed by [Auti](url), who has approximately **five to six years of experience** in reverse engineering across numerous games. \n- Auti occasionally posts Devlogs to his [YouTube channel](https://www.youtube.com/@autihvh)\n- The UI and menu design are created by Fope, his partner.",
-  href: "https://serotonin.best/",
+  href: "https://serotonin.win/",
   priceHref: "https://bloxproducts.com/?affiliate_key=1270744029168009258#Serotonin",
   hide: false,
   period: "monthly",
@@ -845,7 +845,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     period: "monthly",
     plat: ["ios", "android"],
     pros: ["VNG Support", "Level 8"],
-    neutral: ["Fails sUNC checks"],
+    neutral: ["Paid version only", "Fails sUNC checks"],
     cons: [],
     verified: false,
     editor: "voxlis.NET",
@@ -856,9 +856,9 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     href: "https://spdmteam.com/",
     priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
     hide: false,
-    hasKeySystem: true,
+    hasKeySystem: false,
     hideunc: true,
-    free: true,
+    free: false,
     warning: true,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for ArceusX NEO so you know what you’re getting. Would you like to continue to ArceusX NEO's website anyway?",
@@ -4676,8 +4676,4 @@ window.addEventListener("load", () => {
     })
   }
 })
-
-
-
-
 
