@@ -5915,3 +5915,20 @@ body.has-top-warning header:not(.scrolled) {
   width: 0 !important;
   height: 0 !important;
 }
+
+* {
+  user-select: none;
+}
+
+.crds-grid .crd {
+  user-select: text;
+}
+
+.crds-grid .crd button,
+.crds-grid .crd a {
+  user-select: none;
+}
+
+.theme-dropdown-selected {
+  position: relative;
+}
