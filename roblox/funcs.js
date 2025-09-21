@@ -25,53 +25,53 @@ const expData = [
     hide: false,
     scrapId: "5zqrO9zJvAj7tE9S",
     key: "nqZfYyWSLt37gqeNNgT4XZy1EHovYSTm",
-    widget: true
+    widget: true,
   },
-       {
-      id: "severe",
-      name: "Severe",
-      desc: "A good external exploit.",
-      external: true,
-      price: "$19.99",
-      period: "lifetime",
-      plat: ["windows"],
-      pros: ["Has a Luau environment", "Rich in features", "Kernel product"],
-      neutral: [],
-      cons: [],
-      verified: true,
-      editor: "voxlis.NET",
-      txtColor: "text-yellow-500",
-      accentColor: "from-purple-600 to-purple-700",
-      info: "## Exploit Performance  \n- [Severe](/) gained recognition as the first undetected external  following the rollout of [Hyperion](/) in November 2023. Since then, it has undergone continuous improvements, focusing on stability, performance, and a user-friendly interface with clean, modern visuals.  \n- The custom [Luau](/) environment built into [Severe](/) is optimized for speed and deep memory interaction, offering advanced low-level capabilities rarely seen in external executors.\n\n## Background Information  \n- [Severe](/) originated as [v-severe](/), an external that began development before [Hyperion](/) was introduced, sometime around 2021.  \n- It now includes unique features such as a 3D radar and in-menu chat — with additional enhancements planned for future releases.\n\n## Developers Background Information  \n- [Severe](/) is developed by [@BACKWOODS](/), who started his journey creating and redesigning UIs in C#. He later transitioned into exploit development, releasing [Sona](/) and [Sona One](/), two prior executors known for providing Level 6–7 execution performance.\n\n> Sources: [Severe](), internal testing, and developer notes\n",
-      premium: false,
-      href: "https://discord.gg/4QmWjQCgzV",
-      priceHref: "https://discord.gg/4QmWjQCgzV",
-      hide: false,
-      hideunc: true,
-      pricegray: true,
-    },
-    {
-      id: "matrix",
-      name: "Matrix",
-      desc: "A cheap external exploit.",
-      external: true,
-      price: "$4.99",
-      period: "lifetime",
-      plat: ["windows"],
-      pros: ["Usermode product", "Very cheap price"],
-      neutral: ["Basic in features"],
-      cons: [],
-      verified: true,
-      editor: "voxlis.NET",
-      txtColor: "text-yellow-500",
-      accentColor: "from-purple-600 to-purple-700",
-      premium: false,
-      href: "https://key-empire.com/roblox",
-      priceHref: "http://matrixhubs.shop/",
-      hide: false,
-      hideunc: true,
-      pricegray: true,
-    },
+  {
+    id: "severe",
+    name: "Severe",
+    desc: "A good external exploit.",
+    external: true,
+    price: "$19.99",
+    period: "lifetime",
+    plat: ["windows"],
+    pros: ["Has a Luau environment", "Rich in features", "Kernel product"],
+    neutral: [],
+    cons: [],
+    verified: true,
+    editor: "voxlis.NET",
+    txtColor: "text-yellow-500",
+    accentColor: "from-purple-600 to-purple-700",
+    info: "## Exploit Performance  \n- [Severe](/) gained recognition as the first undetected external  following the rollout of [Hyperion](/) in November 2023. Since then, it has undergone continuous improvements, focusing on stability, performance, and a user-friendly interface with clean, modern visuals.  \n- The custom [Luau](/) environment built into [Severe](/) is optimized for speed and deep memory interaction, offering advanced low-level capabilities rarely seen in external executors.\n\n## Background Information  \n- [Severe](/) originated as [v-severe](/), an external that began development before [Hyperion](/) was introduced, sometime around 2021.  \n- It now includes unique features such as a 3D radar and in-menu chat — with additional enhancements planned for future releases.\n\n## Developers Background Information  \n- [Severe](/) is developed by [@BACKWOODS](/), who started his journey creating and redesigning UIs in C#. He later transitioned into exploit development, releasing [Sona](/) and [Sona One](/), two prior executors known for providing Level 6–7 execution performance.\n\n> Sources: [Severe](), internal testing, and developer notes\n",
+    premium: false,
+    href: "https://discord.gg/4QmWjQCgzV",
+    priceHref: "https://discord.gg/4QmWjQCgzV",
+    hide: false,
+    hideunc: true,
+    pricegray: true,
+  },
+  {
+    id: "matrix",
+    name: "Matrix",
+    desc: "A cheap external exploit.",
+    external: true,
+    price: "$4.99",
+    period: "lifetime",
+    plat: ["windows"],
+    pros: ["Usermode product", "Very cheap price"],
+    neutral: ["Basic in features"],
+    cons: [],
+    verified: true,
+    editor: "voxlis.NET",
+    txtColor: "text-yellow-500",
+    accentColor: "from-purple-600 to-purple-700",
+    premium: false,
+    href: "https://key-empire.com/roblox",
+    priceHref: "http://matrixhubs.shop/",
+    hide: false,
+    hideunc: true,
+    pricegray: true,
+  },
   {
     id: "ronin",
     name: "Ronin",
@@ -144,7 +144,7 @@ const expData = [
     uncbuttonlink: "https://sunc.rubis.app/?scrap=HvuHEiAG9iQJ0BTq&key=CwgWgiTmw4bM6OEGKK5quxUWxBJiHWEz",
     hide: true,
   },
-    {
+  {
     id: "wave",
     name: "Wave",
     desc: "Amazing exploit with regular updates.",
@@ -171,7 +171,7 @@ const expData = [
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for Wave so you know what you’re getting. Would you like to continue to Wave’s website anyway?",
   },
-    {
+  {
     id: "valex",
     name: "Valex",
     desc: "A executor with tons of features and super stable.",
@@ -223,7 +223,7 @@ const expData = [
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for MacSploit so you know what you’re getting. Would you like to continue to MacSploit's website anyway?",
   },
-    {
+  {
     id: "matcha",
     name: "Matcha",
     desc: "An external exploit with driver-based execution.",
@@ -272,7 +272,7 @@ const expData = [
     free: true,
     hideunc: true,
   },
-    {
+  {
     id: "swift",
     name: "Swift",
     desc: "The free Level 8 exploit to use.",
@@ -316,7 +316,7 @@ const expData = [
     hide: true,
     pricegray: true,
   },
-    {
+  {
     id: "hydrogen",
     name: "Hydrogen",
     desc: "A free macOS Exploit",
@@ -358,7 +358,8 @@ const expData = [
     premium: false,
     href: "https://seliware.com",
     priceHref: "https://key-empire.com/roblox#seliware",
-    info: "## Developers Background Information  \n- [Seliware](/) is developed by two experienced programmers — [@Dx](/) and [@z33r0x](/). While little is publicly known about them, both were previously part of the development team behind [TRX](/), a widely used executor within the CIS scene before the Byfron update.\n\n## History  \n- During its closed beta phase, [Seliware](/) had four core developers: [@z33r0x](/), [@Dx](/), [@Nezy](/), and [@74235](/). However, [@Nezy](/) and [@74235](/) left the project shortly before launch, creating a competing product called [Calibri](/), which was discontinued soon after.  \n- Following its official release, [Seliware](/) introduced consistent updates and practical innovations. In January, after Microsoft patched the WinVerifyTrust hook injection method, [Seliware](/) was the third executor to push an update — following [AWP](/) and [Wave](/).  \n- In April, due to internal issues, [Seliware](/) temporarily shut down for 3 weeks. Upon reopening, all active subscriptions were compensated. Currently, it stands as the most memory-efficient paid executor, making it especially appealing for farming use cases.\n\n## Future  \n- A complete rewrite of [Seliware](/) has been underway since December and will launch as a separate product under a new name. All users with an active [Seliware](/) subscription at the time of the new release will receive a full transfer.  \n- Support for other platforms — including macOS and iOS — is also planned for future expansion.\n\n## Interesting Facts  \n- [GRH](/), the creator of [Synapse Z](/), contributed to the early development of [Seliware](/).  \n- [Seliware](/) is the second-longest surviving internal executor following the [Hyperion](/) update, outlived only by [Wave](/).\n\n> Sources: [Seliware Team](), internal notes, and public release changelogs\n",    hide: false,
+    info: "## Developers Background Information  \n- [Seliware](/) is developed by two experienced programmers — [@Dx](/) and [@z33r0x](/). While little is publicly known about them, both were previously part of the development team behind [TRX](/), a widely used executor within the CIS scene before the Byfron update.\n\n## History  \n- During its closed beta phase, [Seliware](/) had four core developers: [@z33r0x](/), [@Dx](/), [@Nezy](/), and [@74235](/). However, [@Nezy](/) and [@74235](/) left the project shortly before launch, creating a competing product called [Calibri](/), which was discontinued soon after.  \n- Following its official release, [Seliware](/) introduced consistent updates and practical innovations. In January, after Microsoft patched the WinVerifyTrust hook injection method, [Seliware](/) was the third executor to push an update — following [AWP](/) and [Wave](/).  \n- In April, due to internal issues, [Seliware](/) temporarily shut down for 3 weeks. Upon reopening, all active subscriptions were compensated. Currently, it stands as the most memory-efficient paid executor, making it especially appealing for farming use cases.\n\n## Future  \n- A complete rewrite of [Seliware](/) has been underway since December and will launch as a separate product under a new name. All users with an active [Seliware](/) subscription at the time of the new release will receive a full transfer.  \n- Support for other platforms — including macOS and iOS — is also planned for future expansion.\n\n## Interesting Facts  \n- [GRH](/), the creator of [Synapse Z](/), contributed to the early development of [Seliware](/).  \n- [Seliware](/) is the second-longest surviving internal executor following the [Hyperion](/) update, outlived only by [Wave](/).\n\n> Sources: [Seliware Team](), internal notes, and public release changelogs\n",
+    hide: false,
     hasKeySystem: false,
     free: false,
     pricegray: true,
@@ -411,7 +412,7 @@ const expData = [
     lvl: 3,
     price: "FREE",
     plat: ["windows"],
-    pros: ["Has a decompiler", "No keysystem",  "51% sUNC~"],
+    pros: ["Has a decompiler", "No keysystem", "51% sUNC~"],
     neutral: ["Level 3"],
     verified: true,
     editor: "voxlis.NET",
@@ -450,7 +451,7 @@ const expData = [
     lvl: 3,
     price: "FREE",
     plat: ["windows"],
-    pros: ["Has a decompiler", "No keysystem",  "40% sUNC~"],
+    pros: ["Has a decompiler", "No keysystem", "40% sUNC~"],
     neutral: ["Level 3"],
     cons: [],
     verified: true,
@@ -481,10 +482,11 @@ const expData = [
     href: "https://getvelocity.live/",
     priceHref: "https://yap.com/",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=6FDtZtu9TkmK4Brn&key=pfNjgR1vhCircX6AI2i54oOBtBIzYbWk",
-    info: "## Exploit Performance  \n- [Velocity](/) is a stable and powerful free executor with a modern backend, custom key system, and active maintenance. It delivers fast performance, regular updates, and a smooth user experience driven by community feedback.\n\n## Background Information  \n- [Velocity](/) started as [CGHub](/), a tool by [CG](/), and later became [Sonar](/). Originally a test project, it gained 20,000 users in its first week, leading to its full release and rebrand to [Velocity](/) on January 9, 2025.\n\n## Discord Server & Community  \n- Early support was unorganized with tickets flooding chat, later fixed by a dedicated server. After a short decline, new staff restored order. The community played a big role early on, and [Korabi](/) later overhauled the project with a new site, backend, key system, and moderation—pushing [Velocity](/) to the top.\n\n> Sources: [reddit.com/r/robloxhackers](), Velocity Developers\n",    hide: false,
+    info: "## Exploit Performance  \n- [Velocity](/) is a stable and powerful free executor with a modern backend, custom key system, and active maintenance. It delivers fast performance, regular updates, and a smooth user experience driven by community feedback.\n\n## Background Information  \n- [Velocity](/) started as [CGHub](/), a tool by [CG](/), and later became [Sonar](/). Originally a test project, it gained 20,000 users in its first week, leading to its full release and rebrand to [Velocity](/) on January 9, 2025.\n\n## Discord Server & Community  \n- Early support was unorganized with tickets flooding chat, later fixed by a dedicated server. After a short decline, new staff restored order. The community played a big role early on, and [Korabi](/) later overhauled the project with a new site, backend, key system, and moderation—pushing [Velocity](/) to the top.\n\n> Sources: [reddit.com/r/robloxhackers](), Velocity Developers\n",
+    hide: false,
     hasKeySystem: false,
     free: true,
-    hide: false
+    hide: false,
   },
   {
     id: "CSVM",
@@ -494,7 +496,7 @@ const expData = [
     price: "FREE",
     plat: ["windows", "macos", "android", "ios"],
     pros: ["81% sUNC V1"],
-    neutral: ["Level 2", "Is a module for one game"],
+    neutral: ["Is a module for one game", "Level 2"],
     cons: [],
     verified: true,
     editor: "voxlis.NET",
@@ -507,26 +509,26 @@ const expData = [
     hide: false,
   },
   {
-  id: "serotonin",
-  name: "Serotonin",
-  desc: "A usermode external exploit",
-  lvl: 8,
-  price: "$9.99",
-  plat: ["windows"],
-  pros: ["Has a Lua env & code explorer", "Usermode product", "Rich in features"],
-  neutral: [],
-  cons: [],
-  verified: true,
-  edito: "voxlis.NET",
-  txtColor: "text-blue-500",
-  accentColor: "from-red-600 to-red-700",
-  info: "# Exploit Performance\n\n[Serotonin ](url) is an external cheat that has quickly gained a strong reputation from a development standpoint. It offers many unique features, including a **3D ESP Preview**, a **first** for external cheats on Roblox, which is fully modular, allowing all elements to be adjusted. Other notable features include a **Player Avatar/Mesh preview** to visualize meshes and players which has **never been done before**, and **Highlight/Mesh chams** that rival internal visuals. [Serotonin ](url)also provides a **globally functional vis check** and lighting modules that work in almost all games. The development team maintains a consistent weekly update schedule.\n\n## Background Information\n\n[Serotonin ](url)was launched by developer [@Auti](url), who branched off from a previous private project called **Melatonin**. During a year and a half at Melatonin, [Auti ](url)developed cheats for **Roblox, FiveM, Battlefield, CS:S, Rust DMA, and Apex DMA**. While there, [Auti](url) was responsible for releasing the **first external visibility check** to the public and enabling access to Instance Attributes through the external's Lua VM. When starting [Serotonin](url), [Auti](url) partnered with his friend [@Fope](url), who is the UI creator and designer for the menu. [Fope](url) plans on releasing his **CS:2** Product and eventually expanding onto other games.\n\n## Developer Insight\n\n- [Serotonin ](url)Roblox is developed by [Auti](url), who has approximately **five to six years of experience** in reverse engineering across numerous games. \n- Auti occasionally posts Devlogs to his [YouTube channel](https://www.youtube.com/@autihvh)\n- The UI and menu design are created by Fope, his partner.",
-  href: "https://serotonin.win/",
-  priceHref: "https://key-empire.com/roblox#serotonin",
-  hide: false,
-  period: "monthly",
-   pricegray: true,
-},
+    id: "serotonin",
+    name: "Serotonin",
+    desc: "A usermode external exploit",
+    lvl: 8,
+    price: "$9.99",
+    plat: ["windows"],
+    pros: ["Has a Lua env & code explorer", "Usermode product", "Rich in features"],
+    neutral: [],
+    cons: [],
+    verified: true,
+    edito: "voxlis.NET",
+    txtColor: "text-blue-500",
+    accentColor: "from-red-600 to-red-700",
+    info: "# Exploit Performance\n\n[Serotonin ](url)is an external cheat that has quickly gained a strong reputation from a development standpoint. It offers many unique features, including a **3D ESP Preview**, a **first** for external cheats on Roblox, which is fully modular, allowing all elements to be adjusted. Other notable features include a **Player Avatar/Mesh preview** to visualize meshes and players which has **never been done before**, and **Highlight/Mesh chams** that rival internal visuals. [Serotonin ](url)also provides a **globally functional vis check** and lighting modules that work in almost all games. The development team maintains a consistent weekly update schedule.\n\n## Background Information\n\n[Serotonin ](url)was launched by developer [@Auti](url), who branched off from a previous private project called **Melatonin**. During a year and a half at Melatonin, [Auti ](url)developed cheats for **Roblox, FiveM, Battlefield, CS:S, Rust DMA, and Apex DMA**. While there, [Auti](url) was responsible for releasing the **first external visibility check** to the public and enabling access to Instance Attributes through the external's Lua VM. When starting [Serotonin](url), [Auti](url) partnered with his friend [@Fope](url), who is the UI creator and designer for the menu. [Fope](url) plans on releasing his **CS:2** Product and eventually expanding onto other games.\n\n## Developer Insight\n\n- [Serotonin ](url)Roblox is developed by [Auti](url), who has approximately **five to six years of experience** in reverse engineering across numerous games. \n- Auti occasionally posts Devlogs to his [YouTube channel](https://www.youtube.com/@autihvh)\n- The UI and menu design are created by Fope, his partner.",
+    href: "https://serotonin.win/",
+    priceHref: "https://key-empire.com/roblox#serotonin",
+    hide: false,
+    period: "monthly",
+    pricegray: true,
+  },
   {
     id: "ronix",
     name: "Ronix",
@@ -544,7 +546,8 @@ const expData = [
     accentColor: "from-red-600 to-red-700",
     href: "https://ronixstudios.com",
     priceHref: "https://key-empire.com/roblox#ronix",
-    info: "## Exploit Performance  \n- [Ronix Android](/) and [Ronix Mac](/) are the two primary executors in the Ronix lineup. Both are actively maintained and offer fast, stable performance across supported platforms. [Ronix Android](/) is packaged as a clean `.apk` file, while [Ronix Mac](/) uses a lightweight `.sh` installer — no bloated `.zip` archives or complex configurations. Both prioritize speed, stability, and simple script execution without unnecessary extras.  \n\n## Background Information  \n- [Ronix](/) was created on December 18, 2024, following the deletion of the original [Nexam](/) server. While some believed [Nexam](/) was terminated, it was actually manually deleted for safety. Before this, the [Ronix](/) founder was targeted by the exploit community, facing death threats, Nazi-themed harassment, and personal leaks including IP addresses and real-life photos.  \n- After stepping away from the scene, the founder briefly joined [Latte](/) to escape the harassment. Ultimately, [Ronix](/) was founded as a new, safer continuation of [Nexam](/), rebranding many of its original scripts to keep development going and enable faster updates.  \n\n## Developers Background Information  \n- [@Bdokkx](/) handled key scripts like Fisch and Bloxfruits. [@Noppedout](/) developed the [Ronix Android](/) executor from scratch. [@rangeronver](/), the founder of both [Nexam](/) and [Ronix](/), persisted through extensive community-wide harassment.  \n\n> Sources: [Ronix Development Team](), internal logs, and firsthand accounts\n",    hide: false,
+    info: "## Exploit Performance  \n- [Ronix Android](/) and [Ronix Mac](/) are the two primary executors in the Ronix lineup. Both are actively maintained and offer fast, stable performance across supported platforms. [Ronix Android](/) is packaged as a clean `.apk` file, while [Ronix Mac](/) uses a lightweight `.sh` installer — no bloated `.zip` archives or complex configurations. Both prioritize speed, stability, and simple script execution without unnecessary extras.  \n\n## Background Information  \n- [Ronix](/) was created on December 18, 2024, following the deletion of the original [Nexam](/) server. While some believed [Nexam](/) was terminated, it was actually manually deleted for safety. Before this, the [Ronix](/) founder was targeted by the exploit community, facing death threats, Nazi-themed harassment, and personal leaks including IP addresses and real-life photos.  \n- After stepping away from the scene, the founder briefly joined [Latte](/) to escape the harassment. Ultimately, [Ronix](/) was founded as a new, safer continuation of [Nexam](/), rebranding many of its original scripts to keep development going and enable faster updates.  \n\n## Developers Background Information  \n- [@Bdokkx](/) handled key scripts like Fisch and Bloxfruits. [@Noppedout](/) developed the [Ronix Android](/) executor from scratch. [@rangeronver](/), the founder of both [Nexam](/) and [Ronix](/), persisted through extensive community-wide harassment.  \n\n> Sources: [Ronix Development Team](), internal logs, and firsthand accounts\n",
+    hide: false,
     hasKeySystem: true,
     free: true,
     pricegray: true,
@@ -603,7 +606,7 @@ const expData = [
     period: "weekly",
     plat: ["windows"],
     pros: ["Has a decompiler & code explorer", "Rich in features", "Kernel product"],
-    neutral: ["Quite pricey",],
+    neutral: ["Quite pricey"],
     cons: [],
     verified: true,
     editor: "voxlis.NET",
@@ -697,7 +700,7 @@ const expData = [
     pros: ["Has a decompiler", "98% sUNC", "Level 8"],
     neutral: ["Has a keysystem"],
     cons: [],
-    info: "## Exploit Performance\n- [Drift](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information\n- [Drift](/) was formerly known as [Zorara](/), which launched in July 2024. The rebrand to Drift officially took place on May 16, 2025. Originally based on [Xeno](/), the executor was later rebuilt from the ground up. The project has consistently been maintained by the same developer, [@kq](/). [@kq](/) also previously owned a server called [Trident](/), an unofficial continuation of \"[Element]()\" showcasing safe exploits. Trident eventually shut down after competitors recruited the entire team.\n\n## Developer Background Information\n- There is little public information about the owner, [@kq](/), aside from their role as Lead Developer of [Drift](/). They are responsible for maintaining the project and developing its transition from a Xeno-based core to a fully custom base.\n\n> Sources: [reddit.com/r/robloxhackers](), Drift Executor Developer Team\n",
+    info: '## Exploit Performance\n- [Drift](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information\n- [Drift](/) was formerly known as [Zorara](/), which launched in July 2024. The rebrand to Drift officially took place on May 16, 2025. Originally based on [Xeno](/), the executor was later rebuilt from the ground up. The project has consistently been maintained by the same developer, [@kq](/). [@kq](/) also previously owned a server called [Trident](/), an unofficial continuation of "[Element]()" showcasing safe exploits. Trident eventually shut down after competitors recruited the entire team.\n\n## Developer Background Information\n- There is little public information about the owner, [@kq](/), aside from their role as Lead Developer of [Drift](/). They are responsible for maintaining the project and developing its transition from a Xeno-based core to a fully custom base.\n\n> Sources: [reddit.com/r/robloxhackers](), Drift Executor Developer Team\n',
     verified: true,
     editor: "voxlis.NET",
     txtColor: "text-red-500",
@@ -750,8 +753,7 @@ const expData = [
     premium: false,
     href: "https://discord.gg/mmTGebPYnm",
     priceHref: "https://robloxcheatz.com/affiliate/voxlisnet",
-    uncbuttonlink:
-      "https://r.sunc.su/JgXWs9CVfx",
+    uncbuttonlink: "https://r.sunc.su/JgXWs9CVfx",
     hide: true,
     warning: true,
     warningInfo:
@@ -773,7 +775,8 @@ const expData = [
     editor: "voxlis.NET",
     txtColor: "text-yellow-500",
     accentColor: "from-yellow-600 to-yellow-700",
-info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information  \n- Developers operate under fresh accounts. Identities are unknown.\n\n\n## Developer Background  \n- Developers operate under fresh accounts. Identities are unknown.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",    premium: false,
+    info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information  \n- Developers operate under fresh accounts. Identities are unknown.\n\n\n## Developer Background  \n- Developers operate under fresh accounts. Identities are unknown.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
+    premium: false,
     href: "https://discord.gg/WY4juPkFv4",
     priceHref: "https://key-empire.com/roblox#potassium",
     uncbuttonlink:
@@ -784,7 +787,7 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
       "voxlis.NET has flagged this executor as potentially suspicious and does not recommend its use. Do you still want to proceed to the executor?",
     pricegray: true,
   },
-      {
+  {
     id: "fatal",
     name: "Fatal",
     desc: "A ratted Level 8 executor.",
@@ -807,11 +810,11 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     uncbuttonlink: "https://www.reddit.com/r/robloxhackers/comments/1lnp8p3/is_fatal_legitsafe/",
     uncbuttonlink: "https://fatal.best",
     warning: true,
-          info: "## Background information\n- Absolute degen in the community, here is a screenshot of him talking to his 'fans':\n\n![alt ](/assets/fatal.png)",
+    info: "## Background information\n- Absolute degen in the community, here is a screenshot of him talking to his 'fans':\n\n![alt ](/assets/fatal.png)",
     warningInfo:
       "⚠️ This executor has exit scammed $10,000–$35,000+ ⚠️ — steer clear of Fatal; it's a rebranded copy of Fatality.win using a fake 'invite-only' scheme to appear exclusive — don't be fooled, and help spread the warning.",
   },
-    {
+  {
     id: "cloudy",
     name: "Cloudy",
     desc: "A free Level 8 executor",
@@ -916,28 +919,28 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
   },
   {
-      id: "assembly",
-      name: "Assembly",
-      desc: "The best value external exploit.",
-      external: true,
-      price: "$9.99",
-      period: "lifetime",
-      plat: ["windows"],
-      pros: ["Custom LUA enviroment", "Multi-Instance support", "Usermode product"],
-      neutral: [],
-      cons: [],
-      verified: true,
-      editor: "voxlis.NET",
-      txtColor: "text-yellow-500",
-      accentColor: "from-purple-600 to-purple-700",
-      info: "## Exploit Performance\n- [Assembly](/) operates similarly to other competitors, but with it's own twist. [Assembly](/) delivers a seamless user experience and is packaged into a single .exe, making it a lot more convenient compared to other alternatives that require extracting a .zip file containing multiple folders and other executables.\n## Background Information\n- [Assembly](/) started out as a small external with little promotion made by [@esnesemag](/) (david), as a small passion project to see how far he could go. Yet, when he started making good progress, [david]() saw his friends really liked it and pressured him into making it a real official product. \n- Since then, [Assembly](/) has been getting rapid growth & attention, receiving a ton of updates. Even though [david]() is balancing school and developing [Assembly](/), he still makes a lot of progress daily. \n- Releasing only months ago, [Assembly](/) has grown insanely high and continues to grow even more into the future.\n## Developer Background\n- [Assembly](/) is developed solely by [david](/), who handles everything about the actual software itself. \n- After [Assembly](/) released, though, [yakazt](/) joined the staff team, and is now the primary manager of [Assembly](/), managing public relations and [Assembly](/)'s [Discord server](https://discord.gg/asmlol).\n\n> Sources: [assembly.lol](https://assembly.lol), Assembly staff\n",
-      premium: false,
-      href: "https://assembly.lol",
-      priceHref: "https://key-empire.com/roblox#assembly",
-      hide: false,
-      hideunc: true,
-      pricegray: true,
-    },
+    id: "assembly",
+    name: "Assembly",
+    desc: "The best value external exploit.",
+    external: true,
+    price: "$9.99",
+    period: "lifetime",
+    plat: ["windows"],
+    pros: ["Custom LUA enviroment", "Multi-Instance support", "Usermode product"],
+    neutral: [],
+    cons: [],
+    verified: true,
+    editor: "voxlis.NET",
+    txtColor: "text-yellow-500",
+    accentColor: "from-purple-600 to-purple-700",
+    info: "## Exploit Performance\n- [Assembly](/) operates similarly to other competitors, but with it's own twist. [Assembly](/) delivers a seamless user experience and is packaged into a single .exe, making it a lot more convenient compared to other alternatives that require extracting a .zip file containing multiple folders and other executables.\n## Background Information\n- [Assembly](/) started out as a small external with little promotion made by [@esnesemag](/) (david), as a small passion project to see how far he could go. Yet, when he started making good progress, [david]() saw his friends really liked it and pressured him into making it a real official product. \n- Since then, [Assembly](/) has been getting rapid growth & attention, receiving a ton of updates. Even though [david]() is balancing school and developing [Assembly](/), he still makes a lot of progress daily. \n- Releasing only months ago, [Assembly](/) has grown insanely high and continues to grow even more into the future.\n## Developer Background\n- [Assembly](/) is developed solely by [david](/), who handles everything about the actual software itself. \n- After [Assembly](/) released, though, [yakazt](/) joined the staff team, and is now the primary manager of [Assembly](/), managing public relations and [Assembly](/)'s [Discord server](https://discord.gg/asmlol).\n\n> Sources: [assembly.lol](https://assembly.lol), Assembly staff\n",
+    premium: false,
+    href: "https://assembly.lol",
+    priceHref: "https://key-empire.com/roblox#assembly",
+    hide: false,
+    hideunc: true,
+    pricegray: true,
+  },
   {
     id: "kernel",
     name: "Kernel",
@@ -952,14 +955,14 @@ info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and
     editor: "Realirist",
     txtColor: "text-purple-500",
     accentColor: "from-blue-600 to-blue-700",
-    info: "## Exploit Performance  \n- [Kernel](/) functions similarly to the [LuaU // CSVM](/) executor, as it shares the same LuaU VM. The main distinction is that [Kernel](/) is actively maintained, whereas [LuaU // CSVM](/) is probably not gonna get any more updates in the future. [Kernel](/) has fast execution speeds, scoring the \"very fast\" score on the sUNC test. [Kernel]() is technically [LuaU // CSVM](), so they might perform similarly. \n  \n\n## Background Information  \n- Before [Kernel](/), an executor - [Realirist's executor](/) launched in early 2023 and officially released around that same time, as an in-game serverside executor.  \n- On September 23, 2024, [Realirist's executor](/) vanished, later becoming the rebrand called [Kernel](/), with clientside and \"Mixed\" execution, which later became only clientside.\n\n## Developers Background Information\n- There is little background information available about the owner, [@Realirist](/), aside from their primary role in working on the UI for [Krnl Remake](/), an [Arcadia](/) paste. \n- [@Realirist](/) had made a [PowerShell](/) script called [trolo.ps1](/), which could send pop-ups to your computer, and shut it down anytime, which could be considered [RAT](/) behavior, even though it was not harmful.\n\n\n> Source: [@Realirist](/)",
+    info: '## Exploit Performance  \n- [Kernel](/) functions similarly to the [LuaU // CSVM](/) executor, as it shares the same LuaU VM. The main distinction is that [Kernel](/) is actively maintained, whereas [LuaU // CSVM](/) is probably not gonna get any more updates in the future. [Kernel](/) has fast execution speeds, scoring the "very fast" score on the sUNC test. [Kernel]() is technically [LuaU // CSVM](), so they might perform similarly. \n  \n\n## Background Information  \n- Before [Kernel](/), an executor - [Realirist\'s executor](/) launched in early 2023 and officially released around that same time, as an in-game serverside executor.  \n- On September 23, 2024, [Realirist\'s executor](/) vanished, later becoming the rebrand called [Kernel](/), with clientside and "Mixed" execution, which later became only clientside.\n\n## Developers Background Information\n- There is little background information available about the owner, [@Realirist](/), aside from their primary role in working on the UI for [Krnl Remake](/), an [Arcadia](/) paste. \n- [@Realirist](/) had made a [PowerShell](/) script called [trolo.ps1](/), which could send pop-ups to your computer, and shut it down anytime, which could be considered [RAT](/) behavior, even though it was not harmful.\n\n\n> Source: [@Realirist](/)',
     premium: false,
     href: "https://kernels.space/",
     priceHref: "https://kernels.space/",
     uncbuttonlink: "https://rubis.app/view/?scrap=AdbtZX2pP9CxpyTD",
     hide: true,
   },
-    {
+  {
     id: "lx63",
     name: "LX63",
     desc: "A level 8 keyless exploit.",
@@ -998,6 +1001,16 @@ const configData = {
 const robloxVersionData = {
   windows: null,
   lastUpdated: null,
+}
+
+async function fetchRobloxVersion() {
+  const response = await fetch("https://api.voxlis.net/roblox_version")
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+  const data = await response.json()
+  robloxVersionData.windows = data.windows
+  robloxVersionData.lastUpdated = data.lastUpdated
 }
 
 const globalStatusCache = new Map()
@@ -2833,10 +2846,10 @@ ${this.renderCardFooter(exploit)}
           iconHtml = `<i class="fab fa-windows"></i>`
           platformName = "Windows"
           break
-case "macos":
-  iconHtml = `<img src="/assets/macos.svg" alt="macOS" style="width:16px; height:16px; vertical-align:middle;">`
-  platformName = "macos"
-  break
+        case "macos":
+          iconHtml = `<img src="/assets/macos.svg" alt="macOS" style="width:16px; height:16px; vertical-align:middle;">`
+          platformName = "macos"
+          break
 
         case "android":
           iconHtml = `<i class="fab fa-android"></i>`
@@ -2986,7 +2999,7 @@ case "macos":
 
       if (priceButton && exploit) {
         if (exploit.pricegray === true) {
-          priceButton.classList.add('pricegray-disabled');
+          priceButton.classList.add("pricegray-disabled")
           const webButton = cardElement.querySelector(".web-btn")
           if (webButton) {
             const webButtonComputedStyle = window.getComputedStyle(webButton)
@@ -3037,7 +3050,6 @@ case "macos":
 
             const card = button.closest(".exp-crd") || button.closest(".exp-lst-itm")
             const exploit = this.findExploitByCardElement(card)
-
 
             if (exploit) {
               if (exploit.widget === true) {
@@ -3525,8 +3537,8 @@ class ModalManager {
     modalContainer2.style.display = "flex"
 
     widgetIframe.src = "https://sunc.rubis.app/widget"
-    widgetIframe.setAttribute('data-scrap-id', exploit.scrapId || '')
-    widgetIframe.setAttribute('data-key', exploit.key || '')
+    widgetIframe.setAttribute("data-scrap-id", exploit.scrapId || "")
+    widgetIframe.setAttribute("data-key", exploit.key || "")
 
     widgetIframe.onload = () => {
       if (exploit.scrapId && exploit.key) {
@@ -3534,8 +3546,8 @@ class ModalManager {
           type: "sunc-widget:loadScrap",
           payload: {
             scrapId: exploit.scrapId,
-            key: exploit.key
-          }
+            key: exploit.key,
+          },
         })
       }
     }
@@ -3549,10 +3561,10 @@ class ModalManager {
 
   static closeSuncWidget() {
     const modal = document.querySelector(".sunc-widget-modal")
-    
+
     if (modal) {
       modal.classList.remove("show")
-      
+
       setTimeout(() => {
         const container = document.getElementById("suncWidgetModalContainer")
         if (container) {
@@ -3582,7 +3594,7 @@ class ModalManager {
     </iframe>
   </div>
   `
-    
+
     document.body.appendChild(modalContainer)
   }
 
@@ -3635,53 +3647,53 @@ class ModalManager {
     document.body.appendChild(modalContainer)
   }
 
-static openUncModal(exploit) {
-  const modalContainer = document.getElementById("uncModalContainer")
+  static openUncModal(exploit) {
+    const modalContainer = document.getElementById("uncModalContainer")
 
-  if (!modalContainer) {
-    ModalManager.createUncModal()
+    if (!modalContainer) {
+      ModalManager.createUncModal()
+    }
+
+    const modalContainer2 = document.getElementById("uncModalContainer")
+    const modalTitle = document.getElementById("uncModalTitle")
+    const modalExploitName = document.getElementById("uncModalExploitName")
+    const modalExploitDesc = document.getElementById("uncModalExploitDesc")
+    const modalCode = document.getElementById("uncModalCode")
+    const modalLoading = document.getElementById("uncModalLoading")
+    const modalError = document.getElementById("uncModalError")
+
+    modalContainer2.style.display = "flex"
+    modalTitle.textContent = `${exploit.name} UNC Code`
+    modalExploitName.textContent = exploit.name
+    modalExploitDesc.textContent = exploit.desc
+
+    modalLoading.style.display = "flex"
+    modalCode.style.display = "none"
+    modalError.style.display = "none"
+
+    ModalManager.fetchUncData(exploit.id, exploit.name)
+      .then((data) => {
+        modalLoading.style.display = "none"
+        modalCode.style.display = "block"
+        modalCode.textContent = data.code || "-- No UNC code available"
+
+        if (window.hljs) {
+          window.hljs.highlightElement(modalCode)
+        }
+      })
+      .catch((error) => {
+        modalLoading.style.display = "none"
+        modalError.style.display = "flex"
+        document.getElementById("uncModalErrorText").textContent =
+          `Failed to load UNC data: ${error.message || "Unknown error"}`
+      })
+
+    setTimeout(() => {
+      document.querySelector(".unc-modal").classList.add("show")
+    }, 10)
+
+    document.body.style.overflow = "hidden"
   }
-
-  const modalContainer2 = document.getElementById("uncModalContainer")
-  const modalTitle = document.getElementById("uncModalTitle")
-  const modalExploitName = document.getElementById("uncModalExploitName")
-  const modalExploitDesc = document.getElementById("uncModalExploitDesc")
-  const modalCode = document.getElementById("uncModalCode")
-  const modalLoading = document.getElementById("uncModalLoading")
-  const modalError = document.getElementById("uncModalError")
-
-  modalContainer2.style.display = "flex"
-  modalTitle.textContent = `${exploit.name} UNC Code`
-  modalExploitName.textContent = exploit.name
-  modalExploitDesc.textContent = exploit.desc
-
-  modalLoading.style.display = "flex"
-  modalCode.style.display = "none"
-  modalError.style.display = "none"
-
-  ModalManager.fetchUncData(exploit.id, exploit.name)
-    .then((data) => {
-      modalLoading.style.display = "none"
-      modalCode.style.display = "block"
-      modalCode.textContent = data.code || "-- No UNC code available"
-
-      if (window.hljs) {
-        window.hljs.highlightElement(modalCode)
-      }
-    })
-    .catch((error) => {
-      modalLoading.style.display = "none"
-      modalError.style.display = "flex"
-      document.getElementById("uncModalErrorText").textContent =
-        `Failed to load UNC data: ${error.message || "Unknown error"}`
-    })
-
-  setTimeout(() => {
-    document.querySelector(".unc-modal").classList.add("show")
-  }, 10)
-
-  document.body.style.overflow = "hidden"
-}
 
   static closeUncModal() {
     const modal = document.querySelector(".unc-modal")
@@ -4062,7 +4074,6 @@ class ThemeManager {
     ripple.style.height = "10px"
     ripple.style.borderRadius = "50%"
     ripple.style.backgroundColor = themeColor
-    ripple.style.opacity = "0.3"
     ripple.style.transition = "all 0.6s cubic-bezier(0.19, 1, 0.22, 1)"
     ripple.style.zIndex = "9999"
 
@@ -4080,44 +4091,79 @@ class ThemeManager {
   }
 
   updateLogo() {
-    const logoSelectors = [
-      '.logo-img',
-      '.footer-logo-img', 
-      '.loading-logo-img'
-    ]
-    
-    const adSelectors = [
-      'img[src*="ad-red-voxlis"]',
-      'img[src*="ad-purple-voxlis"]'
+    const logoSelectors = [".logo-img", ".footer-logo-img", ".loading-logo-img"]
+
+    const adSelectors = ['img[src*="ad-red-voxlis"]', 'img[src*="ad-purple-voxlis"]']
+
+    const voxlisAdSelectors = [
+      'img[src*="voxlis_small.png"]',
+      'img[src*="voxlis_big.png"]',
+      'img[src*="_voxlis_small.png"]',
+      'img[src*="_voxlis_big.png"]',
     ]
 
-    if (window.heartAnimation && typeof window.heartAnimation.updateHeartImage === 'function') {
-      window.heartAnimation.updateHeartImage(this.currentTheme);
+    if (window.heartAnimation && typeof window.heartAnimation.updateHeartImage === "function") {
+      window.heartAnimation.updateHeartImage(this.currentTheme)
     }
-    
-    logoSelectors.forEach(selector => {
+
+    logoSelectors.forEach((selector) => {
       const logoImg = document.querySelector(selector)
       if (logoImg) {
         const themeLogoPath = `/assets/${this.currentTheme}-voxlis.png`
-        const defaultLogoPath = '/assets/red-voxlis.png'
-        
+        const defaultLogoPath = "/assets/red-voxlis.png"
+
         const testImg = new Image()
-        testImg.onload = () => { logoImg.src = themeLogoPath }
-        testImg.onerror = () => { logoImg.src = defaultLogoPath }
+        testImg.onload = () => {
+          logoImg.src = themeLogoPath
+        }
+        testImg.onerror = () => {
+          logoImg.src = defaultLogoPath
+        }
         testImg.src = themeLogoPath
       }
     })
-    
-    adSelectors.forEach(selector => {
+
+    adSelectors.forEach((selector) => {
       const adImgs = document.querySelectorAll(selector)
-      adImgs.forEach(adImg => {
+      adImgs.forEach((adImg) => {
         const themeAdPath = `/assets/ads/ad-${this.currentTheme}-voxlis.png`
-        const defaultAdPath = '/assets/ads/ad-red-voxlis.png'
-        
+        const defaultAdPath = "/assets/ads/ad-red-voxlis.png"
+
         const testImg = new Image()
-        testImg.onload = () => { adImg.src = themeAdPath }
-        testImg.onerror = () => { adImg.src = defaultAdPath }
+        testImg.onload = () => {
+          adImg.src = themeAdPath
+        }
+        testImg.onerror = () => {
+          adImg.src = defaultAdPath
+        }
         testImg.src = themeAdPath
+      })
+    })
+
+    voxlisAdSelectors.forEach((selector) => {
+      const adImgs = document.querySelectorAll(selector)
+      adImgs.forEach((adImg) => {
+        const currentSrc = adImg.src
+        let newSrc
+
+        if (currentSrc.includes("voxlis_small.png") || currentSrc.includes("_voxlis_small.png")) {
+          newSrc = `/assets/ads/${this.currentTheme}_voxlis_small.png`
+        } else if (currentSrc.includes("voxlis_big.png") || currentSrc.includes("_voxlis_big.png")) {
+          newSrc = `/assets/ads/${this.currentTheme}_voxlis_big.png`
+        }
+
+        if (newSrc) {
+          const testImg = new Image()
+          testImg.onload = () => {
+            adImg.src = newSrc
+          }
+          testImg.onerror = () => {
+            // Fallback to red theme if theme-specific image doesn't exist
+            const fallbackSrc = newSrc.replace(`${this.currentTheme}_`, "red_")
+            adImg.src = fallbackSrc
+          }
+          testImg.src = newSrc
+        }
       })
     })
   }
@@ -4243,107 +4289,110 @@ class ThemeManager {
 
 class OptimizedHeartAnimation {
   constructor({ heartCount = 30, minHearts = 20 } = {}) {
-    this.canvas = document.getElementById("heartRainCanvas");
-    this.loader = document.getElementById("loader");
-    if (!this.canvas) return;
+    this.canvas = document.getElementById("heartRainCanvas")
+    this.loader = document.getElementById("loader")
+    if (!this.canvas) return
 
-    this.ctx = this.canvas.getContext("2d");
-    this.heartImageSrc = "/assets/red-heart.svg";
-    this.hearts = [];
-    this.heartImage = new Image();
-    this.isRunning = false;
-    this.lastFrameTime = 0;
-    this.lastFpsUpdate = 0;
-    this.frameCount = 0;
-    this.fps = 0;
-    this.targetFps = 30;
-    this.fpsInterval = 1000 / this.targetFps;
+    this.ctx = this.canvas.getContext("2d")
+    this.heartImageSrc = "/assets/red-heart.svg"
+    this.hearts = []
+    this.heartImage = new Image()
+    this.isRunning = false
+    this.lastFrameTime = 0
+    this.lastFpsUpdate = 0
+    this.frameCount = 0
+    this.fps = 0
+    this.targetFps = 30
+    this.fpsInterval = 1000 / this.targetFps
 
-    this.baseHeartCount = heartCount;
-    this.minHearts = minHearts;
+    this.baseHeartCount = heartCount
+    this.minHearts = minHearts
 
-    this.cssWidth = 0;
-    this.cssHeight = 0;
+    this.cssWidth = 0
+    this.cssHeight = 0
 
-    this.resizeCanvas();
+    this.resizeCanvas()
     if (typeof ResizeObserver !== "undefined") {
-      new ResizeObserver(() => this.resizeCanvas()).observe(this.canvas);
+      new ResizeObserver(() => this.resizeCanvas()).observe(this.canvas)
     } else {
-      window.addEventListener("resize", this.resizeCanvas.bind(this));
+      window.addEventListener("resize", this.resizeCanvas.bind(this))
     }
 
-    this.heartImage.src = this.heartImageSrc;
+    this.heartImage.src = this.heartImageSrc
     this.heartImage.onload = () => {
-      if (this.loader) this.loader.style.display = "none";
-      const target = this.getEffectiveBaseCount();
-      for (let i = 0; i < target; i++) this.hearts.push(this.createHeart());
-      this.start();
-    };
+      if (this.loader) this.loader.style.display = "none"
+      const target = this.getEffectiveBaseCount()
+      for (let i = 0; i < target; i++) this.hearts.push(this.createHeart())
+      this.start()
+    }
 
     this.heartImage.onerror = () => {
-      console.error(`Failed to load heart image: ${this.heartImageSrc}`);
-      if (this.loader) this.loader.textContent = "Failed to load animation assets.";
-    };
+      console.error(`Failed to load heart image: ${this.heartImageSrc}`)
+      if (this.loader) this.loader.textContent = "Failed to load animation assets."
+    }
 
-    this.canvas.addEventListener("click", this.handleClick.bind(this));
+    this.canvas.addEventListener("click", this.handleClick.bind(this))
   }
 
   getEffectiveBaseCount() {
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
-    return Math.max(this.minHearts, Math.round(this.baseHeartCount / dpr));
+    const dpr = Math.max(1, window.devicePixelRatio || 1)
+    return Math.max(this.minHearts, Math.round(this.baseHeartCount / dpr))
   }
 
   updateHeartImage(theme) {
-    const themeHeartPath = `/assets/${theme}-heart.svg`;
-    const defaultHeartPath = "/assets/red-heart.svg";
-    const testImg = new Image();
+    const themeHeartPath = `/assets/${theme}-heart.svg`
+    const defaultHeartPath = "/assets/red-heart.svg"
+    const testImg = new Image()
     testImg.onload = () => {
-      this.heartImageSrc = themeHeartPath;
-      this.heartImage.src = themeHeartPath;
-      this.hearts.forEach((h) => (h.img = this.heartImage));
-    };
+      this.heartImageSrc = themeHeartPath
+      this.heartImage.src = themeHeartPath
+      this.hearts.forEach((h) => (h.img = this.heartImage))
+    }
     testImg.onerror = () => {
-      this.heartImageSrc = defaultHeartPath;
-      this.heartImage.src = defaultHeartPath;
-      this.hearts.forEach((h) => (h.img = this.heartImage));
-    };
-    testImg.src = themeHeartPath;
+      this.heartImageSrc = defaultHeartPath
+      this.heartImage.src = defaultHeartPath
+      this.hearts.forEach((h) => (h.img = this.heartImage))
+    }
+    testImg.src = themeHeartPath
   }
 
   resizeCanvas() {
-    if (!this.canvas) return;
+    if (!this.canvas) return
 
-    const dpr = Math.max(1, window.devicePixelRatio || 1);
-    const oldCssWidth = this.cssWidth || this.canvas.clientWidth || window.innerWidth;
-    const oldCssHeight = this.cssHeight || this.canvas.clientHeight || window.innerHeight;
+    const dpr = Math.max(1, window.devicePixelRatio || 1)
+    const oldCssWidth = this.cssWidth || this.canvas.clientWidth || window.innerWidth
+    const oldCssHeight = this.cssHeight || this.canvas.clientHeight || window.innerHeight
 
-    this.cssWidth = this.canvas.clientWidth || window.innerWidth;
-    this.cssHeight = this.canvas.clientHeight || window.innerHeight;
+    this.cssWidth = this.canvas.clientWidth || window.innerWidth
+    this.cssHeight = this.canvas.clientHeight || window.innerHeight
 
-    this.canvas.width = Math.floor(this.cssWidth * dpr);
-    this.canvas.height = Math.floor(this.cssHeight * dpr);
-    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.canvas.width = Math.floor(this.cssWidth * dpr)
+    this.canvas.height = Math.floor(this.cssHeight * dpr)
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
     if (this.hearts.length && oldCssWidth && oldCssHeight) {
-      const scaleX = this.cssWidth / oldCssWidth;
-      const scaleY = this.cssHeight / oldCssHeight;
-      this.hearts.forEach((h) => { h.x *= scaleX; h.y *= scaleY; });
+      const scaleX = this.cssWidth / oldCssWidth
+      const scaleY = this.cssHeight / oldCssHeight
+      this.hearts.forEach((h) => {
+        h.x *= scaleX
+        h.y *= scaleY
+      })
     }
 
     // Adjust ONLY base hearts to DPR-scaled target
-    const target = this.getEffectiveBaseCount();
-    const baseHearts = this.hearts.filter((h) => !h.isClickHeart);
+    const target = this.getEffectiveBaseCount()
+    const baseHearts = this.hearts.filter((h) => !h.isClickHeart)
 
     if (baseHearts.length < target) {
       for (let i = 0, add = target - baseHearts.length; i < add; i++) {
-        this.hearts.push(this.createHeart());
+        this.hearts.push(this.createHeart())
       }
     } else if (baseHearts.length > target) {
-      let remove = baseHearts.length - target;
+      let remove = baseHearts.length - target
       for (let i = this.hearts.length - 1; i >= 0 && remove > 0; i--) {
         if (!this.hearts[i].isClickHeart) {
-          this.hearts.splice(i, 1);
-          remove--;
+          this.hearts.splice(i, 1)
+          remove--
         }
       }
     }
@@ -4361,59 +4410,79 @@ class OptimizedHeartAnimation {
       rotationSpeed: Math.random() * 0.005 - 0.0025,
       opacity: Math.random() * 0.3 + 0.7,
       isClickHeart: false,
-    };
+    }
   }
 
-  start() { if (!this.isRunning) { this.isRunning = true; this.lastFrameTime = performance.now(); this.lastFpsUpdate = this.lastFrameTime; requestAnimationFrame(this.animate.bind(this)); } }
-  stop() { this.isRunning = false; }
+  start() {
+    if (!this.isRunning) {
+      this.isRunning = true
+      this.lastFrameTime = performance.now()
+      this.lastFpsUpdate = this.lastFrameTime
+      requestAnimationFrame(this.animate.bind(this))
+    }
+  }
+  stop() {
+    this.isRunning = false
+  }
 
   animate(timestamp) {
-    if (!this.isRunning) return;
-    const elapsed = timestamp - this.lastFrameTime;
+    if (!this.isRunning) return
+    const elapsed = timestamp - this.lastFrameTime
     if (elapsed > this.fpsInterval) {
-      this.lastFrameTime = timestamp - (elapsed % this.fpsInterval);
-      this.ctx.clearRect(0, 0, this.cssWidth, this.cssHeight);
+      this.lastFrameTime = timestamp - (elapsed % this.fpsInterval)
+      this.ctx.clearRect(0, 0, this.cssWidth, this.cssHeight)
 
       for (let i = this.hearts.length - 1; i >= 0; i--) {
-        const h = this.hearts[i];
-        h.x += h.dx; h.y += h.dy; h.rotation += h.rotationSpeed;
+        const h = this.hearts[i]
+        h.x += h.dx
+        h.y += h.dy
+        h.rotation += h.rotationSpeed
 
         if (h.isClickHeart) {
-          h.life -= 1;
-          h.opacity = Math.max(0, h.life / h.maxLife);
-          h.dy += 0.03;
-          if (h.life <= 0) { this.hearts.splice(i, 1); continue; }
+          h.life -= 1
+          h.opacity = Math.max(0, h.life / h.maxLife)
+          h.dy += 0.03
+          if (h.life <= 0) {
+            this.hearts.splice(i, 1)
+            continue
+          }
         } else {
-          const limitX = this.cssWidth + h.size;
-          const limitY = this.cssHeight + h.size;
-          if (h.y > limitY) { h.y = -h.size; h.x = Math.random() * this.cssWidth; h.dy = Math.random() * 0.3 + 0.2; }
-          if (h.x < -h.size) h.x = this.cssWidth + h.size;
-          if (h.x > this.cssWidth + h.size) h.x = -h.size;
+          const limitX = this.cssWidth + h.size
+          const limitY = this.cssHeight + h.size
+          if (h.y > limitY) {
+            h.y = -h.size
+            h.x = Math.random() * this.cssWidth
+            h.dy = Math.random() * 0.3 + 0.2
+          }
+          if (h.x < -h.size) h.x = this.cssWidth + h.size
+          if (h.x > this.cssWidth + h.size) h.x = -h.size
         }
 
-        this.ctx.save();
-        this.ctx.translate(h.x, h.y);
-        this.ctx.rotate(h.rotation);
-        this.ctx.globalAlpha = h.opacity;
-        this.ctx.drawImage(h.img, -h.size / 2, -h.size / 2, h.size, h.size);
-        this.ctx.restore();
+        this.ctx.save()
+        this.ctx.translate(h.x, h.y)
+        this.ctx.rotate(h.rotation)
+        this.ctx.globalAlpha = h.opacity
+        this.ctx.drawImage(h.img, -h.size / 2, -h.size / 2, h.size, h.size)
+        this.ctx.restore()
       }
 
-      this.frameCount++;
+      this.frameCount++
       if (timestamp - this.lastFpsUpdate > 1000) {
-        this.fps = Math.round((this.frameCount * 1000) / (timestamp - this.lastFpsUpdate));
-        this.frameCount = 0; this.lastFpsUpdate = timestamp;
+        this.fps = Math.round((this.frameCount * 1000) / (timestamp - this.lastFpsUpdate))
+        this.frameCount = 0
+        this.lastFpsUpdate = timestamp
       }
     }
-    requestAnimationFrame(this.animate.bind(this));
+    requestAnimationFrame(this.animate.bind(this))
   }
 
   handleClick(e) {
-    const rect = this.canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left, y = e.clientY - rect.top;
-    const n = Math.floor(Math.random() * 3) + 3;
+    const rect = this.canvas.getBoundingClientRect()
+    const x = e.clientX - rect.left,
+      y = e.clientY - rect.top
+    const n = Math.floor(Math.random() * 3) + 3
     for (let i = 0; i < n; i++) {
-      const maxLife = 60 + Math.floor(Math.random() * 30);
+      const maxLife = 60 + Math.floor(Math.random() * 30)
       this.hearts.push({
         img: this.heartImage,
         x: x + (Math.random() * 40 - 20),
@@ -4427,11 +4496,10 @@ class OptimizedHeartAnimation {
         isClickHeart: true,
         life: maxLife,
         maxLife,
-      });
+      })
     }
   }
 }
-
 
 class LoadingManager {
   constructor(appState) {
@@ -4500,157 +4568,153 @@ class LoadingManager {
   }
 }
 
-let clickTracker
-
 class FloatingWarningSystem {
- constructor() {
-  this.warning = document.getElementById("floatingWarning");
-  if (!this.warning) return;
+  constructor() {
+    this.warning = document.getElementById("floatingWarning")
+    if (!this.warning) return
 
-  this.isVisible = false;
-  this.lastScrollY = window.pageYOffset;
-  this.scrollThreshold = 15; 
-  
-  this.hideTimeout = null;
-  this.userClosed = false;
+    this.isVisible = false
+    this.lastScrollY = window.pageYOffset
+    this.scrollThreshold = 15
 
-  this.init();
- }
+    this.hideTimeout = null
+    this.userClosed = false
 
- init() {
-  if (sessionStorage.getItem("warningClosed") === "true") {
-   this.userClosed = true;
-   this.warning.style.display = "none";
-   return;
+    this.init()
   }
-  setTimeout(() => this.showWarning(), 1500);
-  this.setupScrollListener();
- }
 
-setupScrollListener() {
-  
-}
- handleScroll() {
-  if (this.userClosed) return;
-  const currentScrollY = window.pageYOffset;
-  const isAtTop = currentScrollY < 50;
-  const isScrollingUp = currentScrollY < this.lastScrollY;
-  const isScrollingDown = currentScrollY > this.lastScrollY;
-
-  if (isAtTop) {
-   if (this.isVisible) this.hideWarning();
-  } else if (isScrollingUp) {
-   if (!this.isVisible) this.showWarning();
-  } else if (isScrollingDown && Math.abs(currentScrollY - this.lastScrollY) > this.scrollThreshold) {
-   if (this.isVisible) this.hideWarning();
+  init() {
+    if (sessionStorage.getItem("warningClosed") === "true") {
+      this.userClosed = true
+      this.warning.style.display = "none"
+      return
+    }
+    setTimeout(() => this.showWarning(), 1500)
+    this.setupScrollListener()
   }
-  this.lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
- }
 
- showWarning() {
-  if (this.isVisible || this.userClosed) return;
-  this.warning.classList.add("is-visible");
-  this.isVisible = true;
-  clearTimeout(this.hideTimeout);
-  this.hideTimeout = setTimeout(() => this.hideWarning(), 8000);
- }
+  setupScrollListener() {}
+  handleScroll() {
+    if (this.userClosed) return
+    const currentScrollY = window.pageYOffset
+    const isAtTop = currentScrollY < 50
+    const isScrollingUp = currentScrollY < this.lastScrollY
+    const isScrollingDown = currentScrollY > this.lastScrollY
 
- hideWarning() {
-  if (!this.isVisible) return;
-  this.warning.classList.remove("is-visible");
-  this.isVisible = false;
-  clearTimeout(this.hideTimeout);
- }
+    if (isAtTop) {
+      if (this.isVisible) this.hideWarning()
+    } else if (isScrollingUp) {
+      if (!this.isVisible) this.showWarning()
+    } else if (isScrollingDown && Math.abs(currentScrollY - this.lastScrollY) > this.scrollThreshold) {
+      if (this.isVisible) this.hideWarning()
+    }
+    this.lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY
+  }
 
- close() {
-  this.hideWarning();
-  this.userClosed = true;
-  sessionStorage.setItem("warningClosed", "true");
- }
+  showWarning() {
+    if (this.isVisible || this.userClosed) return
+    this.warning.classList.add("is-visible")
+    this.isVisible = true
+    clearTimeout(this.hideTimeout)
+    this.hideTimeout = setTimeout(() => this.hideWarning(), 8000)
+  }
+
+  hideWarning() {
+    if (!this.isVisible) return
+    this.warning.classList.remove("is-visible")
+    this.isVisible = false
+    clearTimeout(this.hideTimeout)
+  }
+
+  close() {
+    this.hideWarning()
+    this.userClosed = true
+    sessionStorage.setItem("warningClosed", "true")
+  }
 }
 
 class TopWarningBar {
- constructor() {
-  this.warningBar = document.getElementById("topWarningBar");
-  if (!this.warningBar) return;
+  constructor() {
+    this.warningBar = document.getElementById("topWarningBar")
+    if (!this.warningBar) return
 
-  this.userClosed = false;
-  this.warningBarHeight = 0;
+    this.userClosed = false
+    this.warningBarHeight = 0
 
-  this.init();
- }
-
- init() {
-  if (sessionStorage.getItem("topWarningClosed") === "true") {
-   this.userClosed = true;
-   this.warningBar.style.display = "none";
-   document.body.classList.remove("has-top-warning");
-   return;
+    this.init()
   }
 
-  this.warningBarHeight = this.warningBar.offsetHeight;
-  document.documentElement.style.setProperty("--warning-bar-height", `${this.warningBarHeight}px`);
-  
-  document.body.classList.add("has-top-warning");
- }
+  init() {
+    if (sessionStorage.getItem("topWarningClosed") === "true") {
+      this.userClosed = true
+      this.warningBar.style.display = "none"
+      document.body.classList.remove("has-top-warning")
+      return
+    }
 
- setupScrollListener() {
-  let ticking = false;
-  window.addEventListener("scroll", () => {
-   if (!ticking) {
-    window.requestAnimationFrame(() => {
-     this.handleScroll();
-     ticking = false;
-    });
-    ticking = true;
-   }
-  });
- }
+    this.warningBarHeight = this.warningBar.offsetHeight
+    document.documentElement.style.setProperty("--warning-bar-height", `${this.warningBarHeight}px`)
+
+    document.body.classList.add("has-top-warning")
+  }
+
+  setupScrollListener() {
+    let ticking = false
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          this.handleScroll()
+          ticking = false
+        })
+        ticking = true
+      }
+    })
+  }
 
   setupTransitionListener() {
     this.warningBar.addEventListener("transitionend", (e) => {
-    if (e.propertyName === 'transform' && !this.isVisible) {
-      document.body.classList.remove("has-top-warning");
-    }
-    });
+      if (e.propertyName === "transform" && !this.isVisible) {
+        document.body.classList.remove("has-top-warning")
+      }
+    })
   }
 
   handleScroll() {
-  if (this.userClosed) return;
-  const isAtTop = window.pageYOffset <= this.topThreshold;
-  if (isAtTop && !this.isVisible) {
-  this.showWarning();
+    if (this.userClosed) return
+    const isAtTop = window.pageYOffset <= this.topThreshold
+    if (isAtTop && !this.isVisible) {
+      this.showWarning()
+    }
   }
- }
 
   showWarning() {
-    if (this.isVisible || this.userClosed) return;
-    document.body.classList.add("has-top-warning");
-    this.warningBar.offsetHeight;
-    this.warningBar.classList.add("is-visible");
-    this.isVisible = true;
+    if (this.isVisible || this.userClosed) return
+    document.body.classList.add("has-top-warning")
+    this.warningBar.offsetHeight
+    this.warningBar.classList.add("is-visible")
+    this.isVisible = true
   }
 
- hideWarning() {
-  if (!this.isVisible) return;
-  this.warningBar.classList.remove("is-visible");
-  this.isVisible = false;
- }
+  hideWarning() {
+    if (!this.isVisible) return
+    this.warningBar.classList.remove("is-visible")
+    this.isVisible = false
+  }
 
- close() {
-  this.hideWarning();
-  this.userClosed = true;
-  sessionStorage.setItem("topWarningClosed", "true");
- }
+  close() {
+    this.hideWarning()
+    this.userClosed = true
+    sessionStorage.setItem("topWarningClosed", "true")
+  }
 }
 
-let floatingWarningInstance;
-let topWarningBarInstance;
+let floatingWarningInstance
+let topWarningBarInstance
 
 document.addEventListener("DOMContentLoaded", () => {
-    floatingWarningInstance = new FloatingWarningSystem();
-    topWarningBarInstance = new TopWarningBar();
-});
+  floatingWarningInstance = new FloatingWarningSystem()
+  topWarningBarInstance = new TopWarningBar()
+})
 
 document.addEventListener("DOMContentLoaded", async () => {
   const appState = new AppState()
@@ -4690,6 +4754,3 @@ window.addEventListener("load", () => {
     })
   }
 })
-
-
-
