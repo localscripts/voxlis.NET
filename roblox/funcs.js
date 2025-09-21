@@ -596,6 +596,7 @@ const expData = [
     info: "## Exploit Performance\n- Oops! 🤭,Looks like we had not gathered the information yet on this Exploit! This could take some time to finish... If you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!\n\n## Background Information\n- Oops! 🤭,Looks like we had not gathered the information yet on this Exploit! This could take some time to finish... If you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!\n\n\n## Developers Background Information\n- Oops! 🤭,Looks like we had not gathered the information yet on this Exploit! This could take some time to finish... If you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!\n\n> Sources: [reddit.com/r/robloxhackers](), WeAreDevs.NET, Old V3rmillion.net",
     hasKeySystem: true,
     free: true,
+    hide: true,
   },
   {
     id: "dx9ware",
@@ -4754,3 +4755,4 @@ window.addEventListener("load", () => {
     })
   }
 })
+
