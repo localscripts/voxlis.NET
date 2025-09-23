@@ -103,7 +103,7 @@ const expData = [
     lvl: 8,
     price: "$4.99",
     period: "monthly",
-    plat: ["ios", "android"],
+    plat: ["windows", "ios", "android"],
     pros: ["VNG Support","97% sUNC", "Level 8"],
     neutral: ["Has a keysystem", "Android uses module from ArceusX"],
     cons: [],
@@ -4756,5 +4756,6 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
 
