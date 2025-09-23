@@ -532,7 +532,7 @@ const expData = [
   },
   {
     id: "ronix",
-    name: "Ronix",
+    name: "Ronix™",
     desc: "A new exploit with high UNC percentage.",
     lvl: 8,
     price: "$4.99",
@@ -4756,4 +4756,5 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
