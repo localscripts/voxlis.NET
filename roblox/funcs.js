@@ -4515,7 +4515,7 @@ class OptimizedHeartAnimation {
       y: Math.random() * (this.cssHeight || window.innerHeight),
       dx: Math.random() * 0.2 - 0.1, // Reduced movement
       dy: Math.random() * 0.2 + 0.1, // Slower fall
-      size: Math.random() * 13 + 23, // Much bigger hearts (50-90px)
+      size: Math.random() * 15 + 15,
       rotation: Math.random() * 0.1 - 0.05, // Less rotation
       rotationSpeed: Math.random() * 0.002 - 0.001, // Slower rotation
       opacity: 1.0, // Full opacity, completely visible
@@ -4641,7 +4641,7 @@ class OptimizedHeartAnimation {
         y: y + (Math.random() * 20 - 10),
         dx: Math.random() * 1 - 0.5, // Reduced velocity
         dy: Math.random() * -1 - 0.3,
-        size: Math.random() * 13 + 23, // Much bigger click hearts (60-90px)
+        size: Math.random() * 20 + 20,
         rotation: Math.random() * 0.2 - 0.1,
         rotationSpeed: Math.random() * 0.01 - 0.005,
         opacity: 1,
