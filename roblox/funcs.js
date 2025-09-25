@@ -4516,8 +4516,8 @@ class OptimizedHeartAnimation {
       dx: Math.random() * 0.2 - 0.1, // Reduced movement
       dy: Math.random() * 0.2 + 0.1, // Slower fall
       size: Math.random() * 15 + 15,
-      rotation: Math.random() * 0.1 - 0.05, // Less rotation
-      rotationSpeed: Math.random() * 0.002 - 0.001, // Slower rotation
+      rotation: Math.random() * 0.2 - 0.1, // Less rotation
+      rotationSpeed: Math.random() * 0.005 - 0.0025, // Slower rotation
       opacity: 1.0, // Full opacity, completely visible
       isClickHeart: false,
     }
@@ -4642,8 +4642,8 @@ class OptimizedHeartAnimation {
         dx: Math.random() * 1 - 0.5, // Reduced velocity
         dy: Math.random() * -1 - 0.3,
         size: Math.random() * 20 + 20,
-        rotation: Math.random() * 0.2 - 0.1,
-        rotationSpeed: Math.random() * 0.01 - 0.005,
+        rotation: Math.random() * 0.02 - 0.01,
+        rotationSpeed: Math.random() * 0.4 - 0.2,
         opacity: 1,
         isClickHeart: true,
         life: maxLife,
