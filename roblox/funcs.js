@@ -4319,105 +4319,149 @@ class ThemeManager {
 }
 
 class OptimizedHeartAnimation {
-constructor({ heartCount = 30, minHearts = 20 } = {}) {
-  this.canvas = document.getElementById("heartRainCanvas")
-  this.loader = document.getElementById("loader")
-  if (!this.canvas) return
+  constructor({ heartCount = 12, minHearts = 8 } = {}) {
+    if (OptimizedHeartAnimation.instance) {
+      return OptimizedHeartAnimation.instance
+    }
+    OptimizedHeartAnimation.instance = this
 
-  this.ctx = this.canvas.getContext("2d")
-  // <CHANGE> Initialize with current theme instead of hardcoded red
-  const currentTheme = document.documentElement.getAttribute('data-theme') || 'red'
-  this.heartImageSrc = `/assets/${currentTheme}-heart.svg`
-  this.hearts = []
-  this.heartImage = new Image()
-  this.isRunning = false
-  this.isLoadingTheme = false
-  this.lastFrameTime = 0
-  this.lastFpsUpdate = 0
-  this.frameCount = 0
-  this.fps = 0
-  this.targetFps = 30
-  this.fpsInterval = 1000 / this.targetFps
+    this.canvas = document.getElementById("heartRainCanvas")
+    this.loader = document.getElementById("loader")
+    if (!this.canvas) return
 
-  this.baseHeartCount = heartCount
-  this.minHearts = minHearts
+    this.ctx = this.canvas.getContext("2d")
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "red"
+    this.heartImageSrc = `/assets/${currentTheme}-heart.svg`
+    this.hearts = []
+    this.heartImage = new Image()
+    this.isRunning = false
+    this.isLoadingTheme = false
+    this.lastFrameTime = 0
+    this.targetFps = 20 // Further reduced FPS for better performance
+    this.fpsInterval = 1000 / this.targetFps
+    this.frameSkipCounter = 0
+    this.maxFrameSkip = 3 // Increased frame skipping tolerance
 
-  this.cssWidth = 0
-  this.cssHeight = 0
+    this.baseHeartCount = heartCount // Reduced default count
+    this.minHearts = minHearts
+    this.maxClickHearts = 15 // Reduced max click hearts
+    this.maxTotalHearts = 30 // Hard limit on total hearts
 
-  this.resizeCanvas()
-  if (typeof ResizeObserver !== "undefined") {
-    new ResizeObserver(() => this.resizeCanvas()).observe(this.canvas)
-  } else {
-    window.addEventListener("resize", this.resizeCanvas.bind(this))
+    this.cssWidth = 0
+    this.cssHeight = 0
+    this.isVisible = true
+    this.animationId = null
+    this.isInitialized = false
+
+    this.batchSize = 5
+    this.updateBatch = 0
+
+    this.init()
   }
 
-  // <CHANGE> Load with fallback to prevent loading issues
-  this.heartImage.src = this.heartImageSrc
-  this.heartImage.onload = () => {
-    if (this.loader) this.loader.style.display = "none"
-    const target = this.getEffectiveBaseCount()
-    for (let i = 0; i < target; i++) this.hearts.push(this.createHeart())
-    this.start()
+  init() {
+    if (this.isInitialized) return
+    this.isInitialized = true
+
+    this.resizeCanvas()
+
+    if (typeof ResizeObserver !== "undefined") {
+      this.resizeObserver = new ResizeObserver(() => this.resizeCanvas())
+      this.resizeObserver.observe(this.canvas)
+    } else {
+      this.resizeHandler = this.resizeCanvas.bind(this)
+      window.addEventListener("resize", this.resizeHandler)
+    }
+
+    this.visibilityHandler = () => {
+      this.isVisible = !document.hidden
+      if (this.isVisible && this.isRunning) {
+        this.lastFrameTime = performance.now()
+        this.animate(this.lastFrameTime)
+      }
+    }
+    document.addEventListener("visibilitychange", this.visibilityHandler)
+
+    this.lastClickTime = 0
+    this.clickThrottle = 100 // Minimum time between clicks
+    this.clickHandler = (e) => {
+      const now = performance.now()
+      if (now - this.lastClickTime < this.clickThrottle) return
+      this.lastClickTime = now
+      this.handleClick(e)
+    }
+    this.canvas.addEventListener("click", this.clickHandler)
+
+    this.loadHeartImage()
   }
 
-  this.heartImage.onerror = () => {
-    // <CHANGE> Fallback to red heart if theme heart fails
-    this.heartImageSrc = "/assets/red-heart.svg"
-    this.heartImage.src = this.heartImageSrc
+  loadHeartImage() {
     this.heartImage.onload = () => {
       if (this.loader) this.loader.style.display = "none"
-      const target = this.getEffectiveBaseCount()
-      for (let i = 0; i < target; i++) this.hearts.push(this.createHeart())
+      this.generateInitialHearts()
       this.start()
+    }
+
+    this.heartImage.onerror = () => {
+      this.heartImageSrc = "/assets/red-heart.svg"
+      this.heartImage.src = this.heartImageSrc
+      this.heartImage.onload = () => {
+        if (this.loader) this.loader.style.display = "none"
+        this.generateInitialHearts()
+        this.start()
+      }
+    }
+
+    this.heartImage.src = this.heartImageSrc
+  }
+
+  generateInitialHearts() {
+    const target = this.getEffectiveBaseCount()
+    this.hearts = []
+    for (let i = 0; i < target; i++) {
+      this.hearts.push(this.createHeart())
     }
   }
 
-  this.canvas.addEventListener("click", this.handleClick.bind(this))
-}
-
   getEffectiveBaseCount() {
-    const dpr = Math.max(1, window.devicePixelRatio || 1)
-    return Math.max(this.minHearts, Math.round(this.baseHeartCount / dpr))
+    const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1))
+    const screenArea = (this.cssWidth || window.innerWidth) * (this.cssHeight || window.innerHeight)
+    const scaleFactor = Math.min(1, screenArea / 1000000) // Scale down for large screens
+    return Math.max(this.minHearts, Math.round((this.baseHeartCount * scaleFactor) / dpr))
   }
 
   updateHeartImage(theme) {
-    // <CHANGE> Prevent multiple simultaneous image loads and ensure proper theme application
     if (this.isLoadingTheme) return
     this.isLoadingTheme = true
-    
+
     const themeHeartPath = `/assets/${theme}-heart.svg`
-    const defaultHeartPath = "/assets/red-heart.svg"
-    
-    // Create new image instance to avoid conflicts
     const newHeartImage = new Image()
-    
+
     newHeartImage.onload = () => {
       this.heartImageSrc = themeHeartPath
       this.heartImage = newHeartImage
-      // Update all existing hearts with new image
       this.hearts.forEach((h) => (h.img = this.heartImage))
       this.isLoadingTheme = false
     }
-    
+
     newHeartImage.onerror = () => {
       const fallbackImage = new Image()
       fallbackImage.onload = () => {
-        this.heartImageSrc = defaultHeartPath
+        this.heartImageSrc = "/assets/red-heart.svg"
         this.heartImage = fallbackImage
         this.hearts.forEach((h) => (h.img = this.heartImage))
         this.isLoadingTheme = false
       }
-      fallbackImage.src = defaultHeartPath
+      fallbackImage.src = "/assets/red-heart.svg"
     }
-    
+
     newHeartImage.src = themeHeartPath
   }
 
   resizeCanvas() {
     if (!this.canvas) return
 
-    const dpr = Math.max(1, window.devicePixelRatio || 1)
+    const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1))
     const oldCssWidth = this.cssWidth || this.canvas.clientWidth || window.innerWidth
     const oldCssHeight = this.cssHeight || this.canvas.clientHeight || window.innerHeight
 
@@ -4437,22 +4481,30 @@ constructor({ heartCount = 30, minHearts = 20 } = {}) {
       })
     }
 
-    // Adjust ONLY base hearts to DPR-scaled target
+    this.adjustHeartCount()
+  }
+
+  adjustHeartCount() {
     const target = this.getEffectiveBaseCount()
     const baseHearts = this.hearts.filter((h) => !h.isClickHeart)
 
     if (baseHearts.length < target) {
-      for (let i = 0, add = target - baseHearts.length; i < add; i++) {
+      const toAdd = target - baseHearts.length
+      for (let i = 0; i < toAdd; i++) {
         this.hearts.push(this.createHeart())
       }
     } else if (baseHearts.length > target) {
-      let remove = baseHearts.length - target
-      for (let i = this.hearts.length - 1; i >= 0 && remove > 0; i--) {
+      let toRemove = baseHearts.length - target
+      for (let i = this.hearts.length - 1; i >= 0 && toRemove > 0; i--) {
         if (!this.hearts[i].isClickHeart) {
           this.hearts.splice(i, 1)
-          remove--
+          toRemove--
         }
       }
+    }
+
+    if (this.hearts.length > this.maxTotalHearts) {
+      this.hearts = this.hearts.slice(0, this.maxTotalHearts)
     }
   }
 
@@ -4461,12 +4513,12 @@ constructor({ heartCount = 30, minHearts = 20 } = {}) {
       img: this.heartImage,
       x: Math.random() * (this.cssWidth || window.innerWidth),
       y: Math.random() * (this.cssHeight || window.innerHeight),
-      dx: Math.random() * 0.4 - 0.2,
-      dy: Math.random() * 0.3 + 0.2,
-      size: Math.random() * 15 + 15,
-      rotation: Math.random() * 0.2 - 0.1,
-      rotationSpeed: Math.random() * 0.005 - 0.0025,
-      opacity: Math.random() * 0.3 + 0.7,
+      dx: Math.random() * 0.2 - 0.1, // Reduced movement
+      dy: Math.random() * 0.2 + 0.1, // Slower fall
+      size: Math.random() * 10 + 10, // Smaller hearts
+      rotation: Math.random() * 0.1 - 0.05, // Less rotation
+      rotationSpeed: Math.random() * 0.002 - 0.001, // Slower rotation
+      opacity: Math.random() * 0.2 + 0.5, // More transparent
       isClickHeart: false,
     }
   }
@@ -4475,81 +4527,123 @@ constructor({ heartCount = 30, minHearts = 20 } = {}) {
     if (!this.isRunning) {
       this.isRunning = true
       this.lastFrameTime = performance.now()
-      this.lastFpsUpdate = this.lastFrameTime
-      requestAnimationFrame(this.animate.bind(this))
+      this.animationId = requestAnimationFrame(this.animate.bind(this))
     }
   }
+
   stop() {
     this.isRunning = false
+    if (this.animationId) {
+      cancelAnimationFrame(this.animationId)
+      this.animationId = null
+    }
   }
 
   animate(timestamp) {
-    if (!this.isRunning) return
-    const elapsed = timestamp - this.lastFrameTime
-    if (elapsed > this.fpsInterval) {
-      this.lastFrameTime = timestamp - (elapsed % this.fpsInterval)
-      this.ctx.clearRect(0, 0, this.cssWidth, this.cssHeight)
-
-      for (let i = this.hearts.length - 1; i >= 0; i--) {
-        const h = this.hearts[i]
-        h.x += h.dx
-        h.y += h.dy
-        h.rotation += h.rotationSpeed
-
-        if (h.isClickHeart) {
-          h.life -= 1
-          h.opacity = Math.max(0, h.life / h.maxLife)
-          h.dy += 0.03
-          if (h.life <= 0) {
-            this.hearts.splice(i, 1)
-            continue
-          }
-        } else {
-          const limitX = this.cssWidth + h.size
-          const limitY = this.cssHeight + h.size
-          if (h.y > limitY) {
-            h.y = -h.size
-            h.x = Math.random() * this.cssWidth
-            h.dy = Math.random() * 0.3 + 0.2
-          }
-          if (h.x < -h.size) h.x = this.cssWidth + h.size
-          if (h.x > this.cssWidth + h.size) h.x = -h.size
-        }
-
-        this.ctx.save()
-        this.ctx.translate(h.x, h.y)
-        this.ctx.rotate(h.rotation)
-        this.ctx.globalAlpha = h.opacity
-        this.ctx.drawImage(h.img, -h.size / 2, -h.size / 2, h.size, h.size)
-        this.ctx.restore()
+    if (!this.isRunning || !this.isVisible) {
+      if (this.isRunning) {
+        this.animationId = requestAnimationFrame(this.animate.bind(this))
       }
-
-      this.frameCount++
-      if (timestamp - this.lastFpsUpdate > 1000) {
-        this.fps = Math.round((this.frameCount * 1000) / (timestamp - this.lastFpsUpdate))
-        this.frameCount = 0
-        this.lastFpsUpdate = timestamp
-      }
+      return
     }
-    requestAnimationFrame(this.animate.bind(this))
+
+    const elapsed = timestamp - this.lastFrameTime
+
+    if (elapsed < this.fpsInterval) {
+      this.animationId = requestAnimationFrame(this.animate.bind(this))
+      return
+    }
+
+    if (elapsed > this.fpsInterval * 2.5) {
+      this.frameSkipCounter++
+      if (this.frameSkipCounter < this.maxFrameSkip) {
+        this.animationId = requestAnimationFrame(this.animate.bind(this))
+        return
+      }
+      this.frameSkipCounter = 0
+    }
+
+    this.lastFrameTime = timestamp - (elapsed % this.fpsInterval)
+    this.ctx.clearRect(0, 0, this.cssWidth, this.cssHeight)
+
+    const heartsToProcess = Math.min(this.hearts.length, this.batchSize + this.updateBatch)
+
+    for (let i = this.hearts.length - 1; i >= 0; i--) {
+      const h = this.hearts[i]
+
+      if (i > heartsToProcess && !h.isClickHeart) {
+        this.drawHeart(h)
+        continue
+      }
+
+      this.updateHeart(h, i)
+      this.drawHeart(h)
+    }
+
+    this.updateBatch = (this.updateBatch + this.batchSize) % this.hearts.length
+    this.animationId = requestAnimationFrame(this.animate.bind(this))
+  }
+
+  updateHeart(h, index) {
+    h.x += h.dx
+    h.y += h.dy
+    h.rotation += h.rotationSpeed
+
+    if (h.isClickHeart) {
+      h.life -= 1
+      h.opacity = Math.max(0, h.life / h.maxLife)
+      h.dy += 0.015 // Reduced gravity
+      if (h.life <= 0) {
+        this.hearts.splice(index, 1)
+        return
+      }
+    } else {
+      const limitX = this.cssWidth + h.size
+      const limitY = this.cssHeight + h.size
+      if (h.y > limitY) {
+        h.y = -h.size
+        h.x = Math.random() * this.cssWidth
+        h.dy = Math.random() * 0.2 + 0.1
+      }
+      if (h.x < -h.size) h.x = this.cssWidth + h.size
+      if (h.x > this.cssWidth + h.size) h.x = -h.size
+    }
+  }
+
+  drawHeart(h) {
+    this.ctx.globalAlpha = h.opacity
+
+    if (Math.abs(h.rotation) > 0.005) {
+      this.ctx.save()
+      this.ctx.translate(h.x, h.y)
+      this.ctx.rotate(h.rotation)
+      this.ctx.drawImage(h.img, -h.size / 2, -h.size / 2, h.size, h.size)
+      this.ctx.restore()
+    } else {
+      this.ctx.drawImage(h.img, h.x - h.size / 2, h.y - h.size / 2, h.size, h.size)
+    }
   }
 
   handleClick(e) {
+    const clickHearts = this.hearts.filter((h) => h.isClickHeart)
+    if (clickHearts.length >= this.maxClickHearts || this.hearts.length >= this.maxTotalHearts) return
+
     const rect = this.canvas.getBoundingClientRect()
-    const x = e.clientX - rect.left,
-      y = e.clientY - rect.top
-    const n = Math.floor(Math.random() * 3) + 3
-    for (let i = 0; i < n; i++) {
-      const maxLife = 60 + Math.floor(Math.random() * 30)
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const n = Math.floor(Math.random() * 2) + 1 // Reduced to 1-2 hearts per click
+
+    for (let i = 0; i < n && this.hearts.length < this.maxTotalHearts; i++) {
+      const maxLife = 30 + Math.floor(Math.random() * 15) // Shorter lifespan
       this.hearts.push({
         img: this.heartImage,
-        x: x + (Math.random() * 40 - 20),
-        y: y + (Math.random() * 40 - 20),
-        dx: Math.random() * 2 - 1,
-        dy: Math.random() * -2 - 1,
-        size: Math.random() * 20 + 20,
-        rotation: Math.random() * 0.4 - 0.2,
-        rotationSpeed: Math.random() * 0.02 - 0.01,
+        x: x + (Math.random() * 20 - 10), // Reduced spread
+        y: y + (Math.random() * 20 - 10),
+        dx: Math.random() * 1 - 0.5, // Reduced velocity
+        dy: Math.random() * -1 - 0.3,
+        size: Math.random() * 12 + 12, // Smaller size
+        rotation: Math.random() * 0.2 - 0.1,
+        rotationSpeed: Math.random() * 0.01 - 0.005,
         opacity: 1,
         isClickHeart: true,
         life: maxLife,
@@ -4557,7 +4651,40 @@ constructor({ heartCount = 30, minHearts = 20 } = {}) {
       })
     }
   }
+
+  destroy() {
+    this.stop()
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect()
+    } else if (this.resizeHandler) {
+      window.removeEventListener("resize", this.resizeHandler)
+    }
+
+    if (this.visibilityHandler) {
+      document.removeEventListener("visibilitychange", this.visibilityHandler)
+    }
+
+    if (this.clickHandler) {
+      this.canvas.removeEventListener("click", this.clickHandler)
+    }
+
+    this.hearts = []
+    OptimizedHeartAnimation.instance = null
+  }
 }
+
+if (typeof window !== "undefined") {
+  // Wait for DOM to be ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      window.heartAnimation = new OptimizedHeartAnimation()
+    })
+  } else {
+    window.heartAnimation = new OptimizedHeartAnimation()
+  }
+}
+
 
 class LoadingManager {
   constructor(appState) {
