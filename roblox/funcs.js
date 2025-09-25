@@ -169,6 +169,9 @@ const expData = [
     free: false,
     uncbuttonlink: "https://sunc.rubis.app/?scrap=chxc3Rtp1NOhSxAf&key=KwyQ9vNKHEL9lcCXWMNu7pFxpGrtki7q",
     warning: false,
+    scrapId: "chxc3Rtp1NOhSxAf",
+    key: "KwyQ9vNKHEL9lcCXWMNu7pFxpGrtki7q",
+    widget: true,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for Wave so you know what you’re getting. Would you like to continue to Wave’s website anyway?",
   },
@@ -3527,70 +3530,96 @@ class ModalManager {
   }
 
   static openSuncWidget(exploit) {
-    const modalContainer = document.getElementById("suncWidgetModalContainer")
+  // <CHANGE> Create unique modal container for each product to support multiple widgets
+  const modalId = `suncWidgetModalContainer_${exploit.id}`
+  let modalContainer = document.getElementById(modalId)
 
-    if (!modalContainer) {
-      ModalManager.createSuncWidgetModal()
-    }
-
-    const modalContainer2 = document.getElementById("suncWidgetModalContainer")
-    const widgetIframe = document.getElementById("suncWidgetIframe")
-
-    modalContainer2.style.display = "flex"
-
-    widgetIframe.src = "https://sunc.rubis.app/widget"
-    widgetIframe.setAttribute("data-scrap-id", exploit.scrapId || "")
-    widgetIframe.setAttribute("data-key", exploit.key || "")
-
-    widgetIframe.onload = () => {
-      if (exploit.scrapId && exploit.key) {
-        ModalManager.postMessageToWidget(widgetIframe, {
-          type: "sunc-widget:loadScrap",
-          payload: {
-            scrapId: exploit.scrapId,
-            key: exploit.key,
-          },
-        })
-      }
-    }
-
-    setTimeout(() => {
-      document.querySelector(".sunc-widget-modal").classList.add("show")
-    }, 10)
-
-    document.body.style.overflow = "hidden"
+  if (!modalContainer) {
+    ModalManager.createSuncWidgetModal(exploit.id)
+    modalContainer = document.getElementById(modalId)
   }
 
-  static closeSuncWidget() {
-    const modal = document.querySelector(".sunc-widget-modal")
+  const widgetIframe = document.getElementById(`suncWidgetIframe_${exploit.id}`)
 
+  modalContainer.style.display = "flex"
+
+  widgetIframe.src = "https://sunc.rubis.app/widget"
+  widgetIframe.setAttribute("data-scrap-id", exploit.scrapId || "")
+  widgetIframe.setAttribute("data-key", exploit.key || "")
+
+  widgetIframe.onload = () => {
+    if (exploit.scrapId && exploit.key) {
+      ModalManager.postMessageToWidget(widgetIframe, {
+        type: "sunc-widget:loadScrap",
+        payload: {
+          scrapId: exploit.scrapId,
+          key: exploit.key,
+        },
+      })
+    }
+  }
+
+  setTimeout(() => {
+    document.querySelector(`#${modalId} .sunc-widget-modal`).classList.add("show")
+  }, 10)
+
+  document.body.style.overflow = "hidden"
+}
+
+  static closeSuncWidget(exploitId = null) {
+  // <CHANGE> Support closing specific widget or all widgets if no ID provided
+  if (exploitId) {
+    const modal = document.querySelector(`#suncWidgetModalContainer_${exploitId} .sunc-widget-modal`)
+    
     if (modal) {
       modal.classList.remove("show")
 
       setTimeout(() => {
-        const container = document.getElementById("suncWidgetModalContainer")
+        const container = document.getElementById(`suncWidgetModalContainer_${exploitId}`)
         if (container) {
           container.style.display = "none"
         }
-        document.body.style.overflow = ""
+        
+        // Only restore body overflow if no other widgets are open
+        const openWidgets = document.querySelectorAll('.sunc-widget-modal-container[style*="flex"]')
+        if (openWidgets.length <= 1) {
+          document.body.style.overflow = ""
+        }
       }, 300)
     }
-  }
+  } else {
+    // Close all widgets (fallback for old onclick handlers)
+    const modals = document.querySelectorAll(".sunc-widget-modal")
+    
+    modals.forEach(modal => {
+      modal.classList.remove("show")
+    })
 
-  static createSuncWidgetModal() {
+    setTimeout(() => {
+      const containers = document.querySelectorAll('[id^="suncWidgetModalContainer_"]')
+      containers.forEach(container => {
+        container.style.display = "none"
+      })
+      document.body.style.overflow = ""
+    }, 300)
+  }
+}
+
+  static createSuncWidgetModal(exploitId) {
+    // <CHANGE> Create unique modal container with exploit ID to support multiple widgets
     const modalContainer = document.createElement("div")
     modalContainer.className = "sunc-widget-modal-container"
-    modalContainer.id = "suncWidgetModalContainer"
+    modalContainer.id = `suncWidgetModalContainer_${exploitId}`
     modalContainer.style.display = "none"
 
     modalContainer.innerHTML = `
-  <div class="sunc-widget-modal-overlay" onclick="ModalManager.closeSuncWidget()"></div>
+  <div class="sunc-widget-modal-overlay" onclick="ModalManager.closeSuncWidget('${exploitId}')"></div>
   <div class="sunc-widget-modal">
-    <button class="sunc-widget-close-btn" onclick="ModalManager.closeSuncWidget()">
+    <button class="sunc-widget-close-btn" onclick="ModalManager.closeSuncWidget('${exploitId}')">
       <i class="fas fa-times"></i>
     </button>
     <iframe 
-      id="suncWidgetIframe"
+      id="suncWidgetIframe_${exploitId}"
       class="sunc-widget-iframe-modal"
       frameborder="0">
     </iframe>
@@ -4104,8 +4133,8 @@ class ThemeManager {
       'img[src*="_voxlis_big.png"]',
     ]
 
-    if (window.heartAnimation && typeof window.heartAnimation.updateHeartImage === "function") {
-      window.heartAnimation.updateHeartImage(this.currentTheme)
+    if (window.heartAnimation && typeof window.heartAnimation.updateHeartImage === "function" && !window.heartAnimation.isLoadingTheme) {
+        window.heartAnimation.updateHeartImage(this.currentTheme)
     }
 
     logoSelectors.forEach((selector) => {
@@ -4290,36 +4319,51 @@ class ThemeManager {
 }
 
 class OptimizedHeartAnimation {
-  constructor({ heartCount = 30, minHearts = 20 } = {}) {
-    this.canvas = document.getElementById("heartRainCanvas")
-    this.loader = document.getElementById("loader")
-    if (!this.canvas) return
+constructor({ heartCount = 30, minHearts = 20 } = {}) {
+  this.canvas = document.getElementById("heartRainCanvas")
+  this.loader = document.getElementById("loader")
+  if (!this.canvas) return
 
-    this.ctx = this.canvas.getContext("2d")
+  this.ctx = this.canvas.getContext("2d")
+  // <CHANGE> Initialize with current theme instead of hardcoded red
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'red'
+  this.heartImageSrc = `/assets/${currentTheme}-heart.svg`
+  this.hearts = []
+  this.heartImage = new Image()
+  this.isRunning = false
+  this.isLoadingTheme = false
+  this.lastFrameTime = 0
+  this.lastFpsUpdate = 0
+  this.frameCount = 0
+  this.fps = 0
+  this.targetFps = 30
+  this.fpsInterval = 1000 / this.targetFps
+
+  this.baseHeartCount = heartCount
+  this.minHearts = minHearts
+
+  this.cssWidth = 0
+  this.cssHeight = 0
+
+  this.resizeCanvas()
+  if (typeof ResizeObserver !== "undefined") {
+    new ResizeObserver(() => this.resizeCanvas()).observe(this.canvas)
+  } else {
+    window.addEventListener("resize", this.resizeCanvas.bind(this))
+  }
+
+  // <CHANGE> Load with fallback to prevent loading issues
+  this.heartImage.src = this.heartImageSrc
+  this.heartImage.onload = () => {
+    if (this.loader) this.loader.style.display = "none"
+    const target = this.getEffectiveBaseCount()
+    for (let i = 0; i < target; i++) this.hearts.push(this.createHeart())
+    this.start()
+  }
+
+  this.heartImage.onerror = () => {
+    // <CHANGE> Fallback to red heart if theme heart fails
     this.heartImageSrc = "/assets/red-heart.svg"
-    this.hearts = []
-    this.heartImage = new Image()
-    this.isRunning = false
-    this.lastFrameTime = 0
-    this.lastFpsUpdate = 0
-    this.frameCount = 0
-    this.fps = 0
-    this.targetFps = 30
-    this.fpsInterval = 1000 / this.targetFps
-
-    this.baseHeartCount = heartCount
-    this.minHearts = minHearts
-
-    this.cssWidth = 0
-    this.cssHeight = 0
-
-    this.resizeCanvas()
-    if (typeof ResizeObserver !== "undefined") {
-      new ResizeObserver(() => this.resizeCanvas()).observe(this.canvas)
-    } else {
-      window.addEventListener("resize", this.resizeCanvas.bind(this))
-    }
-
     this.heartImage.src = this.heartImageSrc
     this.heartImage.onload = () => {
       if (this.loader) this.loader.style.display = "none"
@@ -4327,14 +4371,10 @@ class OptimizedHeartAnimation {
       for (let i = 0; i < target; i++) this.hearts.push(this.createHeart())
       this.start()
     }
-
-    this.heartImage.onerror = () => {
-      console.error(`Failed to load heart image: ${this.heartImageSrc}`)
-      if (this.loader) this.loader.textContent = "Failed to load animation assets."
-    }
-
-    this.canvas.addEventListener("click", this.handleClick.bind(this))
   }
+
+  this.canvas.addEventListener("click", this.handleClick.bind(this))
+}
 
   getEffectiveBaseCount() {
     const dpr = Math.max(1, window.devicePixelRatio || 1)
@@ -4342,20 +4382,36 @@ class OptimizedHeartAnimation {
   }
 
   updateHeartImage(theme) {
+    // <CHANGE> Prevent multiple simultaneous image loads and ensure proper theme application
+    if (this.isLoadingTheme) return
+    this.isLoadingTheme = true
+    
     const themeHeartPath = `/assets/${theme}-heart.svg`
     const defaultHeartPath = "/assets/red-heart.svg"
-    const testImg = new Image()
-    testImg.onload = () => {
+    
+    // Create new image instance to avoid conflicts
+    const newHeartImage = new Image()
+    
+    newHeartImage.onload = () => {
       this.heartImageSrc = themeHeartPath
-      this.heartImage.src = themeHeartPath
+      this.heartImage = newHeartImage
+      // Update all existing hearts with new image
       this.hearts.forEach((h) => (h.img = this.heartImage))
+      this.isLoadingTheme = false
     }
-    testImg.onerror = () => {
-      this.heartImageSrc = defaultHeartPath
-      this.heartImage.src = defaultHeartPath
-      this.hearts.forEach((h) => (h.img = this.heartImage))
+    
+    newHeartImage.onerror = () => {
+      const fallbackImage = new Image()
+      fallbackImage.onload = () => {
+        this.heartImageSrc = defaultHeartPath
+        this.heartImage = fallbackImage
+        this.hearts.forEach((h) => (h.img = this.heartImage))
+        this.isLoadingTheme = false
+      }
+      fallbackImage.src = defaultHeartPath
     }
-    testImg.src = themeHeartPath
+    
+    newHeartImage.src = themeHeartPath
   }
 
   resizeCanvas() {
