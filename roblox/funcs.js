@@ -4813,6 +4813,145 @@ window.addEventListener("load", () => {
   }
 })
 
+// Report Modal Management
+class ReportManager {
+  static init() {
+    const reportBtn = document.getElementById("reportBtn")
+    const mobReportBtn = document.getElementById("mobReportBtn")
+    const reportModal = document.getElementById("reportModal")
+    const reportModalClose = document.getElementById("reportModalClose")
+    const reportCancelBtn = document.getElementById("reportCancelBtn")
+    const reportForm = document.getElementById("reportForm")
+    const reportModalOverlay = document.querySelector(".report-modal-overlay")
+
+    if (reportBtn) {
+      reportBtn.addEventListener("click", ReportManager.openModal)
+    }
+
+    if (mobReportBtn) {
+      mobReportBtn.addEventListener("click", ReportManager.openModal)
+    }
+
+    if (reportModalClose) {
+      reportModalClose.addEventListener("click", ReportManager.closeModal)
+    }
+
+    if (reportCancelBtn) {
+      reportCancelBtn.addEventListener("click", ReportManager.closeModal)
+    }
+
+    if (reportModalOverlay) {
+      reportModalOverlay.addEventListener("click", ReportManager.closeModal)
+    }
+
+    if (reportForm) {
+      reportForm.addEventListener("submit", ReportManager.handleSubmit)
+    }
+
+    // Close modal on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && reportModal && reportModal.classList.contains("active")) {
+        ReportManager.closeModal()
+      }
+    })
+  }
+
+  static openModal() {
+    const modal = document.getElementById("reportModal")
+    if (modal) {
+      modal.style.display = "flex"
+      setTimeout(() => {
+        modal.classList.add("active")
+      }, 10)
+      document.body.style.overflow = "hidden"
+    }
+  }
+
+  static closeModal() {
+    const modal = document.getElementById("reportModal")
+    if (modal) {
+      modal.classList.remove("active")
+      setTimeout(() => {
+        modal.style.display = "none"
+        document.body.style.overflow = ""
+        ReportManager.resetForm()
+      }, 300)
+    }
+  }
+
+  static resetForm() {
+    const form = document.getElementById("reportForm")
+    if (form) {
+      form.reset()
+    }
+  }
+
+  static async handleSubmit(e) {
+    e.preventDefault()
+
+    // Check rate limit
+    const lastReport = localStorage.getItem("lastReportTime")
+    const now = Date.now()
+    const fifteenMinutes = 15 * 60 * 1000
+
+    if (lastReport && now - Number.parseInt(lastReport) < fifteenMinutes) {
+      const remainingTime = Math.ceil((fifteenMinutes - (now - Number.parseInt(lastReport))) / 60000)
+      return
+    }
+
+    const sendBtn = document.getElementById("reportSendBtn")
+    const title = document.getElementById("reportTitle").value.trim()
+    const description = document.getElementById("reportDescription").value.trim()
+
+    if (!title || !description) {
+      
+      return
+    }
+
+    // Disable button and show loading
+    sendBtn.disabled = true
+    sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...'
+
+    try {
+      const response = await fetch("https://api.voxlis.net/report-voxlis.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          url: window.location.href,
+          referrer: document.referrer || "Direct",
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        localStorage.setItem("lastReportTime", now.toString())
+        
+        ReportManager.closeModal()
+      } else {
+        throw new Error(result.message || "Failed to submit report")
+      }
+    } catch (error) {
+      console.error("Report submission error:", error)
+      
+    } finally {
+      // Reset button
+      sendBtn.disabled = false
+      sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Report'
+    }
+  }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  ReportManager.init()
+})
 
 
 
