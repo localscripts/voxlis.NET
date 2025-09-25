@@ -91,6 +91,10 @@
           </button>
           <a href="/" class="nav-lnk">Home</a>
           <a href="/discord/" class="nav-lnk" target="_blank" rel="noopener noreferrer">Discord</a>
+          <button id="reportBtn" class="nav-btn grd">
+            <i class="fas fa-flag"></i>
+            Report
+          </button>
           <a href="https://github.com/localscripts/voxlis.NET" class="nav-btn grd" target="_blank" rel="noopener noreferrer">Contribute</a>          
         </nav>
       </div>
@@ -113,6 +117,9 @@
         <nav class="mob-nav">
           <a href="/" class="mob-nav-lnk">Home</a>
           <a href="/discord/" class="mob-nav-lnk">Discord</a>
+          <button id="mobReportBtn" class="mob-nav-lnk report-btn">
+            <i class="fas fa-flag"></i> Report
+          </button>
           <a href="https://github.com/localscripts/voxlis.NET" class="mob-nav-lnk cntb" target="_blank" rel="noopener noreferrer">Contribute</a>
         </nav>
       </div>
@@ -658,6 +665,35 @@
     </div>
   </div>
 </div>
+  <div id="reportModal" class="report-modal-container" style="display: none;">
+    <div class="report-modal-overlay"></div>
+    <div class="report-modal">
+      <div class="report-modal-header">
+        <h2 class="report-modal-title">Report an Issue</h2>
+        <button class="report-modal-close" id="reportModalClose">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="report-modal-content">
+        <form id="reportForm">
+          <div class="report-form-group">
+            <label for="reportTitle">Issue Title</label>
+            <input type="text" id="reportTitle" name="title" placeholder="Brief description of the issue" required maxlength="100">
+          </div>
+          <div class="report-form-group">
+            <label for="reportDescription">Issue Description</label>
+            <textarea id="reportDescription" name="description" placeholder="Detailed description of the issue" required maxlength="500" rows="4"></textarea>
+          </div>
+          <div class="report-modal-footer">
+            <button type="button" class="report-modal-btn report-modal-btn-cancel" id="reportCancelBtn">Cancel</button>
+            <button type="submit" class="report-modal-btn report-modal-btn-send" id="reportSendBtn">
+              <i class="fas fa-paper-plane"></i> Send Report
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <script src="funcs.js"></script>
 </body>
 </html>
