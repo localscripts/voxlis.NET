@@ -4515,10 +4515,10 @@ class OptimizedHeartAnimation {
       y: Math.random() * (this.cssHeight || window.innerHeight),
       dx: Math.random() * 0.2 - 0.1, // Reduced movement
       dy: Math.random() * 0.2 + 0.1, // Slower fall
-      size: Math.random() * 20 + 25, // Much bigger hearts (25-45px)
+      size: Math.random() * 40 + 50, // Much bigger hearts (50-90px)
       rotation: Math.random() * 0.1 - 0.05, // Less rotation
       rotationSpeed: Math.random() * 0.002 - 0.001, // Slower rotation
-      opacity: Math.random() * 0.2 + 0.8, // Much lighter, more visible (0.8-1.0)
+      opacity: 1.0, // Full opacity, completely visible
       isClickHeart: false,
     }
   }
@@ -4641,7 +4641,7 @@ class OptimizedHeartAnimation {
         y: y + (Math.random() * 20 - 10),
         dx: Math.random() * 1 - 0.5, // Reduced velocity
         dy: Math.random() * -1 - 0.3,
-        size: Math.random() * 20 + 30, // Much bigger click hearts (30-50px)
+        size: Math.random() * 30 + 60, // Much bigger click hearts (60-90px)
         rotation: Math.random() * 0.2 - 0.1,
         rotationSpeed: Math.random() * 0.01 - 0.005,
         opacity: 1,
@@ -4684,6 +4684,7 @@ if (typeof window !== "undefined") {
     window.heartAnimation = new OptimizedHeartAnimation()
   }
 }
+
 
 
 
