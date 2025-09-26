@@ -21,7 +21,7 @@ const expData = [
     info: "## Exploit Performance  \n- [Zenith](/) functions similarly to the old [Nihon](/) executor, as it shares the same development team but has been rebranded. The main distinction is that [Zenith](/) is actively maintained, whereas [Nihon](/) is still undergoing redevelopment. [Zenith](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files. [Swift]() is technically [Zenith](), so they might perform the similarly. \n  \n\n## Background Information  \n- Before [Zenith](/), an executor - [Nihon](/) launched in early 2024 and officially released on October 24, 2024, delivering strong performance.  \n- On February 3, 2025, [Nihon](/) team splited. The [Nihon](/) owner commented on the situation:  \n  *\"A former admin and Sero nuked the server and banned users. We're restoring it—Zenith wasn't involved and even returned our vanity. ❤️\"*. No further details were provided, though the situation is likely more complex.  \n\n## Developers Background Information\n- There is little background information available about the owners, [@Immune](/), aside from their primary role in working on the UI for [Nihon](/). The rest of the development team included [@loadnil](/), [@mcgamin1738](/) and [@lendmeyourstrength](), who were primarily responsible for both the back-end and front-end development of Nihon. \n\n- Later, the team was forced to leave [Nihon](/), leading the developers to found [Zenith](/), which has been doing quite well. The current main owners are [@loadnil](/), [@lendmeyourstrength](/), [@mcgamin1738](/), and [@spectraluwu](/).\n\n\n> Sources: [reddit.com/r/robloxhackers](), Zenith & Nihon Developers",
     href: "https://zenith.win",
     priceHref: "https://www.key-empire.com/roblox#zenith",
-    uncbuttonlink: "https://melon.nu/s/2kYfimVy1N",
+    uncbuttonlink: "https://sunc.rubis.app/?scrap=5zqrO9zJvAj7tE9S&key=nqZfYyWSLt37gqeNNgT4XZy1EHovYSTm",
     hide: false,
     scrapId: "5zqrO9zJvAj7tE9S",
     key: "nqZfYyWSLt37gqeNNgT4XZy1EHovYSTm",
@@ -194,7 +194,7 @@ const expData = [
     accentColor: "from-purple-600 to-purple-700",
     href: "https://valex.io/",
     priceHref: "https://key-empire.com/roblox#valex",
-    uncbuttonlink: "https://r.sunc.su/b33T6aRXwG",
+    uncbuttonlink: "https://sunc.rubis.app/?scrap=hIzddwToHu6eFfNA&key=CHXGJNkEYLw9NFzGyW3Sg7A3DPQSx7ZC",
     hideunc: false,
     info: "### **Exploit Performance**\n\n* [Valex]() is a high-performance internal executor for Roblox built for speed, stability, and advanced execution. It’s fully standalone—just one executable with no setup or config files required. [Valex]() uses a custom injection method unlike any other executor on the market, enabling smoother performance, fewer crashes, and high compatibility. It offers broad feature support, and receives updates faster than most competitors. Every version is optimized to ensure maximum performance and reliability.\n\n\n### **Background Information**\n\n* [Valex]() was originally launched as [Nezur]() in 2023 under [1Cheats](), the team behind well-known Roblox and Fortnite cheats. Originally started as an experiment to improve internal injection, [Valex]() quickly gained attention for its low detection rate, solid performance, and reliable updates. With its latest release, it introduced a redesigned core and UI, giving users advanced functionality previously limited to high-end paid exploits. Although internal, [Valex]() is simple to use and acts as a one-click solution for both casual and advanced users. It also runs on a fully custom backend with secure authentication, entirely owned and managed by the [Valex]() team.\n\n\n### **Developer Info**\n\n* [Valex]() is developed by a skilled and experienced team with backgrounds in C++, Java, and full-stack development. The project is led by a developer active in the exploit scene since 2019, known for creating several public scripthubs and tools. The team keeps a low profile but consistently delivers fast updates, prioritizes security, and ensures a smooth user experience. Future plans for [Valex]() include deeper internal integration, more per-game tools, and continued efforts to remain fully working.\n\n> Sources: [reddit.com/r/robloxhackers](), Valex Team",
     hasKeySystem: true,
@@ -3044,30 +3044,81 @@ ${this.renderCardFooter(exploit)}
     })
   }
 
+  static processSuncLinks(exploits) {
+    return exploits.map(exploit => {
+      // Check if uncbuttonlink contains sunc.rubis.app pattern
+      if (exploit.uncbuttonlink && exploit.uncbuttonlink.includes('sunc.rubis.app')) {
+        try {
+          const url = new URL(exploit.uncbuttonlink)
+          const scrapParam = url.searchParams.get('scrap')
+          const keyParam = url.searchParams.get('key')
+          
+          // If both parameters exist, automatically enable sunc widget
+          if (scrapParam && keyParam) {
+            return {
+              ...exploit,
+              scrapId: scrapParam,
+              key: keyParam,
+              widget: true
+            }
+          }
+        } catch (error) {
+          console.warn(`Failed to parse sunc URL for exploit ${exploit.id}:`, error)
+        }
+      }
+      
+      return exploit
+    })
+  }
+
   setupCardButtons() {
     const setupButtonHandlers = () => {
       document.querySelectorAll(".unc-btn").forEach((button) => {
         if (!button._hasClickHandler) {
           button._hasClickHandler = true
           button.onclick = (e) => {
-            e.preventDefault()
-            e.stopPropagation()
+          e.preventDefault()
+          e.stopPropagation()
 
-            const card = button.closest(".exp-crd") || button.closest(".exp-lst-itm")
-            const exploit = this.findExploitByCardElement(card)
+          const card = button.closest(".exp-crd") || button.closest(".exp-lst-itm")
+          const exploit = this.findExploitByCardElement(card)
 
-            if (exploit) {
-              if (exploit.widget === true) {
-                ModalManager.openSuncWidget(exploit)
-              } else {
-                if (exploit.uncbuttonlink && exploit.uncbuttonlink.length > 0) {
-                  window.open(exploit.uncbuttonlink, "_blank")
-                } else {
-                  ModalManager.openUncModal(exploit)
+          if (exploit) {
+            // Check if this exploit has sunc link and auto-process it
+            if (exploit.uncbuttonlink && exploit.uncbuttonlink.includes('sunc.rubis.app')) {
+              try {
+                const url = new URL(exploit.uncbuttonlink)
+                const scrapParam = url.searchParams.get('scrap')
+                const keyParam = url.searchParams.get('key')
+                
+                if (scrapParam && keyParam) {
+                  // Create temporary exploit object with extracted parameters
+                  const suncExploit = {
+                    ...exploit,
+                    scrapId: scrapParam,
+                    key: keyParam,
+                    widget: true
+                  }
+                  ModalManager.openSuncWidget(suncExploit)
+                  return
                 }
+              } catch (error) {
+                console.warn(`Failed to parse sunc URL for exploit ${exploit.id}:`, error)
+              }
+            }
+            
+            // Fallback to original behavior
+            if (exploit.widget === true) {
+              ModalManager.openSuncWidget(exploit)
+            } else {
+              if (exploit.uncbuttonlink && exploit.uncbuttonlink.length > 0) {
+                window.open(exploit.uncbuttonlink, "_blank")
+              } else {
+                ModalManager.openUncModal(exploit)
               }
             }
           }
+        }
         }
       })
 
@@ -4942,7 +4993,6 @@ window.addEventListener("load", () => {
   }
 })
 
-// Report Modal Management
 class ReportManager {
   static init() {
     const reportBtn = document.getElementById("reportBtn")
@@ -4977,7 +5027,6 @@ class ReportManager {
       reportForm.addEventListener("submit", ReportManager.handleSubmit)
     }
 
-    // Close modal on Escape key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && reportModal && reportModal.classList.contains("active")) {
         ReportManager.closeModal()
@@ -5018,7 +5067,6 @@ class ReportManager {
   static async handleSubmit(e) {
     e.preventDefault()
 
-    // Check rate limit
     const lastReport = localStorage.getItem("lastReportTime")
     const now = Date.now()
     const fifteenMinutes = 15 * 60 * 1000
@@ -5037,7 +5085,6 @@ class ReportManager {
       return
     }
 
-    // Disable button and show loading
     sendBtn.disabled = true
     sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...'
 
@@ -5070,17 +5117,159 @@ class ReportManager {
       console.error("Report submission error:", error)
       
     } finally {
-      // Reset button
       sendBtn.disabled = false
       sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Report'
     }
   }
 }
 
-// Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   ReportManager.init()
 })
 
+// Enhanced Mobile Menu Manager with proper hamburger button reset
+class MobileMenuManager {
+  constructor() {
+    this.menu = document.getElementById("mobMenu")
+    this.menuToggle = document.getElementById("mobMenuTgl")
+    this.closeButton = null
+    this.isAnimating = false
 
+    this.init()
+  }
+
+  init() {
+    // Add close button to mobile menu if it doesn't exist
+    this.addCloseButton()
+
+    // Setup event listeners
+    this.setupEventListeners()
+  }
+
+  addCloseButton() {
+    if (!this.menu) return
+
+    const menuContainer = this.menu.querySelector(".mob-menu-cntr")
+    if (!menuContainer) return
+
+    // Check if close button already exists
+    let closeButton = document.getElementById("mobMenuClose")
+    if (!closeButton) {
+      // Create close button
+      closeButton = document.createElement("button")
+      closeButton.id = "mobMenuClose"
+      closeButton.className = "mob-menu-close"
+      closeButton.innerHTML = '<i class="fas fa-times"></i>'
+
+      // Insert at the beginning of the menu container
+      menuContainer.insertBefore(closeButton, menuContainer.firstChild)
+    }
+
+    this.closeButton = closeButton
+  }
+
+  setupEventListeners() {
+    // Close button click
+    if (this.closeButton) {
+      this.closeButton.addEventListener("click", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        this.closeMenu()
+      })
+    }
+
+    // Click outside to close
+    if (this.menu) {
+      this.menu.addEventListener("click", (e) => {
+        if (e.target === this.menu) {
+          this.closeMenu()
+        }
+      })
+    }
+
+    // Escape key to close
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !this.menu.classList.contains("hidden")) {
+        this.closeMenu()
+      }
+    })
+  }
+
+  closeMenu() {
+    if (this.isAnimating || !this.menu || this.menu.classList.contains("hidden")) {
+      return
+    }
+
+    this.isAnimating = true
+
+    this.menu.style.transform = "translateY(-100%)"
+    this.menu.style.opacity = "0"
+
+    setTimeout(() => {
+      // Add hidden class
+      this.menu.classList.add("hidden")
+
+      if (this.menuToggle) {
+        this.menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
+      }
+
+      document.body.classList.remove("menu-open")
+
+      document.body.style.overflow = ""
+
+      // Reset transform and opacity for next opening
+      this.menu.style.transform = ""
+      this.menu.style.opacity = ""
+
+      this.isAnimating = false
+    }, 450) // Match CSS transition duration
+  }
+
+  // Method to properly open menu (for consistency)
+  openMenu() {
+    if (this.isAnimating || !this.menu || !this.menu.classList.contains("hidden")) {
+      return
+    }
+
+    this.isAnimating = true
+
+    // Remove hidden class
+    this.menu.classList.remove("hidden")
+
+    if (this.menuToggle) {
+      this.menuToggle.innerHTML = '<i class="fas fa-times"></i>'
+    }
+
+    document.body.classList.add("menu-open")
+
+    document.body.style.overflow = "hidden"
+
+    setTimeout(() => {
+      this.isAnimating = false
+    }, 450)
+  }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  window.mobileMenuManager = new MobileMenuManager()
+
+  const menuToggle = document.getElementById("mobMenuTgl")
+  const menu = document.getElementById("mobMenu")
+
+  if (menuToggle && menu) {
+    // Remove existing event listeners by cloning the element
+    const newMenuToggle = menuToggle.cloneNode(true)
+    menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle)
+
+    // Add new event listener that properly manages state
+    newMenuToggle.addEventListener("click", () => {
+      if (menu.classList.contains("hidden")) {
+        window.mobileMenuManager.openMenu()
+      } else {
+        window.mobileMenuManager.closeMenu()
+      }
+    })
+  }
+})
 
