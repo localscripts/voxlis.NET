@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,13 +6,21 @@
     <title>Privacy Policy - voxlis.NET</title>
     <style>
         :root {
-            --background: #0a0a0f;
-            --card-bg: rgba(16, 17, 27, 0.4);
-            --text: #ffffff;
-            --text-secondary: #a8b3cf;
-            --border: rgba(42, 43, 62, 0.5);
-            --accent: #606fee;
-            --transition: all 0.2s ease;
+            --background: #000000;
+            --surface: #0a0a0a;
+            --surface-elevated: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent: #ff4444;
+            --accent-hover: #ff6666;
+            --accent-subtle: rgba(255, 68, 68, 0.1);
+            --border: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(255, 255, 255, 0.12);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.6);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
         }
 
         * {
@@ -24,30 +31,48 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.5;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.7;
             min-height: 100vh;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
         }
 
-        #background {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background-color: var(--background);
-        }
-
-        #background::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent, rgba(10, 10, 15, 0.5), var(--background));
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        /* Enhanced navigation with better styling and positioning */
+        .navigation {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .nav-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .back-link {
@@ -57,234 +82,406 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.875rem;
-            margin-bottom: 2rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
             transition: var(--transition);
         }
 
         .back-link:hover {
-            color: var(--text);
+            color: var(--accent);
+            border-color: var(--accent);
+            background: var(--accent-subtle);
+            transform: translateX(-2px);
         }
 
         .back-link svg {
             width: 16px;
             height: 16px;
-        }
-
-        header {
-            margin-bottom: 3rem;
-        }
-
-        .tag {
-            display: inline-flex;
-            padding: 0.375rem 0.75rem;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            backdrop-filter: blur(8px);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-        }
-
-        .policy-content {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            backdrop-filter: blur(8px);
-        }
-
-        .last-updated {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 3rem;
-        }
-
-        .policy-section {
-            margin-bottom: 3rem;
-        }
-
-        .policy-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .policy-section h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        .policy-section p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .policy-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .policy-section li {
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .policy-section li::before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-        }
-
-        .site-footer {
-            margin-top: 4rem;
-            padding: 2rem 0;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        .footer-left {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .footer-maintained {
-            color: var(--text-secondary);
-        }
-
-        .footer-right {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .footer-right a {
-            color: var(--text-secondary);
-            text-decoration: none;
             transition: var(--transition);
         }
 
-        .footer-right a:hover {
-            color: var(--text);
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.025em;
+            display: inline-flex;
+            align-items: center;
         }
 
+        .logo img {
+            height: 32px;
+            width: auto;
+            transition: var(--transition);
+        }
+
+        .logo img:hover {
+            opacity: 0.8;
+        }
+
+        .logo .accent {
+            color: var(--accent);
+        }
+
+        /* Completely redesigned header with better typography and spacing */
+        .page-header {
+            text-align: center;
+            margin: 4rem 0 5rem;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .page-tag {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Redesigned content area with better visual hierarchy */
+        .content-wrapper {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 5rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--accent);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            padding: 1rem;
+            background: var(--accent-subtle);
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            border-radius: 12px;
+            font-family: var(--font-mono);
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+            padding: 2.5rem;
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .content-section:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 3px;
+            height: 1.5rem;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+
+        .section-list li {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .section-list li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Completely redesigned footer with proper layout and styling */
+        .site-footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.025em;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .footer-logo img {
+            height: 24px;
+            width: auto;
+            transition: var(--transition);
+        }
+
+        .footer-logo img:hover {
+            opacity: 0.8;
+        }
+
+        .footer-logo .accent {
+            color: var(--accent);
+        }
+
+        .footer-copyright {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: var(--accent);
+            border-color: var(--border);
+            background: var(--surface-elevated);
+        }
+
+        .footer-link.active {
+            color: var(--accent);
+            background: var(--accent-subtle);
+            border-color: rgba(255, 68, 68, 0.2);
+        }
+
+        /* Enhanced responsive design */
         @media (max-width: 768px) {
             .container {
-                padding: 1rem;
+                padding: 0 1rem;
             }
 
-            h1 {
-                font-size: 2.5rem;
+            .nav-content {
+                padding: 0 1rem;
             }
 
-            .policy-content {
-                padding: 1.5rem;
+            .page-header {
+                margin: 2rem 0 3rem;
+            }
+
+            .content-wrapper {
+                padding: 2rem 1.5rem;
+                border-radius: 16px;
+            }
+
+            .content-section {
+                padding: 2rem 1.5rem;
             }
 
             .footer-content {
                 flex-direction: column;
-                gap: 1rem;
                 text-align: center;
+                gap: 1.5rem;
+                padding: 0 1rem;
             }
 
-            .footer-left {
+            .footer-brand {
                 flex-direction: column;
                 gap: 0.5rem;
             }
 
-            .footer-right {
+            .footer-links {
                 gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .content-wrapper {
+                padding: 1.5rem 1rem;
+            }
+
+            .content-section {
+                padding: 1.5rem 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div id="background"></div>
-    <div class="container">
-        <a href="https://voxlis.net" class="back-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            Back to Home
-        </a>
+    <div class="page-wrapper">
+        <nav class="navigation">
+            <div class="nav-content">
+                <a href="https://voxlis.net" class="back-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Back to Home
+                </a>
+                <a href="https://voxlis.net" class="logo">
+                    <img src="/assets/red-voxlis.png">
+                </a>
+            </div>
+        </nav>
 
-        <header>
-            <div class="tag">Legal</div>
-            <h1>Privacy Policy</h1>
-        </header>
+        <div class="container">
+            <header class="page-header">
+                <div class="page-tag">Legal Document</div>
+                <h1 class="page-title">Privacy Policy</h1>
+                <p class="page-subtitle">Your privacy matters to us. Learn how we handle your data with transparency and care.</p>
+            </header>
 
-        <div class="policy-content">
-            <div class="last-updated">Last Updated: 09/07/2025</div>
-        
-            <div class="policy-section">
-                <h2>1. Information We Collect</h2>
-                <p>We collect minimal operational data to improve our services. This includes:</p>
-                <ul>
-                    <li>Anonymous usage statistics (e.g. click tracking)</li>
-                    <li>Performance metrics</li>
-                    <li>Error reports</li>
-                </ul>
-                <p>We do not collect personal information, and no registration or login system is in place to store your data.</p>
+            <div class="content-wrapper">
+                <div class="last-updated">Last Updated: 09/07/2025</div>
+                  
             </div>
-        
-            <div class="policy-section">
-                <h2>2. Data Security</h2>
-                <p>Since we do not collect personal information, we do not store or manage sensitive data. Any operational data we collect is used solely for the purpose of enhancing the user experience and troubleshooting.</p>
-            </div>
-        
-            <div class="policy-section">
-                <h2>3. Cookies and Tracking Technologies</h2>
-                <p>Our services may use cookies or similar technologies to improve user experience and track usage statistics. You can control cookie settings via your browser preferences. No personal information is linked to these technologies.</p>
-            </div>
-        
-            <div class="policy-section">
-                <h2>4. Changes to This Policy</h2>
-                <p>We may update this policy periodically. The latest version will always be available on this page.</p>
-            </div>
-        </div>        
+        </div>
 
         <footer class="site-footer">
             <div class="footer-content">
-                <div class="footer-left">
-                    <span>© 2025 voxlis.NET</span>
+                <div class="footer-brand">
+                    <a href="https://voxlis.net" class="footer-logo">
+                        <img src="/assets/red-voxlis.png">
+                    </a>
+                    <span class="footer-copyright">© 2025 All rights reserved</span>
                 </div>
-                <div class="footer-right">
-                    <a href="https://voxlis.net/terms/terms">Terms of Service</a>
-                    <a href="https://voxlis.net/terms/privacy">Privacy Policy</a>
+                <div class="footer-links">
+                    <a href="terms.html" class="footer-link">Terms of Service</a>
+                    <a href="privacy.html" class="footer-link active">Privacy Policy</a>
                 </div>
             </div>
         </footer>
     </div>
+
+    <script src="shared-content.js"></script>
     <script>
-        const elements = document.querySelectorAll(".container > *")
-            elements.forEach((element, index) => {
-            element.style.opacity = "0"
-            element.style.transform = "translateY(20px)"
-            element.style.transition = "opacity 0.5s ease, transform 0.5s ease"
-        
-            setTimeout(() => {
-                element.style.opacity = "1"
-                element.style.transform = "translateY(0)"
-            }, index * 100)
-            })
+        document.addEventListener('DOMContentLoaded', function() {
+            renderLegalContent('privacy');
+            initializePageAnimations();
+        });
     </script>
 </body>
 </html>
-
