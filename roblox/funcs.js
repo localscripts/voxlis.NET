@@ -987,7 +987,7 @@ const expData = [
     href: "https://lx63.xyz",
     priceHref: "",
     hide: false,
-    uncbuttonlink: "https://r.sunc.su/aqvWsVUojC",
+    uncbuttonlink: "https://sunc.rubis.app/?scrap=Cn5a1onS77Opiv8p&key=aDMDoLP6KcKDc8aR04ayqU1K7yjg27LP",
     free: true,
     warning: false,
     warningInfo:
