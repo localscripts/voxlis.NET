@@ -1,5 +1,6 @@
-<svg viewBox="0 0 21000 29700" xmlns="http://www.w3.org/2000/svg">
-  <g stroke-width="20" stroke-miterlimit="22.926">
+<svg viewBox="0 0 17661.76 17661.76" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  <!-- shift content so minX=0, minY=0 -->
+  <g transform="translate(-1977.73 -6803.61)" stroke-width="20" stroke-miterlimit="22.926">
     <!-- light blue fill + stroke -->
     <g fill="#007FFF" stroke="#007FFF">
       <rect x="3940.15" y="10612.46" width="13736.93" height="6003.24"/>
@@ -45,7 +46,7 @@
 
     <!-- white fill + stroke -->
     <g fill="#fff" stroke="#fff">
-      <rect x="5902.57" y="10728.45" width="1962.42" height="1962.42"/>
+      <rect x="5903.57" y="10728.45" width="1962.42" height="1962.42"/>
     </g>
   </g>
 </svg>
