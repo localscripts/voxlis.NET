@@ -153,7 +153,7 @@ const expData = [
     price: "$7.49",
     period: "weekly",
     plat: ["windows"],
-    pros: ["Has a decompiler", "94% sUNC", "Level 8"],
+    pros: ["Has a decompiler", "100% sUNC", "Level 8"],
     neutral: [],
     cons: [],
     verified: true,
@@ -5269,4 +5269,5 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
