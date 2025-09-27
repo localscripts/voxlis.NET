@@ -169,9 +169,6 @@ const expData = [
     free: false,
     uncbuttonlink: "https://sunc.rubis.app/?scrap=chxc3Rtp1NOhSxAf&key=KwyQ9vNKHEL9lcCXWMNu7pFxpGrtki7q",
     warning: false,
-    scrapId: "chxc3Rtp1NOhSxAf",
-    key: "KwyQ9vNKHEL9lcCXWMNu7pFxpGrtki7q",
-    widget: true,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for Wave so you know what you’re getting. Would you like to continue to Wave’s website anyway?",
   },
