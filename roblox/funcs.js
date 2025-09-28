@@ -3167,8 +3167,12 @@ ${this.renderCardFooter(exploit)}
             const card = button.closest(".exp-crd") || button.closest(".exp-lst-itm")
             const exploit = this.findExploitByCardElement(card)
 
-            if (exploit && exploit.priceHref) {
-              window.open(exploit.priceHref, "_blank")
+            if (exploit) {
+              if (exploit.warning === true) {
+                ModalManager.showWarningModal(exploit)
+              } else if (exploit.priceHref) {
+                window.open(exploit.priceHref, "_blank")
+              }
             }
           }
         }
@@ -3847,16 +3851,45 @@ class ModalManager {
     const warningText = document.getElementById("warningModalText")
     const cancelBtn = document.getElementById("warningModalCancel")
     const okayBtn = document.getElementById("warningModalOkay")
-    const targetUrl = exploit.href
+    const targetUrl = exploit.href || exploit.priceHref
 
+    let countdownTimer = 10
+    let timerInterval = null
+    
+    let timerDisplay = document.querySelector('.warning-modal-timer')
+    if (!timerDisplay) {
+      timerDisplay = document.createElement('div')
+      timerDisplay.className = 'warning-modal-timer'
+      timerDisplay.style.cssText = 'text-align: center; margin-top: 10px; font-size: 14px; color: #666;'
+      document.querySelector('.warning-modal-content').appendChild(timerDisplay)
+    }
+    
+    const updateTimer = () => {
+      timerDisplay.textContent = `This modal will close automatically in ${countdownTimer} seconds`
+      countdownTimer--
+      
+      if (countdownTimer < 0) {
+        clearInterval(timerInterval)
+        cleanup()
+      }
+    }
+    
     warningText.textContent = exploit.warningInfo || "Are you sure you want to visit this website?"
     warningModal.style.display = "flex"
     document.body.style.overflow = "hidden"
 
     void warningModal.offsetWidth
     warningModal.classList.add("active")
+    
+    updateTimer()
+    timerInterval = setInterval(updateTimer, 1000)
 
     const cleanup = () => {
+      if (timerInterval) {
+        clearInterval(timerInterval)
+        timerInterval = null
+      }
+      
       warningModal.classList.remove("active")
 
       setTimeout(() => {
@@ -3877,7 +3910,6 @@ class ModalManager {
       }
     }
   }
-
   static async fetchUncData(id, name) {
     try {
       const response = await fetch(`https://voxlis.net/assets/unc/${id}.json`)
@@ -5124,7 +5156,6 @@ document.addEventListener("DOMContentLoaded", () => {
   ReportManager.init()
 })
 
-// Enhanced Mobile Menu Manager with proper hamburger button reset
 class MobileMenuManager {
   constructor() {
     this.menu = document.getElementById("mobMenu")
@@ -5136,10 +5167,7 @@ class MobileMenuManager {
   }
 
   init() {
-    // Add close button to mobile menu if it doesn't exist
     this.addCloseButton()
-
-    // Setup event listeners
     this.setupEventListeners()
   }
 
@@ -5149,16 +5177,13 @@ class MobileMenuManager {
     const menuContainer = this.menu.querySelector(".mob-menu-cntr")
     if (!menuContainer) return
 
-    // Check if close button already exists
     let closeButton = document.getElementById("mobMenuClose")
     if (!closeButton) {
-      // Create close button
       closeButton = document.createElement("button")
       closeButton.id = "mobMenuClose"
       closeButton.className = "mob-menu-close"
       closeButton.innerHTML = '<i class="fas fa-times"></i>'
 
-      // Insert at the beginning of the menu container
       menuContainer.insertBefore(closeButton, menuContainer.firstChild)
     }
 
@@ -5166,7 +5191,6 @@ class MobileMenuManager {
   }
 
   setupEventListeners() {
-    // Close button click
     if (this.closeButton) {
       this.closeButton.addEventListener("click", (e) => {
         e.preventDefault()
@@ -5175,7 +5199,6 @@ class MobileMenuManager {
       })
     }
 
-    // Click outside to close
     if (this.menu) {
       this.menu.addEventListener("click", (e) => {
         if (e.target === this.menu) {
@@ -5184,7 +5207,6 @@ class MobileMenuManager {
       })
     }
 
-    // Escape key to close
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !this.menu.classList.contains("hidden")) {
         this.closeMenu()
@@ -5203,7 +5225,6 @@ class MobileMenuManager {
     this.menu.style.opacity = "0"
 
     setTimeout(() => {
-      // Add hidden class
       this.menu.classList.add("hidden")
 
       if (this.menuToggle) {
@@ -5214,15 +5235,13 @@ class MobileMenuManager {
 
       document.body.style.overflow = ""
 
-      // Reset transform and opacity for next opening
       this.menu.style.transform = ""
       this.menu.style.opacity = ""
 
       this.isAnimating = false
-    }, 450) // Match CSS transition duration
+    }, 450)
   }
 
-  // Method to properly open menu (for consistency)
   openMenu() {
     if (this.isAnimating || !this.menu || !this.menu.classList.contains("hidden")) {
       return
@@ -5230,7 +5249,6 @@ class MobileMenuManager {
 
     this.isAnimating = true
 
-    // Remove hidden class
     this.menu.classList.remove("hidden")
 
     if (this.menuToggle) {
@@ -5247,7 +5265,6 @@ class MobileMenuManager {
   }
 }
 
-// Initialize when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   window.mobileMenuManager = new MobileMenuManager()
 
@@ -5255,11 +5272,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("mobMenu")
 
   if (menuToggle && menu) {
-    // Remove existing event listeners by cloning the element
     const newMenuToggle = menuToggle.cloneNode(true)
     menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle)
 
-    // Add new event listener that properly manages state
     newMenuToggle.addEventListener("click", () => {
       if (menu.classList.contains("hidden")) {
         window.mobileMenuManager.openMenu()
@@ -5269,5 +5284,4 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
-
 
