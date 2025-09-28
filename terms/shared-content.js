@@ -96,15 +96,14 @@ function renderLegalContent(pageType) {
   if (!data) return
 
   // Update title
-  document.title = `${data.title} - voxlis.NET`
+  document.title = `${data.title}`
   document.querySelector(".page-title").textContent = data.title
 
-  // Update last updated date
-  document.querySelector(".last-updated").textContent = `Last Updated: ${data.lastUpdated}`
+  // Find the notepad container
+  const notepad = document.querySelector(".notepad")
 
-  // Clear existing content
-  const contentWrapper = document.querySelector(".content-wrapper")
-  const existingSections = contentWrapper.querySelectorAll(".content-section")
+  // Clear existing content sections
+  const existingSections = notepad.querySelectorAll(".content-section")
   existingSections.forEach((section) => section.remove())
 
   // Add sections
@@ -140,21 +139,6 @@ function renderLegalContent(pageType) {
       sectionDiv.appendChild(additionalP)
     }
 
-    contentWrapper.appendChild(sectionDiv)
-  })
-}
-
-// Animation function
-function initializePageAnimations() {
-  const elements = document.querySelectorAll(".container > *")
-  elements.forEach((element, index) => {
-    element.style.opacity = "0"
-    element.style.transform = "translateY(20px)"
-    element.style.transition = "opacity 0.5s ease, transform 0.5s ease"
-
-    setTimeout(() => {
-      element.style.opacity = "1"
-      element.style.transform = "translateY(0)"
-    }, index * 100)
+    notepad.appendChild(sectionDiv)
   })
 }
