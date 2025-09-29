@@ -35,7 +35,7 @@ const expData = [
     price: "$19.99",
     period: "lifetime",
     plat: ["windows"],
-    pros: ["Has a Luau environment", "Rich in features", "Kernel product"],
+    pros: ["Has a Luau environment", "Rich in features", "Usermode product"],
     neutral: [],
     cons: [],
     verified: true,
