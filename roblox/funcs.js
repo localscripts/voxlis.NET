@@ -2294,9 +2294,7 @@ class UIManager {
       menuToggle.addEventListener("click", () => {
         menu.classList.toggle("hidden")
         document.body.classList.toggle("menu-open")
-        menuToggle.innerHTML = menu.classList.contains("hidden")
-          ? '<i class="fas fa-bars"></i>'
-          : '<i class="fas fa-times"></i>'
+        // <CHANGE> Removed icon toggle - keeping it static as bars
       })
     }
 
@@ -2396,9 +2394,8 @@ class UIManager {
       mobileFilterButton.addEventListener("click", () => {
         openDrawer()
         const menu = this.getElement("menu")
-        const menuToggle = this.getElement("menuToggle")
+        // <CHANGE> Removed menuToggle icon change
         if (menu) menu.classList.add("hidden")
-        if (menuToggle) menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
         document.body.classList.remove("menu-open")
       })
     }
@@ -3400,7 +3397,7 @@ ${this.renderCardFooter(exploit)}
     if (windowWidth > 768 && menu && !menu.classList.contains("hidden")) {
       menu.classList.add("hidden")
       document.body.classList.remove("menu-open")
-      if (menuToggle) menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
+     
     }
 
     this.adjustSearchBar()
@@ -5169,7 +5166,12 @@ class MobileMenuManager {
 
   init() {
     this.addCloseButton()
+
     this.setupEventListeners()
+    
+    if (this.menuToggle) {
+      this.menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
+    }
   }
 
   addCloseButton() {
@@ -5184,7 +5186,6 @@ class MobileMenuManager {
       closeButton.id = "mobMenuClose"
       closeButton.className = "mob-menu-close"
       closeButton.innerHTML = '<i class="fas fa-times"></i>'
-
       menuContainer.insertBefore(closeButton, menuContainer.firstChild)
     }
 
@@ -5222,18 +5223,13 @@ class MobileMenuManager {
 
     this.isAnimating = true
 
+
     this.menu.style.transform = "translateY(-100%)"
     this.menu.style.opacity = "0"
 
     setTimeout(() => {
       this.menu.classList.add("hidden")
-
-      if (this.menuToggle) {
-        this.menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
-      }
-
       document.body.classList.remove("menu-open")
-
       document.body.style.overflow = ""
 
       this.menu.style.transform = ""
@@ -5251,13 +5247,7 @@ class MobileMenuManager {
     this.isAnimating = true
 
     this.menu.classList.remove("hidden")
-
-    if (this.menuToggle) {
-      this.menuToggle.innerHTML = '<i class="fas fa-times"></i>'
-    }
-
     document.body.classList.add("menu-open")
-
     document.body.style.overflow = "hidden"
 
     setTimeout(() => {
@@ -5275,7 +5265,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (menuToggle && menu) {
     const newMenuToggle = menuToggle.cloneNode(true)
     menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle)
-
     newMenuToggle.addEventListener("click", () => {
       if (menu.classList.contains("hidden")) {
         window.mobileMenuManager.openMenu()
@@ -5285,6 +5274,4 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
-
-
 
