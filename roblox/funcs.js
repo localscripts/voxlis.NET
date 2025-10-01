@@ -386,7 +386,7 @@ const expData = [
     uncbuttonlink: "https://sunc.rubis.app/?scrap=8LLgUuLKzHbPaasF&key=UZ8OSOv0MKjLjLDCfsFyi4SySArz4L14",
     hasKeySystem: true,
     free: true,
-    pricegray: true,
+    pricegray: false,
   },
   {
     id: "krnl",
@@ -5285,5 +5285,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
