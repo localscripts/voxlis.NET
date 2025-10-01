@@ -2288,16 +2288,6 @@ class UIManager {
       }
     })
 
-    const menuToggle = this.getElement("menuToggle")
-    const menu = this.getElement("menu")
-    if (menuToggle && menu) {
-      menuToggle.addEventListener("click", () => {
-        menu.classList.toggle("hidden")
-        document.body.classList.toggle("menu-open")
-        // <CHANGE> Removed icon toggle - keeping it static as bars
-      })
-    }
-
     this.setupSearchListeners()
     this.setupFilterDrawer()
     this.setupLevelSliders()
@@ -5190,7 +5180,6 @@ class MobileMenuManager {
     }
 
     this.isAnimating = true
-
 
     this.menu.style.transform = "translateY(-100%)"
     this.menu.style.opacity = "0"
