@@ -4280,39 +4280,6 @@ class ThemeManager {
     const theme = this.currentTheme
     let bgColor, textColor, borderColor
 
-    switch (theme) {
-      case "red":
-        bgColor = "#371616"
-        textColor = "#f87171"
-        borderColor = "#f8717166"
-        break
-      case "blue":
-        bgColor = "#1e3a8a"
-        textColor = "#60a5fa"
-        borderColor = "#60a5fa66"
-        break
-      case "green":
-        bgColor = "#1a2e21"
-        textColor = "#86efac"
-        borderColor = "#86efac66"
-        break
-      case "yellow":
-        bgColor = "#332618"
-        textColor = "#fde047"
-        borderColor = "#fde04766"
-        break
-      case "purple":
-        bgColor = "#28183c"
-        textColor = "#c084fc"
-        borderColor = "#c084fc66"
-        break
-      case "classic":
-      default:
-        bgColor = "#000000"
-        textColor = "#ef4444"
-        borderColor = "#f8717166"
-    }
-
     const uncModal = document.querySelector(".unc-modal")
 
     if (uncModal) {
@@ -5186,6 +5153,7 @@ class MobileMenuManager {
       closeButton.id = "mobMenuClose"
       closeButton.className = "mob-menu-close"
       closeButton.innerHTML = '<i class="fas fa-times"></i>'
+
       menuContainer.insertBefore(closeButton, menuContainer.firstChild)
     }
 
@@ -5265,6 +5233,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (menuToggle && menu) {
     const newMenuToggle = menuToggle.cloneNode(true)
     menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle)
+
     newMenuToggle.addEventListener("click", () => {
       if (menu.classList.contains("hidden")) {
         window.mobileMenuManager.openMenu()
