@@ -990,6 +990,7 @@ const expData = [
     warning: false,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
+      hide: true,
   },
 ]
 
