@@ -2385,7 +2385,7 @@ class UIManager {
       mobileFilterButton.addEventListener("click", () => {
         openDrawer()
         const menu = this.getElement("menu")
-        // <CHANGE> Removed menuToggle icon change
+        
         if (menu) menu.classList.add("hidden")
         document.body.classList.remove("menu-open")
       })
@@ -2903,16 +2903,32 @@ ${this.renderCardFooter(exploit)}
           <i class="fas fa-info-circle"></i>
         </button>
       </div>
-      <button class="crd-btn web-btn full-width">
-        ${websiteButtonText} <i class="fas fa-external-link-alt"></i>
-      </button>
+      ${(() => {
+        let displayDomain = websiteButtonText
+        if (exploit.href) {
+          try {
+            const url = new URL(exploit.href)
+            displayDomain = url.hostname.replace(/^www\./, '')
+          } catch (e) {
+            displayDomain = exploit.href.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]
+          }
+        }
+        return `<button class="crd-btn web-btn full-width">
+          <div class="default-text">
+            <i class="fas fa-external-link-alt"></i> ${websiteButtonText}
+          </div>
+          <div class="hover-text">
+            <i class="fas fa-external-link-alt"></i> ${displayDomain}
+          </div>
+        </button>`
+      })()}
     `
       } else {
         return `
       <div class="btn-grid free-program-grid">
-        <button class="crd-btn unc-btn expanded">
-          UNC <i class="fas fa-code"></i>
-        </button>
+      <button class="crd-btn unc-btn expanded">
+        UNC <i class="fas fa-code"></i>
+      </button>
         <button class="crd-btn info-btn expanded">
           <div class="text-container">
             <span class="text-switch visible" data-text="info">INFO</span>
@@ -2921,9 +2937,25 @@ ${this.renderCardFooter(exploit)}
           <i class="fas fa-info-circle"></i>
         </button>
       </div>
-      <button class="crd-btn web-btn full-width">
-        ${websiteButtonText} <i class="fas fa-external-link-alt"></i>
-      </button>
+      ${(() => {
+        let displayDomain = websiteButtonText
+        if (exploit.href) {
+          try {
+            const url = new URL(exploit.href)
+            displayDomain = url.hostname.replace(/^www\./, '')
+          } catch (e) {
+            displayDomain = exploit.href.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]
+          }
+        }
+        return `<button class="crd-btn web-btn full-width">
+          <div class="default-text">
+            <i class="fas fa-external-link-alt"></i> ${websiteButtonText}
+          </div>
+          <div class="hover-text">
+            <i class="fas fa-external-link-alt"></i> ${displayDomain}
+          </div>
+        </button>`
+      })()}
     `
       }
     } else {
@@ -2933,9 +2965,25 @@ ${this.renderCardFooter(exploit)}
       if (exploit.hideunc === true) {
         return `
       <div class="btn-grid">
-        <button class="crd-btn web-btn expanded">
-          ${websiteButtonText} <i class="fas fa-external-link-alt"></i>
-        </button>
+      ${(() => {
+        let displayDomain = websiteButtonText
+        if (exploit.href) {
+          try {
+            const url = new URL(exploit.href)
+            displayDomain = url.hostname.replace(/^www\./, '')
+          } catch (e) {
+            displayDomain = exploit.href.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]
+          }
+        }
+        return `<button class="crd-btn web-btn expanded">
+          <div class="default-text">
+            <i class="fas fa-external-link-alt"></i> ${websiteButtonText}
+          </div>
+          <div class="hover-text">
+            <i class="fas fa-external-link-alt"></i> ${displayDomain}
+          </div>
+        </button>`
+      })()}
         <button class="crd-btn info-btn expanded">
           <div class="text-container">
             <span class="text-switch visible" data-text="info">INFO</span>
@@ -2956,9 +3004,25 @@ ${this.renderCardFooter(exploit)}
       } else {
         return `
       <div class="btn-grid">
-        <button class="crd-btn web-btn expanded">
-          ${websiteButtonText} <i class="fas fa-external-link-alt"></i>
-        </button>
+      ${(() => {
+        let displayDomain = websiteButtonText
+        if (exploit.href) {
+          try {
+            const url = new URL(exploit.href)
+            displayDomain = url.hostname.replace(/^www\./, '')
+          } catch (e) {
+            displayDomain = exploit.href.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]
+          }
+        }
+        return `<button class="crd-btn web-btn expanded">
+          <div class="default-text">
+            <i class="fas fa-external-link-alt"></i> ${websiteButtonText}
+          </div>
+          <div class="hover-text">
+            <i class="fas fa-external-link-alt"></i> ${displayDomain}
+          </div>
+        </button>`
+      })()}
         <button class="crd-btn unc-btn">
           UNC <i class="fas fa-code"></i>
         </button>
@@ -3032,14 +3096,14 @@ ${this.renderCardFooter(exploit)}
 
   static processSuncLinks(exploits) {
     return exploits.map(exploit => {
-      // Check if uncbuttonlink contains sunc.rubis.app pattern
+      
       if (exploit.uncbuttonlink && exploit.uncbuttonlink.includes('sunc.rubis.app')) {
         try {
           const url = new URL(exploit.uncbuttonlink)
           const scrapParam = url.searchParams.get('scrap')
           const keyParam = url.searchParams.get('key')
           
-          // If both parameters exist, automatically enable sunc widget
+          
           if (scrapParam && keyParam) {
             return {
               ...exploit,
@@ -3063,50 +3127,67 @@ ${this.renderCardFooter(exploit)}
         if (!button._hasClickHandler) {
           button._hasClickHandler = true
           button.onclick = (e) => {
-          e.preventDefault()
-          e.stopPropagation()
+            e.preventDefault()
+            e.stopPropagation()
 
-          const card = button.closest(".exp-crd") || button.closest(".exp-lst-itm")
-          const exploit = this.findExploitByCardElement(card)
+            const card = button.closest(".exp-crd") || button.closest(".exp-lst-itm")
+            const exploit = this.findExploitByCardElement(card)
 
-          if (exploit) {
-            // Check if this exploit has sunc link and auto-process it
-            if (exploit.uncbuttonlink && exploit.uncbuttonlink.includes('sunc.rubis.app')) {
-              try {
-                const url = new URL(exploit.uncbuttonlink)
-                const scrapParam = url.searchParams.get('scrap')
-                const keyParam = url.searchParams.get('key')
-                
-                if (scrapParam && keyParam) {
-                  // Create temporary exploit object with extracted parameters
-                  const suncExploit = {
-                    ...exploit,
-                    scrapId: scrapParam,
-                    key: keyParam,
-                    widget: true
+            if (exploit) {
+              
+              const uniquePlatforms = [...new Set(exploit.plat)]
+              
+              
+              if (uniquePlatforms.length > 1) {
+                ModalManager.openPlatformModal(exploit)
+                return
+              }
+              
+              
+              if (exploit.uncbuttonlink && exploit.uncbuttonlink.includes('sunc.rubis.app')) {
+                try {
+                  const url = new URL(exploit.uncbuttonlink)
+                  const scrapParam = url.searchParams.get('scrap')
+                  const keyParam = url.searchParams.get('key')
+                  
+                  if (scrapParam && keyParam) {
+                    
+                    const suncExploit = {
+                      ...exploit,
+                      scrapId: scrapParam,
+                      key: keyParam,
+                      widget: true
+                    }
+                    ModalManager.openSuncWidget(suncExploit)
+                    return
                   }
-                  ModalManager.openSuncWidget(suncExploit)
-                  return
+                } catch (error) {
+                  console.warn(`Failed to parse sunc URL for exploit ${exploit.id}:`, error)
                 }
-              } catch (error) {
-                console.warn(`Failed to parse sunc URL for exploit ${exploit.id}:`, error)
               }
-            }
+
+              if (uniquePlatforms.length > 1) {
+                ModalManager.openPlatformModal(exploit)
+                return
+              }
             
-            // Fallback to original behavior
+            
             if (exploit.widget === true) {
-              ModalManager.openSuncWidget(exploit)
-            } else {
-              if (exploit.uncbuttonlink && exploit.uncbuttonlink.length > 0) {
-                window.open(exploit.uncbuttonlink, "_blank")
-              } else {
-                ModalManager.openUncModal(exploit)
-              }
-            }
+                  ModalManager.openSuncWidget(exploit)
+                } else {
+                  if (exploit.uncbuttonlink && exploit.uncbuttonlink.length > 0) {
+                    window.open(exploit.uncbuttonlink, "_blank")
+                  } else {
+                    
+                    ModalManager.fetchUncDataForPlatform(exploit, uniquePlatforms[0])
+                  }
+                }
           }
         }
         }
       })
+
+      
 
       document.querySelectorAll(".info-btn").forEach((button) => {
         if (!button._hasClickHandler) {
@@ -3136,8 +3217,9 @@ ${this.renderCardFooter(exploit)}
             const exploit = this.findExploitByCardElement(card)
 
             if (exploit) {
+              
               if (exploit.warning === true) {
-                ModalManager.showWarningModal(exploit)
+                ModalManager.showWarningModal(exploit, 'website')
               } else if (exploit.href) {
                 window.open(exploit.href, "_blank")
               }
@@ -3157,8 +3239,9 @@ ${this.renderCardFooter(exploit)}
             const exploit = this.findExploitByCardElement(card)
 
             if (exploit) {
+              
               if (exploit.warning === true) {
-                ModalManager.showWarningModal(exploit)
+                ModalManager.showWarningModal(exploit, 'price')
               } else if (exploit.priceHref) {
                 window.open(exploit.priceHref, "_blank")
               }
@@ -3571,7 +3654,7 @@ class ModalManager {
   }
 
   static openSuncWidget(exploit) {
-  // <CHANGE> Create unique modal container for each product to support multiple widgets
+  
   const modalId = `suncWidgetModalContainer_${exploit.id}`
   let modalContainer = document.getElementById(modalId)
 
@@ -3608,7 +3691,6 @@ class ModalManager {
 }
 
   static closeSuncWidget(exploitId = null) {
-  // <CHANGE> Support closing specific widget or all widgets if no ID provided
   if (exploitId) {
     const modal = document.querySelector(`#suncWidgetModalContainer_${exploitId} .sunc-widget-modal`)
     
@@ -3621,7 +3703,6 @@ class ModalManager {
           container.style.display = "none"
         }
         
-        // Only restore body overflow if no other widgets are open
         const openWidgets = document.querySelectorAll('.sunc-widget-modal-container[style*="flex"]')
         if (openWidgets.length <= 1) {
           document.body.style.overflow = ""
@@ -3629,7 +3710,7 @@ class ModalManager {
       }, 300)
     }
   } else {
-    // Close all widgets (fallback for old onclick handlers)
+    
     const modals = document.querySelectorAll(".sunc-widget-modal")
     
     modals.forEach(modal => {
@@ -3647,7 +3728,7 @@ class ModalManager {
 }
 
   static createSuncWidgetModal(exploitId) {
-    // <CHANGE> Create unique modal container with exploit ID to support multiple widgets
+    
     const modalContainer = document.createElement("div")
     modalContainer.className = "sunc-widget-modal-container"
     modalContainer.id = `suncWidgetModalContainer_${exploitId}`
@@ -3670,6 +3751,170 @@ class ModalManager {
     document.body.appendChild(modalContainer)
   }
 
+  static createPlatformModal() {
+    const modalContainer = document.createElement("div")
+    modalContainer.className = "platform-modal-container"
+    modalContainer.id = "platformModalContainer"
+    modalContainer.style.display = "none"
+
+    modalContainer.innerHTML = `
+      <div class="platform-modal-overlay"></div>
+      <div class="platform-modal">
+        <div class="platform-modal-header">
+          <h2 class="platform-modal-title">Select Platform</h2>
+          <p class="platform-modal-subtitle">Choose your platform to view the correct UNC</p>
+        </div>
+        <div class="platform-modal-content">
+          <div id="platformOptions" class="platform-options"></div>
+        </div>
+        <div class="platform-modal-footer">
+          <button id="platformModalCancel" class="platform-modal-btn platform-modal-btn-cancel">Cancel</button>
+        </div>
+      </div>
+    `
+
+    document.body.appendChild(modalContainer)
+
+    document.querySelector(".platform-modal-overlay").addEventListener("click", ModalManager.closePlatformModal)
+    document.getElementById("platformModalCancel").addEventListener("click", ModalManager.closePlatformModal)
+  }
+
+  static openPlatformModal(exploit) {
+  let modalContainer = document.getElementById("platformModalContainer")
+  
+  if (!modalContainer) {
+    ModalManager.createPlatformModal()
+    modalContainer = document.getElementById("platformModalContainer")
+  }
+
+  const platformOptions = document.getElementById("platformOptions")
+  platformOptions.innerHTML = ""
+
+  const uniquePlatforms = [...new Set(exploit.plat)]
+  
+  uniquePlatforms.forEach((platform) => {
+    const platformButton = document.createElement("button")
+    platformButton.className = "platform-option-btn"
+    
+    let iconHtml = ""
+    let platformName = ""
+    
+    switch (platform) {
+      case "windows":
+        iconHtml = `<i class="fab fa-windows"></i>`
+        platformName = "Windows"
+        break
+      case "macos":
+        iconHtml = `<img src="/assets/macos.svg" alt="macOS" style="width:24px; height:24px;">`
+        platformName = "macOS"
+        break
+      case "android":
+        iconHtml = `<i class="fab fa-android"></i>`
+        platformName = "Android"
+        break
+      case "ios":
+        iconHtml = `<i class="fab fa-apple"></i>`
+        platformName = "iOS"
+        break
+    }
+    
+    platformButton.innerHTML = `
+      <div class="platform-option-icon">${iconHtml}</div>
+      <div class="platform-option-name">${platformName}</div>
+    `
+    
+    platformButton.onclick = () => {
+      ModalManager.closePlatformModal()
+      ModalManager.fetchUncDataForPlatform(exploit, platform)
+    }
+    
+    platformOptions.appendChild(platformButton)
+  })
+
+  modalContainer.style.display = "flex"
+  
+  setTimeout(() => {
+    document.querySelector(".platform-modal").classList.add("show")
+  }, 10)
+
+  document.body.style.overflow = "hidden"
+}
+
+  static closePlatformModal() {
+    const modal = document.querySelector(".platform-modal")
+    
+    if (modal) {
+      modal.classList.remove("show")
+      
+      setTimeout(() => {
+        const container = document.getElementById("platformModalContainer")
+        if (container) {
+          container.style.display = "none"
+        }
+        document.body.style.overflow = ""
+      }, 300)
+    }
+  }
+
+  static async fetchUncDataForPlatform(exploit, platform) {
+    const modalContainer = document.getElementById("uncModalContainer")
+    
+    if (!modalContainer) {
+      ModalManager.createUncModal()
+    }
+
+    const modalContainer2 = document.getElementById("uncModalContainer")
+    const modalTitle = document.getElementById("uncModalTitle")
+    const modalExploitName = document.getElementById("uncModalExploitName")
+    const modalExploitDesc = document.getElementById("uncModalExploitDesc")
+    const modalCode = document.getElementById("uncModalCode")
+    const modalLoading = document.getElementById("uncModalLoading")
+    const modalError = document.getElementById("uncModalError")
+
+    modalContainer2.style.display = "flex"
+    modalTitle.textContent = `${exploit.name} UNC Code (${platform})`
+    modalExploitName.textContent = exploit.name
+    modalExploitDesc.textContent = exploit.desc
+
+    modalLoading.style.display = "flex"
+    modalCode.style.display = "none"
+    modalError.style.display = "none"
+
+    try {
+      const response = await fetch(`https://voxlis.net/assets/unc/${platform}/${exploit.id}.json`)
+      
+      if (response.status === 404) {
+        ModalManager.showNotification(`UNC/sUNC test for ${exploit.name} on ${platform} is unknown`, "error")
+        throw new Error("UNC data not found")
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const rawText = await response.text()
+      
+      modalLoading.style.display = "none"
+      modalCode.style.display = "block"
+      modalCode.textContent = rawText || "-- No UNC code available"
+
+      if (window.hljs) {
+        window.hljs.highlightElement(modalCode)
+      }
+    } catch (error) {
+      modalLoading.style.display = "none"
+      modalError.style.display = "flex"
+      document.getElementById("uncModalErrorText").textContent =
+        `Failed to load UNC data: ${error.message || "Unknown error"}`
+    }
+
+    setTimeout(() => {
+      document.querySelector(".unc-modal").classList.add("show")
+    }, 10)
+
+    document.body.style.overflow = "hidden"
+  }
+
   static postMessageToWidget(iframe, message) {
     if (iframe && iframe.contentWindow) {
       iframe.contentWindow.postMessage(message, "https://sunc.rubis.app")
@@ -3689,6 +3934,149 @@ class ModalManager {
         footerCloseBtn.addEventListener("click", ModalManager.closeInfoModal)
       }
     }
+  }
+
+  static openPlatformModal(exploit) {
+  const modalContainer = document.getElementById("platformModal")
+  
+  if (!modalContainer) {
+    console.error("Platform modal not found in HTML")
+    return
+  }
+
+  const platformOptions = document.getElementById("platformOptions")
+  platformOptions.innerHTML = ""
+
+  const uniquePlatforms = [...new Set(exploit.plat)]
+  
+  uniquePlatforms.forEach((platform) => {
+    const platformButton = document.createElement("button")
+    platformButton.className = "platform-option-btn"
+    
+    let iconHtml = ""
+    let platformName = ""
+    
+    switch (platform) {
+      case "windows":
+        iconHtml = `<i class="fab fa-windows"></i>`
+        platformName = "Windows"
+        break
+      case "macos":
+        iconHtml = `<i class="fab fa-apple"></i>`
+        platformName = "macOS"
+        break
+      case "android":
+        iconHtml = `<i class="fab fa-android"></i>`
+        platformName = "Android"
+        break
+      case "ios":
+        iconHtml = `<i class="fab fa-apple"></i>`
+        platformName = "iOS"
+        break
+    }
+    
+    platformButton.innerHTML = `
+      <div class="platform-option-icon">${iconHtml}</div>
+      <div class="platform-option-name">${platformName}</div>
+    `
+    
+    platformButton.onclick = () => {
+      ModalManager.closePlatformModal()
+      ModalManager.fetchUncDataForPlatform(exploit, platform)
+    }
+    
+    platformOptions.appendChild(platformButton)
+  })
+
+  modalContainer.style.display = "flex"
+  
+  setTimeout(() => {
+    document.querySelector(".platform-modal").classList.add("show")
+  }, 10)
+
+  document.body.style.overflow = "hidden"
+  
+  
+  const overlay = modalContainer.querySelector(".platform-modal-overlay")
+  const cancelBtn = document.getElementById("platformModalCancel")
+  
+  overlay.onclick = () => ModalManager.closePlatformModal()
+  cancelBtn.onclick = () => ModalManager.closePlatformModal()
+}
+
+static closePlatformModal() {
+  const modal = document.querySelector(".platform-modal")
+  
+  if (modal) {
+    modal.classList.remove("show")
+    
+    setTimeout(() => {
+      const container = document.getElementById("platformModal")
+      if (container) {
+        container.style.display = "none"
+      }
+      document.body.style.overflow = ""
+    }, 300)
+  }
+}
+
+  static async fetchUncDataForPlatform(exploit, platform) {
+    const modalContainer = document.getElementById("uncModalContainer")
+    
+    if (!modalContainer) {
+      ModalManager.createUncModal()
+    }
+
+    const modalContainer2 = document.getElementById("uncModalContainer")
+    const modalTitle = document.getElementById("uncModalTitle")
+    const modalExploitName = document.getElementById("uncModalExploitName")
+    const modalExploitDesc = document.getElementById("uncModalExploitDesc")
+    const modalCode = document.getElementById("uncModalCode")
+    const modalLoading = document.getElementById("uncModalLoading")
+    const modalError = document.getElementById("uncModalError")
+
+    modalContainer2.style.display = "flex"
+    modalTitle.textContent = `${exploit.name} UNC Code (${platform.charAt(0).toUpperCase() + platform.slice(1)})`
+    modalExploitName.textContent = exploit.name
+    modalExploitDesc.textContent = exploit.desc
+
+    modalLoading.style.display = "flex"
+    modalCode.style.display = "none"
+    modalError.style.display = "none"
+
+    try {
+      const response = await fetch(`https://voxlis.net/assets/unc/${platform}/${exploit.id}.json`)
+      
+      if (response.status === 404) {
+        ModalManager.showNotification(`UNC/sUNC test for ${exploit.name} on ${platform} is unknown`, "error")
+        throw new Error("UNC data not found")
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      const rawText = await response.text()
+      
+      modalLoading.style.display = "none"
+      modalCode.style.display = "block"
+      modalCode.textContent = rawText || "-- No UNC code available"
+
+      if (window.hljs) {
+        window.hljs.highlightElement(modalCode)
+      }
+    } catch (error) {
+      modalLoading.style.display = "none"
+      modalError.style.display = "flex"
+      document.getElementById("uncModalErrorText").textContent =
+        `Failed to load UNC data: ${error.message || "Unknown error"}`
+    }
+
+    setTimeout(() => {
+      document.querySelector(".unc-modal").classList.add("show")
+    }, 10)
+
+    document.body.style.overflow = "hidden"
   }
 
   static createWarningModal() {
@@ -3835,70 +4223,129 @@ class ModalManager {
     }
   }
 
-  static showWarningModal(exploit) {
-    const warningModal = document.getElementById("warningModal")
-    const warningText = document.getElementById("warningModalText")
-    const cancelBtn = document.getElementById("warningModalCancel")
-    const okayBtn = document.getElementById("warningModalOkay")
-    const targetUrl = exploit.href || exploit.priceHref
-
-    let countdownTimer = 10
-    let timerInterval = null
+  static showWarningModal(exploit, buttonType = 'website') {
+  const warningModal = document.getElementById("warningModal")
+  const warningData = exploit.modals?.warning
+  
+  if (warningData && warningData.enabled === false) {
     
-    let timerDisplay = document.querySelector('.warning-modal-timer')
-    if (!timerDisplay) {
-      timerDisplay = document.createElement('div')
-      timerDisplay.className = 'warning-modal-timer'
-      timerDisplay.style.cssText = 'text-align: center; margin-top: 10px; font-size: 14px; color: #666;'
-      document.querySelector('.warning-modal-content').appendChild(timerDisplay)
+    const targetUrl = buttonType === 'price' ? exploit.priceHref : exploit.href
+    if (targetUrl) {
+      window.open(targetUrl, "_blank")
+    }
+    return
+  }
+
+  const warningText = document.getElementById("warningModalText")
+  const cancelBtn = document.getElementById("warningModalCancel")
+  const okayBtn = document.getElementById("warningModalOkay")
+  
+  const targetUrl = buttonType === 'price' ? exploit.priceHref : exploit.href
+
+  warningText.textContent = warningData?.desc || exploit.warningInfo || "Are you sure you want to visit this website?"
+  
+  warningModal.style.display = "flex"
+  document.body.style.overflow = "hidden"
+  warningModal.classList.add("active")
+
+  okayBtn.disabled = true
+  okayBtn.classList.add('loading-state')
+  
+  const progressWrapper = document.createElement('div')
+  progressWrapper.className = 'progress-wrapper'
+  
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+  svg.setAttribute('class', 'progress-border-svg')
+  
+  const btnWidth = okayBtn.offsetWidth
+  const btnHeight = okayBtn.offsetHeight
+  const borderRadius = 6
+  const strokeWidth = 2
+  
+  const padding = strokeWidth / 2
+  const x = padding
+  const y = padding
+  const width = btnWidth - strokeWidth
+  const height = btnHeight - strokeWidth
+  const r = borderRadius
+  
+  const pathData = `
+    M ${x + r} ${y}
+    L ${x + width - r} ${y}
+    Q ${x + width} ${y} ${x + width} ${y + r}
+    L ${x + width} ${y + height - r}
+    Q ${x + width} ${y + height} ${x + width - r} ${y + height}
+    L ${x + r} ${y + height}
+    Q ${x} ${y + height} ${x} ${y + height - r}
+    L ${x} ${y + r}
+    Q ${x} ${y} ${x + r} ${y}
+  `
+  
+  const bgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+  bgPath.setAttribute('d', pathData)
+  bgPath.setAttribute('fill', 'none')
+  bgPath.setAttribute('stroke', 'rgba(255, 255, 255, 0.1)')
+  bgPath.setAttribute('stroke-width', strokeWidth)
+  bgPath.setAttribute('class', 'progress-bg')
+  
+  const progressPath = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+  progressPath.setAttribute('d', pathData)
+  progressPath.setAttribute('fill', 'none')
+  progressPath.setAttribute('stroke', 'var(--prim)')
+  progressPath.setAttribute('stroke-width', strokeWidth)
+  progressPath.setAttribute('stroke-linecap', 'round')
+  progressPath.setAttribute('class', 'progress-path')
+  
+  const pathLength = progressPath.getTotalLength()
+  progressPath.style.strokeDasharray = pathLength
+  progressPath.style.strokeDashoffset = pathLength
+  
+  svg.appendChild(bgPath)
+  svg.appendChild(progressPath)
+  progressWrapper.appendChild(svg)
+  okayBtn.appendChild(progressWrapper)
+  
+  requestAnimationFrame(() => {
+    progressPath.style.transition = 'stroke-dashoffset 5s cubic-bezier(0.4, 0, 0.2, 1)'
+    progressPath.style.strokeDashoffset = '0'
+  })
+  
+  const enableTimer = setTimeout(() => {
+    okayBtn.disabled = false
+    okayBtn.classList.remove('loading-state')
+    okayBtn.classList.add('ready-state')
+  }, 5000)
+
+  const cleanup = () => {
+    clearTimeout(enableTimer)
+    okayBtn.disabled = false
+    okayBtn.classList.remove('loading-state', 'ready-state')
+    
+    const wrapper = okayBtn.querySelector('.progress-wrapper')
+    if (wrapper) {
+      wrapper.remove()
     }
     
-    const updateTimer = () => {
-      timerDisplay.textContent = `This modal will close automatically in ${countdownTimer} seconds`
-      countdownTimer--
-      
-      if (countdownTimer < 0) {
-        clearInterval(timerInterval)
-        cleanup()
-      }
-    }
-    
-    warningText.textContent = exploit.warningInfo || "Are you sure you want to visit this website?"
-    warningModal.style.display = "flex"
-    document.body.style.overflow = "hidden"
+    warningModal.classList.remove("active")
+    setTimeout(() => {
+      warningModal.style.display = "none"
+      document.body.style.overflow = ""
+    }, 300)
+  }
 
-    void warningModal.offsetWidth
-    warningModal.classList.add("active")
-    
-    updateTimer()
-    timerInterval = setInterval(updateTimer, 1000)
+  cancelBtn.onclick = () => {
+    cleanup()
+  }
 
-    const cleanup = () => {
-      if (timerInterval) {
-        clearInterval(timerInterval)
-        timerInterval = null
-      }
-      
-      warningModal.classList.remove("active")
-
-      setTimeout(() => {
-        warningModal.style.display = "none"
-        document.body.style.overflow = ""
-      }, 300)
-    }
-
-    cancelBtn.onclick = () => {
+  okayBtn.onclick = () => {
+    if (!okayBtn.disabled) {
       cleanup()
-    }
-
-    okayBtn.onclick = () => {
-      cleanup()
-
       if (targetUrl) {
         window.open(targetUrl, "_blank")
       }
     }
   }
+}
   static async fetchUncData(id, name) {
     try {
       const response = await fetch(`https://voxlis.net/assets/unc/${id}.json`)
@@ -4258,7 +4705,7 @@ class ThemeManager {
             adImg.src = newSrc
           }
           testImg.onerror = () => {
-            // Fallback to red theme if theme-specific image doesn't exist
+            
             const fallbackSrc = newSrc.replace(`${this.currentTheme}_`, "red_")
             adImg.src = fallbackSrc
           }
@@ -4355,7 +4802,7 @@ class ThemeManager {
 }
 
 class OptimizedHeartAnimation {
-  constructor({ heartCount = 12, minHearts = 8 } = {}) {
+  constructor({ heartCount = 30, minHearts = 15 } = {}) {
     if (OptimizedHeartAnimation.instance) {
       return OptimizedHeartAnimation.instance
     }
@@ -4373,15 +4820,15 @@ class OptimizedHeartAnimation {
     this.isRunning = false
     this.isLoadingTheme = false
     this.lastFrameTime = 0
-    this.targetFps = 20 // Further reduced FPS for better performance
+    this.targetFps = 20 
     this.fpsInterval = 1000 / this.targetFps
     this.frameSkipCounter = 0
-    this.maxFrameSkip = 3 // Increased frame skipping tolerance
+    this.maxFrameSkip = 3 
 
-    this.baseHeartCount = heartCount // Reduced default count
+    this.baseHeartCount = heartCount 
     this.minHearts = minHearts
-    this.maxClickHearts = 15 // Reduced max click hearts
-    this.maxTotalHearts = 30 // Hard limit on total hearts
+    this.maxClickHearts = 15
+    this.maxTotalHearts = 30
 
     this.cssWidth = 0
     this.cssHeight = 0
@@ -4419,7 +4866,7 @@ class OptimizedHeartAnimation {
     document.addEventListener("visibilitychange", this.visibilityHandler)
 
     this.lastClickTime = 0
-    this.clickThrottle = 100 // Minimum time between clicks
+    this.clickThrottle = 100 
     this.clickHandler = (e) => {
       const now = performance.now()
       if (now - this.lastClickTime < this.clickThrottle) return
@@ -4462,7 +4909,7 @@ class OptimizedHeartAnimation {
   getEffectiveBaseCount() {
     const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1))
     const screenArea = (this.cssWidth || window.innerWidth) * (this.cssHeight || window.innerHeight)
-    const scaleFactor = Math.min(1, screenArea / 1000000) // Scale down for large screens
+    const scaleFactor = Math.min(1, screenArea / 1000000) 
     return Math.max(this.minHearts, Math.round((this.baseHeartCount * scaleFactor) / dpr))
   }
 
@@ -4549,12 +4996,12 @@ class OptimizedHeartAnimation {
       img: this.heartImage,
       x: Math.random() * (this.cssWidth || window.innerWidth),
       y: Math.random() * (this.cssHeight || window.innerHeight),
-      dx: Math.random() * 0.2 - 0.1, // Reduced movement
-      dy: Math.random() * 0.2 + 0.1, // Slower fall
+      dx: Math.random() * 0.2 - 0.1, 
+      dy: Math.random() * 0.2 + 0.1, 
       size: Math.random() * 15 + 15,
-      rotation: Math.random() * 0.2 - 0.1, // Less rotation
-      rotationSpeed: Math.random() * 0.005 - 0.0025, // Slower rotation
-      opacity: 1.0, // Full opacity, completely visible
+      rotation: Math.random() * 0.2 - 0.1, 
+      rotationSpeed: Math.random() * 0.005 - 0.0025, 
+      opacity: 1.0, 
       isClickHeart: false,
     }
   }
@@ -4628,7 +5075,7 @@ class OptimizedHeartAnimation {
     if (h.isClickHeart) {
       h.life -= 1
       h.opacity = Math.max(0, h.life / h.maxLife)
-      h.dy += 0.015 // Reduced gravity
+      h.dy += 0.015 
       if (h.life <= 0) {
         this.hearts.splice(index, 1)
         return
@@ -4667,15 +5114,15 @@ class OptimizedHeartAnimation {
     const rect = this.canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    const n = Math.floor(Math.random() * 2) + 1 // Reduced to 1-2 hearts per click
+    const n = Math.floor(Math.random() * 2) + 1 
 
     for (let i = 0; i < n && this.hearts.length < this.maxTotalHearts; i++) {
-      const maxLife = 30 + Math.floor(Math.random() * 15) // Shorter lifespan
+      const maxLife = 30 + Math.floor(Math.random() * 15) 
       this.hearts.push({
         img: this.heartImage,
-        x: x + (Math.random() * 20 - 10), // Reduced spread
+        x: x + (Math.random() * 20 - 10), 
         y: y + (Math.random() * 20 - 10),
-        dx: Math.random() * 1 - 0.5, // Reduced velocity
+        dx: Math.random() * 1 - 0.5, 
         dy: Math.random() * -1 - 0.3,
         size: Math.random() * 20 + 20,
         rotation: Math.random() * 0.02 - 0.01,
@@ -4711,7 +5158,7 @@ class OptimizedHeartAnimation {
 }
 
 if (typeof window !== "undefined") {
-  // Wait for DOM to be ready
+  
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
       window.heartAnimation = new OptimizedHeartAnimation()
@@ -5112,6 +5559,9 @@ document.addEventListener("DOMContentLoaded", () => {
   ReportManager.init()
 })
 
+
+
+
 class MobileMenuManager {
   constructor() {
     this.menu = document.getElementById("mobMenu")
@@ -5123,9 +5573,12 @@ class MobileMenuManager {
   }
 
   init() {
+    
     this.addCloseButton()
 
+    
     this.setupEventListeners()
+    
     
     if (this.menuToggle) {
       this.menuToggle.innerHTML = '<i class="fas fa-bars"></i>'
@@ -5138,13 +5591,16 @@ class MobileMenuManager {
     const menuContainer = this.menu.querySelector(".mob-menu-cntr")
     if (!menuContainer) return
 
+    
     let closeButton = document.getElementById("mobMenuClose")
     if (!closeButton) {
+      
       closeButton = document.createElement("button")
       closeButton.id = "mobMenuClose"
       closeButton.className = "mob-menu-close"
       closeButton.innerHTML = '<i class="fas fa-times"></i>'
 
+      
       menuContainer.insertBefore(closeButton, menuContainer.firstChild)
     }
 
@@ -5152,6 +5608,7 @@ class MobileMenuManager {
   }
 
   setupEventListeners() {
+    
     if (this.closeButton) {
       this.closeButton.addEventListener("click", (e) => {
         e.preventDefault()
@@ -5160,6 +5617,7 @@ class MobileMenuManager {
       })
     }
 
+    
     if (this.menu) {
       this.menu.addEventListener("click", (e) => {
         if (e.target === this.menu) {
@@ -5168,6 +5626,7 @@ class MobileMenuManager {
       })
     }
 
+    
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !this.menu.classList.contains("hidden")) {
         this.closeMenu()
@@ -5182,6 +5641,8 @@ class MobileMenuManager {
 
     this.isAnimating = true
 
+    
+
     this.menu.style.transform = "translateY(-100%)"
     this.menu.style.opacity = "0"
 
@@ -5190,6 +5651,7 @@ class MobileMenuManager {
       document.body.classList.remove("menu-open")
       document.body.style.overflow = ""
 
+      
       this.menu.style.transform = ""
       this.menu.style.opacity = ""
 
@@ -5204,6 +5666,8 @@ class MobileMenuManager {
 
     this.isAnimating = true
 
+    
+
     this.menu.classList.remove("hidden")
     document.body.classList.add("menu-open")
     document.body.style.overflow = "hidden"
@@ -5214,6 +5678,7 @@ class MobileMenuManager {
   }
 }
 
+
 document.addEventListener("DOMContentLoaded", () => {
   window.mobileMenuManager = new MobileMenuManager()
 
@@ -5221,9 +5686,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("mobMenu")
 
   if (menuToggle && menu) {
+    
     const newMenuToggle = menuToggle.cloneNode(true)
     menuToggle.parentNode.replaceChild(newMenuToggle, menuToggle)
 
+    
     newMenuToggle.addEventListener("click", () => {
       if (menu.classList.contains("hidden")) {
         window.mobileMenuManager.openMenu()
@@ -5233,4 +5700,3 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
-
