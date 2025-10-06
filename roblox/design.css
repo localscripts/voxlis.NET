@@ -6266,6 +6266,7 @@ body.has-top-warning header:not(.scrolled) {
   transform: scale(1.1) !important;
 }
 
+/* Responsive adjustments for smaller screens */
 @media (max-width: 480px) {
   .mob-menu-cntr {
     padding: calc(var(--hdr-h) + 1.5rem) 1.5rem 1.5rem 1.5rem;
@@ -6299,4 +6300,404 @@ body.has-top-warning header:not(.scrolled) {
     max-width: 95%;
     line-height: 1.3;
   }
+}
+
+/* <CHANGE> Clean button states without glow */
+.warning-modal-btn-okay {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: rgba(209, 213, 219, 1);
+  position: relative;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.warning-modal-btn-okay.loading-state {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.warning-modal-btn-okay.ready-state {
+  background-color: rgba(var(--prim-rgb), 0.1);
+  opacity: 1;
+}
+
+.warning-modal-btn-okay:not(:disabled):hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* <CHANGE> Progress wrapper */
+.progress-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-border-svg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.progress-bg {
+  opacity: 0.2;
+}
+
+.progress-path {
+  stroke: var(--prim);
+}
+
+.platform-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.platform-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.platform-modal {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 16px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.platform-modal.show {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.platform-modal-header {
+  padding: 24px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.platform-modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.platform-modal-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.platform-modal-content {
+  padding: 24px;
+}
+
+.platform-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.platform-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: var(--input-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  gap: 12px;
+}
+
+.platform-option-btn:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+}
+
+.platform-option-icon {
+  font-size: 32px;
+  color: var(--accent-color);
+}
+
+.platform-option-icon i {
+  font-size: 32px;
+}
+
+.platform-option-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.platform-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+}
+
+.platform-modal-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.platform-modal-btn-cancel {
+  background: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.platform-modal-btn-cancel:hover {
+  background: var(--hover-bg);
+}
+
+/* <CHANGE> Platform Selection Modal - matches existing UNC modal design */
+.platform-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.platform-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.platform-modal {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  background-color: var(--crd-bg);
+  border-radius: 0.75rem;
+  border: 1px solid var(--crd-bdr);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: transform var(--smooth-duration) var(--smooth-ease), opacity var(--smooth-duration) var(--smooth-ease);
+}
+
+.platform-modal.show {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.platform-modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--crd-bdr);
+  background: linear-gradient(to right, rgba(var(--prim-rgb), 0.1), transparent);
+}
+
+.platform-modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem 0;
+}
+
+.platform-modal-subtitle {
+  font-size: 0.875rem;
+  color: var(--txt-mut);
+  margin: 0;
+}
+
+.platform-modal-content {
+  padding: 1.5rem;
+}
+
+.platform-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.platform-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--crd-bdr);
+  border-radius: var(--rad);
+  cursor: pointer;
+  transition: all var(--smooth-duration) var(--smooth-ease);
+  gap: 0.75rem;
+}
+
+.platform-option-btn:hover {
+  background-color: rgba(var(--prim-rgb), 0.1);
+  border-color: var(--prim);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.platform-option-icon {
+  font-size: 2rem;
+  color: var(--prim);
+}
+
+.platform-option-icon i {
+  font-size: 2rem;
+}
+
+.platform-option-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+}
+
+.platform-modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--crd-bdr);
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+}
+
+.platform-modal-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--smooth-duration) var(--smooth-ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.platform-modal-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s, height 0.4s;
+  z-index: 1;
+}
+
+.platform-modal-btn:hover::after {
+  width: 300%;
+  height: 300%;
+}
+
+.platform-modal-btn > * {
+  position: relative;
+  z-index: 2;
+}
+
+.platform-modal-btn-cancel {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--crd-bdr);
+  color: rgba(209, 213, 219, 1);
+}
+
+.platform-modal-btn-cancel:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.web-btn {
+  background-color: var(--sec);
+  border: 1px solid var(--sec-bdr);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.web-btn .default-text,
+.web-btn .hover-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  transition: transform var(--smooth-duration) var(--smooth-ease), opacity var(--smooth-duration) var(--smooth-ease);
+}
+
+.web-btn .hover-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.web-btn:hover .default-text {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.web-btn:hover .hover-text {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.web-btn:hover {
+  background-color: rgba(var(--prim-rgb), 0.1);
+  border-color: rgba(var(--prim-rgb), 0.3);
+  color: var(--prim);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
