@@ -616,7 +616,33 @@ const expData = [
       "voxlis.NET recommends checking out “MORE INFO” for ArceusX NEO so you know what you’re getting. Would you like to continue to ArceusX NEO's website anyway?",
     pricegray: true,
   },
-
+  {
+    id: "lx63",
+    name: "LX63",
+    desc: "A level 8 keyless exploit.",
+    lvl: 8,
+    price: "FREE",
+    plat: ["windows"],
+    pros: ["Has a decompiler", "No keysystem", "95% sUNC", "Level 8"],
+    neutral: [],
+    cons: [],
+    verified: false,
+    editor: "voxlis.NET",
+    txtColor: "text-blue-500",
+    accentColor: "from-blue-600 to-blue-700",
+    info: "",
+    premium: false,
+    hasKeySystem: false,
+    href: "https://lx63.xyz",
+    priceHref: "",
+    hide: false,
+    uncbuttonlink: "https://sunc.rubis.app/?scrap=Cn5a1onS77Opiv8p&key=aDMDoLP6KcKDc8aR04ayqU1K7yjg27LP",
+    free: true,
+    warning: false,
+    warningInfo:
+      "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
+      hide: false,
+  },
 ]
 
 const configData = {
@@ -5325,3 +5351,4 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
