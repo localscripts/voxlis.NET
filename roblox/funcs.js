@@ -655,7 +655,7 @@ const expData = [
     editor: "voxlis.NET",
     txtColor: "text-blue-500",
     accentColor: "from-blue-600 to-blue-700",
-    info: "",
+    info: "## Exploit Performance\n- [LX63](/) is a stable, powerful keyless executor that usually delivers strong performance and good uptime but can occasionally fail during injection and has suffered multi-week outages.\n\n## Background Information\n- 2020: launched as an [Axon fork]() and keyless executor, later became an API executor; 2022: discontinued; 2025: returned as a [Xeno paste](); initial 2025 release was discovered to be a [Visual]() paste, prompting a rushed rewrite that reduced functionality, and a new rewrite is currently underway.\n## Developers Background Information\n- [@LX63Manager](): listed original owner (identity unknown); [@kizagan]() ([@Anthares]()): co-owner active since 2020; [@Lol-AVL](): co-owner and CS2 cheat developer (identity unknown); LX63 Discord staff mainly lesser-known members with notable figures like [@Munchen]() and [@Miguel]() on the team.\n",
     premium: false,
     hasKeySystem: false,
     href: "https://lx63.xyz",
@@ -5376,5 +5376,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
