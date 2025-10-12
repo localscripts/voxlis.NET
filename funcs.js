@@ -523,6 +523,7 @@ const expData = [
     neutral: [],
     cons: [],
     verified: true,
+    external: true,
     edito: "voxlis.NET",
     txtColor: "text-blue-500",
     accentColor: "from-red-600 to-red-700",
@@ -4812,6 +4813,7 @@ window.addEventListener("load", () => {
     })
   }
 })
+
 
 
 
