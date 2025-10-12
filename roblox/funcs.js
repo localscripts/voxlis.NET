@@ -193,7 +193,7 @@ const expData = [
     txtColor: "text-green-500",
     accentColor: "from-green-600 to-green-700",
     info: "",
-    premium: true,
+    premium: false,
     href: "https://yerba.wtf/",
     priceHref: "https://yerba.wtf/",
     hide: false,
@@ -5376,4 +5376,5 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
