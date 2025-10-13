@@ -103,7 +103,7 @@ const expData = [
     lvl: 8,
     price: "$4.99",
     period: "monthly",
-    plat: ["windows", "ios", "android"],
+    plat: ["windows", "macos", "ios", "android"],
     pros: ["Has a decompiler", "VNG Support","97% sUNC", "Level 8"],
     neutral: ["Android uses module from ArceusX"],
     cons: [],
@@ -452,6 +452,7 @@ const expData = [
     lvl: 8,
     price: "$9.99",
     plat: ["windows"],
+    external: true,
     pros: ["Has a Lua env & code explorer", "Usermode product", "Rich in features"],
     neutral: [],
     cons: [],
@@ -5376,6 +5377,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
