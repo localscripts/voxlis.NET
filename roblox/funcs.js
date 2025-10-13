@@ -188,7 +188,7 @@ const expData = [
     cons: [],
     verified: true,
     premium: false,
-    pricegray: false,
+    pricegray: true,
     editor: "voxlis.NET",
     txtColor: "text-green-500",
     accentColor: "from-green-600 to-green-700",
@@ -5376,6 +5376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
