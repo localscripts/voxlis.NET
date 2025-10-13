@@ -735,17 +735,17 @@ async function fetchAllExploitStatuses() {
     globalStatusCache.clear()
     statusCacheTimestamp = now
 
-    for (const exploit of expData) {
-      const exploitStatuses = {}
+  for (const exploit of expData) {
+    const exploitStatuses = {}
 
-      for (const platform of exploit.plat) {
-        if (platformFirstData.hasOwnProperty(platform) && platformFirstData[platform].hasOwnProperty(exploit.id)) {
-          exploitStatuses[platform] = platformFirstData[platform][exploit.id] === true
-        } else {
-        }
+    for (const platform of exploit.plat) {
+      if (platformFirstData.hasOwnProperty(platform) && platformFirstData[platform].hasOwnProperty(exploit.id)) {
+        const exploitData = platformFirstData[platform][exploit.id]
+        exploitStatuses[platform] = exploitData?.updated === true
       }
-      globalStatusCache.set(exploit.id, exploitStatuses)
     }
+    globalStatusCache.set(exploit.id, exploitStatuses)
+  }
 
     return globalStatusCache
   } catch (error) {
@@ -5377,8 +5377,3 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
-
-
-
-
-
