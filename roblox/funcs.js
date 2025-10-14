@@ -135,7 +135,7 @@ const expData = [
     editor: "voxlis.NET",
     txtColor: "text-blue-500",
     accentColor: "from-blue-600 to-blue-700",
-    premium: false,
+    premium: true,
     pricegray: true,
     href: "https://getwave.gg",
     priceHref: "https://key-empire.com/roblox#wave",
@@ -342,6 +342,7 @@ const expData = [
     hasKeySystem: true,
     free: true,
     pricegray: false,
+    hide: true,
   },
   {
     id: "krnl",
@@ -5377,6 +5378,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
