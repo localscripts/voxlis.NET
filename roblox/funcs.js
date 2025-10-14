@@ -432,7 +432,7 @@ const expData = [
     pros: ["Multi-Inject support", "Has a decompiler", "No keysystem", "98% sUNC", "Level 8"],
     neutral: [],
     cons: [],
-    verified: false,
+    verified: true,
     editor: "voxlis.NET",
     txtColor: "text-blue-500",
     accentColor: "from-blue-600 to-blue-700",
@@ -5377,6 +5377,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
