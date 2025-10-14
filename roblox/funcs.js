@@ -637,7 +637,7 @@ const expData = [
     hasKeySystem: true,
     hideunc: true,
     free: false,
-    warning: true,
+    warning: false,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for ArceusX NEO so you know what you’re getting. Would you like to continue to ArceusX NEO's website anyway?",
     pricegray: true,
