@@ -232,7 +232,7 @@ const expData = [
     lvl: 8,
     price: "$4.97",
     period: "monthly",
-    plat: ["ios", "android"],
+    plat: ["android"],
     pros: ["Has a decompiler", "VNG Support", "Level 8"],
     neutral: ["Fails sUNC checks", "Uses core technology from ArceusX"],
     cons: [],
@@ -5377,5 +5377,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
