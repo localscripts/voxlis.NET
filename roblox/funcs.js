@@ -625,13 +625,13 @@ const expData = [
     pros: ["VNG Support", "Level 8"],
     neutral: ["Fails sUNC checks"],
     cons: [],
-    verified: false,
+    verified: true,
     editor: "voxlis.NET",
     txtColor: "text-yellow-500",
     accentColor: "from-yellow-600 to-yellow-700",
     info: "## Exploit Performance  \n- [ArceusX]() can run most scripts due to its high UNC percentage but lacks support for some functions like `getinstance`. Alternatives like [KRNL](https://krnl.cat) and [Delta](https://deltaexploits.gg) offer slightly better UNC and have safer reputations.\n\n## Background Information  \n- Released in 2019, [ArceusX]() was one of the first mobile Roblox executors. In March 2022, [@lxnny]() — owner of [Delta](https://deltaexploits.gg) — reposted a community warning on [WeAreDevs](https://wearedevs.net), exposing [ArceusX]() for ratting users and scamming developers. Despite this, it remains widely used. In April 2024, [SPDMTeam](https://spdmteam.com) launched [Wave](https://getwave.gg), a Windows executor combining [ArceusX]() and CodeX with an improved UI. While trusted, it’s still owned by the same team involved in past data issues. [ArceusX]() continues to receive regular updates.\n\n## Developer Background Information  \n- [ArceusX]() is owned by [Tiahh]() and [SPDMTeam](https://spdmteam.com). There is limited public information about the developers.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
     premium: false,
-    href: "https://spdmteam.com/",
+    href: "https://spdmteam.com/v5",
     priceHref: "https://key-empire.com/roblox#arceusx",
     hide: false,
     hasKeySystem: true,
@@ -5377,3 +5377,4 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
