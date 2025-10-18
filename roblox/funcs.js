@@ -136,7 +136,7 @@ const expData = [
     txtColor: "text-blue-500",
     accentColor: "from-blue-600 to-blue-700",
     premium: true,
-    pricegray: false,
+    pricegray: true,
     href: "https://getwave.gg",
     priceHref: "https://key-empire.com/roblox#wave",
     info: "## Exploit Performance\n- [Wave]() works like a normal executor, has good uptime, but has its issues like random crashes, UI not saving tabs after closing the program, and the workspace folder not saving after updates. [Wave]() offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information\n- In March 2022, [@lxnny]() — the owner of [Delta]() — reposted the CW (community warning) on [WeAreDevs.NET](), exposing ArceusX for ratting users and massively scamming their developers.\n- Originally, [Wave's]() launch was delayed and teased multiple times in their Discord server.\n  It eventually released around April 5–9, but saw very few updates early on.\n  For example, when Roblox updated on a Wednesday, Wave wouldn't get updated until Friday.\n  This pattern continued up until December 2024, sometimes with even bigger delays. Since December, [Wave]() has shown better performance and has been more consistent.\n  However, the UI and other features haven't seen much attention or updates since then.\n\n## Developers Background Information\n- Currently owned by [@Tiahh](). Developer background information is limited. Previous developers were reportedly scammed in 2021 by [ArceusX]() owners at the time, and details about the current development team are largely unknown.\n\n> Sources: [reddit.com/r/robloxhackers](), WeAreDevs.NET, Old V3rmillion.net",
@@ -335,7 +335,7 @@ const expData = [
     txtColor: "text-red-500",
     accentColor: "from-red-600 to-red-700",
     premium: true,
-    href: "https://realbunni.com",
+    href: "https://discord.gg/bunnilol",
     priceHref: "https://key-empire.com/roblox#bunni",
     info: "## Exploit Performance  \n- [Bunni](/) is a newly released exploit with limited commentary at this time, as the current build is not yet stable.\n\n## Background Information  \n- [Bunni](/) is a relatively new exploit with limited public information available. It was originally named [Visual](/) before being rebranded to Bunni. Interestingly, the name [Bunni](/) was previously used by [Swift](/) before it underwent its own rebrand.  \n- The developer [@Peyton](/), known for owning both [Swift](/) and [MacSploit](/), is also behind [Bunni](/). Further details about their involvement can be found in the respective cards for [Swift]() and [MacSploit]().\n\n\n## Developer Information  \n- [@Peyton](/), the project’s creator, is an experienced and respected developer in the exploit community. His track record includes continued leadership on [Swift](/), while now also overseeing [Bunni's]() direction. [Blinx](/), the UI designer behind both the original [Swift]() interface and [Bunni’s]() current look, brings a clean and consistent visual identity across projects. [Reveny](/) and [Viz](/), both software engineering majors and longtime collaborators of Peyton, contribute to the development of [Bunni](). Though not publicly known in the community, their technical expertise ensures the project is both scalable and dependable.\n\n> Sources: [reddit.com/r/robloxhackers](), Swift Discord, Bunni Discord",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=8LLgUuLKzHbPaasF&key=UZ8OSOv0MKjLjLDCfsFyi4SySArz4L14",
@@ -5378,6 +5378,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
