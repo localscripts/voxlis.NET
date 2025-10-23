@@ -5303,7 +5303,7 @@ class OptimizedHeartAnimation {
 
     this.themeOverrides = {
       halloween: {
-        asset: "/assets/pumkin.svg",
+        asset: "/assets/pumpkin.svg",
         baseHeartCount: 26,
         minHearts: 18,
         maxClickHearts: 18,
