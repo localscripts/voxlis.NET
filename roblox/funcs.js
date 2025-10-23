@@ -1873,6 +1873,7 @@ class UIManager {
           selected.textContent = "Most Popular"
         }
         dropdown.querySelectorAll(".custom-dropdown-option").forEach((opt) => opt.classList.remove("selected"))
+        option.classList.add("selected")
       }
     })
   }
@@ -1883,6 +1884,7 @@ class UIManager {
       hero: "#heroSec",
       menuToggle: "#mobMenuTgl",
       menu: "#mobMenu",
+      search: "#srchInp",
       mobileSearch: "#mobSrchInp",
       clearButton: "#clrSrch",
       mobileClearButton: "#mobClrSrch",
@@ -3185,7 +3187,6 @@ ${this.renderCardFooter(exploit)}
     ModalManager.createUncModal()
     ModalManager.createInfoModal()
     ModalManager.createWarningModal()
-    DevProfileModal.createModal()
   }
 
   setupDropdowns() {
@@ -3608,17 +3609,6 @@ class ModalManager {
       if (footerCloseBtn) {
         footerCloseBtn.addEventListener("click", ModalManager.closeInfoModal)
       }
-
-      const backBtn = document.getElementById("infoModalBackBtn")
-
-      if (backBtn) {
-        backBtn.addEventListener("click", (event) => {
-          event.preventDefault()
-          ModalManager.navigateInfoModalBack()
-        })
-      }
-
-      ModalManager.updateInfoModalNav()
     }
   }
 
@@ -3859,23 +3849,7 @@ static closePlatformModal() {
     }
   }
 
-  static openInfoModal(exploit, options = {}) {
-    if (!exploit) return
-
-    const { pushHistory = false, preserveHistory = false } = options
-
-    if (!Array.isArray(ModalManager.infoModalHistory)) {
-      ModalManager.infoModalHistory = []
-    }
-
-    if (!preserveHistory && !pushHistory) {
-      ModalManager.infoModalHistory = []
-    } else if (pushHistory && ModalManager.currentInfoExploitId) {
-      ModalManager.infoModalHistory.push(ModalManager.currentInfoExploitId)
-    }
-
-    ModalManager.currentInfoExploitId = exploit.id || null
-
+  static openInfoModal(exploit) {
     const modalContainer = document.getElementById("infoModalContainer")
     const modalTitle = document.getElementById("infoModalTitle")
     const modalExploitName = document.getElementById("infoModalExploitName")
@@ -3896,13 +3870,6 @@ static closePlatformModal() {
           window.hljs.highlightElement(block)
         })
       }
-
-      ExploitReferenceRegistry.attachToMarkup(modalMarkdown, {
-        originExploitId: exploit.id,
-        allowSelfReference: false,
-        preserveHistory: true,
-      })
-      DevProfileModal.attachToMarkup(modalMarkdown)
     } else {
       modalMarkdown.innerHTML = "<p>No additional information available for this exploit.</p>"
     }
@@ -3912,7 +3879,6 @@ static closePlatformModal() {
     }, 10)
 
     document.body.style.overflow = "hidden"
-    ModalManager.updateInfoModalNav()
   }
 
   static closeInfoModal() {
@@ -3929,49 +3895,7 @@ static closePlatformModal() {
         }
 
         document.body.style.overflow = ""
-        ModalManager.infoModalHistory = []
-        ModalManager.currentInfoExploitId = null
-        ModalManager.updateInfoModalNav()
       }, 300)
-    }
-  }
-
-  static navigateInfoModalBack() {
-    if (!Array.isArray(ModalManager.infoModalHistory) || !ModalManager.infoModalHistory.length) {
-      return
-    }
-
-    const previousId = ModalManager.infoModalHistory.pop()
-    const exploit = ExploitReferenceRegistry.getExploitById(previousId)
-
-    if (exploit) {
-      ModalManager.openInfoModal(exploit, { preserveHistory: true })
-    } else {
-      ModalManager.updateInfoModalNav()
-    }
-  }
-
-  static updateInfoModalNav() {
-    const backBtn = document.getElementById("infoModalBackBtn")
-    const backLabel = document.getElementById("infoModalBackLabel")
-
-    if (!backBtn) return
-
-    const hasHistory = Array.isArray(ModalManager.infoModalHistory) && ModalManager.infoModalHistory.length > 0
-
-    if (hasHistory) {
-      backBtn.classList.add("visible")
-
-      if (backLabel) {
-        const previousId = ModalManager.infoModalHistory[ModalManager.infoModalHistory.length - 1]
-        backLabel.textContent = ExploitReferenceRegistry.getExploitNameById(previousId) || "Back"
-      }
-    } else {
-      backBtn.classList.remove("visible")
-
-      if (backLabel) {
-        backLabel.textContent = "Back"
-      }
     }
   }
 
@@ -4287,714 +4211,6 @@ static closePlatformModal() {
   }
 }
 
-ModalManager.infoModalHistory = []
-ModalManager.currentInfoExploitId = null
-
-class DevProfileRepository {
-  static buildProfiles() {
-    const profiles = new Map()
-    const hasInlineParser =
-      typeof window !== "undefined" && window.marked && typeof window.marked.parseInline === "function"
-
-    expData.forEach((exploit) => {
-      if (!exploit.info) return
-
-      const lines = exploit.info.split(/\n+/)
-      let currentSection = null
-
-      lines.forEach((rawLine) => {
-        if (!rawLine) return
-        const trimmedLine = rawLine.trim()
-        if (!trimmedLine) return
-
-        const headingMatch = trimmedLine.match(/^#{2,6}\s*(.+)$/)
-        if (headingMatch) {
-          currentSection = headingMatch[1].trim()
-          return
-        }
-
-        const linkMatches = [...trimmedLine.matchAll(/\[([^\]]+)\]\([^)]*\)/g)]
-        if (!linkMatches.length) return
-
-        linkMatches.forEach((match) => {
-          const rawName = match[1]
-          if (!rawName) return
-
-          const hasHandle = rawName.includes("@")
-
-          if (DevProfileRepository.shouldIgnoreName(rawName, exploit.name, { allowHandles: hasHandle })) {
-            return
-          }
-
-          if (!hasHandle) {
-            const isDeveloper = DevProfileRepository.isDeveloperCandidate({
-              rawName,
-              line: trimmedLine,
-              section: currentSection,
-              exploitName: exploit.name,
-              matchIndex: typeof match.index === "number" ? match.index : trimmedLine.indexOf(match[0]),
-              matchText: match[0],
-            })
-
-            if (!isDeveloper) return
-          }
-
-          const normalizedName = DevProfileRepository.normalizeName(rawName)
-          if (!normalizedName || normalizedName[0] !== "@") return
-
-          const key = DevProfileRepository.getKey(normalizedName)
-          if (!key) return
-
-          if (!profiles.has(key)) {
-            profiles.set(key, {
-              name: normalizedName,
-              mentions: [],
-              _mentionKeys: new Set(),
-            })
-          }
-
-          const profile = profiles.get(key)
-          const cleanedLine = DevProfileRepository.cleanLine(trimmedLine)
-          const mentionKey = `${exploit.id}|${cleanedLine}`
-
-          if (profile._mentionKeys.has(mentionKey)) {
-            return
-          }
-
-          profile._mentionKeys.add(mentionKey)
-
-          const inlineSource = trimmedLine.replace(/^\s*[-*>]\s*/, "")
-          let html = DevProfileRepository.escapeHtml(cleanedLine)
-
-          if (hasInlineParser) {
-            try {
-              html = window.marked.parseInline(inlineSource)
-            } catch (error) {
-              html = DevProfileRepository.escapeHtml(cleanedLine)
-            }
-          }
-
-          profile.mentions.push({
-            exploitId: exploit.id,
-            exploitName: exploit.name,
-            section: currentSection || null,
-            text: cleanedLine,
-            html,
-          })
-        })
-      })
-    })
-
-    profiles.forEach((profile) => {
-      delete profile._mentionKeys
-    })
-
-    return profiles
-  }
-
-  static normalizeName(name) {
-    if (!name) return ""
-
-    let cleaned = String(name).trim()
-    if (!cleaned) return ""
-
-    const atIndex = cleaned.indexOf("@")
-    if (atIndex >= 0) {
-      cleaned = cleaned.slice(atIndex)
-    }
-
-    cleaned = cleaned.replace(/[)>\]]+$/, "")
-    cleaned = cleaned.replace(/[,.;:!?]+$/, "")
-
-    if (!cleaned.startsWith("@")) {
-      cleaned = `@${cleaned}`
-    }
-
-    return cleaned.trim()
-  }
-
-  static sanitizeDisplayName(name) {
-    return String(name || "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "")
-  }
-
-  static isDeveloperSection(section) {
-    if (!section) return false
-    const value = section.toLowerCase()
-    return ["developer", "developers", "developer background", "developers background", "development team", "owners", "owner", "team", "staff"].some((keyword) =>
-      value.includes(keyword),
-    )
-  }
-
-  static extractContextSegments(line, matchIndex, matchText) {
-    const fallback = line ? line.toLowerCase() : ""
-
-    if (typeof matchIndex !== "number" || matchIndex < 0 || !matchText) {
-      return {
-        beforeTail: fallback.slice(-80),
-        afterHead: "",
-        afterBeforeNextLink: fallback.slice(-80),
-      }
-    }
-
-    const lower = fallback
-    const before = lower.slice(0, matchIndex)
-    const after = lower.slice(matchIndex + matchText.length)
-    const nextLinkIndex = after.indexOf("[")
-    const beforeNextLink = nextLinkIndex >= 0 ? after.slice(0, nextLinkIndex) : after
-
-    return {
-      beforeTail: before.slice(-120),
-      afterHead: after.slice(0, 120),
-      afterBeforeNextLink: beforeNextLink.slice(0, 160),
-    }
-  }
-
-  static isDeveloperContext(line, context = {}) {
-    if (!line) return false
-
-    const { matchIndex = -1, matchText = "", inDeveloperSection = false } = context
-    const lower = line.toLowerCase()
-    const { beforeTail, afterHead, afterBeforeNextLink } = DevProfileRepository.extractContextSegments(
-      lower,
-      matchIndex,
-      matchText,
-    )
-
-    const prefixPatterns = [
-      /\b(created|built|coded|written|authored|engineered|developed|maintained|reverse[-\s]?engineered)\s+by\s*$/,
-      /\b(by|from)\s*$/,
-      /\b(owner|owners|founder|founders|co[-\s]?founder|cofounder|co-owner|coowner|lead|leader|maintainer|maintainers|administrator|moderator|architect|designer|engineer|developer|dev|staff|team)\s*$/,
-      /(partnered|partnering|collaborated|collaborating|working|teaming)\s+with\s*$/,
-    ]
-
-    const suffixPatterns = [
-      /^\s*(,|\(|-|–|—)?\s*(the\s+)?(owner|owners|founder|co[-\s]?founder|cofounder|co-owner|lead|leader|maintainer|administrator|moderator|architect|designer|engineer|developer|dev|staff|team|creator)\b/,
-      /^\s*(,|\(|-|–|—)?\s*(who\s+)?(leads|runs|maintains|manages|heads|operates)\b/,
-      /^\s*(,|\(|-|–|—)?\s*(their|his|her)\s+(partner|collaborator|developer|designer|engineer)\b/,
-    ]
-
-    if (prefixPatterns.some((pattern) => pattern.test(beforeTail))) {
-      return true
-    }
-
-    if (suffixPatterns.some((pattern) => pattern.test(afterHead))) {
-      return true
-    }
-
-    if (inDeveloperSection) {
-      const softPatterns = [
-        /^\s*(,|\(|-|–|—)?\s*(the\s+)?(ui|ux|design|security|backend|front[-\s]?end|core|lead)\s+(designer|engineer|developer|architect|developer)/,
-        /^\s*(,|\(|-|–|—)?\s*(who\s+)?(cooperates|partners)\b/,
-      ]
-
-      if (softPatterns.some((pattern) => pattern.test(afterHead))) {
-        return true
-      }
-
-      const softKeywordWindow = afterBeforeNextLink
-      if (
-        softKeywordWindow &&
-        /\b(collaborator|collaborators|partner|partners|engineer|engineers|developer|developers|designer|designers|maintainer|maintainers|moderator|administrator|staff|team|lead|leader|owner|founder|architect)\b/.test(
-          softKeywordWindow,
-        )
-      ) {
-        return true
-      }
-    }
-
-    return /\bby\s*\[[^\]]+\]\([^)]*\)/i.test(line)
-  }
-
-  static isDeveloperCandidate({ rawName, line, section, exploitName, matchIndex, matchText }) {
-    if (DevProfileRepository.shouldIgnoreName(rawName, exploitName)) return false
-
-    const inDeveloperSection = DevProfileRepository.isDeveloperSection(section)
-
-    if (inDeveloperSection) {
-      return true
-    }
-
-    return DevProfileRepository.isDeveloperContext(line, {
-      matchIndex,
-      matchText,
-      inDeveloperSection,
-    })
-  }
-
-  static shouldIgnoreName(rawName, exploitName, options = {}) {
-    const { allowHandles = false } = options
-    const cleaned = DevProfileRepository.sanitizeDisplayName(rawName)
-    if (!cleaned) return true
-
-    const exploitKey = DevProfileRepository.sanitizeDisplayName(exploitName)
-    if (exploitKey && cleaned === exploitKey) return true
-
-    if (!allowHandles && cleaned.length <= 2) return true
-
-    if (DevProfileRepository.isDomainLikeName(rawName)) {
-      return true
-    }
-
-    if (DevProfileRepository.ignoredNameKeys && DevProfileRepository.ignoredNameKeys.has(cleaned)) {
-      return true
-    }
-
-    if (DevProfileRepository.ignoredNameKeys && cleaned.endsWith("s")) {
-      const singular = cleaned.slice(0, -1)
-      if (DevProfileRepository.ignoredNameKeys.has(singular)) {
-        return true
-      }
-    }
-
-    return false
-  }
-
-  static isDomainLikeName(rawName) {
-    if (!rawName) return false
-
-    const value = String(rawName).toLowerCase().trim()
-
-    if (!value) return false
-
-    if (value.includes("://")) return true
-
-    if (/\b(disc\s*ord|reddit|youtube|twitter|instagram)\b/.test(value)) return true
-
-  if (/\.(com|net|gg|xyz|lol|dev|app|io|site|link|shop|fun|wtf|vip)(\/|$)/i.test(value)) return true
-
-    return false
-  }
-
-  static getKey(name) {
-    const normalized = DevProfileRepository.normalizeName(name)
-    return normalized ? normalized.slice(1).toLowerCase() : ""
-  }
-
-  static cleanLine(line) {
-    if (!line) return ""
-
-    let cleaned = line.replace(/^\s*[-*>]\s*/, "")
-    cleaned = cleaned.replace(/\r/g, "")
-    cleaned = cleaned.replace(/^>\s*/, "")
-    cleaned = cleaned.replace(/`([^`]+)`/g, "$1")
-    cleaned = cleaned.replace(/\*\*(.*?)\*\*/g, "$1")
-    cleaned = cleaned.replace(/__(.*?)__/g, "$1")
-    cleaned = cleaned.replace(/\[@([^\]]+)\]\([^)]*\)/g, (_, captured) =>
-      DevProfileRepository.normalizeName(captured),
-    )
-    cleaned = cleaned.replace(/\[(.*?)\]\([^)]*\)/g, "$1")
-    cleaned = cleaned.replace(/\s+/g, " ").trim()
-    return cleaned
-  }
-
-  static escapeHtml(value) {
-    if (value === null || value === undefined) return ""
-
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;")
-  }
-
-  static getProfile(name) {
-    const key = DevProfileRepository.getKey(name)
-    if (!key) return null
-    return DevProfileRepository.profiles.get(key) || null
-  }
-
-  static hasProfile(name) {
-    const key = DevProfileRepository.getKey(name)
-    return key ? DevProfileRepository.profiles.has(key) : false
-  }
-}
-
-DevProfileRepository.ignoredNameKeys = new Set([
-  "voxlis",
-  "voxlisnet",
-  "voxlisnetwork",
-  "reddit",
-  "redditcom",
-  "wearedevs",
-  "youtube",
-  "discord",
-  "visual",
-  "nihon",
-  "hyperion",
-  "reaperhub",
-  "somber",
-  "sona",
-  "sonone",
-  "sonar",
-  "v3rmillion",
-  "v3rm",
-  "scriptware",
-  "scriptwarecom",
-  "cghub",
-])
-
-expData.forEach((exploit) => {
-  if (!exploit) return
-
-  const exploitNameKey = DevProfileRepository.sanitizeDisplayName(exploit.name)
-  if (exploitNameKey) {
-    DevProfileRepository.ignoredNameKeys.add(exploitNameKey)
-  }
-
-  const exploitIdKey = DevProfileRepository.sanitizeDisplayName(exploit.id)
-  if (exploitIdKey) {
-    DevProfileRepository.ignoredNameKeys.add(exploitIdKey)
-  }
-
-  const editorKey = DevProfileRepository.sanitizeDisplayName(exploit.editor)
-  if (editorKey) {
-    DevProfileRepository.ignoredNameKeys.add(editorKey)
-  }
-})
-
-DevProfileRepository.profiles = DevProfileRepository.buildProfiles()
-
-class ExploitReferenceRegistry {
-  static init() {
-    if (ExploitReferenceRegistry.initialized) return
-
-    ExploitReferenceRegistry.initialized = true
-    ExploitReferenceRegistry.byKey = new Map()
-    ExploitReferenceRegistry.byId = new Map()
-
-    expData.forEach((exploit) => {
-      if (!exploit || !exploit.id) return
-
-      ExploitReferenceRegistry.byId.set(exploit.id, exploit)
-
-      const keys = new Set()
-      keys.add(DevProfileRepository.sanitizeDisplayName(exploit.name))
-      keys.add(DevProfileRepository.sanitizeDisplayName(exploit.id))
-
-      if (Array.isArray(exploit.aliases)) {
-        exploit.aliases.forEach((alias) => keys.add(DevProfileRepository.sanitizeDisplayName(alias)))
-      }
-
-      keys.forEach((key) => {
-        if (!key) return
-        if (!ExploitReferenceRegistry.byKey.has(key)) {
-          ExploitReferenceRegistry.byKey.set(key, exploit)
-        }
-      })
-    })
-  }
-
-  static getExploitById(id) {
-    ExploitReferenceRegistry.init()
-    return ExploitReferenceRegistry.byId.get(id) || null
-  }
-
-  static getExploitNameById(id) {
-    const exploit = ExploitReferenceRegistry.getExploitById(id)
-    return exploit ? exploit.name : "Back"
-  }
-
-  static getExploitFromText(text) {
-    if (!text) return null
-
-    ExploitReferenceRegistry.init()
-
-    const key = DevProfileRepository.sanitizeDisplayName(text)
-    if (!key) return null
-
-    return ExploitReferenceRegistry.byKey.get(key) || null
-  }
-
-  static attachToMarkup(rootNode, options = {}) {
-    if (!rootNode) return
-
-    const { originExploitId = null, allowSelfReference = true, preserveHistory = true } = options
-
-    ExploitReferenceRegistry.init()
-
-    const links = rootNode.querySelectorAll("a")
-
-    links.forEach((link) => {
-      if (!link || link.dataset.exploitReferenceAttached === "true") return
-
-      const text = (link.textContent || "").trim()
-      if (!text || text.includes("@")) return
-
-      const href = (link.getAttribute("href") || "").trim()
-
-      if (href && href !== "#" && href !== "/") {
-        return
-      }
-
-      const exploit = ExploitReferenceRegistry.getExploitFromText(text)
-      if (!exploit) return
-
-      if (!allowSelfReference && originExploitId && exploit.id === originExploitId) {
-        return
-      }
-
-      link.dataset.exploitReferenceAttached = "true"
-      link.classList.add("exploit-reference-link")
-      link.setAttribute("href", "#")
-      link.setAttribute("role", "button")
-      link.setAttribute("aria-label", `Open info for ${exploit.name}`)
-      link.title = `View ${exploit.name}`
-
-      link.addEventListener("click", (event) => {
-        event.preventDefault()
-        event.stopPropagation()
-        ModalManager.openInfoModal(exploit, {
-          pushHistory: true,
-          preserveHistory,
-        })
-      })
-    })
-  }
-}
-
-ExploitReferenceRegistry.initialized = false
-
-class DevProfileModal {
-  static createModal() {
-    if (DevProfileModal.modalContainer) return
-
-    const container = document.createElement("div")
-    container.id = "devProfileModalContainer"
-    container.className = "dev-modal-container"
-    container.style.display = "none"
-
-    container.innerHTML = `
-<div class="dev-modal-overlay"></div>
-<div class="dev-modal" role="dialog" aria-modal="true" aria-labelledby="devProfileDisplayName">
-  <div class="dev-modal-header">
-    <div class="dev-modal-header-text">
-      <span class="dev-modal-eyebrow">Developer Profile</span>
-      <h2 class="dev-modal-title" id="devProfileDisplayName">@developer</h2>
-    </div>
-    <button type="button" class="dev-modal-close-btn" aria-label="Close developer profile">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="dev-modal-content">
-    <div class="dev-modal-meta">
-      <div class="dev-modal-stat" id="devProfileReferenceCount"></div>
-      <div class="dev-modal-tags" id="devProfileTags"></div>
-    </div>
-    <div class="dev-modal-body">
-      <div class="dev-modal-mentions" id="devProfileMentions"></div>
-      <div class="dev-modal-empty" id="devProfileEmptyState">
-        We don\'t have detailed information on this developer yet. Want to help? Reach out on our Discord.
-      </div>
-    </div>
-  </div>
-</div>
-`
-
-    document.body.appendChild(container)
-
-    const overlay = container.querySelector(".dev-modal-overlay")
-    const closeBtn = container.querySelector(".dev-modal-close-btn")
-
-    if (overlay) {
-      overlay.addEventListener("click", () => DevProfileModal.close())
-    }
-
-    if (closeBtn) {
-      closeBtn.addEventListener("click", (event) => {
-        event.preventDefault()
-        DevProfileModal.close()
-      })
-    }
-
-    DevProfileModal.modalContainer = container
-    DevProfileModal.modalElement = container.querySelector(".dev-modal")
-    DevProfileModal.closeButton = closeBtn
-
-    if (!DevProfileModal.keyHandler) {
-      DevProfileModal.keyHandler = (event) => {
-        if (event.key === "Escape" && DevProfileModal.isOpen) {
-          DevProfileModal.close()
-        }
-      }
-      document.addEventListener("keydown", DevProfileModal.keyHandler)
-    }
-  }
-
-  static open(name) {
-    if (!name) return
-
-    DevProfileModal.createModal()
-
-    const normalized = DevProfileRepository.normalizeName(name)
-    DevProfileModal.renderProfile(normalized, DevProfileRepository.getProfile(normalized))
-
-    const container = DevProfileModal.modalContainer
-    const modal = DevProfileModal.modalElement
-
-    if (!container || !modal) return
-
-    container.style.display = "flex"
-
-    requestAnimationFrame(() => {
-      modal.classList.add("show")
-    })
-
-    DevProfileModal.isOpen = true
-    document.body.style.overflow = "hidden"
-
-    if (DevProfileModal.closeButton) {
-      DevProfileModal.closeButton.focus({ preventScroll: true })
-    }
-  }
-
-  static close() {
-    const container = DevProfileModal.modalContainer
-    const modal = DevProfileModal.modalElement
-
-    if (!container || !modal || !DevProfileModal.isOpen) return
-
-    modal.classList.remove("show")
-
-    setTimeout(() => {
-      container.style.display = "none"
-      document.body.style.overflow = ""
-    }, 250)
-
-    DevProfileModal.isOpen = false
-  }
-
-  static renderProfile(displayName, profile) {
-    DevProfileModal.createModal()
-
-    const container = DevProfileModal.modalContainer
-    if (!container) return
-
-    const nameElement = container.querySelector("#devProfileDisplayName")
-    const referenceCountElement = container.querySelector("#devProfileReferenceCount")
-    const tagsElement = container.querySelector("#devProfileTags")
-    const mentionsElement = container.querySelector("#devProfileMentions")
-    const emptyStateElement = container.querySelector("#devProfileEmptyState")
-
-    if (nameElement) {
-      nameElement.textContent = displayName
-    }
-
-    const totalMentions = profile && profile.mentions ? profile.mentions.length : 0
-
-    if (referenceCountElement) {
-      referenceCountElement.innerHTML = `<i class="fas fa-database"></i> ${totalMentions} reference${
-        totalMentions === 1 ? "" : "s"
-      }`
-    }
-
-    if (tagsElement) {
-      tagsElement.innerHTML = ""
-
-      if (profile && profile.mentions && profile.mentions.length) {
-        tagsElement.style.display = "flex"
-
-        const seen = new Set()
-        profile.mentions.forEach((mention) => {
-          if (!seen.has(mention.exploitId)) {
-            seen.add(mention.exploitId)
-            const tag = document.createElement("span")
-            tag.className = "dev-modal-tag"
-            tag.textContent = mention.exploitName
-            tagsElement.appendChild(tag)
-          }
-        })
-      } else {
-        tagsElement.style.display = "none"
-      }
-    }
-
-    if (mentionsElement) {
-      mentionsElement.innerHTML = ""
-
-      if (profile && profile.mentions && profile.mentions.length) {
-        profile.mentions.forEach((mention) => {
-          const item = document.createElement("div")
-          item.className = "dev-modal-mention"
-
-          const header = document.createElement("div")
-          header.className = "dev-modal-mention-header"
-
-          const exploitLabel = document.createElement("span")
-          exploitLabel.className = "dev-modal-mention-exploit"
-          exploitLabel.textContent = mention.exploitName
-          header.appendChild(exploitLabel)
-
-          if (mention.section) {
-            const sectionLabel = document.createElement("span")
-            sectionLabel.className = "dev-modal-mention-section"
-            sectionLabel.textContent = mention.section
-            header.appendChild(sectionLabel)
-          }
-
-          item.appendChild(header)
-
-          const body = document.createElement("div")
-          body.className = "dev-modal-mention-text"
-          body.innerHTML = mention.html || DevProfileRepository.escapeHtml(mention.text)
-          item.appendChild(body)
-
-          mentionsElement.appendChild(item)
-
-          ExploitReferenceRegistry.attachToMarkup(body, {
-            originExploitId: mention.exploitId,
-            allowSelfReference: true,
-            preserveHistory: true,
-          })
-          DevProfileModal.attachToMarkup(body)
-        })
-      }
-    }
-
-    if (emptyStateElement) {
-      emptyStateElement.style.display = totalMentions ? "none" : "block"
-    }
-  }
-
-  static attachToMarkup(rootNode) {
-    if (!rootNode) return
-
-    const links = rootNode.querySelectorAll("a")
-
-    links.forEach((link) => {
-      if (!link) return
-      if (link.dataset.devProfileAttached === "true") return
-      if (link.dataset.exploitReferenceAttached === "true") return
-
-      const text = (link.textContent || "").trim()
-  const devName = DevProfileRepository.normalizeName(text)
-
-      if (!devName || devName[0] !== "@") return
-
-      const href = link.getAttribute("href") || ""
-      if (href && href !== "#" && href !== "" && href !== "/") return
-
-  if (!DevProfileRepository.hasProfile(devName)) return
-
-      link.dataset.devProfileAttached = "true"
-      link.dataset.devProfileName = devName
-      link.classList.add("dev-profile-link")
-      link.setAttribute("href", "#")
-      link.setAttribute("role", "button")
-      link.setAttribute("aria-label", `Open profile for ${devName}`)
-      link.title = `View ${devName} profile`
-
-      link.addEventListener("click", (event) => {
-        event.preventDefault()
-        event.stopPropagation()
-        DevProfileModal.open(devName)
-      })
-    })
-  }
-}
-
 class ThemeManager {
   constructor() {
     this.currentTheme = localStorage.getItem("voxlis-theme") || "red"
@@ -5038,13 +4254,7 @@ class ThemeManager {
           this.updateSelectedTheme(theme)
           localStorage.setItem("voxlis-theme", theme)
           this.createThemeChangeEffect(theme)
-          this.updateLogo()
-          if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
-            window.requestAnimationFrame(() => this.updateThemeElements())
-          } else {
-            setTimeout(() => this.updateThemeElements(), 0)
-          }
-          themeDropdown.classList.remove("active")
+          setTimeout(() => this.updateThemeElements(), this.updateLogo(), 100)
         })
       })
     }
@@ -5055,15 +4265,11 @@ class ThemeManager {
     const themeDropdownOptions = document.getElementById("themeDropdownOptions")
 
     if (themeDropdownSelected && themeDropdownOptions) {
-      const themeDisplayMap = {
-        halloween: "Halloween",
-      }
-      const defaultName = `${theme.charAt(0).toUpperCase()}${theme.slice(1)} Theme`
-      const themeName = themeDisplayMap[theme] || defaultName
+      const themeName = theme.charAt(0).toUpperCase() + theme.slice(1)
 
       themeDropdownSelected.innerHTML = `
     <div class="theme-color-indicator ${theme}"></div>
-    <span>${themeName}</span>
+    <span>${themeName} Theme</span>
     <i class="fas fa-chevron-down"></i>
 `
 
@@ -5120,23 +4326,13 @@ class ThemeManager {
     ]
 
     if (window.heartAnimation && typeof window.heartAnimation.updateHeartImage === "function" && !window.heartAnimation.isLoadingTheme) {
-      window.heartAnimation.updateHeartImage(this.currentTheme)
+        window.heartAnimation.updateHeartImage(this.currentTheme)
     }
-
-    const themeAssetFallbacks = {
-      halloween: "orange",
-    }
-
-    const themeLogoOverrides = {
-      halloween: "/assets/orange-voxlis.png",
-    }
-
-    const assetTheme = themeAssetFallbacks[this.currentTheme] || this.currentTheme
 
     logoSelectors.forEach((selector) => {
       const logoImg = document.querySelector(selector)
       if (logoImg) {
-        const themeLogoPath = themeLogoOverrides[this.currentTheme] || `/assets/${assetTheme}-voxlis.png`
+        const themeLogoPath = `/assets/${this.currentTheme}-voxlis.png`
         const defaultLogoPath = "/assets/red-voxlis.png"
 
         const testImg = new Image()
@@ -5153,7 +4349,7 @@ class ThemeManager {
     adSelectors.forEach((selector) => {
       const adImgs = document.querySelectorAll(selector)
       adImgs.forEach((adImg) => {
-        const themeAdPath = `/assets/ads/ad-${assetTheme}-voxlis.png`
+        const themeAdPath = `/assets/ads/ad-${this.currentTheme}-voxlis.png`
         const defaultAdPath = "/assets/ads/ad-red-voxlis.png"
 
         const testImg = new Image()
@@ -5174,9 +4370,9 @@ class ThemeManager {
         let newSrc
 
         if (currentSrc.includes("voxlis_small.png") || currentSrc.includes("_voxlis_small.png")) {
-          newSrc = `/assets/ads/${assetTheme}_voxlis_small.png`
+          newSrc = `/assets/ads/${this.currentTheme}_voxlis_small.png`
         } else if (currentSrc.includes("voxlis_big.png") || currentSrc.includes("_voxlis_big.png")) {
-          newSrc = `/assets/ads/${assetTheme}_voxlis_big.png`
+          newSrc = `/assets/ads/${this.currentTheme}_voxlis_big.png`
         }
 
         if (newSrc) {
@@ -5186,7 +4382,7 @@ class ThemeManager {
           }
           testImg.onerror = () => {
             
-            const fallbackSrc = newSrc.replace(`${assetTheme}_`, "red_")
+            const fallbackSrc = newSrc.replace(`${this.currentTheme}_`, "red_")
             adImg.src = fallbackSrc
           }
           testImg.src = newSrc
@@ -5194,12 +4390,9 @@ class ThemeManager {
       })
     })
   }
-
   updateThemeElements() {
-    const rootStyles = getComputedStyle(document.documentElement)
-    const bgColor = rootStyles.getPropertyValue("--crd-bg").trim() || "rgba(0, 0, 0, 0.4)"
-    const textColor = rootStyles.getPropertyValue("--fg").trim() || "#ffffff"
-    const borderColor = rootStyles.getPropertyValue("--crd-bdr").trim() || "rgba(255, 255, 255, 0.1)"
+    const theme = this.currentTheme
+    let bgColor, textColor, borderColor
 
     const uncModal = document.querySelector(".unc-modal")
 
@@ -5296,36 +4489,8 @@ class OptimizedHeartAnimation {
     if (!this.canvas) return
 
     this.ctx = this.canvas.getContext("2d")
-    this.defaultBaseHeartCount = heartCount
-    this.defaultMinHearts = minHearts
-    this.defaultMaxClickHearts = 15
-    this.defaultMaxTotalHearts = 30
-
-    this.themeOverrides = {
-      halloween: {
-        asset: "/assets/pumpkin.svg",
-        baseHeartCount: 26,
-        minHearts: 18,
-        maxClickHearts: 18,
-        maxTotalHearts: 36,
-        size: { min: 24, max: 46 },
-        drift: { min: -0.25, max: 0.25 },
-        fall: { min: 0.35, max: 0.9 },
-        initialRotation: { min: -0.35, max: 0.35 },
-        rotationSpeed: { min: -0.015, max: 0.015 },
-        clickSize: { min: 28, max: 52 },
-        clickVelocityX: { min: -0.7, max: 0.7 },
-        clickVelocityY: { min: -1.25, max: -0.4 },
-        clickLifeRange: { min: 40, max: 65 },
-        clickSpawnRange: { min: 2, max: 3 },
-        opacityRange: { min: 0.85, max: 1 },
-      },
-    }
-
     const currentTheme = document.documentElement.getAttribute("data-theme") || "red"
-    this.currentTheme = currentTheme
-    this.applyThemeConfig(currentTheme)
-    this.heartImageSrc = this.currentConfig.asset
+    this.heartImageSrc = `/assets/${currentTheme}-heart.svg`
     this.hearts = []
     this.heartImage = new Image()
     this.isRunning = false
@@ -5336,10 +4501,10 @@ class OptimizedHeartAnimation {
     this.frameSkipCounter = 0
     this.maxFrameSkip = 3 
 
-    this.baseHeartCount = this.currentConfig.baseHeartCount
-    this.minHearts = this.currentConfig.minHearts
-    this.maxClickHearts = this.currentConfig.maxClickHearts
-    this.maxTotalHearts = this.currentConfig.maxTotalHearts
+    this.baseHeartCount = heartCount 
+    this.minHearts = minHearts
+    this.maxClickHearts = 15
+    this.maxTotalHearts = 30
 
     this.cssWidth = 0
     this.cssHeight = 0
@@ -5351,87 +4516,6 @@ class OptimizedHeartAnimation {
     this.updateBatch = 0
 
     this.init()
-  }
-
-  getAssetForTheme(theme) {
-    const override = this.themeOverrides[theme]
-    if (override && override.asset) {
-      return override.asset
-    }
-    return `/assets/${theme}-heart.svg`
-  }
-
-  mergeConfig(base, overrides) {
-    const merged = { ...base, ...overrides }
-    const rangeKeys = [
-      "size",
-      "drift",
-      "fall",
-      "initialRotation",
-      "rotationSpeed",
-      "clickSize",
-      "clickVelocityX",
-      "clickVelocityY",
-      "clickLifeRange",
-      "clickSpawnRange",
-      "opacityRange",
-    ]
-
-    rangeKeys.forEach((key) => {
-      if (base[key] || overrides[key]) {
-        merged[key] = { ...(base[key] || {}), ...(overrides[key] || {}) }
-      }
-    })
-
-    return merged
-  }
-
-  applyThemeConfig(theme) {
-    const baseConfig = {
-      asset: this.getAssetForTheme(theme),
-      baseHeartCount: this.defaultBaseHeartCount,
-      minHearts: this.defaultMinHearts,
-      maxClickHearts: this.defaultMaxClickHearts,
-      maxTotalHearts: this.defaultMaxTotalHearts,
-      size: { min: 15, max: 30 },
-      drift: { min: -0.1, max: 0.1 },
-      fall: { min: 0.1, max: 0.3 },
-      initialRotation: { min: -0.1, max: 0.1 },
-      rotationSpeed: { min: -0.005, max: 0.005 },
-      clickSize: { min: 20, max: 40 },
-      clickVelocityX: { min: -0.5, max: 0.5 },
-      clickVelocityY: { min: -1.1, max: -0.3 },
-      clickLifeRange: { min: 30, max: 45 },
-      clickSpawnRange: { min: 1, max: 2 },
-      opacityRange: { min: 0.7, max: 1 },
-    }
-
-    const overrides = this.themeOverrides[theme] || {}
-    this.currentConfig = this.mergeConfig(baseConfig, overrides)
-    this.baseHeartCount = this.currentConfig.baseHeartCount
-    this.minHearts = this.currentConfig.minHearts
-    this.maxClickHearts = this.currentConfig.maxClickHearts
-    this.maxTotalHearts = this.currentConfig.maxTotalHearts
-  }
-
-  randomInRange(range, fallbackMin, fallbackMax) {
-    const hasRange = range && typeof range.min === "number" && typeof range.max === "number"
-    const min = hasRange ? range.min : fallbackMin ?? 0
-    const max = hasRange ? range.max : fallbackMax ?? 1
-    if (max <= min) {
-      return min
-    }
-    return Math.random() * (max - min) + min
-  }
-
-  randomIntInRange(range, fallbackMin, fallbackMax) {
-    const hasRange = range && typeof range.min === "number" && typeof range.max === "number"
-    const min = Math.ceil(hasRange ? range.min : fallbackMin ?? 0)
-    const max = Math.floor(hasRange ? range.max : fallbackMax ?? min)
-    if (max <= min) {
-      return min
-    }
-    return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
   init() {
@@ -5509,31 +4593,22 @@ class OptimizedHeartAnimation {
     if (this.isLoadingTheme) return
     this.isLoadingTheme = true
 
-    const themeHeartPath = this.getAssetForTheme(theme)
+    const themeHeartPath = `/assets/${theme}-heart.svg`
     const newHeartImage = new Image()
 
     newHeartImage.onload = () => {
-      this.currentTheme = theme
       this.heartImageSrc = themeHeartPath
       this.heartImage = newHeartImage
-      this.applyThemeConfig(theme)
-      this.hearts = []
-      this.generateInitialHearts()
+      this.hearts.forEach((h) => (h.img = this.heartImage))
       this.isLoadingTheme = false
     }
 
     newHeartImage.onerror = () => {
-      this.currentTheme = theme
-      this.applyThemeConfig(theme)
       const fallbackImage = new Image()
       fallbackImage.onload = () => {
         this.heartImageSrc = "/assets/red-heart.svg"
         this.heartImage = fallbackImage
-        this.hearts = []
-        this.generateInitialHearts()
-        this.isLoadingTheme = false
-      }
-      fallbackImage.onerror = () => {
+        this.hearts.forEach((h) => (h.img = this.heartImage))
         this.isLoadingTheme = false
       }
       fallbackImage.src = "/assets/red-heart.svg"
@@ -5593,17 +4668,16 @@ class OptimizedHeartAnimation {
   }
 
   createHeart() {
-    const config = this.currentConfig || {}
     return {
       img: this.heartImage,
       x: Math.random() * (this.cssWidth || window.innerWidth),
       y: Math.random() * (this.cssHeight || window.innerHeight),
-      dx: this.randomInRange(config.drift, -0.1, 0.1),
-      dy: this.randomInRange(config.fall, 0.1, 0.3),
-      size: this.randomInRange(config.size, 15, 30),
-      rotation: this.randomInRange(config.initialRotation, -0.1, 0.1),
-      rotationSpeed: this.randomInRange(config.rotationSpeed, -0.005, 0.005),
-      opacity: this.randomInRange(config.opacityRange, 0.7, 1),
+      dx: Math.random() * 0.2 - 0.1, 
+      dy: Math.random() * 0.2 + 0.1, 
+      size: Math.random() * 15 + 15,
+      rotation: Math.random() * 0.2 - 0.1, 
+      rotationSpeed: Math.random() * 0.005 - 0.0025, 
+      opacity: 1.0, 
       isClickHeart: false,
     }
   }
@@ -5676,8 +4750,7 @@ class OptimizedHeartAnimation {
 
     if (h.isClickHeart) {
       h.life -= 1
-      const fadeProgress = Math.max(0, h.life / h.maxLife)
-      h.opacity = fadeProgress * (typeof h.initialOpacity === "number" ? h.initialOpacity : 1)
+      h.opacity = Math.max(0, h.life / h.maxLife)
       h.dy += 0.015 
       if (h.life <= 0) {
         this.hearts.splice(index, 1)
@@ -5689,16 +4762,10 @@ class OptimizedHeartAnimation {
       if (h.y > limitY) {
         h.y = -h.size
         h.x = Math.random() * this.cssWidth
-        h.dy = this.randomInRange(this.currentConfig.fall, 0.1, 0.3)
-        h.dx = this.randomInRange(this.currentConfig.drift, -0.1, 0.1)
-        h.size = this.randomInRange(this.currentConfig.size, 15, 30)
-        h.rotation = this.randomInRange(this.currentConfig.initialRotation, -0.1, 0.1)
+        h.dy = Math.random() * 0.2 + 0.1
       }
-      if (h.x < -h.size) {
-        h.x = this.cssWidth + h.size
-      } else if (h.x > this.cssWidth + h.size) {
-        h.x = -h.size
-      }
+      if (h.x < -h.size) h.x = this.cssWidth + h.size
+      if (h.x > this.cssWidth + h.size) h.x = -h.size
     }
   }
 
@@ -5723,22 +4790,20 @@ class OptimizedHeartAnimation {
     const rect = this.canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    const spawnCount = this.randomIntInRange(this.currentConfig.clickSpawnRange, 1, 2)
+    const n = Math.floor(Math.random() * 2) + 1 
 
-    for (let i = 0; i < spawnCount && this.hearts.length < this.maxTotalHearts; i++) {
-      const maxLife = this.randomIntInRange(this.currentConfig.clickLifeRange, 30, 45)
-      const initialOpacity = this.randomInRange(this.currentConfig.opacityRange, 0.7, 1)
+    for (let i = 0; i < n && this.hearts.length < this.maxTotalHearts; i++) {
+      const maxLife = 30 + Math.floor(Math.random() * 15) 
       this.hearts.push({
         img: this.heartImage,
-        x: x + this.randomInRange(null, -15, 15),
-        y: y + this.randomInRange(null, -15, 15),
-        dx: this.randomInRange(this.currentConfig.clickVelocityX, -0.5, 0.5),
-        dy: this.randomInRange(this.currentConfig.clickVelocityY, -1.1, -0.3),
-        size: this.randomInRange(this.currentConfig.clickSize, 20, 40),
-        rotation: this.randomInRange(this.currentConfig.initialRotation, -0.2, 0.2),
-        rotationSpeed: this.randomInRange(this.currentConfig.rotationSpeed, -0.02, 0.02),
-        opacity: initialOpacity,
-        initialOpacity,
+        x: x + (Math.random() * 20 - 10), 
+        y: y + (Math.random() * 20 - 10),
+        dx: Math.random() * 1 - 0.5, 
+        dy: Math.random() * -1 - 0.3,
+        size: Math.random() * 20 + 20,
+        rotation: Math.random() * 0.02 - 0.01,
+        rotationSpeed: Math.random() * 0.4 - 0.2,
+        opacity: 1,
         isClickHeart: true,
         life: maxLife,
         maxLife,
