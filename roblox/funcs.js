@@ -5336,10 +5336,10 @@ class OptimizedHeartAnimation {
     this.frameSkipCounter = 0
     this.maxFrameSkip = 3 
 
-  this.baseHeartCount = this.currentConfig.baseHeartCount
-  this.minHearts = this.currentConfig.minHearts
-  this.maxClickHearts = this.currentConfig.maxClickHearts
-  this.maxTotalHearts = this.currentConfig.maxTotalHearts
+    this.baseHeartCount = this.currentConfig.baseHeartCount
+    this.minHearts = this.currentConfig.minHearts
+    this.maxClickHearts = this.currentConfig.maxClickHearts
+    this.maxTotalHearts = this.currentConfig.maxTotalHearts
 
     this.cssWidth = 0
     this.cssHeight = 0
