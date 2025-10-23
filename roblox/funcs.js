@@ -1873,7 +1873,6 @@ class UIManager {
           selected.textContent = "Most Popular"
         }
         dropdown.querySelectorAll(".custom-dropdown-option").forEach((opt) => opt.classList.remove("selected"))
-        option.classList.add("selected")
       }
     })
   }
@@ -1884,7 +1883,6 @@ class UIManager {
       hero: "#heroSec",
       menuToggle: "#mobMenuTgl",
       menu: "#mobMenu",
-      search: "#srchInp",
       mobileSearch: "#mobSrchInp",
       clearButton: "#clrSrch",
       mobileClearButton: "#mobClrSrch",
@@ -5040,7 +5038,13 @@ class ThemeManager {
           this.updateSelectedTheme(theme)
           localStorage.setItem("voxlis-theme", theme)
           this.createThemeChangeEffect(theme)
-          setTimeout(() => this.updateThemeElements(), this.updateLogo(), 100)
+          this.updateLogo()
+          if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
+            window.requestAnimationFrame(() => this.updateThemeElements())
+          } else {
+            setTimeout(() => this.updateThemeElements(), 0)
+          }
+          themeDropdown.classList.remove("active")
         })
       })
     }
@@ -5051,11 +5055,15 @@ class ThemeManager {
     const themeDropdownOptions = document.getElementById("themeDropdownOptions")
 
     if (themeDropdownSelected && themeDropdownOptions) {
-      const themeName = theme.charAt(0).toUpperCase() + theme.slice(1)
+      const themeDisplayMap = {
+        halloween: "Halloween",
+      }
+      const defaultName = `${theme.charAt(0).toUpperCase()}${theme.slice(1)} Theme`
+      const themeName = themeDisplayMap[theme] || defaultName
 
       themeDropdownSelected.innerHTML = `
     <div class="theme-color-indicator ${theme}"></div>
-    <span>${themeName} Theme</span>
+    <span>${themeName}</span>
     <i class="fas fa-chevron-down"></i>
 `
 
@@ -5112,13 +5120,23 @@ class ThemeManager {
     ]
 
     if (window.heartAnimation && typeof window.heartAnimation.updateHeartImage === "function" && !window.heartAnimation.isLoadingTheme) {
-        window.heartAnimation.updateHeartImage(this.currentTheme)
+      window.heartAnimation.updateHeartImage(this.currentTheme)
     }
+
+    const themeAssetFallbacks = {
+      halloween: "orange",
+    }
+
+    const themeLogoOverrides = {
+      halloween: "/assets/orange-voxlis.png",
+    }
+
+    const assetTheme = themeAssetFallbacks[this.currentTheme] || this.currentTheme
 
     logoSelectors.forEach((selector) => {
       const logoImg = document.querySelector(selector)
       if (logoImg) {
-        const themeLogoPath = `/assets/${this.currentTheme}-voxlis.png`
+        const themeLogoPath = themeLogoOverrides[this.currentTheme] || `/assets/${assetTheme}-voxlis.png`
         const defaultLogoPath = "/assets/red-voxlis.png"
 
         const testImg = new Image()
@@ -5135,7 +5153,7 @@ class ThemeManager {
     adSelectors.forEach((selector) => {
       const adImgs = document.querySelectorAll(selector)
       adImgs.forEach((adImg) => {
-        const themeAdPath = `/assets/ads/ad-${this.currentTheme}-voxlis.png`
+        const themeAdPath = `/assets/ads/ad-${assetTheme}-voxlis.png`
         const defaultAdPath = "/assets/ads/ad-red-voxlis.png"
 
         const testImg = new Image()
@@ -5156,9 +5174,9 @@ class ThemeManager {
         let newSrc
 
         if (currentSrc.includes("voxlis_small.png") || currentSrc.includes("_voxlis_small.png")) {
-          newSrc = `/assets/ads/${this.currentTheme}_voxlis_small.png`
+          newSrc = `/assets/ads/${assetTheme}_voxlis_small.png`
         } else if (currentSrc.includes("voxlis_big.png") || currentSrc.includes("_voxlis_big.png")) {
-          newSrc = `/assets/ads/${this.currentTheme}_voxlis_big.png`
+          newSrc = `/assets/ads/${assetTheme}_voxlis_big.png`
         }
 
         if (newSrc) {
@@ -5168,7 +5186,7 @@ class ThemeManager {
           }
           testImg.onerror = () => {
             
-            const fallbackSrc = newSrc.replace(`${this.currentTheme}_`, "red_")
+            const fallbackSrc = newSrc.replace(`${assetTheme}_`, "red_")
             adImg.src = fallbackSrc
           }
           testImg.src = newSrc
@@ -5176,9 +5194,12 @@ class ThemeManager {
       })
     })
   }
+
   updateThemeElements() {
-    const theme = this.currentTheme
-    let bgColor, textColor, borderColor
+    const rootStyles = getComputedStyle(document.documentElement)
+    const bgColor = rootStyles.getPropertyValue("--crd-bg").trim() || "rgba(0, 0, 0, 0.4)"
+    const textColor = rootStyles.getPropertyValue("--fg").trim() || "#ffffff"
+    const borderColor = rootStyles.getPropertyValue("--crd-bdr").trim() || "rgba(255, 255, 255, 0.1)"
 
     const uncModal = document.querySelector(".unc-modal")
 
@@ -5275,8 +5296,36 @@ class OptimizedHeartAnimation {
     if (!this.canvas) return
 
     this.ctx = this.canvas.getContext("2d")
+    this.defaultBaseHeartCount = heartCount
+    this.defaultMinHearts = minHearts
+    this.defaultMaxClickHearts = 15
+    this.defaultMaxTotalHearts = 30
+
+    this.themeOverrides = {
+      halloween: {
+        asset: "/assets/pumpkin.svg",
+        baseHeartCount: 26,
+        minHearts: 18,
+        maxClickHearts: 18,
+        maxTotalHearts: 36,
+        size: { min: 24, max: 46 },
+        drift: { min: -0.25, max: 0.25 },
+        fall: { min: 0.35, max: 0.9 },
+        initialRotation: { min: -0.35, max: 0.35 },
+        rotationSpeed: { min: -0.015, max: 0.015 },
+        clickSize: { min: 28, max: 52 },
+        clickVelocityX: { min: -0.7, max: 0.7 },
+        clickVelocityY: { min: -1.25, max: -0.4 },
+        clickLifeRange: { min: 40, max: 65 },
+        clickSpawnRange: { min: 2, max: 3 },
+        opacityRange: { min: 0.85, max: 1 },
+      },
+    }
+
     const currentTheme = document.documentElement.getAttribute("data-theme") || "red"
-    this.heartImageSrc = `/assets/${currentTheme}-heart.svg`
+    this.currentTheme = currentTheme
+    this.applyThemeConfig(currentTheme)
+    this.heartImageSrc = this.currentConfig.asset
     this.hearts = []
     this.heartImage = new Image()
     this.isRunning = false
@@ -5287,10 +5336,10 @@ class OptimizedHeartAnimation {
     this.frameSkipCounter = 0
     this.maxFrameSkip = 3 
 
-    this.baseHeartCount = heartCount 
-    this.minHearts = minHearts
-    this.maxClickHearts = 15
-    this.maxTotalHearts = 30
+    this.baseHeartCount = this.currentConfig.baseHeartCount
+    this.minHearts = this.currentConfig.minHearts
+    this.maxClickHearts = this.currentConfig.maxClickHearts
+    this.maxTotalHearts = this.currentConfig.maxTotalHearts
 
     this.cssWidth = 0
     this.cssHeight = 0
@@ -5302,6 +5351,87 @@ class OptimizedHeartAnimation {
     this.updateBatch = 0
 
     this.init()
+  }
+
+  getAssetForTheme(theme) {
+    const override = this.themeOverrides[theme]
+    if (override && override.asset) {
+      return override.asset
+    }
+    return `/assets/${theme}-heart.svg`
+  }
+
+  mergeConfig(base, overrides) {
+    const merged = { ...base, ...overrides }
+    const rangeKeys = [
+      "size",
+      "drift",
+      "fall",
+      "initialRotation",
+      "rotationSpeed",
+      "clickSize",
+      "clickVelocityX",
+      "clickVelocityY",
+      "clickLifeRange",
+      "clickSpawnRange",
+      "opacityRange",
+    ]
+
+    rangeKeys.forEach((key) => {
+      if (base[key] || overrides[key]) {
+        merged[key] = { ...(base[key] || {}), ...(overrides[key] || {}) }
+      }
+    })
+
+    return merged
+  }
+
+  applyThemeConfig(theme) {
+    const baseConfig = {
+      asset: this.getAssetForTheme(theme),
+      baseHeartCount: this.defaultBaseHeartCount,
+      minHearts: this.defaultMinHearts,
+      maxClickHearts: this.defaultMaxClickHearts,
+      maxTotalHearts: this.defaultMaxTotalHearts,
+      size: { min: 15, max: 30 },
+      drift: { min: -0.1, max: 0.1 },
+      fall: { min: 0.1, max: 0.3 },
+      initialRotation: { min: -0.1, max: 0.1 },
+      rotationSpeed: { min: -0.005, max: 0.005 },
+      clickSize: { min: 20, max: 40 },
+      clickVelocityX: { min: -0.5, max: 0.5 },
+      clickVelocityY: { min: -1.1, max: -0.3 },
+      clickLifeRange: { min: 30, max: 45 },
+      clickSpawnRange: { min: 1, max: 2 },
+      opacityRange: { min: 0.7, max: 1 },
+    }
+
+    const overrides = this.themeOverrides[theme] || {}
+    this.currentConfig = this.mergeConfig(baseConfig, overrides)
+    this.baseHeartCount = this.currentConfig.baseHeartCount
+    this.minHearts = this.currentConfig.minHearts
+    this.maxClickHearts = this.currentConfig.maxClickHearts
+    this.maxTotalHearts = this.currentConfig.maxTotalHearts
+  }
+
+  randomInRange(range, fallbackMin, fallbackMax) {
+    const hasRange = range && typeof range.min === "number" && typeof range.max === "number"
+    const min = hasRange ? range.min : fallbackMin ?? 0
+    const max = hasRange ? range.max : fallbackMax ?? 1
+    if (max <= min) {
+      return min
+    }
+    return Math.random() * (max - min) + min
+  }
+
+  randomIntInRange(range, fallbackMin, fallbackMax) {
+    const hasRange = range && typeof range.min === "number" && typeof range.max === "number"
+    const min = Math.ceil(hasRange ? range.min : fallbackMin ?? 0)
+    const max = Math.floor(hasRange ? range.max : fallbackMax ?? min)
+    if (max <= min) {
+      return min
+    }
+    return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
   init() {
@@ -5379,22 +5509,31 @@ class OptimizedHeartAnimation {
     if (this.isLoadingTheme) return
     this.isLoadingTheme = true
 
-    const themeHeartPath = `/assets/${theme}-heart.svg`
+    const themeHeartPath = this.getAssetForTheme(theme)
     const newHeartImage = new Image()
 
     newHeartImage.onload = () => {
+      this.currentTheme = theme
       this.heartImageSrc = themeHeartPath
       this.heartImage = newHeartImage
-      this.hearts.forEach((h) => (h.img = this.heartImage))
+      this.applyThemeConfig(theme)
+      this.hearts = []
+      this.generateInitialHearts()
       this.isLoadingTheme = false
     }
 
     newHeartImage.onerror = () => {
+      this.currentTheme = theme
+      this.applyThemeConfig(theme)
       const fallbackImage = new Image()
       fallbackImage.onload = () => {
         this.heartImageSrc = "/assets/red-heart.svg"
         this.heartImage = fallbackImage
-        this.hearts.forEach((h) => (h.img = this.heartImage))
+        this.hearts = []
+        this.generateInitialHearts()
+        this.isLoadingTheme = false
+      }
+      fallbackImage.onerror = () => {
         this.isLoadingTheme = false
       }
       fallbackImage.src = "/assets/red-heart.svg"
@@ -5454,16 +5593,17 @@ class OptimizedHeartAnimation {
   }
 
   createHeart() {
+    const config = this.currentConfig || {}
     return {
       img: this.heartImage,
       x: Math.random() * (this.cssWidth || window.innerWidth),
       y: Math.random() * (this.cssHeight || window.innerHeight),
-      dx: Math.random() * 0.2 - 0.1, 
-      dy: Math.random() * 0.2 + 0.1, 
-      size: Math.random() * 15 + 15,
-      rotation: Math.random() * 0.2 - 0.1, 
-      rotationSpeed: Math.random() * 0.005 - 0.0025, 
-      opacity: 1.0, 
+      dx: this.randomInRange(config.drift, -0.1, 0.1),
+      dy: this.randomInRange(config.fall, 0.1, 0.3),
+      size: this.randomInRange(config.size, 15, 30),
+      rotation: this.randomInRange(config.initialRotation, -0.1, 0.1),
+      rotationSpeed: this.randomInRange(config.rotationSpeed, -0.005, 0.005),
+      opacity: this.randomInRange(config.opacityRange, 0.7, 1),
       isClickHeart: false,
     }
   }
@@ -5536,7 +5676,8 @@ class OptimizedHeartAnimation {
 
     if (h.isClickHeart) {
       h.life -= 1
-      h.opacity = Math.max(0, h.life / h.maxLife)
+      const fadeProgress = Math.max(0, h.life / h.maxLife)
+      h.opacity = fadeProgress * (typeof h.initialOpacity === "number" ? h.initialOpacity : 1)
       h.dy += 0.015 
       if (h.life <= 0) {
         this.hearts.splice(index, 1)
@@ -5548,10 +5689,16 @@ class OptimizedHeartAnimation {
       if (h.y > limitY) {
         h.y = -h.size
         h.x = Math.random() * this.cssWidth
-        h.dy = Math.random() * 0.2 + 0.1
+        h.dy = this.randomInRange(this.currentConfig.fall, 0.1, 0.3)
+        h.dx = this.randomInRange(this.currentConfig.drift, -0.1, 0.1)
+        h.size = this.randomInRange(this.currentConfig.size, 15, 30)
+        h.rotation = this.randomInRange(this.currentConfig.initialRotation, -0.1, 0.1)
       }
-      if (h.x < -h.size) h.x = this.cssWidth + h.size
-      if (h.x > this.cssWidth + h.size) h.x = -h.size
+      if (h.x < -h.size) {
+        h.x = this.cssWidth + h.size
+      } else if (h.x > this.cssWidth + h.size) {
+        h.x = -h.size
+      }
     }
   }
 
@@ -5576,20 +5723,22 @@ class OptimizedHeartAnimation {
     const rect = this.canvas.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    const n = Math.floor(Math.random() * 2) + 1 
+    const spawnCount = this.randomIntInRange(this.currentConfig.clickSpawnRange, 1, 2)
 
-    for (let i = 0; i < n && this.hearts.length < this.maxTotalHearts; i++) {
-      const maxLife = 30 + Math.floor(Math.random() * 15) 
+    for (let i = 0; i < spawnCount && this.hearts.length < this.maxTotalHearts; i++) {
+      const maxLife = this.randomIntInRange(this.currentConfig.clickLifeRange, 30, 45)
+      const initialOpacity = this.randomInRange(this.currentConfig.opacityRange, 0.7, 1)
       this.hearts.push({
         img: this.heartImage,
-        x: x + (Math.random() * 20 - 10), 
-        y: y + (Math.random() * 20 - 10),
-        dx: Math.random() * 1 - 0.5, 
-        dy: Math.random() * -1 - 0.3,
-        size: Math.random() * 20 + 20,
-        rotation: Math.random() * 0.02 - 0.01,
-        rotationSpeed: Math.random() * 0.4 - 0.2,
-        opacity: 1,
+        x: x + this.randomInRange(null, -15, 15),
+        y: y + this.randomInRange(null, -15, 15),
+        dx: this.randomInRange(this.currentConfig.clickVelocityX, -0.5, 0.5),
+        dy: this.randomInRange(this.currentConfig.clickVelocityY, -1.1, -0.3),
+        size: this.randomInRange(this.currentConfig.clickSize, 20, 40),
+        rotation: this.randomInRange(this.currentConfig.initialRotation, -0.2, 0.2),
+        rotationSpeed: this.randomInRange(this.currentConfig.rotationSpeed, -0.02, 0.02),
+        opacity: initialOpacity,
+        initialOpacity,
         isClickHeart: true,
         life: maxLife,
         maxLife,
