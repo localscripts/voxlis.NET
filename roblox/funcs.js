@@ -194,7 +194,7 @@ const expData = [
     info: "",
     premium: false,
     href: "https://yerba.wtf/",
-    priceHref: "https://yerba.wtf/",
+    priceHref: "https://robloxcheatz.com?ref=keyempire",
     hide: false,
     external: true,
     hideunc: true,
@@ -312,7 +312,7 @@ const expData = [
     accentColor: "from-red-600 to-red-700",
     premium: false,
     href: "https://seliware.com",
-    priceHref: "https://key-empire.com/roblox#seliware",
+    priceHref: "https://robloxcheatz.com?ref=keyempire",
     info: "## Developers Background Information  \n- [Seliware](/) is developed by two experienced programmers — [@Dx](/) and [@z33r0x](/). While little is publicly known about them, both were previously part of the development team behind [TRX](/), a widely used executor within the CIS scene before the Byfron update.\n\n## History  \n- During its closed beta phase, [Seliware](/) had four core developers: [@z33r0x](/), [@Dx](/), [@Nezy](/), and [@74235](/). However, [@Nezy](/) and [@74235](/) left the project shortly before launch, creating a competing product called [Calibri](/), which was discontinued soon after.  \n- Following its official release, [Seliware](/) introduced consistent updates and practical innovations. In January, after Microsoft patched the WinVerifyTrust hook injection method, [Seliware](/) was the third executor to push an update — following [AWP](/) and [Wave](/).  \n- In April, due to internal issues, [Seliware](/) temporarily shut down for 3 weeks. Upon reopening, all active subscriptions were compensated. Currently, it stands as the most memory-efficient paid executor, making it especially appealing for farming use cases.\n\n## Future  \n- A complete rewrite of [Seliware](/) has been underway since December and will launch as a separate product under a new name. All users with an active [Seliware](/) subscription at the time of the new release will receive a full transfer.  \n- Support for other platforms — including macOS and iOS — is also planned for future expansion.\n\n## Interesting Facts  \n- [GRH](/), the creator of [Synapse Z](/), contributed to the early development of [Seliware](/).  \n- [Seliware](/) is the second-longest surviving internal executor following the [Hyperion](/) update, outlived only by [Wave](/).\n\n> Sources: [Seliware Team](), internal notes, and public release changelogs\n",
     hide: false,
     hasKeySystem: false,
@@ -335,7 +335,7 @@ const expData = [
     accentColor: "from-red-600 to-red-700",
     premium: true,
     href: "https://discord.gg/bunnilol",
-    priceHref: "https://key-empire.com/roblox#bunni",
+    priceHref: "https://robloxcheatz.com?ref=keyempire",
     info: "## Exploit Performance\n\n* Multiple stability issues. You must have [VcRedist x64](https://aka.ms/vs/17/release/vc_redist.x64.exe) & [VcRedist x86](https://aka.ms/vs/17/release/vc_redist.x86.exe) installed to pass the UI, and a reasonably capable CPU. We tested this executor on an [i5-4460](). After the injection, the client’s performance dropped severely — mouse and keyboard input lagged by roughly 20 seconds. Other executors do not show this behavior on the same CPU. [voxlis NETWORK]() recommends this executor only for lifetime-subscription users.\n\n\n## Background Information  \n\n- Originally released under the name [Swift](), the brand was later sold and the project renamed [Bunni](). It was subsequently rebranded to [Visual]() for a short period before returning to the [Bunni]() name. For a fuller timeline and source details, consult the Swift and MacSploit cards.\n\n\n## Developer Information  \n- [Peyton](/), the project’s creator, is an experienced and respected developer in the exploit community. His track record includes continued leadership on [Swift](/), while now also overseeing Visual’s direction. [Blinx](/), the UI designer behind both the original Swift interface and Visual’s current look, brings a clean and consistent visual identity across projects. [Reveny](/) and [Viz](/), both software engineering majors and longtime collaborators of Peyton, contribute to the development of Visual. Though not publicly known in the community, their technical expertise ensures the project is both scalable and dependable.\n\n> Sources: Reddit.com/r/robloxhackers, Swift Discord, Visual Discord, Bunni Discord",
     hasKeySystem: true,
     free: true,
@@ -602,7 +602,7 @@ const expData = [
     info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information  \n- Developers operate under fresh accounts. Identities are unknown.\n\n\n## Developer Background  \n- Developers operate under fresh accounts. Identities are unknown.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
     premium: false,
     href: "https://discord.gg/WY4juPkFv4",
-    priceHref: "https://key-empire.com/roblox#potassium",
+    priceHref: "https://robloxcheatz.com?ref=keyempire",
     uncbuttonlink:
       "https://rubis.numelon.com/sunc-result/?scrap=NhyWN1c9glakIDfT&accessKey=fkCC9lKOKZZZSfBRHimUtJFq32PucJNe",
     hide: false,
@@ -631,7 +631,7 @@ const expData = [
     info: "## Exploit Performance  \n- [ArceusX]() can run most scripts due to its high UNC percentage but lacks support for some functions like `getinstance`. Alternatives like [KRNL](https://krnl.cat) and [Delta](https://deltaexploits.gg) offer slightly better UNC and have safer reputations.\n\n## Background Information  \n- Released in 2019, [ArceusX]() was one of the first mobile Roblox executors. In March 2022, [@lxnny]() — owner of [Delta](https://deltaexploits.gg) — reposted a community warning on [WeAreDevs](https://wearedevs.net), exposing [ArceusX]() for ratting users and scamming developers. Despite this, it remains widely used. In April 2024, [SPDMTeam](https://spdmteam.com) launched [Wave](https://getwave.gg), a Windows executor combining [ArceusX]() and CodeX with an improved UI. While trusted, it’s still owned by the same team involved in past data issues. [ArceusX]() continues to receive regular updates.\n\n## Developer Background Information  \n- [ArceusX]() is owned by [Tiahh]() and [SPDMTeam](https://spdmteam.com). There is limited public information about the developers.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
     premium: false,
     href: "https://spdmteam.com/",
-    priceHref: "https://key-empire.com/roblox#arceusx",
+    priceHref: "https://robloxcheatz.com?ref=keyempire",
     hide: false,
     hasKeySystem: true,
     hideunc: true,
@@ -5376,6 +5376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
