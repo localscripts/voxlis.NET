@@ -218,7 +218,7 @@ const expData = [
     accentColor: "from-green-600 to-green-700",
     info: "## Exploit Performance\n\n* [Matcha]() is widely regarded as one of the best external exploits available. It features a clean, user-friendly GUI and a solid feature set. [Matcha]() receives frequent updates and is easy to set up. Performance-wise, it runs well on nearly any machine — even CPUs released as early as 2017 can handle it without issue.\n\n## Background Information\n\n* Before [Matcha]() launched in August 2024, [Vault]() was relatively unknown in the exploiting scene. The project began as a simple external, but development significantly accelerated after [@slamfrags]() was removed from the team about four months ago.\n* Since then, [Matcha]() has seen rapid daily improvements, even with [Vault]() balancing school responsibilities. [Vain]() was appointed to manage the staff team, ensuring better coordination and internal operations.\n* The exploit originally started from a casual DM where [@slamfrags]() asked [Vault]() to build an external for Roblox. [Vault]() agreed, partly due to financial needs at the time. While [@slamfrags]() handled promotion, [Vault]() focused on development. However, over time, [@slamfrags]() became known for mismanaging funds, underpaying or outright ignoring the staff team, and showing unprofessional behavior, which led to staff members resigning.\n* Eventually, staff operations were handed over to [@vain](), who brought structure and fairness to the team. Staff members are now paid and their work is recognized. The current support team is publicly listed on [Matcha's Discord server]().\n\n## Developer Background Information\n\n* [Matcha]() is developed primarily by [Vault](), who writes the core cheat code and its security features.\n* The original management team consisted of [@geekn]() and [@slamfrags](). [@geekn]() left voluntarily, while [@slamfrags]() was removed due to being overpaid for minimal contributions and ongoing internal issues.\n* Following their removal, [Vault]() brought in close friends to help manage and support the project, which contributed to its steady and structured growth.\n\n> Sources: [reddit.com/r/robloxhackers](), Matcha Discord Moderator\n",
     premium: true,
-    href: "https://discord.gg/avSUY4R33C",
+    href: "https://matcha.pink",
     priceHref: "https://key-empire.com/roblox#matcha",
     hide: false,
     external: true,
@@ -5376,6 +5376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
