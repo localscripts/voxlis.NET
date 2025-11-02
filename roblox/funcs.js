@@ -592,7 +592,7 @@ const expData = [
     price: "$20.00",
     period: "lifetime",
     plat: ["windows"],
-    pros: ["Multi-Inject support", "Has a decompiler", "96% sUNC", "Level 8"],
+    pros: ["Multi-Inject support", "Has a decompiler", "100% sUNC", "Level 8"],
     neutral: [],
     cons: [],
     verified: false,
@@ -604,7 +604,7 @@ const expData = [
     href: "https://discord.gg/WY4juPkFv4",
     priceHref: "https://robloxcheatz.com?ref=keyempire",
     uncbuttonlink:
-      "https://rubis.numelon.com/sunc-result/?scrap=NhyWN1c9glakIDfT&accessKey=fkCC9lKOKZZZSfBRHimUtJFq32PucJNe",
+      "https://sunc.rubis.app/?scrap=p1oItowSFMvNrpuf&key=hzn8j0diRfPUuqfNpMUetdC8kWheuziL",
     hide: false,
     warning: true,
     warningInfo:
@@ -5376,6 +5376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
