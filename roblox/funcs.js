@@ -599,7 +599,7 @@ const expData = [
     editor: "voxlis.NET",
     txtColor: "text-yellow-500",
     accentColor: "from-yellow-600 to-yellow-700",
-    info: "## Exploit Performance  \n- [Potassium](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files.\n\n## Background Information  \n- Developers operate under fresh accounts. Identities are unknown.\n\n\n## Developer Background  \n- Developers operate under fresh accounts. Identities are unknown.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
+    info: "## Exploit Performance  \n- Expect crashes, this executor is currently detected.\n\n## Background Information  \n- Developers operate under fresh accounts. Identities are unknown.\n\n\n## Developer Background  \n- Developers operate under fresh accounts. Identities are unknown.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
     premium: true,
     href: "https://discord.gg/WY4juPkFv4",
     priceHref: "https://robloxcheatz.com?ref=keyempire",
@@ -5376,6 +5376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
