@@ -326,7 +326,7 @@ const expData = [
     lvl: 8,
     price: "$34.99",
     period: "lifetime",
-    plat: ["windows", "macos"],
+    plat: ["windows"],
     pros: ["Has a decompiler", "100% sUNC", "Level 8"],
     neutral: ["Check 'More Info' -> Exploit Performance"],
     verified: true,
@@ -5376,6 +5376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
