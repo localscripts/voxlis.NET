@@ -33,13 +33,13 @@ const Data = [
       "modals": {
         "info": "## Exploit Performance  \n- [Zenith](/) functions similarly to the old [Nihon](/) executor, as it shares the same development team but has been rebranded. The main distinction is that [Zenith](/) is actively maintained, whereas [Nihon](/) is still undergoing redevelopment. [Zenith](/) offers a smooth experience and is bundled into a single `.exe` file, unlike many other exploits that come in `.zip` archives with multiple `.dll` files. [Swift]() is technically [Zenith](), so they might perform the similarly. \n  \n\n## Background Information  \n- Before [Zenith](/), an executor - [Nihon](/) launched in early 2024 and officially released on October 24, 2024, delivering strong performance.  \n- On February 3, 2025, [Nihon](/) team splited. The [Nihon](/) owner commented on the situation:  \n  *\"A former admin and Sero nuked the server and banned users. We're restoring it—Zenith wasn't involved and even returned our vanity. ❤️\"*. No further details were provided, though the situation is likely more complex.  \n\n## Developers Background Information\n- There is little background information available about the owners, [@Immune](/), aside from their primary role in working on the UI for [Nihon](/). The rest of the development team included [@loadnil](/), [@mcgamin1738](/) and [@lendmeyourstrength](), who were primarily responsible for both the back-end and front-end development of Nihon. \n\n- Later, the team was forced to leave [Nihon](/), leading the developers to found [Zenith](/), which has been doing quite well. The current main owners are [@loadnil](/), [@lendmeyourstrength](/), [@mcgamin1738](/), and [@spectraluwu](/).\n\n\n> Sources: [reddit.com/r/robloxhackers](), Zenith & Nihon Developers",
         "warning": {
-          "enabled": false,
+          "enabled": true,
           "icon": "cat.png",
           "title": "Warning!",
           "desc": "voxlis.NET recommends checking out 'MORE INFO' for Wave so you know what you're getting. Would you like to continue to Wave's website anyway?"
         },
         "keysystem": {
-          "enabled": false,
+          "enabled": true,
           "icon": "cat.png",
           "title": "Warning!",
           "desc": "voxlis.NET recommends checking out 'MORE INFO' for Wave so you know what you're getting. Would you like to continue to Wave's website anyway?",
@@ -47,7 +47,7 @@ const Data = [
           "continue": "href"
         },
         "downtime": {
-          "enabled": false,
+          "enabled": true,
           "icon": "cat.png",
           "title": "Warning!",
           "desc": "voxlis.NET recommends checking out 'MORE INFO' for Wave so you know what you're getting. Would you like to continue to Wave's website anyway?",
@@ -64,7 +64,7 @@ const Data = [
           "continue": "href"
         },
         "extrabutton": {
-          "enabled": false,
+          "enabled": true,
           "swap": false,
           "icon": "star",
           "text": "extra btn",
@@ -8642,3 +8642,4 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
