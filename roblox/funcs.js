@@ -351,7 +351,7 @@ const expData = [
     plat: ["android", "ios"],
     pros: ["Has a decompiler", "VNG Support", "80% sUNC", "Level 8"],
     neutral: [],
-    verified: true,
+    verified: false,
     editor: "voxlis.NET",
     txtColor: "text-red-500",
     accentColor: "from-red-600 to-red-700",
@@ -360,6 +360,9 @@ const expData = [
     info: "## Exploit Performance  \n- [KRNL]() runs smoothly as an Android exploit and performs well for a free tool. Occasionally, it may have issues with the [MuMu]() emulator—using a different emulator can improve stability.\n\n## Background Information  \n- Developed around 2019 by [Ice Bear](), [KRNL]() gained popularity through [WeAreDevs](), despite the site’s mixed reputation. It became one of the most-used free executors, often rivaling paid options.  \n- After Roblox introduced [Hyperion]() (Byfron’s anti-cheat), [KRNL]() paused updates. It briefly supported UWP (Microsoft Store Roblox), which lacked [Byfron]() protection at the time, but support ended once [Byfron]() was added to UWP.\n\n## Developer Background  \n- Created by [Ice Bear](), known for delivering stable tools. In late 2024, [KRNL]() was sold to [@valentinodev](), who now leads its development.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
     hasKeySystem: true,
     free: true,
+    warning: true,
+    warningInfo:
+      "voxlis.NET says: KRNL is currently suspicious, we are not sure what happened yet, you can check their Discord for more information.",
   },
   {
     id: "solara",
@@ -5376,6 +5379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
