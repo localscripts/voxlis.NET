@@ -104,7 +104,7 @@ const expData = [
     period: "monthly",
     plat: ["windows", "macos", "ios", "android"],
     pros: ["Has a decompiler", "VNG Support","97% sUNC", "Level 8"],
-    neutral: ["Android uses module from ArceusX"],
+    neutral: [],
     cons: [],
     verified: true,
     editor: "voxlis.NET",
@@ -5379,6 +5379,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
