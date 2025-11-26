@@ -673,6 +673,26 @@ const expData = [
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
       hide: true,
   },
+  {
+    id: "aureus",
+    name: "Aureus",
+    desc: "Aureus: Outshining all rivals as the top Roblox serverside authority.",
+    lvl: 2,
+    price: "$15.00",
+    plat: [],
+    pros: ["Instant access without downloads", "Variety of unique games", "Fast Execution","Autoconvert"],
+    neutral: ["Community support"],
+    cons: ["Serversided Only"],
+    verified: true,
+    editor: "voxlis.NET",
+    txtColor: "text-red-500",
+    accentColor: "from-red-600 to-red-700",
+    info: "# Aureus Serverside; Where Legends Execute.\n\nThis isn't just another group of scripters. This is Aureus Serverside — the apex predator of Roblox serverside execution. While others scramble to keep up with half-baked features, slow execution times, and clunky UIs, Aureus stands untouchable at the summit of dominance. We aren’t just ahead — we’ve lapped the competition twice.\n\nWith lightning-fast execution, seamless autoconversion, and a suite of features so refined it makes other tools look like broken toys, Aureus doesn’t just compete — it eradicates any notion of competition. Every line of code executed through Aureus is a statement: you chose performance, power, and prestige.\n\nOur community isn’t for everyone. It’s for the elite. The ones who demand perfection, not excuses. The ones who understand that when it comes to serverside, there’s Aureus, and then there’s everything else that wishes it was Aureus.\n\nSo if you’ve chosen Aureus, congratulations. You didn’t just pick a tool — you joined a legacy.",
+    premium: true,
+    href: "https://aureus.wtf/",
+    priceHref: "https://aureus.wtf/pricing/",
+    hide: false,
+  },
 ]
 
 const configData = {
