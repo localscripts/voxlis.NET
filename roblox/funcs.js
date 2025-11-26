@@ -269,7 +269,7 @@ const expData = [
     href: "https://getswift.vip/",
     priceHref: "https://getswift.vip/",
     uncbuttonlink: "https://sunc.rubis.app/?scrap=RVFt4UcmDJGWp1WE&key=RRLzNFLtQgKeakeIZNPkjDyTJRIz2kV6",
-    hide: false,
+    hide: true,
   },
   {
     id: "hydrogen",
@@ -363,6 +363,7 @@ const expData = [
     warning: true,
     warningInfo:
       "voxlis.NET says: KRNL is currently suspicious, we are not sure what happened yet, you can check their Discord for more information.",
+    hide: true,
   },
   {
     id: "solara",
@@ -468,6 +469,7 @@ const expData = [
     hide: false,
     period: "monthly",
     pricegray: true,
+    hide: true,
   },
 
   {
@@ -669,7 +671,7 @@ const expData = [
     warning: false,
     warningInfo:
       "voxlis.NET recommends checking out “MORE INFO” for RatWare so you know what you’re getting. Would you like to continue to Rat-Ware's website anyway?",
-      hide: false,
+      hide: true,
   },
 ]
 
@@ -5379,6 +5381,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
