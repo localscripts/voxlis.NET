@@ -446,7 +446,7 @@ const expData = [
     hide: false,
     hasKeySystem: false,
     free: true,
-    hide: false,
+    hide: true,
   },
   {
     id: "serotonin",
@@ -469,7 +469,7 @@ const expData = [
     hide: false,
     period: "monthly",
     pricegray: true,
-    hide: true,
+    hide: false,
   },
 
   {
@@ -5381,6 +5381,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
