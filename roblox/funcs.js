@@ -1,5 +1,26 @@
 const expData = [
   {
+    id: "awp",
+    name: "Volt",
+    desc: "Emulates Hyperion for maximum safety.",
+    lvl: 8,
+    price: "$8",
+    period: "weekly",
+    plat: ["windows", "windows"],
+    pros: ["Emulates Hyperion for safety", "98% sUNC", "Level 8"],
+    neutral: ["Only accessible to 100 people until release"],
+    cons: [],
+    verified: true,
+    editor: "voxlis",
+    txtColor: "text-violet-500",
+    accentColor: "from-violet-600 to-violet-700",
+    info: "## Exploit Performance  \n- Although [Volt](https://volt.bz) is associated with [Krampus](/), it operates reliably. The developers focus on avoiding detection and ban waves by using Hyperion emulation techniques. However, running the official Roblox client can still be inconvenient, as it requires reinstallation, and users may occasionally face bans even when using [Volt](https://volt.bz).\n\n> \n\n## Background Information  \n- There is speculation that [Volt](https://volt.bz) is linked to [Krampus](/), an exploit that abruptly shut down on May 11, 2024, shortly after the release of Hyperion 4.0. The developers abandoned the project without offering any updates or refunds, leaving long-term license holders without support. The shutdown was likely due to the challenges in bypassing the new Hyperion 4.0. Although [Krampus](/) did not distribute malware, they issued a misleading \"official explanation,\" falsely claiming their developers were \"raided\" and even circulating fabricated images as evidence in their Discord server.\n  \n- After months of inactivity, the [Krampus](/) Discord suddenly began promoting a Robux gambling site. It's unclear whether the developers are behind the site or were paid for sponsorship, but it's most likely that the Discord server was simply sold off.\n\n\n## Developers Background Information\n- Currently managed by [@shylockdv](/), [@jbhglj7uj](/), and [@etheriut](/), but no additional information is known about them.\n\n\n \n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), WeAreDevs.NET",
+    premium: false,
+    href: "https://volt.bz",
+    priceHref: "https://volt.bz",
+    hide: false,
+  },
+  {
     id: "zenith",
     name: "Zenith",
     desc: "The best overall value exploit.",
@@ -5381,6 +5402,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
