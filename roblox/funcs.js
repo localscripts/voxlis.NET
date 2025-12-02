@@ -498,7 +498,8 @@ const expData = [
     name: "Volcano",
     desc: "A free exploit with good performance.",
     lvl: 8,
-    price: "FREE",
+    price: "$6.99",
+    period: "monthly",
     plat: ["windows"],
     pros: ["Has a decompiler", "94% sUNC", "Level 8"],
     neutral: [],
@@ -5381,6 +5382,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
