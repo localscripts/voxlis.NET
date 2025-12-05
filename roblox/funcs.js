@@ -515,6 +515,7 @@ const expData = [
     hasKeySystem: true,
     free: true,
     hide: false,
+    pricegray: true,
   },
   {
     id: "dx9ware",
@@ -5382,6 +5383,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
