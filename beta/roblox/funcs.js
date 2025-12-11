@@ -265,7 +265,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: true,
       premium: false,
       hideunc: true,
@@ -311,7 +311,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: true,
       premium: false,
       hideunc: true,
@@ -356,7 +356,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: true,
       premium: false,
       hideunc: true,
@@ -411,7 +411,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -457,7 +457,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: true,
       premium: false,
       hideunc: true,
@@ -502,7 +502,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: true,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: true,
@@ -551,7 +551,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: true,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -649,7 +649,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: true,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -696,7 +696,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: false,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -747,7 +747,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: true,
       pricegray: false,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -793,7 +793,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: false,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -843,7 +843,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: true,
       premium: false,
       hideunc: false,
@@ -889,7 +889,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: true,
       pricegray: false,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -936,7 +936,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: false,
@@ -985,7 +985,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: false,
       pricegray: false,
-      verified: true,
+      verified: false,
       external: true,
       premium: false,
       hideunc: true,
@@ -1031,7 +1031,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
     flags: {
       hasKeySystem: true,
       pricegray: true,
-      verified: true,
+      verified: false,
       external: false,
       premium: false,
       hideunc: true,
@@ -1065,17 +1065,17 @@ const BadgeData = [
     color: "#4374b3",
     backgroundColor: "rgba(6, 12, 25)",
     borderColor: "rgba(17, 36, 69)",
-    hoverInfo: "This exploit has been verified as safe and functional",
+    hoverInfo: "This exploit contains full “MORE INFO” data and is confirmed as verified through corroborating background information.",
     tooltipBg: "#4374b3",
   },
   {
     id: "premium",
-    label: "Premium",
+    label: "Best Value",
     icon: '<i class="fas fa-crown"></i>',
     color: "#fbbf24",
     backgroundColor: "rgba(251, 191, 36, 0.2)",
     borderColor: "rgba(251, 191, 36, 0.3)",
-    hoverInfo: "Premium features available for subscribers",
+    hoverInfo: "The best-value product currently, based on community click data",
     tooltipBg: "#f59e0b",
   },
   {
@@ -1085,7 +1085,7 @@ const BadgeData = [
     color: "#ef4444",
     backgroundColor: "rgba(239, 68, 68, 0.2)",
     borderColor: "rgba(239, 68, 68, 0.3)",
-    hoverInfo: "Use caution - this exploit may have compatibility issues",
+    hoverInfo: "Warning: proceed carefully — this exploit’s “MORE INFO” tab seems suspicious.",
     tooltipBg: "#dc2626",
   },
 ];
