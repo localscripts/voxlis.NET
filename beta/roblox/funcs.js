@@ -6349,8 +6349,8 @@ class ThemeManager {
     logoSelectors.forEach((selector) => {
       const logoImg = document.querySelector(selector);
       if (logoImg) {
-        const themeLogoPath = `/assets/ads/${this.currentTheme}-voxlis.png`;
-        const defaultLogoPath = "/assets/ads/red-voxlis.png";
+        const themeLogoPath = `/assets/ads/${this.currentTheme}_voxlis.png`;
+        const defaultLogoPath = "/assets/ads/header.png";
 
         const testImg = new Image();
         testImg.onload = () => {
