@@ -1,4 +1,26 @@
 const expData = [
+    {
+    id: "Hythera",
+    name: "Hythera",
+    desc: "A free keyless external",
+    lvl: 0,
+    price: "FREE",
+    plat: ["windows"],
+    pros: ["Easy to use", "Free", "Optimized", "Keyless", "Desync"],
+    neutral: [],
+    cons: ["Niche"],
+    verified: true,
+    editor: "its_turdle",
+    txtColor: "text-green-500",
+    accentColor: "from-green-600 to-green-700",
+    info: "[Hythera](/) is a free keyless exploit with the sole goal of making exploiting easy again. Ever since byfron there's been more and more layers between you and exploiting, so [Hythera](/) makes it easy.\n\nI know it's sketchy, but if you had money to steal you would've *bought* a paid external. \n\nWe have lots of powerful features, and if you ever have any troubles or questions, just dm me on discord (its_turdle).",
+    premium: false,
+    href: "https://gethythera.dev",
+    priceHref: "",
+    hide: false,
+    external: true,
+    hideunc: true,
+  },
   {
     id: "zenith",
     name: "Zenith",
@@ -5408,6 +5430,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
+
 
 
 
