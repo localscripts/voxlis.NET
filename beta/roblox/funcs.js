@@ -14,7 +14,7 @@ const Data = [
         cons: [],
       },
       links: {
-        href: "https://matcha.pink",
+        href: "https://matcha.pink/discord",
         priceHref: "https://www.key-empire.com/#matcha",
         unclinks: {},
       },
@@ -34,13 +34,12 @@ const Data = [
         hide: false,
       },
       modals: {
-      info: "## Exploit Performance  \n- [Matcha]() is an external cheat featuring a built-in menu that provides access to preset functions such as ESP, Aimbot, Noclip, and other similar tools. It does not support standard Lua execution, as it uses a custom Lua environment that runs within the cheat rather than inside the game. [Matcha’s]() authentication system can be somewhat unintuitive, so the initial setup may require extra time. However, the registration process is somewhat complex and not user friendly.\n\n## Background Information  \n- Before [Matcha]() launched in August 2024, the project itself was relatively small and low-visibility. It originally started as a simple external tool but saw rapid improvement throughout mid-2024.  \n- After restructuring, [Matcha]() began receiving consistent daily updates—even while [@Vault]() balanced school responsibilities. [@Vain]() was appointed to manage the staff team, improving coordination and overall structure. Staff operations are now organized, contributors are compensated, and the support team is publicly listed on the [Matcha Discord server]().  \n\n## Developer Background Information  \n- [Matcha]() is primarily developed by [@Vault](), who handles the core features and security. The project began when [@slamfrags]() asked [@Vault]() to create an external, which [Vault]() accepted partly due to financial needs.  \n- The initial management team consisted of [@geekn]() and [@slamfrags](); [@geekn]() left voluntarily, while [@slamfrags]() was later removed due to financial mismanagement and unprofessional conduct. Later on, [@slamfrags]() released his own external called [Yerba]().\n- After the removal, development accelerated and [@Vault]() brought trusted friends into the project, resulting in better structure, fair treatment of staff, and a more stable workflow.\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET), Matcha Discord Moderators & Matcha Owner\n",
+        info: "## Exploit Performance  \n- [Matcha]() is an external cheat featuring a built-in menu that provides access to preset functions such as ESP, Aimbot, Noclip, and other similar tools. It does not support standard Lua execution, as it uses a custom Lua environment that runs within the cheat rather than inside the game. [Matcha’s]() authentication system can be somewhat unintuitive, so the initial setup may require extra time. However, the registration process is somewhat complex and not user friendly.\n\n## Background Information  \n- Before [Matcha]() launched in August 2024, the project itself was relatively small and low-visibility. It originally started as a simple external tool but saw rapid improvement throughout mid-2024.  \n- After restructuring, [Matcha]() began receiving consistent daily updates—even while [@Vault]() balanced school responsibilities. [@Vain]() was appointed to manage the staff team, improving coordination and overall structure. Staff operations are now organized, contributors are compensated, and the support team is publicly listed on the [Matcha Discord server]().  \n\n## Developer Background Information  \n- [Matcha]() is primarily developed by [@Vault](), who handles the core features and security. The project began when [@slamfrags]() asked [@Vault]() to create an external, which [Vault]() accepted partly due to financial needs.  \n- The initial management team consisted of [@geekn]() and [@slamfrags](); [@geekn]() left voluntarily, while [@slamfrags]() was later removed due to financial mismanagement and unprofessional conduct. Later on, [@slamfrags]() released his own external called [Yerba]().\n- After the removal, development accelerated and [@Vault]() brought trusted friends into the project, resulting in better structure, fair treatment of staff, and a more stable workflow.\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET), Matcha Discord Moderators & Matcha Owner\n",
         downtime: {
           enabled: true,
           icon: "/assets/cat.png",
           title: "Hold on!",
           desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
           continue: "href",
         },
       },
@@ -99,7 +98,7 @@ const Data = [
       },
     },
   },
-    {
+  {
     wave: {
       main: {
         name: "Wave",
@@ -181,7 +180,7 @@ const Data = [
         lvl: 8,
       },
       modals: {
-info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-quality product despite being free. However, the free version relies on a highly inconvenient key system that often feels designed to push users toward purchasing a bypass. As a result, the free tier functions more like a demo rather than something realistically usable without paying.\n\n## Background Information\n- [Volcano](), originally known as [Electron](), was created in December 2021. At the time, it wasn’t particularly notable and served mainly as an alternative used by a small subset of the community, especially since more popular options like [KRNL]() were available.\n- In June 2023, [Electron]() made a comeback with a UWP exploit. While they were not the first to achieve this method, they dominated the market significantly—likely due to having more name recognition than competitors like [Celery](), which was relatively unknown. Their key system was easy to complete, but the key duration was inconsistent, lasting anywhere from an hour to a full day.\n- After UWP got a Byfron patch, some time later, [Electron]() was planned for release on December 1st on the Windows client, but delays pushed it back. It launched successfully, then became inactive, returned, functioned temporarily, and disappeared again—though this period is not fully documented. After the second patch, communication largely stopped on their official Telegram, and their Discord was locked.\n- On April 22, 2024, they announced via Discord that [Electron]() would return under a new name: [Volcano](), with compensation for former [Electron]() users. It took time for [Volcano]() to regain traction, but it has since grown into a solid and active user base.\n- On December 11th, 2025, [Volcano]() ditched the key system and switched to a fully paid model since Byfron’s changes made updating tough, and tons of users were bypassing the keys, costing the owner a lot of potential money.\n\n## Developer Information\n- The main owner is [@coisop](), known for contributions to [Electron]() and [Volcano](). In 2019 work began on [RyoWrapper](), later renamed [RyoProto](); in 2020 [Neutron]() released as a paid LuaJIT wrapper; in 2021 [Electron]() launched as a free LuaJIT wrapper, the same year Luau dropped; [Electron]() eventually transitioned to [Proto Conversion]() with a Lua 5.1 to Luau transpiler; after the Luau source release the project continued using [Proto Conversion]() alongside direct Luau source integration; later development progressed into [Hyperion](), which remains in use today.\n\n\n\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & The [Volcano]() Creator",
+        info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-quality product despite being free. However, the free version relies on a highly inconvenient key system that often feels designed to push users toward purchasing a bypass. As a result, the free tier functions more like a demo rather than something realistically usable without paying.\n\n## Background Information\n- [Volcano](), originally known as [Electron](), was created in December 2021. At the time, it wasn’t particularly notable and served mainly as an alternative used by a small subset of the community, especially since more popular options like [KRNL]() were available.\n- In June 2023, [Electron]() made a comeback with a UWP exploit. While they were not the first to achieve this method, they dominated the market significantly—likely due to having more name recognition than competitors like [Celery](), which was relatively unknown. Their key system was easy to complete, but the key duration was inconsistent, lasting anywhere from an hour to a full day.\n- After UWP got a Byfron patch, some time later, [Electron]() was planned for release on December 1st on the Windows client, but delays pushed it back. It launched successfully, then became inactive, returned, functioned temporarily, and disappeared again—though this period is not fully documented. After the second patch, communication largely stopped on their official Telegram, and their Discord was locked.\n- On April 22, 2024, they announced via Discord that [Electron]() would return under a new name: [Volcano](), with compensation for former [Electron]() users. It took time for [Volcano]() to regain traction, but it has since grown into a solid and active user base.\n- On December 11th, 2025, [Volcano]() ditched the key system and switched to a fully paid model since Byfron’s changes made updating tough, and tons of users were bypassing the keys, costing the owner a lot of potential money.\n\n## Developer Information\n- The main owner is [@coisop](), known for contributions to [Electron]() and [Volcano](). In 2019 work began on [RyoWrapper](), later renamed [RyoProto](); in 2020 [Neutron]() released as a paid LuaJIT wrapper; in 2021 [Electron]() launched as a free LuaJIT wrapper, the same year Luau dropped; [Electron]() eventually transitioned to [Proto Conversion]() with a Lua 5.1 to Luau transpiler; after the Luau source release the project continued using [Proto Conversion]() alongside direct Luau source integration; later development progressed into [Hyperion](), which remains in use today.\n\n\n\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & The [Volcano]() Creator",
         downtime: {
           enabled: true,
           icon: "/assets/cat.png",
@@ -206,8 +205,10 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
       links: {
         href: "https://volcano.wtf",
         unclinks: {
-          android: "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
-          macos: "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
+          android:
+            "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
+          macos:
+            "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
         },
       },
       misc: {
@@ -226,7 +227,7 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
         lvl: 8,
       },
       modals: {
-          info: "## Exploit Performance\n\n- [ NOTE ] { voxlis.NET } : To be tested\n\n## Background Information\n\n- [Cryptic](), originally released as an Android executor on December 7th, 2024, was not just another random pop-up executor; it became the first to achieve a verified 100% sUNC score. This achievement quickly established its reputation as a highly stable and reliable Android execution platform. Cryptic later entered a rough development period when its original developer transitioned to [Delta](), temporarily forcing the project to rely on the [Arceus X]() module. On November 28th, 2025, the team announced a full return to independence with the intent of restoring performance and refining user experience.\n\n- [Cryptic]() Windows released on December 27th, 2024, in partnership with [Argon](). The Windows version was later taken offline due to developer health concerns, with a confirmed relaunch scheduled for December 2025.\n\n- [Cryptic]() iOS launched on January 22nd, 2025, but had a short initial runtime due to development setbacks, with revival plans still active. [Cryptic]() macOS was released on November 17th, 2025, and contrary to speculation of discontinuation, the macOS build remains fully operational and continues receiving upkeep and optimization updates.\n\n## Developers Background Information\n- Kept private by the owners\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & Cryptic Team",
+        info: "## Exploit Performance\n\n- [ NOTE ] { voxlis.NET } : To be tested\n\n## Background Information\n\n- [Cryptic](), originally released as an Android executor on December 7th, 2024, was not just another random pop-up executor; it became the first to achieve a verified 100% sUNC score. This achievement quickly established its reputation as a highly stable and reliable Android execution platform. Cryptic later entered a rough development period when its original developer transitioned to [Delta](), temporarily forcing the project to rely on the [Arceus X]() module. On November 28th, 2025, the team announced a full return to independence with the intent of restoring performance and refining user experience.\n\n- [Cryptic]() Windows released on December 27th, 2024, in partnership with [Argon](). The Windows version was later taken offline due to developer health concerns, with a confirmed relaunch scheduled for December 2025.\n\n- [Cryptic]() iOS launched on January 22nd, 2025, but had a short initial runtime due to development setbacks, with revival plans still active. [Cryptic]() macOS was released on November 17th, 2025, and contrary to speculation of discontinuation, the macOS build remains fully operational and continues receiving upkeep and optimization updates.\n\n## Developers Background Information\n- Kept private by the owners\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & Cryptic Team",
         downtime: {
           enabled: true,
           icon: "/assets/cat.png",
@@ -238,823 +239,803 @@ info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-qualit
       },
     },
   },
-{
-  severe: {
-    main: {
-      name: "Severe",
-      plat: ["windows"],
-      desc: "A good external exploit.",
-      pros: [
-        "Has a Luau environment",
-        "Usermode product",
-        "Rich in features",
-      ],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://discord.gg/4QmWjQCgzV",
-      priceHref: "https://discord.gg/4QmWjQCgzV",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$19.99",
-      period: "lifetime",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: true,
-      verified: false,
-      external: true,
-      premium: false,
-      hideunc: true,
-      free: false,
-      hide: false,
-      lvl: null,
-    },
-    modals: {
-      info:
-        "## Exploit Performance  \n- [Severe](/) gained recognition as the first undetected external  following the rollout of [Hyperion](/) in November 2023. Since then, it has undergone continuous improvements, focusing on stability, performance, and a user-friendly interface with clean, modern visuals.  \n- The custom [Luau](/) environment built into [Severe](/) is optimized for speed and deep memory interaction, offering advanced low-level capabilities rarely seen in external executors.\n\n## Background Information  \n- [Severe](/) originated as [v-severe](/), an external that began development before [Hyperion](/) was introduced, sometime around 2021.  \n- It now includes unique features such as a 3D radar and in-menu chat — with additional enhancements planned for future releases.\n\n## Developers Background Information  \n- [Severe](/) is developed by [@BACKWOODS](/), who started his journey creating and redesigning UIs in C#. He later transitioned into exploit development, releasing [Sona](/) and [Sona One](/), two prior executors known for providing Level 6–7 execution performance.\n\n> Sources: [Severe](), internal testing, and developer notes\n",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    severe: {
+      main: {
+        name: "Severe",
+        plat: ["windows"],
+        desc: "A good external exploit.",
+        pros: [
+          "Has a Luau environment",
+          "Usermode product",
+          "Rich in features",
+        ],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://discord.gg/4QmWjQCgzV",
+        priceHref: "https://discord.gg/4QmWjQCgzV",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$19.99",
+        period: "lifetime",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: true,
+        verified: false,
+        external: true,
+        premium: false,
+        hideunc: true,
+        free: false,
+        hide: false,
+        lvl: null,
+      },
+      modals: {
+        info: "## Exploit Performance  \n- [Severe](/) gained recognition as the first undetected external  following the rollout of [Hyperion](/) in November 2023. Since then, it has undergone continuous improvements, focusing on stability, performance, and a user-friendly interface with clean, modern visuals.  \n- The custom [Luau](/) environment built into [Severe](/) is optimized for speed and deep memory interaction, offering advanced low-level capabilities rarely seen in external executors.\n\n## Background Information  \n- [Severe](/) originated as [v-severe](/), an external that began development before [Hyperion](/) was introduced, sometime around 2021.  \n- It now includes unique features such as a 3D radar and in-menu chat — with additional enhancements planned for future releases.\n\n## Developers Background Information  \n- [Severe](/) is developed by [@BACKWOODS](/), who started his journey creating and redesigning UIs in C#. He later transitioned into exploit development, releasing [Sona](/) and [Sona One](/), two prior executors known for providing Level 6–7 execution performance.\n\n> Sources: [Severe](), internal testing, and developer notes\n",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  matrix: {
-    main: {
-      name: "Matrix",
-      plat: ["windows"],
-      desc: "A cheap external exploit.",
-      pros: ["Usermode product", "Very cheap price"],
-      neutral: ["Basic in features"],
-      cons: [],
-    },
-    links: {
-      href: "https://www.key-empire.com/#matrix",
-      priceHref: "http://matrixhubs.shop/",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$4.99",
-      period: "lifetime",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: true,
-      verified: false,
-      external: true,
-      premium: false,
-      hideunc: true,
-      free: false,
-      hide: false,
-      lvl: null,
-    },
-    modals: {
-      info: null,
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    matrix: {
+      main: {
+        name: "Matrix",
+        plat: ["windows"],
+        desc: "A cheap external exploit.",
+        pros: ["Usermode product", "Very cheap price"],
+        neutral: ["Basic in features"],
+        cons: [],
+      },
+      links: {
+        href: "https://www.key-empire.com/#matrix",
+        priceHref: "http://matrixhubs.shop/",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$4.99",
+        period: "lifetime",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: true,
+        verified: false,
+        external: true,
+        premium: false,
+        hideunc: true,
+        free: false,
+        hide: false,
+        lvl: null,
+      },
+      modals: {
+        info: null,
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  ronin: {
-    main: {
-      name: "Ronin",
-      plat: ["windows"],
-      desc: "An external cheat with a Lifetime subscription.",
-      pros: ["Amazing optimization", "Usermode product", "Rich in features"],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://getronin.xyz/",
-      priceHref: "https://www.key-empire.com/#ronin",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$12.49",
-      period: "lifetime",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: true,
-      verified: false,
-      external: true,
-      premium: false,
-      hideunc: true,
-      free: false,
-      hide: false,
-      lvl: null,
-    },
-    modals: {
-      info:
-        "## Exploit Performance  \n- [Ronin]() is an external released on March 2nd, 2025. Recently out of beta, it performs on par with other fully released competitors. Since launch, [Ronin]() has delivered stable and reliable results, with minimal complaints from users and resellers.  \n- Despite being new, [Ronin]() has already proven itself in terms of stability, efficiency, and quality. Early feedback highlights its smooth performance and solid design. It is seen as a high-potential option with strong usability and readiness for the market.\n\n## Background Information  \n- [Ronin]() is a usermode product owned by [Reaper](), who also developed [Cryptic]() and [Somber]() (formerly known as [Reaper Hub]()). It officially released on March 2nd, 2025 and is currently out of beta. Development is now led by [@Pixi]() and [@Jumble](), after [Reaper]() stepped away from direct development.  \n- The interface is written in Rust, providing a fast and efficient user experience. [Ronin]() reflects the quality expected from [Reaper]()’s projects.  \n- [Reaper]() is known for maintaining a low profile, avoiding drama, and having a clean reputation in the community. His professionalism and consistent output have earned him wide respect.\n\n## Developer Background Information  \n- [Ronin]() is currently developed by [@Pixi]() and [@Jumble](), under the ownership of [Reaper]().  \n\n> Sources: [reddit.com/r/robloxhackers](), Ronin Discord Server\n",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    ronin: {
+      main: {
+        name: "Ronin",
+        plat: ["windows"],
+        desc: "An external cheat with a Lifetime subscription.",
+        pros: ["Amazing optimization", "Usermode product", "Rich in features"],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://getronin.xyz/",
+        priceHref: "https://www.key-empire.com/#ronin",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$12.49",
+        period: "lifetime",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: true,
+        verified: false,
+        external: true,
+        premium: false,
+        hideunc: true,
+        free: false,
+        hide: false,
+        lvl: null,
+      },
+      modals: {
+        info: "## Exploit Performance  \n- [Ronin]() is an external released on March 2nd, 2025. Recently out of beta, it performs on par with other fully released competitors. Since launch, [Ronin]() has delivered stable and reliable results, with minimal complaints from users and resellers.  \n- Despite being new, [Ronin]() has already proven itself in terms of stability, efficiency, and quality. Early feedback highlights its smooth performance and solid design. It is seen as a high-potential option with strong usability and readiness for the market.\n\n## Background Information  \n- [Ronin]() is a usermode product owned by [Reaper](), who also developed [Cryptic]() and [Somber]() (formerly known as [Reaper Hub]()). It officially released on March 2nd, 2025 and is currently out of beta. Development is now led by [@Pixi]() and [@Jumble](), after [Reaper]() stepped away from direct development.  \n- The interface is written in Rust, providing a fast and efficient user experience. [Ronin]() reflects the quality expected from [Reaper]()’s projects.  \n- [Reaper]() is known for maintaining a low profile, avoiding drama, and having a clean reputation in the community. His professionalism and consistent output have earned him wide respect.\n\n## Developer Background Information  \n- [Ronin]() is currently developed by [@Pixi]() and [@Jumble](), under the ownership of [Reaper]().  \n\n> Sources: [reddit.com/r/robloxhackers](), Ronin Discord Server\n",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  macsploit: {
-    main: {
-      name: "Macsploit",
-      plat: ["macos"],
-      desc: "A powerful exploit for macOS.",
-      pros: [
-        "Multi-Inject support",
-        "Has a Trial version",
-        "Has a decompiler",
-        "100% sUNC",
-        "Level 8",
-      ],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://www.raptor.fun/",
-      priceHref: "https://key-empire.com/#macsploit",
-      unclinks: {
-        macos:
-          "https://sunc.rubis.app/?scrap=9kH1EN8HIbXl9I2o&key=KrU695V4fbJuWZcwG9jMJen2M22mRbng",
+  {
+    macsploit: {
+      main: {
+        name: "Macsploit",
+        plat: ["macos"],
+        desc: "A powerful exploit for macOS.",
+        pros: [
+          "Multi-Inject support",
+          "Has a Trial version",
+          "Has a decompiler",
+          "100% sUNC",
+          "Level 8",
+        ],
+        neutral: [],
+        cons: [],
       },
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$9.99",
-      period: "lifetime",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: true,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: false,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "\n## Exploit Performance\n- [MacSploit]() functions like a standard executor but is designed specifically for macOS. While its stability is generally acceptable, it has experienced significant periods of downtime. Since it is macOS-exclusive, [voxlis.NET]() cannot provide a deeper assessment at this time.\n\n## Background Information\n- In 2024, the [MacSploit]() source code was leaked by [@Peyton]() after [@managedhosts]() was accused of engaging in shady behavior, including alleged involvement with loggers and other suspicious practices.\n\n\n## Developer Information\n- [MacSploit](), owned by [Raptor](), was originally founded by [@Peyton]() and [@Nexus42](). Raptor initially began as a Windows executor collection. [@Peyton]() retired from the project in 2022 but later returned and reignited activity around [MacSploit]() following concerns about how the project was being handled.\n- [@Nexus42]() is currently the lead developer of [MacSploit](). However, he has a controversial reputation due to past involvement with logging tools, and the community remains critical of his role. Other contributors include [@atomic](), [@rcloll](), and [@Kohl](), who assist with the ongoing development of the project.  \n\n> Sources: [reddit.com/r/robloxhackers](), Raptor Development Discord, Raptor\n",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+      links: {
+        href: "https://www.raptor.fun/",
+        priceHref: "https://key-empire.com/#macsploit",
+        unclinks: {
+          macos:
+            "https://sunc.rubis.app/?scrap=9kH1EN8HIbXl9I2o&key=KrU695V4fbJuWZcwG9jMJen2M22mRbng",
+        },
       },
-    },
-  },
-},
-{
-  yerba: {
-    main: {
-      name: "Yerba",
-      plat: ["windows"],
-      desc: "An external usermode product.",
-      pros: ["Amazing optimization", "Usermode Product", "Has a decompiler "],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://yerba.wtf/",
-      priceHref: "https://www.key-empire.com/#yerba",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$9.99",
-      period: "lifetime",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: true,
-      verified: false,
-      external: true,
-      premium: false,
-      hideunc: true,
-      free: false,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info: "",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+      misc: {
+        editor: "voxlis.NET",
+        price: "$9.99",
+        period: "lifetime",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: true,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "\n## Exploit Performance\n- [MacSploit]() functions like a standard executor but is designed specifically for macOS. While its stability is generally acceptable, it has experienced significant periods of downtime. Since it is macOS-exclusive, [voxlis.NET]() cannot provide a deeper assessment at this time.\n\n## Background Information\n- In 2024, the [MacSploit]() source code was leaked by [@Peyton]() after [@managedhosts]() was accused of engaging in shady behavior, including alleged involvement with loggers and other suspicious practices.\n\n\n## Developer Information\n- [MacSploit](), owned by [Raptor](), was originally founded by [@Peyton]() and [@Nexus42](). Raptor initially began as a Windows executor collection. [@Peyton]() retired from the project in 2022 but later returned and reignited activity around [MacSploit]() following concerns about how the project was being handled.\n- [@Nexus42]() is currently the lead developer of [MacSploit](). However, he has a controversial reputation due to past involvement with logging tools, and the community remains critical of his role. Other contributors include [@atomic](), [@rcloll](), and [@Kohl](), who assist with the ongoing development of the project.  \n\n> Sources: [reddit.com/r/robloxhackers](), Raptor Development Discord, Raptor\n",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  codex: {
-    main: {
-      name: "CodeX",
-      plat: ["android"],
-      desc: "A powerful exploit with advanced features.",
-      pros: ["Has a decompiler", "VNG Support", "Level 8"],
-      neutral: ["Fails sUNC checks", "Uses core technology from ArceusX"],
-      cons: [],
-    },
-    links: {
-      href: "https://codex.lol/",
-      priceHref: "https://key-empire.com/#codex",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$4.97",
-      period: "monthly",
-    },
-    flags: {
-      hasKeySystem: true,
-      pricegray: true,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: true,
-      free: true,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    yerba: {
+      main: {
+        name: "Yerba",
+        plat: ["windows"],
+        desc: "An external usermode product.",
+        pros: ["Amazing optimization", "Usermode Product", "Has a decompiler "],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://yerba.wtf/",
+        priceHref: "https://www.key-empire.com/#yerba",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$9.99",
+        period: "lifetime",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: true,
+        verified: false,
+        external: true,
+        premium: false,
+        hideunc: true,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  hydrogen: {
-    main: {
-      name: "Hydrogen",
-      plat: ["macos"],
-      desc: "A free macOS Exploit",
-      pros: ["Has a decompiler", "96% sUNC", "Level 8"],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://hydrogen.lat",
-      priceHref: "https://hydrogen.lat",
-      unclinks: {
-        macos:
-          "https://sunc.rubis.app/?scrap=5qh7GIfCDb8WZjtp&key=3Hq4Uz3Oc3X9G34ROz12ODY4VJIwXuUH",
+  {
+    codex: {
+      main: {
+        name: "CodeX",
+        plat: ["android"],
+        desc: "A powerful exploit with advanced features.",
+        pros: ["Has a decompiler", "VNG Support", "Level 8"],
+        neutral: ["Fails sUNC checks", "Uses core technology from ArceusX"],
+        cons: [],
       },
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$4.99",
-      period: "monthly",
-    },
-    flags: {
-      hasKeySystem: true,
-      pricegray: true,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: true,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "## Exploit Performance\n- Customizable themes (open-source), [Luarmor]() support, and performance comparable to a standard executor.\n\n## Background Information\n- [Hydrogen]() has been a long-standing executor for macOS and Android (now discontinued). Originally developed by [@xgladius](), it was known for being an ultra-fast macOS executor. Later, development was taken over by [@retguard](), who eventually discontinued updates in May 2024 due to personal reasons. As of April 12, 2025, [@xgladius]() has resumed development, with plans to continue its progress for the foreseeable future.\n\n## Developer Background\n- [Hydrogen]() is created by [@xgladius](), a well-known exploit developer and reverse engineer. He is recognized for projects like [luaudec](https://github.com/xgladius/luauDec) and various other contributions to the Exploit Community.\n\n> Sources: Hydrogen Staff Team\n",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+      links: {
+        href: "https://codex.lol/",
+        priceHref: "https://key-empire.com/#codex",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$4.97",
+        period: "monthly",
+      },
+      flags: {
+        hasKeySystem: true,
+        pricegray: true,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: true,
+        free: true,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
+  {
+    hydrogen: {
+      main: {
+        name: "Hydrogen",
+        plat: ["macos"],
+        desc: "A free macOS Exploit",
+        pros: ["Has a decompiler", "96% sUNC", "Level 8"],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://hydrogen.lat",
+        priceHref: "https://hydrogen.lat",
+        unclinks: {
+          macos:
+            "https://sunc.rubis.app/?scrap=5qh7GIfCDb8WZjtp&key=3Hq4Uz3Oc3X9G34ROz12ODY4VJIwXuUH",
+        },
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$4.99",
+        period: "monthly",
+      },
+      flags: {
+        hasKeySystem: true,
+        pricegray: true,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: true,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "## Exploit Performance\n- Customizable themes (open-source), [Luarmor]() support, and performance comparable to a standard executor.\n\n## Background Information\n- [Hydrogen]() has been a long-standing executor for macOS and Android (now discontinued). Originally developed by [@xgladius](), it was known for being an ultra-fast macOS executor. Later, development was taken over by [@retguard](), who eventually discontinued updates in May 2024 due to personal reasons. As of April 12, 2025, [@xgladius]() has resumed development, with plans to continue its progress for the foreseeable future.\n\n## Developer Background\n- [Hydrogen]() is created by [@xgladius](), a well-known exploit developer and reverse engineer. He is recognized for projects like [luaudec](https://github.com/xgladius/luauDec) and various other contributions to the Exploit Community.\n\n> Sources: Hydrogen Staff Team\n",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
+      },
+    },
+  },
 
-{
-  seliware: {
-    main: {
-      name: "Seliware",
-      plat: ["windows"],
-      desc: "A reliable exploit with excellent support.",
-      pros: [
-        "Multi-Inject support",
-        "Has a decompiler",
-        "100% sUNC",
-        "Level 8",
-      ],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://seliware.com",
-      priceHref: "https://www.key-empire.com/#seliware",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$9.99",
-      period: "monthly",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: false,
-      verified: true,
-      external: false,
-      premium: true,
-      hideunc: false,
-      free: false,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "## Developers Background Information  \n- [Seliware](/) is developed by two experienced programmers — [@Dx](/) and [@z33r0x](/). While little is publicly known about them, both were previously part of the development team behind [TRX](/), a widely used executor within the CIS scene before the Byfron update.\n\n## History  \n- During its closed beta phase, [Seliware](/) had four core developers: [@z33r0x](/), [@Dx](/), [@Nezy](/), and [@74235](/). However, [@Nezy](/) and [@74235](/) left the project shortly before launch, creating a competing product called [Calibri](/), which was discontinued soon after.  \n- Following its official release, [Seliware](/) introduced consistent updates and practical innovations. In January, after Microsoft patched the WinVerifyTrust hook injection method, [Seliware](/) was the third executor to push an update — following [AWP](/) and [Wave](/).  \n- In April, due to internal issues, [Seliware](/) temporarily shut down for 3 weeks. Upon reopening, all active subscriptions were compensated. Currently, it stands as the most memory-efficient paid executor, making it especially appealing for farming use cases.\n\n## Future  \n- A complete rewrite of [Seliware](/) has been underway since December and will launch as a separate product under a new name. All users with an active [Seliware](/) subscription at the time of the new release will receive a full transfer.  \n- Support for other platforms — including macOS and iOS — is also planned for future expansion.\n\n## Interesting Facts  \n- [GRH](/), the creator of [Synapse Z](/), contributed to the early development of [Seliware](/).  \n- [Seliware](/) is the second-longest surviving internal executor following the [Hyperion](/) update, outlived only by [Wave](/).\n\n> Sources: [Seliware Team](), internal notes, and public release changelogs\n",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    seliware: {
+      main: {
+        name: "Seliware",
+        plat: ["windows"],
+        desc: "A reliable exploit with excellent support.",
+        pros: [
+          "Multi-Inject support",
+          "Has a decompiler",
+          "100% sUNC",
+          "Level 8",
+        ],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://seliware.com",
+        priceHref: "https://www.key-empire.com/#seliware",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$9.99",
+        period: "monthly",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: false,
+        verified: true,
+        external: false,
+        premium: true,
+        hideunc: false,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "## Developers Background Information  \n- [Seliware](/) is developed by two experienced programmers — [@Dx](/) and [@z33r0x](/). While little is publicly known about them, both were previously part of the development team behind [TRX](/), a widely used executor within the CIS scene before the Byfron update.\n\n## History  \n- During its closed beta phase, [Seliware](/) had four core developers: [@z33r0x](/), [@Dx](/), [@Nezy](/), and [@74235](/). However, [@Nezy](/) and [@74235](/) left the project shortly before launch, creating a competing product called [Calibri](/), which was discontinued soon after.  \n- Following its official release, [Seliware](/) introduced consistent updates and practical innovations. In January, after Microsoft patched the WinVerifyTrust hook injection method, [Seliware](/) was the third executor to push an update — following [AWP](/) and [Wave](/).  \n- In April, due to internal issues, [Seliware](/) temporarily shut down for 3 weeks. Upon reopening, all active subscriptions were compensated. Currently, it stands as the most memory-efficient paid executor, making it especially appealing for farming use cases.\n\n## Future  \n- A complete rewrite of [Seliware](/) has been underway since December and will launch as a separate product under a new name. All users with an active [Seliware](/) subscription at the time of the new release will receive a full transfer.  \n- Support for other platforms — including macOS and iOS — is also planned for future expansion.\n\n## Interesting Facts  \n- [GRH](/), the creator of [Synapse Z](/), contributed to the early development of [Seliware](/).  \n- [Seliware](/) is the second-longest surviving internal executor following the [Hyperion](/) update, outlived only by [Wave](/).\n\n> Sources: [Seliware Team](), internal notes, and public release changelogs\n",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  bunni: {
-    main: {
-      name: "Bunni",
-      plat: ["windows"],
-      desc: "The free Level 8 exploit to use.",
-      pros: ["Has a decompiler", "100% sUNC", "Level 8"],
-      neutral: ["Check 'More Info' -> Exploit Performance"],
-      cons: [],
-    },
-    links: {
-      href: "https://discord.gg/bunnilol",
-      priceHref: "https://www.key-empire.com/#bunni",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$34.99",
-      period: "lifetime",
-    },
-    flags: {
-      hasKeySystem: true,
-      pricegray: true,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: true,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "## Exploit Performance\n\n* Multiple stability issues. You must have [VcRedist x64](https://aka.ms/vs/17/release/vc_redist.x64.exe) & [VcRedist x86](https://aka.ms/vs/17/release/vc_redist.x86.exe) installed to pass the UI, and a reasonably capable CPU. We tested this executor on an [i5-4460](). After the injection, the client’s performance dropped severely — mouse and keyboard input lagged by roughly 20 seconds. Other executors do not show this behavior on the same CPU. [voxlis NETWORK]() recommends this executor only for lifetime-subscription users.\n\n\n## Background Information  \n\n- Originally released under the name [Swift](), the brand was later sold and the project renamed [Bunni](). It was subsequently rebranded to [Visual]() for a short period before returning to the [Bunni]() name. For a fuller timeline and source details, consult the Swift and MacSploit cards.\n\n\n## Developer Information  \n- [Peyton](/), the project’s creator, is an experienced and respected developer in the exploit community. His track record includes continued leadership on [Swift](/), while now also overseeing Visual’s direction. [Blinx](/), the UI designer behind both the original Swift interface and Visual’s current look, brings a clean and consistent visual identity across projects. [Reveny](/) and [Viz](/), both software engineering majors and longtime collaborators of Peyton, contribute to the development of Visual. Though not publicly known in the community, their technical expertise ensures the project is both scalable and dependable.\n\n> Sources: Reddit.com/r/robloxhackers, Swift Discord, Visual Discord, Bunni Discord",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    bunni: {
+      main: {
+        name: "Bunni",
+        plat: ["windows"],
+        desc: "The free Level 8 exploit to use.",
+        pros: ["Has a decompiler", "100% sUNC", "Level 8"],
+        neutral: ["Check 'More Info' -> Exploit Performance"],
+        cons: [],
+      },
+      links: {
+        href: "https://discord.gg/bunnilol",
+        priceHref: "https://www.key-empire.com/#bunni",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$34.99",
+        period: "lifetime",
+      },
+      flags: {
+        hasKeySystem: true,
+        pricegray: true,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: true,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "## Exploit Performance\n\n* Multiple stability issues. You must have [VcRedist x64](https://aka.ms/vs/17/release/vc_redist.x64.exe) & [VcRedist x86](https://aka.ms/vs/17/release/vc_redist.x86.exe) installed to pass the UI, and a reasonably capable CPU. We tested this executor on an [i5-4460](). After the injection, the client’s performance dropped severely — mouse and keyboard input lagged by roughly 20 seconds. Other executors do not show this behavior on the same CPU. [voxlis NETWORK]() recommends this executor only for lifetime-subscription users.\n\n\n## Background Information  \n\n- Originally released under the name [Swift](), the brand was later sold and the project renamed [Bunni](). It was subsequently rebranded to [Visual]() for a short period before returning to the [Bunni]() name. For a fuller timeline and source details, consult the Swift and MacSploit cards.\n\n\n## Developer Information  \n- [Peyton](/), the project’s creator, is an experienced and respected developer in the exploit community. His track record includes continued leadership on [Swift](/), while now also overseeing Visual’s direction. [Blinx](/), the UI designer behind both the original Swift interface and Visual’s current look, brings a clean and consistent visual identity across projects. [Reveny](/) and [Viz](/), both software engineering majors and longtime collaborators of Peyton, contribute to the development of Visual. Though not publicly known in the community, their technical expertise ensures the project is both scalable and dependable.\n\n> Sources: Reddit.com/r/robloxhackers, Swift Discord, Visual Discord, Bunni Discord",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
 
-{
-  solara: {
-    main: {
-      name: "Solara",
-      plat: ["windows"],
-      desc: "A free exploit with decent performance.",
-      pros: ["Has a decompiler", "No keysystem", "51% sUNC~"],
-      neutral: ["Level 3"],
-      cons: [],
-    },
-    links: {
-      href: "https://getsolara.dev",
-      priceHref: null,
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "FREE",
-      period: null,
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: false,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: true,
-      hide: false,
-      lvl: 3,
-    },
-    modals: {
-      info:
-        "## Exploit Performance \n- [Solara]() offers solid performance with minimal crashes or instability, making it a reliable option for most users. It receives fast and frequent updates, keeping up with Roblox patches to reduce downtime.\n- Unlike many executors that rely on complicated key systems, [Solara]() simplifies access by requiring users to complete a quick Linkvertise task during download, making setup more user-friendly.\n\n## Background Information \n- [Solara]() is owned and managed by [@quivings](), who was previously active in the script development scene.\n- While not much is publicly known about him, [@quivings]() has built a respectable reputation within the community for his work and consistent updates to the tool.\n",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    solara: {
+      main: {
+        name: "Solara",
+        plat: ["windows"],
+        desc: "A free exploit with decent performance.",
+        pros: ["Has a decompiler", "No keysystem", "51% sUNC~"],
+        neutral: ["Level 3"],
+        cons: [],
+      },
+      links: {
+        href: "https://getsolara.dev",
+        priceHref: null,
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "FREE",
+        period: null,
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: false,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: true,
+        hide: false,
+        lvl: 3,
+      },
+      modals: {
+        info: "## Exploit Performance \n- [Solara]() offers solid performance with minimal crashes or instability, making it a reliable option for most users. It receives fast and frequent updates, keeping up with Roblox patches to reduce downtime.\n- Unlike many executors that rely on complicated key systems, [Solara]() simplifies access by requiring users to complete a quick Linkvertise task during download, making setup more user-friendly.\n\n## Background Information \n- [Solara]() is owned and managed by [@quivings](), who was previously active in the script development scene.\n- While not much is publicly known about him, [@quivings]() has built a respectable reputation within the community for his work and consistent updates to the tool.\n",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  delta: {
-    main: {
-      name: "Delta",
-      plat: ["ios", "android"],
-      desc: "A powerful multi-platform exploit.",
-      pros: ["Has a decompiler", "100% sUNC", "Level 8"],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://deltaexploits.gg",
-      priceHref: null,
-      unclinks: {
-        ios:
-          "https://sunc.rubis.app/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
-        android:
-          "https://sunc.rubis.app/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
+  {
+    delta: {
+      main: {
+        name: "Delta",
+        plat: ["ios", "android"],
+        desc: "A powerful multi-platform exploit.",
+        pros: ["Has a decompiler", "100% sUNC", "Level 8"],
+        neutral: [],
+        cons: [],
       },
-    },
-    misc: {
-      editor: "voxlis",
-      price: "FREE",
-      period: null,
-    },
-    flags: {
-      hasKeySystem: true,
-      pricegray: false,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: true,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+      links: {
+        href: "https://deltaexploits.gg",
+        priceHref: null,
+        unclinks: {
+          ios: "https://sunc.rubis.app/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
+          android:
+            "https://sunc.rubis.app/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
+        },
       },
-    },
-  },
-},
-{
-  xeno: {
-    main: {
-      name: "Xeno",
-      plat: ["windows"],
-      desc: "A free exploit with basic features.",
-      pros: ["Has a decompiler", "No keysystem", "40% sUNC~"],
-      neutral: ["Level 3"],
-      cons: [],
-    },
-    links: {
-      href: "https://www.xeno.onl/",
-      priceHref: "https://linkvertise.com/1319977/xeno",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "FREE",
-      period: null,
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: false,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: true,
-      hide: false,
-      lvl: 3,
-    },
-    modals: {
-      info:
-        "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+      misc: {
+        editor: "voxlis",
+        price: "FREE",
+        period: null,
+      },
+      flags: {
+        hasKeySystem: true,
+        pricegray: false,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: true,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  serotonin: {
-    main: {
-      name: "Serotonin",
-      plat: ["windows"],
-      desc: "A usermode external exploit",
-      pros: [
-        "Has a Lua env & code explorer",
-        "Usermode product",
-        "Rich in features",
-      ],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://serotonin.best/",
-      priceHref: "https://key-empire.com/#serotonin",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$9.99",
-      period: "monthly",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: true,
-      verified: false,
-      external: true,
-      premium: false,
-      hideunc: false,
-      free: false,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "# Exploit Performance\n\n[Serotonin ](url)is an external cheat that has quickly gained a strong reputation from a development standpoint. It offers many unique features, including a **3D ESP Preview**, a **first** for external cheats on Roblox, which is fully modular, allowing all elements to be adjusted. Other notable features include a **Player Avatar/Mesh preview** to visualize meshes and players which has **never been done before**, and **Highlight/Mesh chams** that rival internal visuals. [Serotonin ](url)also provides a **globally functional vis check** and lighting modules that work in almost all games. The development team maintains a consistent weekly update schedule.\n\n## Background Information\n\n[Serotonin ](url)was launched by developer [@Auti](url), who branched off from a previous private project called **Melatonin**. During a year and a half at Melatonin, [Auti ](url)developed cheats for **Roblox, FiveM, Battlefield, CS:S, Rust DMA, and Apex DMA**. While there, [Auti](url) was responsible for releasing the **first external visibility check** to the public and enabling access to Instance Attributes through the external's Lua VM. When starting [Serotonin](url), [Auti](url) partnered with his friend [@Fope](url), who is the UI creator and designer for the menu. [Fope](url) plans on releasing his **CS:2** Product and eventually expanding onto other games.\n\n## Developer Insight\n\n- [Serotonin ](url)Roblox is developed by [Auti](url), who has approximately **five to six years of experience** in reverse engineering across numerous games. \n- Auti occasionally posts Devlogs to his [YouTube channel](https://www.youtube.com/@autihvh)\n- The UI and menu design are created by Fope, his partner.",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    xeno: {
+      main: {
+        name: "Xeno",
+        plat: ["windows"],
+        desc: "A free exploit with basic features.",
+        pros: ["Has a decompiler", "No keysystem", "40% sUNC~"],
+        neutral: ["Level 3"],
+        cons: [],
+      },
+      links: {
+        href: "https://www.xeno.onl/",
+        priceHref: "https://linkvertise.com/1319977/xeno",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "FREE",
+        period: null,
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: false,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: true,
+        hide: false,
+        lvl: 3,
+      },
+      modals: {
+        info: "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  vegax: {
-    main: {
-      name: "VegaX",
-      plat: ["android"],
-      desc: "A powerful exploit with short key duration.",
-      pros: ["2 day long keys", "Level 8"],
-      neutral: ["Fails sUNC checks", "Uses core technology from ArceusX"],
-      cons: [],
-    },
-    links: {
-      href: "https://vegax.gg",
-      priceHref: "https://yap.com/",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "FREE",
-      period: null,
-    },
-    flags: {
-      hasKeySystem: true,
-      pricegray: false,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: true,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    serotonin: {
+      main: {
+        name: "Serotonin",
+        plat: ["windows"],
+        desc: "A usermode external exploit",
+        pros: [
+          "Has a Lua env & code explorer",
+          "Usermode product",
+          "Rich in features",
+        ],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://serotonin.best/",
+        priceHref: "https://key-empire.com/#serotonin",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$9.99",
+        period: "monthly",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: true,
+        verified: false,
+        external: true,
+        premium: false,
+        hideunc: false,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "# Exploit Performance\n\n[Serotonin ](url)is an external cheat that has quickly gained a strong reputation from a development standpoint. It offers many unique features, including a **3D ESP Preview**, a **first** for external cheats on Roblox, which is fully modular, allowing all elements to be adjusted. Other notable features include a **Player Avatar/Mesh preview** to visualize meshes and players which has **never been done before**, and **Highlight/Mesh chams** that rival internal visuals. [Serotonin ](url)also provides a **globally functional vis check** and lighting modules that work in almost all games. The development team maintains a consistent weekly update schedule.\n\n## Background Information\n\n[Serotonin ](url)was launched by developer [@Auti](url), who branched off from a previous private project called **Melatonin**. During a year and a half at Melatonin, [Auti ](url)developed cheats for **Roblox, FiveM, Battlefield, CS:S, Rust DMA, and Apex DMA**. While there, [Auti](url) was responsible for releasing the **first external visibility check** to the public and enabling access to Instance Attributes through the external's Lua VM. When starting [Serotonin](url), [Auti](url) partnered with his friend [@Fope](url), who is the UI creator and designer for the menu. [Fope](url) plans on releasing his **CS:2** Product and eventually expanding onto other games.\n\n## Developer Insight\n\n- [Serotonin ](url)Roblox is developed by [Auti](url), who has approximately **five to six years of experience** in reverse engineering across numerous games. \n- Auti occasionally posts Devlogs to his [YouTube channel](https://www.youtube.com/@autihvh)\n- The UI and menu design are created by Fope, his partner.",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
+  {
+    vegax: {
+      main: {
+        name: "VegaX",
+        plat: ["android"],
+        desc: "A powerful exploit with short key duration.",
+        pros: ["2 day long keys", "Level 8"],
+        neutral: ["Fails sUNC checks", "Uses core technology from ArceusX"],
+        cons: [],
+      },
+      links: {
+        href: "https://vegax.gg",
+        priceHref: "https://yap.com/",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "FREE",
+        period: null,
+      },
+      flags: {
+        hasKeySystem: true,
+        pricegray: false,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: true,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
+      },
+    },
+  },
 
-{
-  sirhurt: {
-    main: {
-      name: "SirHurt",
-      plat: ["windows"],
-      desc: "An exploit thats been around since 2015",
-      pros: ["Has a decompiler", "97% sUNC", "Level 8"],
-      neutral: [],
-      cons: [],
-    },
-    links: {
-      href: "https://sirhurt.net",
-      priceHref: "https://sirhurt.net",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$2.80",
-      period: "weekly",
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: true,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: false,
-      free: false,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        '## Exploit Performance  \n- [SirHurt](https://sirhurt.net/) is a Level 8 executor with 93% sUNC compatibility. It performs consistently and supports a wide range of scripts.  \n\n## Background Information  \n- [SirHurt]() was originally launched in December 2015 as a private cheat under the name “AssHurt.” It was later renamed to "SirHurt" to make the product more marketable, particularly to younger users and their parents.  \n- Due to the shutdown of [V3rmillion.net](), much of its early history has been lost, though the executor has continued to receive updates and maintain relevance in the community for nearly a decade.  \n- The exploit is maintained by [IcePools](), who leads both development and operations. Past contributors include Woffle and Aero, though their current involvement is unclear.\n\n## Developer Background  \n- [IcePools]() is the main developer and operator of [SirHurt](). While there have been community warnings in the past—mainly regarding personal allegations—no verifiable evidence has been presented.  \n- A counter-CW was posted on [V3rm.net]() which addressed and debunked the original claims using archived material. The community generally considers the matter resolved.\n\n> Submitted by: **@daxhascool** (Public Relations at SirHurt)  \n> Sources: [reddit.com/r/robloxhackers]()\n',
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    sirhurt: {
+      main: {
+        name: "SirHurt",
+        plat: ["windows"],
+        desc: "An exploit thats been around since 2015",
+        pros: ["Has a decompiler", "97% sUNC", "Level 8"],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://sirhurt.net",
+        priceHref: "https://sirhurt.net",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$2.80",
+        period: "weekly",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: true,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: '## Exploit Performance  \n- [SirHurt](https://sirhurt.net/) is a Level 8 executor with 93% sUNC compatibility. It performs consistently and supports a wide range of scripts.  \n\n## Background Information  \n- [SirHurt]() was originally launched in December 2015 as a private cheat under the name “AssHurt.” It was later renamed to "SirHurt" to make the product more marketable, particularly to younger users and their parents.  \n- Due to the shutdown of [V3rmillion.net](), much of its early history has been lost, though the executor has continued to receive updates and maintain relevance in the community for nearly a decade.  \n- The exploit is maintained by [IcePools](), who leads both development and operations. Past contributors include Woffle and Aero, though their current involvement is unclear.\n\n## Developer Background  \n- [IcePools]() is the main developer and operator of [SirHurt](). While there have been community warnings in the past—mainly regarding personal allegations—no verifiable evidence has been presented.  \n- A counter-CW was posted on [V3rm.net]() which addressed and debunked the original claims using archived material. The community generally considers the matter resolved.\n\n> Submitted by: **@daxhascool** (Public Relations at SirHurt)  \n> Sources: [reddit.com/r/robloxhackers]()\n',
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  aimmy: {
-    main: {
-      name: "Aimmy",
-      plat: ["windows"],
-      desc: "An AI-based exploit with support for multiple games.",
-      pros: ["Supports other games", "No keysystem", "AI-based"],
-      neutral: [
-        "Requires GTX 1050 or better",
-        "Requires training the model",
-      ],
-      cons: [],
-    },
-    links: {
-      href: "https://aimmy.dev",
-      priceHref: "https://yap.com/",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "FREE",
-      period: null,
-    },
-    flags: {
-      hasKeySystem: false,
-      pricegray: false,
-      verified: false,
-      external: true,
-      premium: false,
-      hideunc: true,
-      free: true,
-      hide: false,
-      lvl: null,
-    },
-    modals: {
-      info:
-        "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    aimmy: {
+      main: {
+        name: "Aimmy",
+        plat: ["windows"],
+        desc: "An AI-based exploit with support for multiple games.",
+        pros: ["Supports other games", "No keysystem", "AI-based"],
+        neutral: ["Requires GTX 1050 or better", "Requires training the model"],
+        cons: [],
+      },
+      links: {
+        href: "https://aimmy.dev",
+        priceHref: "https://yap.com/",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "FREE",
+        period: null,
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: false,
+        verified: false,
+        external: true,
+        premium: false,
+        hideunc: true,
+        free: true,
+        hide: false,
+        lvl: null,
+      },
+      modals: {
+        info: "## Oops! 🤭\n- Looks like we had not gathered the information yet on this Exploit! This could take some time to finish...\n\nIf you would like to help us out, visit https://github.com/localscripts/voxlis.NET/blob/main/README.md!",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-{
-  arceusx: {
-    main: {
-      name: "ArceusX",
-      plat: ["ios", "android"],
-      desc: "A long-standing mobile exploit.",
-      pros: ["VNG Support", "Level 8"],
-      neutral: ["Fails sUNC checks"],
-      cons: [],
-    },
-    links: {
-      href: "https://spdmteam.com/",
-      priceHref: "https://www.key-empire.com/#arceusx",
-      unclinks: {},
-    },
-    misc: {
-      editor: "voxlis.NET",
-      price: "$7.49",
-      period: "monthly",
-    },
-    flags: {
-      hasKeySystem: true,
-      pricegray: true,
-      verified: false,
-      external: false,
-      premium: false,
-      hideunc: true,
-      free: false,
-      hide: false,
-      lvl: 8,
-    },
-    modals: {
-      info:
-        "## Exploit Performance  \n- [ArceusX]() can run most scripts due to its high UNC percentage but lacks support for some functions like `getinstance`. Alternatives like [KRNL](https://krnl.cat) and [Delta](https://deltaexploits.gg) offer slightly better UNC and have safer reputations.\n\n## Background Information  \n- Released in 2019, [ArceusX]() was one of the first mobile Roblox executors. In March 2022, [@lxnny]() — owner of [Delta](https://deltaexploits.gg) — reposted a community warning on [WeAreDevs](https://wearedevs.net), exposing [ArceusX]() for ratting users and scamming developers. Despite this, it remains widely used. In April 2024, [SPDMTeam](https://spdmteam.com) launched [Wave](https://getwave.gg), a Windows executor combining [ArceusX]() and CodeX with an improved UI. While trusted, it’s still owned by the same team involved in past data issues. [ArceusX]() continues to receive regular updates.\n\n## Developer Background Information  \n- [ArceusX]() is owned by [Tiahh]() and [SPDMTeam](https://spdmteam.com). There is limited public information about the developers.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
-      warning: null,
-      downtime: {
-        enabled: true,
-        icon: "/assets/cat.png",
-        title: "Hold on!",
-        desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
-        video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
-        continue: "href",
+  {
+    arceusx: {
+      main: {
+        name: "ArceusX",
+        plat: ["ios", "android"],
+        desc: "A long-standing mobile exploit.",
+        pros: ["VNG Support", "Level 8"],
+        neutral: ["Fails sUNC checks"],
+        cons: [],
+      },
+      links: {
+        href: "https://spdmteam.com/",
+        priceHref: "https://www.key-empire.com/#arceusx",
+        unclinks: {},
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$7.49",
+        period: "monthly",
+      },
+      flags: {
+        hasKeySystem: true,
+        pricegray: true,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: true,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: "## Exploit Performance  \n- [ArceusX]() can run most scripts due to its high UNC percentage but lacks support for some functions like `getinstance`. Alternatives like [KRNL](https://krnl.cat) and [Delta](https://deltaexploits.gg) offer slightly better UNC and have safer reputations.\n\n## Background Information  \n- Released in 2019, [ArceusX]() was one of the first mobile Roblox executors. In March 2022, [@lxnny]() — owner of [Delta](https://deltaexploits.gg) — reposted a community warning on [WeAreDevs](https://wearedevs.net), exposing [ArceusX]() for ratting users and scamming developers. Despite this, it remains widely used. In April 2024, [SPDMTeam](https://spdmteam.com) launched [Wave](https://getwave.gg), a Windows executor combining [ArceusX]() and CodeX with an improved UI. While trusted, it’s still owned by the same team involved in past data issues. [ArceusX]() continues to receive regular updates.\n\n## Developer Background Information  \n- [ArceusX]() is owned by [Tiahh]() and [SPDMTeam](https://spdmteam.com). There is limited public information about the developers.\n\n> Sources: [reddit.com/r/robloxhackers]()\n",
+        warning: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          video: "https://www.youtube.com/watch?v=68Ra1IN19HU",
+          continue: "href",
+        },
       },
     },
   },
-},
-
 ];
 
 const BadgeData = [
@@ -1065,7 +1046,8 @@ const BadgeData = [
     color: "#4374b3",
     backgroundColor: "rgba(6, 12, 25)",
     borderColor: "rgba(17, 36, 69)",
-    hoverInfo: "This exploit contains full “MORE INFO” data and is confirmed as verified through corroborating background information.",
+    hoverInfo:
+      "This exploit contains full “MORE INFO” data and is confirmed as verified through corroborating background information.",
     tooltipBg: "#4374b3",
   },
   {
@@ -1075,7 +1057,8 @@ const BadgeData = [
     color: "#fbbf24",
     backgroundColor: "rgba(251, 191, 36, 0.2)",
     borderColor: "rgba(251, 191, 36, 0.3)",
-    hoverInfo: "The best-value product currently, based on community click data",
+    hoverInfo:
+      "The best-value product currently, based on community click data",
     tooltipBg: "#f59e0b",
   },
   {
@@ -1085,7 +1068,8 @@ const BadgeData = [
     color: "#ef4444",
     backgroundColor: "rgba(239, 68, 68, 0.2)",
     borderColor: "rgba(239, 68, 68, 0.3)",
-    hoverInfo: "Warning: proceed carefully — this exploit’s “MORE INFO” tab seems suspicious.",
+    hoverInfo:
+      "Warning: proceed carefully — this exploit’s “MORE INFO” tab seems suspicious.",
     tooltipBg: "#dc2626",
   },
 ];
@@ -1252,7 +1236,7 @@ async function updateExploitStatusAndVersion(exploit) {
 }
 
 function getUnupdatedPlatformsString(exploitStatus) {
-  if (!exploitStatus || typeof exploitStatus !== 'object') {
+  if (!exploitStatus || typeof exploitStatus !== "object") {
     return "";
   }
 
@@ -1260,7 +1244,7 @@ function getUnupdatedPlatformsString(exploitStatus) {
     windows: "Windows",
     macos: "macOS",
     ios: "iOS",
-    android: "Android"
+    android: "Android",
   };
 
   const unupdatedPlatforms = Object.entries(exploitStatus)
@@ -2334,9 +2318,22 @@ class AppState {
         }
 
         if (this.updatedOnly) {
-          const status = this.getExploitStatus(exp.id);
-          if (status !== "updated") {
-            return false;
+          const rawStatus = this.exploitStatuses.get(exp.id);
+
+          // If platform filters are active, check if the exploit is updated for those specific platforms
+          if (this.platformFilters.length > 0 && typeof rawStatus === "object" && rawStatus !== null) {
+            const isUpdatedForSelectedPlatforms = this.platformFilters.some(
+              (platform) => rawStatus[platform] === true
+            );
+            if (!isUpdatedForSelectedPlatforms) {
+              return false;
+            }
+          } else {
+            // If no platform filters, use the general status check
+            const status = this.getExploitStatus(exp.id);
+            if (status !== "updated") {
+              return false;
+            }
           }
         }
 
@@ -3174,15 +3171,15 @@ class UIManager {
     let badgesHtml = "";
     if (exploit.verified) {
       const badgeData = getBadgeById("verified");
-      badgesHtml += `<span class="vrf-bdg" style="--badge-color: ${badgeData.color}; --badge-bg: ${badgeData.backgroundColor}; --badge-border: ${badgeData.borderColor}; --tooltip-bg: ${badgeData.tooltipBg};" title="${badgeData.hoverInfo}">${badgeData.icon}${badgeData.label}<span class="badge-tooltip-text">${badgeData.hoverInfo}</span></span>`;
+      badgesHtml += `<span class="vrf-bdg" style="--badge-color: ${badgeData.color}; --badge-bg: ${badgeData.backgroundColor}; --badge-border: ${badgeData.borderColor}; --tooltip-bg: ${badgeData.tooltipBg};">${badgeData.icon}${badgeData.label}<span class="badge-tooltip-text">${badgeData.hoverInfo}</span></span>`;
     }
     if (exploit.premium) {
       const badgeData = getBadgeById("premium");
-      badgesHtml += `<span class="prem-bdg" style="--badge-color: ${badgeData.color}; --badge-bg: ${badgeData.backgroundColor}; --badge-border: ${badgeData.borderColor}; --tooltip-bg: ${badgeData.tooltipBg};" title="${badgeData.hoverInfo}">${badgeData.icon}${badgeData.label}<span class="badge-tooltip-text">${badgeData.hoverInfo}</span></span>`;
+      badgesHtml += `<span class="prem-bdg" style="--badge-color: ${badgeData.color}; --badge-bg: ${badgeData.backgroundColor}; --badge-border: ${badgeData.borderColor}; --tooltip-bg: ${badgeData.tooltipBg};">${badgeData.icon}${badgeData.label}<span class="badge-tooltip-text">${badgeData.hoverInfo}</span></span>`;
     }
     if (exploit.warning?.enabled === true) {
       const badgeData = getBadgeById("warning");
-      badgesHtml += `<span class="warn-bdg" style="--badge-color: ${badgeData.color}; --badge-bg: ${badgeData.backgroundColor}; --badge-border: ${badgeData.borderColor}; --tooltip-bg: ${badgeData.tooltipBg};" title="${badgeData.hoverInfo}">${badgeData.icon}${badgeData.label}<span class="badge-tooltip-text">${badgeData.hoverInfo}</span></span>`;
+      badgesHtml += `<span class="warn-bdg" style="--badge-color: ${badgeData.color}; --badge-bg: ${badgeData.backgroundColor}; --badge-border: ${badgeData.borderColor}; --tooltip-bg: ${badgeData.tooltipBg};">${badgeData.icon}${badgeData.label}<span class="badge-tooltip-text">${badgeData.hoverInfo}</span></span>`;
     }
 
     card.innerHTML = `
@@ -3298,40 +3295,42 @@ ${this.renderCardFooter(exploit)}
     // Sort badges: updated first (priority 0), then down (priority 1), then others (priority 2)
     platformBadges.sort((a, b) => a.priority - b.priority);
 
-    // Combine sorted platform badges with proper z-index
-    // Reverse the index so leftmost badges have lower z-index (appear under badges to the right)
-    // Group consecutive down/unupdated badges in a wrapper
+    // Separate badges into updated and status-down groups
+    const updatedBadges = platformBadges.filter((badge) => badge.status === "updated");
+    const downBadges = platformBadges.filter((badge) => badge.status === "down");
+    const otherBadges = platformBadges.filter((badge) => badge.status !== "updated" && badge.status !== "down");
+
+    // Render updated badges
     let badges = "";
-    let inDownGroup = false;
-
-    platformBadges.forEach((badge, index) => {
-      const reversedIndex = platformBadges.length - 1 - index;
-      const isDown = badge.status === "down" || badge.status === "unknown";
-      const nextBadge =
-        index < platformBadges.length - 1 ? platformBadges[index + 1] : null;
-      const nextIsDown =
-        nextBadge &&
-        (nextBadge.status === "down" || nextBadge.status === "unknown");
-
-      // Start a down-group wrapper if this is the first down badge in a sequence
-      if (isDown && !inDownGroup) {
-        badges += '<div class="down-group-wrapper">';
-        inDownGroup = true;
-      }
-
-      // Add the badge
+    updatedBadges.forEach((badge) => {
       badges += `
-          <div class="pltf-bdg ${badge.className}" style="--badge-index: ${reversedIndex};">
+          <div class="pltf-bdg ${badge.className}">
               ${badge.iconHtml}
               <span class="platform-tooltip">${badge.tooltipText}</span>
           </div>`;
-
-      // Close the down-group wrapper if this is the last down badge in a sequence
-      if (isDown && !nextIsDown && inDownGroup) {
-        badges += "</div>";
-        inDownGroup = false;
-      }
     });
+
+    // Render other badges (untracked, unknown)
+    otherBadges.forEach((badge) => {
+      badges += `
+          <div class="pltf-bdg ${badge.className}">
+              ${badge.iconHtml}
+              <span class="platform-tooltip">${badge.tooltipText}</span>
+          </div>`;
+    });
+
+    // Render status-down badges in their own container
+    if (downBadges.length > 0) {
+      badges += `<div class="pltf-bdgs-down">`;
+      downBadges.forEach((badge) => {
+        badges += `
+            <div class="pltf-bdg ${badge.className}">
+                ${badge.iconHtml}
+                <span class="platform-tooltip">${badge.tooltipText}</span>
+            </div>`;
+      });
+      badges += `</div>`;
+    }
 
     // Add key system badge at the end
     if (exploit.hasKeySystem) {
@@ -3606,7 +3605,10 @@ ${this.renderCardFooter(exploit)}
           <i class="fas fa-tag"></i> BUY
         </div>
         <div class="price-text">
-          <i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}
+          <div class="text-container">
+            <span class="text-switch visible" data-text="price"><i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}</span>
+            <span class="text-switch hidden" data-text="logo"><img src="../assets/key-empire.png" alt="Key Empire" style="height: 1.2em; width: auto;"></span>
+          </div>
         </div>
       </button>
     `;
@@ -3671,7 +3673,10 @@ ${this.renderCardFooter(exploit)}
           <i class="fas fa-tag"></i> BUY
         </div>
         <div class="price-text">
-          <i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}
+          <div class="text-container">
+            <span class="text-switch visible" data-text="price"><i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}</span>
+            <span class="text-switch hidden" data-text="logo"><img src="../assets/key-empire.png" alt="Key Empire" style="height: 1.2em; width: auto;"></span>
+          </div>
         </div>
       </button>
     `;
@@ -3737,7 +3742,7 @@ ${this.renderCardFooter(exploit)}
                     // No link provided for single platform - show error
                     ModalManager.showNotification(
                       `No UNC link available for ${exploit.name}`,
-                      "error"
+                      "error",
                     );
                     return;
                   }
@@ -4040,7 +4045,7 @@ ${this.renderCardFooter(exploit)}
 
   initTextSwitching() {
     const containers = document.querySelectorAll(
-      ".info-btn .text-container, .price-info-btn .text-container, .more-info-btn .text-container",
+      ".info-btn .text-container, .price-info-btn .text-container, .more-info-btn .text-container, .prc-btn-new .price-text .text-container",
     );
 
     containers.forEach((container) => {
@@ -4070,7 +4075,7 @@ ${this.renderCardFooter(exploit)}
 
     const animationInterval = setInterval(() => {
       const currentContainers = document.querySelectorAll(
-        ".info-btn .text-container, .price-info-btn .text-container, .more-info-btn .text-container",
+        ".info-btn .text-container, .price-info-btn .text-container, .more-info-btn .text-container, .prc-btn-new .price-text .text-container",
       );
 
       currentContainers.forEach((container) => {
@@ -4118,68 +4123,17 @@ ${this.renderCardFooter(exploit)}
   }
 
   handleWindowResize() {
-    const grid = this.getElement("grid");
     const menu = this.getElement("menu");
-    const menuToggle = this.getElement("menuToggle");
-    const windowWidth = window.innerWidth;
 
-    if (grid) {
-      /* <CHANGE> Remove inline style resets - use CSS media queries instead */
-      if (windowWidth < 640) {
-        grid.style.gridTemplateColumns = "1fr";
-      } else if (windowWidth < 1024) {
-        grid.style.gridTemplateColumns =
-          "repeat(auto-fill, minmax(280px, 1fr))";
-      } else {
-        grid.style.gridTemplateColumns =
-          "repeat(auto-fill, minmax(300px, 1fr))";
-      }
-    }
-
-    if (windowWidth > 768 && menu && !menu.classList.contains("hidden")) {
+    // Auto-close mobile menu on larger screens using CSS media query check
+    if (window.matchMedia("(min-width: 769px)").matches && menu && !menu.classList.contains("hidden")) {
       menu.classList.add("hidden");
       document.body.classList.remove("menu-open");
     }
 
-    this.adjustSearchBar();
-
     if (this.appState.paginationManager) {
       this.appState.paginationManager.render();
     }
-  }
-
-  adjustSearchBar() {
-    const searchContainer = document.querySelector(".hdr-ctr");
-    const headerContainer = document.querySelector(".hdr-cntr");
-    const filterButton = this.getElement("filterButton");
-    const logoSection = document.querySelector(".hdr-lft");
-    const searchInput = document.querySelector(".srch-inp");
-    const searchIcon = document.querySelector(".srch-ico");
-
-    if (
-      !searchContainer ||
-      !headerContainer ||
-      !filterButton ||
-      !logoSection ||
-      !searchInput ||
-      !searchIcon
-    )
-      return;
-
-    const windowWidth = window.innerWidth;
-
-    if (windowWidth <= 768) {
-      searchContainer.style.display = "none";
-      return;
-    }
-
-    searchContainer.style.display = "block";
-    searchContainer.style.position = "absolute";
-    searchContainer.style.left = "50%";
-    searchContainer.style.transform = "translateX(-50%)";
-    searchContainer.style.maxWidth = "400px";
-    searchContainer.style.width = "auto";
-    searchContainer.style.zIndex = "5";
   }
 
   createModals() {
@@ -4749,9 +4703,10 @@ class ModalManager {
     platformOptions.innerHTML = "";
 
     // Get platforms from unclinks object keys
-    const platformsWithUnc = exploit.unclinks && typeof exploit.unclinks === "object"
-      ? Object.keys(exploit.unclinks)
-      : [];
+    const platformsWithUnc =
+      exploit.unclinks && typeof exploit.unclinks === "object"
+        ? Object.keys(exploit.unclinks)
+        : [];
 
     if (platformsWithUnc.length === 0) {
       console.warn("No UNC links found for exploit:", exploit.name);
@@ -4798,7 +4753,7 @@ class ModalManager {
         if (!uncLink) {
           ModalManager.showNotification(
             `No UNC link available for ${platformName}`,
-            "error"
+            "error",
           );
           return;
         }
@@ -4823,7 +4778,7 @@ class ModalManager {
         } catch (error) {
           console.warn(
             `Failed to parse sunc URL for exploit ${exploit.id} on ${platform}:`,
-            error
+            error,
           );
         }
 
@@ -5339,7 +5294,7 @@ class ModalManager {
   </div>
   <div class="warning-modal-footer">
     <button id="keysystemModalCancel" class="warning-modal-btn warning-modal-btn-cancel">Cancel</button>
-    <button id="keysystemModalOkay" class="warning-modal-btn warning-modal-btn-okay">2/3 - Continue</button>
+    <button id="keysystemModalOkay" class="warning-modal-btn warning-modal-btn-okay">Continue</button>
   </div>
 </div>
 `;
@@ -5421,7 +5376,7 @@ class ModalManager {
   </div>
   <div class="warning-modal-footer">
     <button id="downtimeModalCancel" class="warning-modal-btn warning-modal-btn-cancel">Cancel</button>
-    <button id="downtimeModalOkay" class="warning-modal-btn warning-modal-btn-okay">2/3 - Continue</button>
+    <button id="downtimeModalOkay" class="warning-modal-btn warning-modal-btn-okay">Continue</button>
   </div>
 </div>
 `;
@@ -5585,7 +5540,7 @@ class ModalManager {
   </div>
   <div class="warning-modal-footer">
     <button id="detectedModalCancel" class="warning-modal-btn warning-modal-btn-cancel">Cancel</button>
-    <button id="detectedModalOkay" class="warning-modal-btn warning-modal-btn-okay">2/3 - Continue</button>
+    <button id="detectedModalOkay" class="warning-modal-btn warning-modal-btn-okay">Continue</button>
   </div>
 </div>
 `;
@@ -5882,7 +5837,10 @@ class ModalManager {
     const unupdatedPlatformsString = getUnupdatedPlatformsString(exploitStatus);
 
     if (downtimeData?.title) {
-      downtimeTitle.textContent = downtimeData.title.replace(/{unupdated_platforms}/g, unupdatedPlatformsString);
+      downtimeTitle.textContent = downtimeData.title.replace(
+        /{unupdated_platforms}/g,
+        unupdatedPlatformsString,
+      );
     } else {
       downtimeTitle.textContent = "Warning";
     }
@@ -5938,8 +5896,12 @@ class ModalManager {
       targetUrl = buttonType === "price" ? exploit.priceHref : exploit.href;
     }
 
-    const descText = downtimeData?.desc || "Are you sure you want to visit this website?";
-    downtimeText.textContent = descText.replace(/{unupdated_platforms}/g, unupdatedPlatformsString);
+    const descText =
+      downtimeData?.desc || "Are you sure you want to visit this website?";
+    downtimeText.textContent = descText.replace(
+      /{unupdated_platforms}/g,
+      unupdatedPlatformsString,
+    );
 
     downtimeModal.style.display = "flex";
     document.body.style.overflow = "hidden";
@@ -7233,6 +7195,166 @@ window.addEventListener("load", () => {
   }
 });
 
+// Platform Badges Stacking and Spreading System
+// This system manages the interactive stacking and spreading behavior of platform badges
+// (Windows, macOS, iOS, Android icons) displayed on exploit cards.
+// This is like, a lot trickier than it seems.
+class PlatformBadgesManager {
+  constructor() {
+    this.badgeProximity = [15, 15]; // [horizontal, vertical] proximity for normal badges
+    this.statusDownProximity = [0, 15]; // [horizontal, vertical] proximity for status-down badges
+    this.containerStates = new Map(); // Track spread-down state per container to prevent flickering
+    this.init();
+  }
+
+  init() {
+    this.setupBadgeStacking();
+    this.setupHoverDetection();
+
+    // Re-setup when new badges are added to DOM
+    const observer = new MutationObserver(() => {
+      this.setupBadgeStacking();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  setupBadgeStacking() {
+    const allBadgeContainers = document.querySelectorAll('.pltf-bdgs');
+
+    allBadgeContainers.forEach(container => {
+      const badges = container.querySelectorAll('.pltf-bdg');
+
+      // Set z-index for each badge (rightmost has highest z-index)
+      // Also identify groups of status-down badges
+      let prevWasDown = false;
+
+      badges.forEach((badge, index) => {
+        badge.style.zIndex = index + 1;
+
+        const isDown = badge.classList.contains('status-down');
+
+        // Mark the first badge in a status-down group
+        if (isDown && !prevWasDown) {
+          badge.classList.add('group-start');
+        } else if (isDown && prevWasDown) {
+          badge.classList.remove('group-start');
+        } else {
+          badge.classList.remove('group-start');
+        }
+
+        prevWasDown = isDown;
+      });
+    });
+  }
+
+  setupHoverDetection() {
+    let rafId = null;
+
+    const checkHover = (e) => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+
+      rafId = requestAnimationFrame(() => {
+        const allBadgeContainers = document.querySelectorAll('.pltf-bdgs');
+
+        allBadgeContainers.forEach(container => {
+          const rect = container.getBoundingClientRect();
+          const mouseX = e.clientX;
+          const mouseY = e.clientY;
+
+          // Check proximity to main badge container using separate horizontal/vertical thresholds
+          const horizontalDistance = this.getHorizontalDistanceToRect(mouseX, rect);
+          const verticalDistance = this.getVerticalDistanceToRect(mouseY, rect);
+
+          const nearMainBadges =
+            horizontalDistance <= this.badgeProximity[0] &&
+            verticalDistance <= this.badgeProximity[1];
+
+          // If within proximity threshold of container, spread the main badges
+          if (nearMainBadges) {
+            container.classList.add('spread');
+
+            // Check if there's a status-down container and if we're near it
+            const downContainer = container.querySelector('.pltf-bdgs-down');
+            let nearDownContainer = false;
+
+            if (downContainer) {
+              const downRect = downContainer.getBoundingClientRect();
+              const downHorizontalDistance = this.getHorizontalDistanceToRect(mouseX, downRect);
+              const downVerticalDistance = this.getVerticalDistanceToRect(mouseY, downRect);
+
+              nearDownContainer =
+                downHorizontalDistance <= this.statusDownProximity[0] &&
+                downVerticalDistance <= this.statusDownProximity[1];
+            }
+
+            // Get or initialize state for this container
+            if (!this.containerStates.has(container)) {
+              this.containerStates.set(container, { isSpreadDown: false, frameCount: 0 });
+            }
+            const state = this.containerStates.get(container);
+
+            // Require nearDownContainer to be true for multiple consecutive frames before spreading
+            // This prevents flickering during badge position transitions
+            if (nearDownContainer) {
+              state.frameCount++;
+              // Only spread after 2 consecutive frames of being near
+              if (state.frameCount >= 2 || state.isSpreadDown) {
+                container.classList.add('spread-down');
+                state.isSpreadDown = true;
+              }
+            } else {
+              // Immediately unspread when not near
+              state.frameCount = 0;
+              state.isSpreadDown = false;
+              container.classList.remove('spread-down');
+            }
+          } else {
+            // Reset state when leaving proximity
+            if (this.containerStates.has(container)) {
+              this.containerStates.get(container).frameCount = 0;
+              this.containerStates.get(container).isSpreadDown = false;
+            }
+            container.classList.remove('spread');
+            container.classList.remove('spread-down');
+          }
+        });
+      });
+    };
+
+    document.addEventListener('mousemove', checkHover, { passive: true });
+  }
+
+  getDistanceToRect(x, y, rect) {
+    // Calculate the shortest distance from point (x, y) to rectangle
+    const dx = Math.max(rect.left - x, 0, x - rect.right);
+    const dy = Math.max(rect.top - y, 0, y - rect.bottom);
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  getVerticalDistanceToRect(y, rect) {
+    // Calculate only the vertical distance from point y to rectangle
+    // Ignores horizontal distance completely
+    return Math.max(rect.top - y, 0, y - rect.bottom);
+  }
+
+  getHorizontalDistanceToRect(x, rect) {
+    // Calculate only the horizontal distance from point x to rectangle
+    // Ignores vertical distance completely
+    return Math.max(rect.left - x, 0, x - rect.right);
+  }
+}
+
+// Initialize Platform Badges Manager
+document.addEventListener('DOMContentLoaded', () => {
+  new PlatformBadgesManager();
+});
+
 class ReportManager {
   static init() {
     const reportBtn = document.getElementById("reportBtn");
@@ -7434,6 +7556,20 @@ class MobileMenuManager {
         this.closeMenu();
       }
     });
+
+    // Close mobile menu on resize to larger screens
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (window.innerWidth > 1024 && this.menu && !this.menu.classList.contains("hidden")) {
+          this.menu.classList.add("hidden");
+          document.body.classList.remove("menu-open");
+          document.body.style.overflow = "";
+          this.isAnimating = false;
+        }
+      }, 100);
+    });
   }
 
   closeMenu() {
@@ -7502,3 +7638,116 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Custom scroll behavior for exploit cards
+class CardScrollManager {
+  constructor() {
+    this.scrollIntervals = new Map();
+    this.init();
+  }
+
+  init() {
+    document.addEventListener('DOMContentLoaded', () => {
+      this.setupCardScrollBehavior();
+    });
+
+    // Also run immediately in case DOM is already loaded
+    if (document.readyState === 'loading') {
+      // Wait for DOM
+    } else {
+      this.setupCardScrollBehavior();
+    }
+  }
+
+  setupCardScrollBehavior() {
+    // Use event delegation for better performance
+    const observer = new MutationObserver(() => {
+      this.attachScrollHandlers();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    this.attachScrollHandlers();
+  }
+
+  attachScrollHandlers() {
+    const cards = document.querySelectorAll('.exp-crd');
+
+    cards.forEach(card => {
+      // Skip if already initialized
+      if (card.dataset.scrollInitialized) return;
+      card.dataset.scrollInitialized = 'true';
+
+      const content = card.querySelector('.crd-cntnt');
+      const cardBody = card.querySelector('.crd-bdy');
+      if (!content || !cardBody) return;
+
+      // Check if content has overflow and add class to card body
+      const checkOverflow = () => {
+        const hasOverflow = content.scrollHeight > content.clientHeight;
+        if (hasOverflow) {
+          cardBody.classList.add('has-overflow');
+        } else {
+          cardBody.classList.remove('has-overflow');
+        }
+      };
+
+      // Check overflow initially and on resize
+      checkOverflow();
+      const resizeObserver = new ResizeObserver(checkOverflow);
+      resizeObserver.observe(content);
+
+      // Reset scroll to top when mouse leaves the card
+      card.addEventListener('mouseleave', () => {
+        content.scrollTop = 0;
+        this.stopAutoScroll(content);
+        cardBody.classList.remove('hovering-scroll-indicator');
+      });
+
+      // Handle mouse movement within card body to detect hover over indicator
+      cardBody.addEventListener('mousemove', (e) => {
+        const rect = cardBody.getBoundingClientRect();
+        const mouseY = e.clientY - rect.top;
+        const indicatorHeight = 30; // Match CSS height
+
+        // Check if hovering over the bottom indicator area
+        if (rect.height - mouseY <= indicatorHeight) {
+          cardBody.classList.add('hovering-scroll-indicator');
+          this.startAutoScroll(content);
+        } else {
+          cardBody.classList.remove('hovering-scroll-indicator');
+          this.stopAutoScroll(content);
+        }
+      });
+
+      cardBody.addEventListener('mouseleave', () => {
+        cardBody.classList.remove('hovering-scroll-indicator');
+        this.stopAutoScroll(content);
+      });
+    });
+  }
+
+  startAutoScroll(element) {
+    // Don't start if already scrolling
+    if (this.scrollIntervals.has(element)) return;
+
+    // Immediately scroll to bottom
+    const maxScroll = element.scrollHeight - element.clientHeight;
+    element.scrollTop = maxScroll;
+
+    this.scrollIntervals.set(element, true); // Mark as scrolled
+  }
+
+  stopAutoScroll(element) {
+    if (this.scrollIntervals.has(element)) {
+      clearInterval(this.scrollIntervals.get(element));
+      this.scrollIntervals.delete(element);
+    }
+  }
+}
+
+// Initialize card scroll manager
+new CardScrollManager();

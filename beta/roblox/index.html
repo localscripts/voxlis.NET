@@ -67,24 +67,15 @@
   <header id="hdr" class="hdr">
     <div class="cntr">
       <div class="hdr-cntr">
-        <div class="hdr-lft">
-          <button id="mobMenuTgl" class="mob-menu-tgl">
-            <i class="fas fa-bars"></i>
+        <a href="/" class="logo-lnk">
+          <img src="/assets/header.png" alt="voxlis.NET" class="logo-img">
+        </a>
+        <div class="srch-cntr">
+          <i class="fas fa-search srch-ico"></i>
+          <input type="text" id="srchInp" class="srch-inp" placeholder="Search exploits...">
+          <button id="clrSrch" class="clr-srch-btn hidden">
+            <i class="fas fa-times"></i>
           </button>
-          <a href="/" class="logo-lnk">
-            <img src="/assets/header.png" alt="voxlis.NET" class="logo-img">
-          </a>
-        </div>
-        <div class="hdr-ctr">
-          <div class="srch-cntr">
-            <div class="srch-ico">
-              <i class="fas fa-search"></i>
-            </div>
-            <input type="text" id="srchInp" class="srch-inp" placeholder="Search exploits...">
-            <button id="clrSrch" class="clr-srch-btn hidden">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
         </div>
         <nav class="hdr-nav">
           <button id="fltrBtn" class="nav-btn grd">
@@ -98,6 +89,9 @@
           </button>
           <a href="https://github.com/localscripts/voxlis.NET" class="nav-btn grd" target="_blank" rel="noopener noreferrer">Contribute</a>
         </nav>
+        <button class="mob-menu-tgl" id="mobMenuTgl" aria-label="Toggle mobile menu">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
     </div>
     <div id="mobMenu" class="mob-menu hidden">
