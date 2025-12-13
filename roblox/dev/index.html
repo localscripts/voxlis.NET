@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="red">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Program Manager - voxlis.NET</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="funcs.css">
+</head>
+<body>
+  <div class="main-container">
+    <div class="dev-controls">
+      <div class="resize-handle top-left"></div>
+      <div class="resize-handle top-right"></div>
+      <div class="resize-handle bottom-left"></div>
+      <div class="resize-handle bottom-right"></div>
+      
+      <div class="dev-controls-header">
+        <h2><i class="fas fa-tools"></i> Developer Controls</h2>
+        <div class="auto-save-indicator">
+          <i class="fas fa-save"></i> Auto-saving
+        </div>
+      </div>
+      
+      <div class="dev-controls-tabs">
+        <div class="dev-controls-tab active" data-tab="edit">
+          <i class="fas fa-edit"></i> Edit
+        </div>
+        <div class="dev-controls-tab" data-tab="preview">
+          <i class="fas fa-eye"></i> Preview
+        </div>
+        <div class="dev-controls-tab" data-tab="output">
+          <i class="fas fa-code"></i> Output
+        </div>
+        <div class="dev-controls-tab" data-tab="settings">
+          <i class="fas fa-cog"></i> Settings
+        </div>
+      </div>
+      
+      <div class="dev-controls-content">
+        <div class="tab-content active" id="edit-tab">
+          <div class="control-section">
+            <div class="section-title"><i class="fas fa-list"></i> Program Selection</div>
+            <div class="program-selector">
+              <div class="multi-select-header">
+                <div class="program-selector-title"><i class="fas fa-search"></i> Select Programs</div>
+                <div class="multi-select-actions">
+                  <button class="multi-select-action" id="selectAllBtn">Select All</button>
+                  <button class="multi-select-action" id="deselectAllBtn">Deselect All</button>
+                </div>
+              </div>
+              <div class="search-filter">
+                <input type="text" id="programSearchInput" placeholder="Search programs...">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="multi-select-count" id="selectedCount">0 selected</div>
+              <div class="program-list" id="programList">
+
+              </div>
+              <div class="bulk-edit-panel" id="bulkEditPanel">
+                <div class="bulk-edit-title"><i class="fas fa-edit"></i> Bulk Edit</div>
+                <div class="bulk-edit-options">
+                  <div class="bulk-edit-option">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" class="custom-checkbox-input" id="bulkVerifiedFlag">
+                      <span class="custom-checkbox-mark"></span>
+                      <span class="custom-checkbox-label">Verified</span>
+                    </label>
+                  </div>
+                  <div class="bulk-edit-option">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" class="custom-checkbox-input" id="bulkPremiumFlag">
+                      <span class="custom-checkbox-mark"></span>
+                      <span class="custom-checkbox-label">Premium</span>
+                    </label>
+                  </div>
+                  <div class="bulk-edit-option">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" class="custom-checkbox-input" id="bulkHideFlag">
+                      <span class="custom-checkbox-mark"></span>
+                      <span class="custom-checkbox-label">Hide</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="button-row">
+                    <button id="applyBulkEdit"><i class="fas fa-check"></i> Apply to Selected</button>
+                  </div>
+                </div>
+              </div>
+              <div class="program-stats" id="programStats">
+                <div class="program-stat">
+                  <div class="program-stat-value" id="totalPrograms">0</div>
+                  <div class="program-stat-label">Total</div>
+                </div>
+                <div class="program-stat">
+                  <div class="program-stat-value" id="verifiedCount">0</div>
+                  <div class="program-stat-label">Verified</div>
+                </div>
+                <div class="program-stat">
+                  <div class="program-stat-value" id="premiumCount">0</div>
+                  <div class="program-stat-label">Premium</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="control-section">
+            <div class="section-title"><i class="fas fa-file-alt"></i> Basic Info</div>
+            <div class="control-group">
+              <label for="exploitName">Exploit Name</label>
+              <input type="text" id="exploitName" value="" placeholder="Select a program to edit">
+            </div>
+            <div class="control-group">
+              <label for="exploitDesc">Description</label>
+              <input type="text" id="exploitDesc" value="" placeholder="Select a program to edit">
+            </div>
+            <div class="control-group">
+              <label for="exploitId">ID</label>
+              <input type="text" id="exploitId" value="" readonly>
+            </div>
+            <div class="url-management">
+              <div class="url-management-title"><i class="fas fa-link"></i> Website URLs</div>
+              <div class="url-inputs">
+                <div class="control-group">
+                  <label for="websiteUrl">Website URL</label>
+                  <input type="text" id="websiteUrl" placeholder="Enter website URL" value="">
+                </div>
+                <div class="control-group">
+                  <label for="priceUrl">Price URL</label>
+                  <input type="text" id="priceUrl" placeholder="Enter price URL" value="">
+                </div>
+              </div>
+            </div>
+            <div class="platform-management">
+              <div class="platform-management-title"><i class="fas fa-desktop"></i> Platforms</div>
+              <div class="platform-options" id="platformOptions">
+                <div class="platform-option" data-platform="windows">
+                  <i class="fab fa-windows"></i>
+                  <span class="platform-option-label">Windows</span>
+                </div>
+                <div class="platform-option" data-platform="macos">
+                  <i class="fab fa-apple"></i>
+                  <span class="platform-option-label">macOS</span>
+                </div>
+                <div class="platform-option" data-platform="ios">
+                  <i class="fab fa-mobile-alt"></i>
+                  <span class="platform-option-label">iOS</span>
+                </div>
+                <div class="platform-option" data-platform="android">
+                  <i class="fab fa-android"></i>
+                  <span class="platform-option-label">Android</span>
+                </div>
+              </div>
+            </div>
+            <div class="price-management">
+              <div class="price-management-title"><i class="fas fa-tag"></i> Price</div>
+              <div class="price-options">
+                <div class="price-option">
+                  <label class="custom-checkbox">
+                    <input type="radio" name="priceType" value="free" class="custom-checkbox-input" id="priceFree" checked>
+                    <span class="custom-checkbox-mark"></span>
+                    <span class="custom-checkbox-label">Free</span>
+                  </label>
+                </div>
+                <div class="price-option">
+                  <label class="custom-checkbox">
+                    <input type="radio" name="priceType" value="paid" class="custom-checkbox-input" id="pricePaid">
+                    <span class="custom-checkbox-mark"></span>
+                    <span class="custom-checkbox-label">Paid</span>
+                  </label>
+                </div>
+              </div>
+              <div class="price-inputs" id="priceInputs" style="display: none;">
+                <div class="price-input-group">
+                  <label for="priceAmount">Price Amount</label>
+                  <input type="text" id="priceAmount" placeholder="e.g. 9.99">
+                </div>
+                <div class="price-input-group">
+                  <label for="pricePeriod">Period</label>
+                  <select id="pricePeriod">
+                    <option value="lifetime">Lifetime</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="daily">Daily</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="flags-management">
+              <div class="flags-management-title"><i class="fas fa-flag"></i> Flags</div>
+              <div class="flags-section">
+                <div class="flags-subsection">
+                  <div class="subsection-title">Verified Premium Hidden</div>
+                  <div class="flag-item">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" class="custom-checkbox-input" id="verifiedFlag">
+                      <span class="custom-checkbox-mark"></span>
+                      <span class="custom-checkbox-label">Verified</span>
+                    </label>
+                  </div>
+                  <div class="flag-item">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" class="custom-checkbox-input" id="premiumFlag">
+                      <span class="custom-checkbox-mark"></span>
+                      <span class="custom-checkbox-label">Premium</span>
+                    </label>
+                  </div>
+                  <div class="flag-item">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" class="custom-checkbox-input" id="hideFlag">
+                      <span class="custom-checkbox-mark"></span>
+                      <span class="custom-checkbox-label">Hide</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="information-management">
+              <div class="information-management-title"><i class="fas fa-info-circle"></i> Information</div>
+              <div class="info-row">
+                <div class="info-col">
+                  <div class="control-group">
+                    <label for="exploitLevel">Level</label>
+                    <select id="exploitLevel">
+                      <option value="1">Level 1</option>
+                      <option value="2">Level 2</option>
+                      <option value="3">Level 3</option>
+                      <option value="4">Level 4</option>
+                      <option value="5">Level 5</option>
+                      <option value="6">Level 6</option>
+                      <option value="7">Level 7</option>
+                      <option value="8">Level 8</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="info-col">
+                  <div class="control-group">
+                    <label for="exploitEditor">Editor</label>
+                    <input type="text" id="exploitEditor" placeholder="Enter editor name">
+                  </div>
+                </div>
+              </div>
+              <div class="attributes-section">
+                <div class="attribute-group">
+                  <label>Pros</label>
+                  <div class="item-list" id="editProsList">
+
+                  </div>
+                  <button type="button" class="add-item-btn" id="editAddProBtn">
+                    <i class="fas fa-plus"></i> Add Pro
+                  </button>
+                </div>
+                
+                <div class="attribute-group">
+                  <label>Neutral</label>
+                  <div class="item-list" id="editNeutralList">
+
+                  </div>
+                  <button type="button" class="add-item-btn" id="editAddNeutralBtn">
+                    <i class="fas fa-plus"></i> Add Neutral
+                  </button>
+                </div>
+                
+                <div class="attribute-group">
+                  <label>Cons</label>
+                  <div class="item-list" id="editConsList">
+
+                  </div>
+                  <button type="button" class="add-item-btn" id="editAddConBtn">
+                    <i class="fas fa-plus"></i> Add Con
+                  </button>
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <div class="button-row">
+                  <button id="saveInfoBtn"><i class="fas fa-save"></i> Save Information</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="control-section">
+            <div class="section-title"><i class="fas fa-markdown"></i> Markdown Content</div>
+            <div class="control-group">
+              <div class="markdown-toolbar">
+                <div class="markdown-toolbar-group">
+                  <button type="button" data-md="# " title="Heading 1">
+                    <i class="fas fa-heading"></i> H1
+                    <span class="btn-tooltip">Large Heading (# Text)</span>
+                  </button>
+                  <button type="button" data-md="## " title="Heading 2">
+                    <i class="fas fa-heading"></i> H2
+                    <span class="btn-tooltip">Medium Heading (## Text)</span>
+                  </button>
+                  <button type="button" data-md="### " title="Heading 3">
+                    <i class="fas fa-heading"></i> H3
+                    <span class="btn-tooltip">Small Heading (### Text)</span>
+                  </button>
+                </div>
+                <div class="markdown-toolbar-group">
+                  <button type="button" data-md="**text**" data-select="true" title="Bold">
+                    <i class="fas fa-bold"></i>
+                    <span class="btn-tooltip">Bold Text (**text**)</span>
+                  </button>
+                  <button type="button" data-md="*text*" data-select="true" title="Italic">
+                    <i class="fas fa-italic"></i>
+                    <span class="btn-tooltip">Italic Text (*text*)</span>
+                  </button>
+                  <button type="button" data-md="~~text~~" data-select="true" title="Strikethrough">
+                    <i class="fas fa-strikethrough"></i>
+                    <span class="btn-tooltip">Strikethrough (~~text~~)</span>
+                  </button>
+                </div>
+                <div class="markdown-toolbar-group">
+                  <button type="button" data-md="- " title="Bullet List">
+                    <i class="fas fa-list-ul"></i>
+                    <span class="btn-tooltip">Bullet List (- item)</span>
+                  </button>
+                  <button type="button" data-md="1. " title="Numbered List">
+                    <i class="fas fa-list-ol"></i>
+                    <span class="btn-tooltip">Numbered List (1. item)</span>
+                  </button>
+                  <button type="button" data-md="> " title="Blockquote">
+                    <i class="fas fa-quote-right"></i>
+                    <span class="btn-tooltip">Blockquote (> text)</span>
+                  </button>
+                </div>
+                <div class="markdown-toolbar-group">
+                  <button type="button" data-md="[link text](url)" data-select="true" title="Link">
+                    <i class="fas fa-link"></i>
+                    <span class="btn-tooltip">Link [text](url)</span>
+                  </button>
+                  <button type="button" data-md="![alt text](image-url)" data-select="true" title="Image">
+                    <i class="fas fa-image"></i>
+                    <span class="btn-tooltip">Image ![alt](url)</span>
+                  </button>
+                  <button type="button" data-md="`code`" data-select="true" title="Inline Code">
+                    <i class="fas fa-code"></i>
+                    <span class="btn-tooltip">Inline Code (`code`)</span>
+                  </button>
+                  <button type="button" data-md="\`\`\`\ncode\n\`\`\`" data-select="true" title="Code Block">
+                    <i class="fas fa-file-code"></i>
+                    <span class="btn-tooltip">Code Block (\`\`\`code\`\`\`)</span>
+                  </button>
+                </div>
+              </div>
+              <textarea id="exploitInfo" class="markdown-editor-textarea" placeholder="Select a program to edit"></textarea>
+              <button type="button" id="toggleMarkdownHelp" class="toggle-help-btn">
+                <i class="fas fa-question-circle"></i> Show Markdown Help
+              </button>
+              <div id="markdownHelp" class="markdown-help" style="display: none;">
+                <div class="markdown-help-title"><i class="fas fa-book"></i> Markdown Guide</div>
+                
+                <div class="markdown-help-tabs">
+                  <div class="markdown-help-tab active" data-help-tab="basic">Basic</div>
+                  <div class="markdown-help-tab" data-help-tab="headings">Headings</div>
+                  <div class="markdown-help-tab" data-help-tab="lists">Lists</div>
+                  <div class="markdown-help-tab" data-help-tab="advanced">Advanced</div>
+                </div>
+                
+                <div class="markdown-help-content active" id="basic-help">
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>**bold text**</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <strong>bold text</strong>
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>*italic text*</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <em>italic text</em>
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>~~strikethrough~~</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <del>strikethrough</del>
+                    </div>
+                  </div>
+                </div>
+                <div class="markdown-help-content" id="headings-help">
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code># Heading 1</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <h1>Heading 1</h1>
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>## Heading 2</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <h2>Heading 2</h2>
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>### Heading 3</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <h3>Heading 3</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="markdown-help-content" id="lists-help">
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>- Item 1</code><br>
+                      <code>- Item 2</code><br>
+                      <code>- Item 3</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <ul>
+                        <li>Item 1</li>
+                        <li>Item 2</li>
+                        <li>Item 3</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>1. First item</code><br>
+                      <code>2. Second item</code><br>
+                      <code>3. Third item</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <ol>
+                        <li>First item</li>
+                        <li>Second item</li>
+                        <li>Third item</li>
+                      </ol>
+                    </div>
+                  </div>
+                </div>
+                <div class="markdown-help-content" id="advanced-help">
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>[Link text](https://example.com)</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <a href="#">Link text</a>
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>![Alt text](image-url)</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      Image with alt text
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>> Blockquote text</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <blockquote>Blockquote text</blockquote>
+                    </div>
+                  </div>
+                  <div class="markdown-help-item">
+                    <div class="markdown-help-syntax">
+                      <code>`inline code`</code>
+                    </div>
+                    <div class="markdown-help-result">
+                      <code>inline code</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="button-row">
+                <button id="updateModal"><i class="fas fa-sync-alt"></i> Update Preview</button>
+                <button id="resetContent" class="secondary"><i class="fas fa-undo"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="preview-tab">
+          <div class="control-section">
+            <div class="section-title"><i class="fas fa-eye"></i> Live Preview</div>
+            <div class="preview-container">
+              <div class="preview-title">Markdown Preview</div>
+              <div class="preview-content" id="markdownPreview"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="output-tab">
+          <div class="control-section">
+            <div class="section-title"><i class="fas fa-code"></i> Output Format</div>
+            <div class="control-group">
+              <div class="output-container">
+                <div class="output-label">JavaScript Output</div>
+                <div class="output-content" id="outputFormat"></div>
+              </div>
+            </div>
+            <div class="control-group">
+              <button id="copyOutput"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+            
+            <div class="export-section">
+              <div class="export-title"><i class="fas fa-file-export"></i> Export Data</div>
+              <div class="export-description">
+                Export the program data to a JavaScript file that can be used in your application.
+              </div>
+              <div class="export-buttons">
+                <button id="exportDataBtn" class="export-button"><i class="fas fa-download"></i> Export Selected Program</button>
+                <button id="exportAllDataBtn" class="export-button secondary"><i class="fas fa-download"></i> Export All Programs</button>
+                <button id="copySelectedDataBtn" class="export-button secondary"><i class="fas fa-copy"></i> Copy Selected Program</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="settings-tab">
+          <div class="control-section">
+            <div class="section-title"><i class="fas fa-palette"></i> Theme</div>
+            <div class="theme-options">
+              <div class="theme-option theme-red selected" data-theme="red"></div>
+              <div class="theme-option theme-blue" data-theme="blue"></div>
+              <div class="theme-option theme-purple" data-theme="purple"></div>
+              <div class="theme-option theme-green" data-theme="green"></div>
+              <div class="theme-option theme-orange" data-theme="orange"></div>
+            </div>
+          </div>
+          <div class="control-section">
+            <div class="section-title"><i class="fas fa-trash-alt"></i> Trash Bin</div>
+            <div class="trash-section">
+              <div class="trash-title">Deleted Programs</div>
+              <div class="trash-list" id="trashList">
+                <div class="trash-empty">No deleted programs found.</div>
+              </div>
+              <div class="control-group">
+                <div class="button-row">
+                  <button id="emptyTrashBtn" class="secondary"><i class="fas fa-trash"></i> Empty Trash</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-modal-container">
+      <div class="info-modal">
+        <div class="resize-handle top-left"></div>
+        <div class="resize-handle top-right"></div>
+        <div class="resize-handle bottom-left"></div>
+        <div class="resize-handle bottom-right"></div>
+        
+        <div class="info-modal-header">
+          <h2 class="info-modal-title" id="infoModalTitle">Exploit Information</h2>
+        </div>
+        <div class="info-modal-content">
+          <div class="info-modal-exploit-info" id="infoModalExploitInfo">
+            <div class="info-modal-exploit-name" id="infoModalExploitName">Select a program</div>
+            <div class="info-modal-exploit-desc" id="infoModalExploitDesc">Please select a program from the list to view details.</div>
+          </div>
+          <div class="info-modal-markdown" id="infoModalMarkdown"></div>
+        </div>
+        <div class="info-modal-footer">
+          <button class="info-modal-close-btn" id="infoModalCloseBtn">
+            <i class="fas fa-times"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-overlay" id="newAppModal">
+    <div class="new-app-modal">
+      <div class="new-app-modal-header">
+        <h3 class="new-app-modal-title">Add New Application</h3>
+        <button class="new-app-modal-close" id="closeNewAppModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="new-app-modal-content">
+        <div class="new-app-modal-section">
+          <div class="new-app-modal-section-title">Basic Information</div>
+          <div class="new-app-form-group">
+            <label for="newAppName">Application Name*</label>
+            <input type="text" id="newAppName" placeholder="Enter application name" required>
+          </div>
+          <div class="new-app-form-group">
+            <label for="newAppId">Application ID*</label>
+            <input type="text" id="newAppId" placeholder="Enter unique ID (e.g. my-app)" required>
+          </div>
+          <div class="new-app-form-group">
+            <label for="newAppDesc">Description*</label>
+            <input type="text" id="newAppDesc" placeholder="Enter a short description" required>
+          </div>
+          <div class="new-app-form-row">
+            <div class="new-app-form-col">
+              <div class="new-app-form-group">
+                <label for="newAppLevel">Level*</label>
+                <select id="newAppLevel" required>
+                  <option value="1">Level 1</option>
+                  <option value="2">Level 2</option>
+                  <option value="3">Level 3</option>
+                  <option value="4">Level 4</option>
+                  <option value="5">Level 5</option>
+                  <option value="6">Level 6</option>
+                  <option value="7">Level 7</option>
+                  <option value="8" selected>Level 8</option>
+                </select>
+              </div>
+            </div>
+            <div class="new-app-form-col">
+              <div class="new-app-form-group">
+                <label for="newAppEditor">Editor*</label>
+                <input type="text" id="newAppEditor" placeholder="Enter editor name" value="voxlis.NET" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="new-app-modal-section">
+          <div class="new-app-modal-section-title">Platforms</div>
+          <div class="platform-options" id="newAppPlatformOptions">
+            <div class="platform-option" data-platform="windows">
+              <i class="fab fa-windows"></i>
+              <span class="platform-option-label">Windows</span>
+            </div>
+            <div class="platform-option" data-platform="macos">
+              <i class="fab fa-apple"></i>
+              <span class="platform-option-label">macOS</span>
+            </div>
+            <div class="platform-option" data-platform="ios">
+              <i class="fab fa-mobile-alt"></i>
+              <span class="platform-option-label">iOS</span>
+            </div>
+            <div class="platform-option" data-platform="android">
+              <i class="fab fa-android"></i>
+              <span class="platform-option-label">Android</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="new-app-modal-section">
+          <div class="new-app-modal-section-title">Price</div>
+          <div class="price-options">
+            <div class="price-option">
+              <label class="custom-checkbox">
+                <input type="radio" name="newAppPriceType" value="free" class="custom-checkbox-input" id="newAppPriceFree" checked>
+                <span class="custom-checkbox-mark"></span>
+                <span class="custom-checkbox-label">Free</span>
+              </label>
+            </div>
+            <div class="price-option">
+              <label class="custom-checkbox">
+                <input type="radio" name="newAppPriceType" value="paid" class="custom-checkbox-input" id="newAppPricePaid">
+                <span class="custom-checkbox-mark"></span>
+                <span class="custom-checkbox-label">Paid</span>
+              </label>
+            </div>
+          </div>
+          <div class="price-inputs" id="newAppPriceInputs" style="display: none;">
+            <div class="price-input-group">
+              <label for="newAppPriceAmount">Price Amount*</label>
+              <input type="text" id="newAppPriceAmount" placeholder="e.g. 9.99">
+            </div>
+            <div class="price-input-group">
+              <label for="newAppPricePeriod">Period</label>
+              <select id="newAppPricePeriod">
+                <option value="lifetime">Lifetime</option>
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="daily">Daily</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <div class="new-app-modal-section">
+          <div class="new-app-modal-section-title">Features</div>
+          <div class="new-app-form-group">
+            <label>Pros</label>
+            <div class="item-list" id="prosList">
+              <div class="item-row">
+                <input type="text" placeholder="Enter a pro feature">
+                <button type="button" class="remove-item-btn"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+            <button type="button" class="add-item-btn" id="addProBtn">
+              <i class="fas fa-plus"></i> Add Pro
+            </button>
+          </div>
+          
+          <div class="new-app-form-group">
+            <label>Neutral</label>
+            <div class="item-list" id="neutralList">
+              <div class="item-row">
+                <input type="text" placeholder="Enter a neutral feature">
+                <button type="button" class="remove-item-btn"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+            <button type="button" class="add-item-btn" id="addNeutralBtn">
+              <i class="fas fa-plus"></i> Add Neutral
+            </button>
+          </div>
+          
+          <div class="new-app-form-group">
+            <label>Cons</label>
+            <div class="item-list" id="consList">
+              <div class="item-row">
+                <input type="text" placeholder="Enter a con">
+                <button type="button" class="remove-item-btn"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+            <button type="button" class="add-item-btn" id="addConBtn">
+              <i class="fas fa-plus"></i> Add Con
+            </button>
+          </div>
+        </div>
+        
+        <div class="new-app-modal-section">
+          <div class="new-app-modal-section-title">Flags</div>
+          <div class="flags-section">
+            <div class="flag-item">
+              <label class="custom-checkbox">
+                <input type="checkbox" class="custom-checkbox-input" id="newAppVerifiedFlag" checked>
+                <span class="custom-checkbox-mark"></span>
+                <span class="custom-checkbox-label">Verified</span>
+              </label>
+            </div>
+            <div class="flag-item">
+              <label class="custom-checkbox">
+                <input type="checkbox" class="custom-checkbox-input" id="newAppPremiumFlag">
+                <span class="custom-checkbox-mark"></span>
+                <span class="custom-checkbox-label">Premium</span>
+              </label>
+            </div>
+            <div class="flag-item">
+              <label class="custom-checkbox">
+                <input type="checkbox" class="custom-checkbox-input" id="newAppHideFlag">
+                <span class="custom-checkbox-mark"></span>
+                <span class="custom-checkbox-label">Hide</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="new-app-modal-section">
+          <div class="new-app-modal-section-title">Additional Information</div>
+          <div class="new-app-form-group">
+            <label for="newAppInfo">Markdown Content</label>
+            <textarea id="newAppInfo" placeholder="Enter markdown content for the application"></textarea>
+          </div>
+          <div class="new-app-form-row">
+            <div class="new-app-form-col">
+              <div class="new-app-form-group">
+                <label for="newAppHref">Website URL</label>
+                <input type="text" id="newAppHref" placeholder="Enter website URL" value="https://yap.com/">
+              </div>
+            </div>
+            <div class="new-app-form-col">
+              <div class="new-app-form-group">
+                <label for="newAppPriceHref">Price URL</label>
+                <input type="text" id="newAppPriceHref" placeholder="Enter price URL" value="https://yap.com/">
+              </div>
+            </div>
+          </div>
+          <div class="new-app-form-row">
+            <div class="new-app-form-col">
+              <div class="new-app-form-group">
+                <label for="newAppTxtColor">Text Color</label>
+                <select id="newAppTxtColor">
+                  <option value="text-red-500">Red</option>
+                  <option value="text-blue-500">Blue</option>
+                  <option value="text-green-500">Green</option>
+                  <option value="text-yellow-500">Yellow</option>
+                  <option value="text-purple-500">Purple</option>
+                </select>
+              </div>
+            </div>
+            <div class="new-app-form-col">
+              <div class="new-app-form-group">
+                <label for="newAppAccentColor">Accent Color</label>
+                <select id="newAppAccentColor">
+                  <option value="from-red-600 to-red-700">Red</option>
+                  <option value="from-blue-600 to-blue-700">Blue</option>
+                  <option value="from-green-600 to-green-700">Green</option>
+                  <option value="from-yellow-600 to-yellow-700">Yellow</option>
+                  <option value="from-purple-600 to-purple-700">Purple</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="new-app-modal-footer">
+        <button class="new-app-modal-btn secondary" id="cancelNewApp">Cancel</button>
+        <button class="new-app-modal-btn primary" id="saveNewApp">
+          <i class="fas fa-save"></i> Save Application
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <button class="add-new-program-btn" id="addNewProgramBtn">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <div class="copy-notification" id="copyNotification">
+    <i class="fas fa-check-circle"></i> <span id="notificationText">Copied to clipboard!</span>
+  </div>
+
+  <script src="funcs.js"></script>
+</body>
+</html>
+
