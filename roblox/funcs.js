@@ -246,7 +246,9 @@ const Data = [
           "Usermode product",
           "Rich in features",
         ],
-        neutral: [],
+        neutral: [
+          "Password reset costs $7.50"
+        ],
         cons: [],
       },
       links: {
@@ -7734,4 +7736,5 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
