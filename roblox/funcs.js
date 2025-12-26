@@ -85,7 +85,7 @@ const Data = [
           enabled: true,
           icon: "cat.png",
           title: "Warning!",
-          desc: "voxlis.NET recommends checking out 'MORE INFO' for Wave so you know what you're getting. Would you like to continue to Wave's website anyway?",
+          desc: "voxlis.NET recommends checking out 'MORE INFO' for Potassium so you know what you're getting. Would you like to continue to Potassium's website anyway?",
         },
         downtime: {
           enabled: true,
@@ -139,6 +139,12 @@ const Data = [
           title: "Hold on!",
           desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
           continue: "href",
+        },
+         warning: {
+          enabled: true,
+          icon: "cat.png",
+          title: "Warning!",
+          desc: "The Wave team has split up and is currently facing a major internal conflict, so purchasing a key right now may not be the best decision. Would you like to visit the website anyway?",
         },
       },
     },
