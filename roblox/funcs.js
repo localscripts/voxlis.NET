@@ -453,7 +453,7 @@ const Data = [
         external: true,
         premium: false,
         hideunc: true,
-        free: false,
+        free: true,
         hide: false,
         lvl: 8,
       },
@@ -7736,5 +7736,6 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
