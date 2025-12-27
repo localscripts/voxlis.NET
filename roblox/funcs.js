@@ -128,7 +128,7 @@ const Data = [
         premium: false,
         hideunc: false,
         free: false,
-        hide: false,
+        hide: true,
         lvl: 8,
       },
       modals: {
@@ -319,7 +319,7 @@ const Data = [
         premium: false,
         hideunc: true,
         free: false,
-        hide: false,
+        hide: true,
         lvl: null,
       },
       modals: {
@@ -7742,6 +7742,7 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
 
