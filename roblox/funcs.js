@@ -149,6 +149,58 @@ const Data = [
       },
     },
   },
+    {
+    volt: {
+      main: {
+        name: "Volt",
+        plat: ["windows"],
+        desc: "Execution with Hyperion emulation",
+        pros: ["Has a decompiler", "100% sUNC", "Level 8"],
+        neutral: [],
+        cons: [],
+      },
+      links: {
+        href: "https://volt.bz/",
+        priceHref: "https://www.key-empire.com/#volt",
+        unclinks: {
+          windows:
+            "https://sunc.rubis.app/?scrap=uWUvqDj5h0rMmJ0d&key=E41gA1PNIk3zS8sZTUMNlF6kFS5NFmX3",
+        },
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: "$4.99",
+        period: "weekly",
+      },
+      flags: {
+        hasKeySystem: false,
+        pricegray: false,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          continue: "href",
+        },
+         warning: {
+          enabled: true,
+          icon: "cat.png",
+          title: "Warning!",
+          desc: "This executor has a history of exit scams. While they do pay compensation, it feels more like a strategy to avoid suspicion—almost as if an exit scam was planned, failed due to lack of funds, and then the project relaunched. voxlis.NET does not recommend this executor if you cannot afford to lose your money.",
+        },
+      },
+    },
+  },
   {
     volcano: {
       main: {
@@ -458,7 +510,7 @@ const Data = [
         verified: false,
         external: true,
         premium: false,
-        hideunc: true,
+        hideunc: false,
         free: true,
         hide: false,
         lvl: 8,
