@@ -264,6 +264,8 @@ const Data = [
             "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
           macos:
             "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
+          windows:
+            "https://sunc.rubis.app/?scrap=oJ5ZmP6adDtfYUch&key=3Rx06fXNoOJwMIWLUTsLNMeU0Zsb2oam",
         },
       },
       misc: {
@@ -7794,6 +7796,7 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
 
