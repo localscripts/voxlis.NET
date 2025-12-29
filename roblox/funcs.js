@@ -512,7 +512,7 @@ const Data = [
         premium: false,
         hideunc: false,
         free: true,
-        hide: false,
+        hide: true,
         lvl: 8,
       },
       modals: {
