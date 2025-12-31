@@ -1,0 +1,12 @@
+{
+	"input": "./",
+	"components": "components",
+	"exclude": [".*", "OLD", "NOTES", "sklair", "LICENSE", "*.md"],
+
+	"output": "./build",
+
+	"preventFOUC": {
+		"enabled": true,
+		"colour": "#000000"
+	}
+}

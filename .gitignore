@@ -1,0 +1,9 @@
+# TODO: temporary sklair binary
+sklair
+
+# sklair built items
+build
+
+# macOS Files
+**._*
+**.DS_*
