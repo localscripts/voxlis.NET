@@ -40,5 +40,5 @@ return {
     warningInfo: "", // warning message text
 
     hide: false, // if true, hides this card from being rendered
-    pricegray: true // if true, grays out the buy button
+    premium: true // if true, makes the buy button green instead of the default gray. used to promote premium services
 }
