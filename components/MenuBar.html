@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html data-theme="red">
+
+<head>
+    <!-- sklair:remove -->
+    <style>
+        body {
+            background: black;
+        }
+    </style>
+
+    <script src="https://wcdn.numelon.com/sklair-shared/tailwindcss-3.4.17.js"></script>
+    <script src="/assets/styles/tailwind.config.js"></script>
+    <link rel="stylesheet" href="/assets/styles/global.css">
+    <link rel="stylesheet" href="/assets/styles/themes.css">
+
+    <script src=" https://wcdn.numelon.com/sklair-shared/font-awesome-6.5.2-cloudflare-cdnjs.min.js" defer></script>
+    <!-- sklair:remove-end -->
+</head>
+
+<body>
+    <header id="menubar"
+        class="fixed top-0 left-0 right-0 h-16 bg-black/80 backdrop-blur border-b border-border/10 z-50">
+        <div class="h-full max-w-7xl mx-auto px-6 flex items-center justify-between relative">
+
+            <!-- left area -->
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center">
+                    <img src="/assets/branding/voxlis.red.png" alt="voxlis.NET" class="h-12 select-none" />
+                </a>
+            </div>
+
+            <!-- centre area -->
+            <div class="absolute left-1/2 -translate-x-1/2 w-full max-w-md">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-muted"></i>
+                    <input type="text" placeholder="Search exploits..."
+                        class="w-full bg-surface/40 border border-border/10 rounded-lg pl-11 pr-4 py-2 text-sm text-fg placeholder-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow" />
+                </div>
+            </div>
+
+            <!-- right area -->
+            <div class="flex items-center gap-5 text-muted">
+                <!-- <a href="/" class="hover:text-white transition">
+                    <i class="fa-solid fa-house text-lg"></i>
+                </a> -->
+                <a href="/r/discord" class="hover:text-white transition">
+                    <i class="fa-brands fa-discord text-lg"></i>
+                </a>
+                <a href="/r/youtube" class="hover:text-white transition">
+                    <i class="fa-brands fa-youtube text-lg"></i>
+                </a>
+                <!-- we are specifically not using the theme-specified main colour (which is usually red) because it can change -->
+                <a href="#" class="hover:text-red-500 transition">
+                    <i class="fa-solid fa-flag text-lg"></i>
+                </a>
+            </div>
+
+        </div>
+    </header>
+</body>
+
+</html>

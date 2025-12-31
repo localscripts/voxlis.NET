@@ -1,6 +1,6 @@
 # voxlis.NET
 
-voxlist.NET is your go-to place for comparing exploits and cheats for Roblox and CS2.
+voxlist.NET is your go-to source for comparing exploits and cheats for Roblox and CS2.
 
 The main site is [voxlis.net](https://voxlis.net), however [voxlis.com](https://voxlis.com) and [robloxhackers.lol](https://robloxhackers.lol) are also active and simply redirect to the main site.
 
