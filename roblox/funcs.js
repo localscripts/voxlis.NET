@@ -51,8 +51,8 @@ const Data = [
         name: "Potassium",
         plat: ["windows"],
         desc: "Best value execution solution",
-        pros: ["Has a decompiler", "100% sUNC", "Level 8"],
-        neutral: [],
+        pros: ["Multi client support", "Has a decompiler", "100% sUNC", "Level 8"],
+        neutral: ["Detection & stability issues"],
         cons: [],
       },
       links: {
@@ -60,7 +60,7 @@ const Data = [
         priceHref: "https://www.key-empire.com/#potassium",
         unclinks: {
           windows:
-            "https://sunc.rubis.app/?scrap=p1oItowSFMvNrpuf&key=hzn8j0diRfPUuqfNpMUetdC8kWheuziL",
+            "https://api.voxlis.net/sunc?scrap=p1oItowSFMvNrpuf&key=hzn8j0diRfPUuqfNpMUetdC8kWheuziL",
         },
       },
       misc: {
@@ -112,7 +112,7 @@ const Data = [
         priceHref: "https://www.key-empire.com/#wave",
         unclinks: {
           windows:
-            "https://sunc.rubis.app/?scrap=chxc3Rtp1NOhSxAf&key=KwyQ9vNKHEL9lcCXWMNu7pFxpGrtki7q",
+            "https://api.voxlis.net/sunc?scrap=chxc3Rtp1NOhSxAf&key=KwyQ9vNKHEL9lcCXWMNu7pFxpGrtki7q",
         },
       },
       misc: {
@@ -155,7 +155,7 @@ const Data = [
         name: "Volt",
         plat: ["windows"],
         desc: "Execution with Hyperion emulation",
-        pros: ["Has a decompiler", "100% sUNC", "Level 8"],
+        pros: ["Multi client support", "Has a decompiler", "100% sUNC", "Level 8"],
         neutral: [],
         cons: [],
       },
@@ -164,7 +164,7 @@ const Data = [
         priceHref: "https://www.key-empire.com/#volt",
         unclinks: {
           windows:
-            "https://sunc.rubis.app/?scrap=uWUvqDj5h0rMmJ0d&key=E41gA1PNIk3zS8sZTUMNlF6kFS5NFmX3",
+            "https://api.voxlis.net/sunc?scrap=uWUvqDj5h0rMmJ0d&key=E41gA1PNIk3zS8sZTUMNlF6kFS5NFmX3",
         },
       },
       misc: {
@@ -207,7 +207,7 @@ const Data = [
         name: "Volcano",
         plat: ["windows"],
         desc: "Rich in history execution solution",
-        pros: ["Has a decompiler", "94% sUNC", "Level 8"],
+        pros: ["Multi client support", "Has a decompiler", "97% sUNC", "Level 8"],
         neutral: [],
         cons: [],
       },
@@ -216,7 +216,7 @@ const Data = [
         priceHref: "https://www.key-empire.com/#volcano",
         unclinks: {
           windows:
-            "https://sunc.rubis.app/?scrap=LQ8uphMkPlKrqKgY&key=wE4Rjq07vQ4dfsHh6a0dxX4A47q1ijaE",
+            "https://api.voxlis.net/sunc?scrap=HedSY7yUP0fYmxwX&key=gZI2IInLbm9H6fWL9BhzTqqJliOEtlPT",
         },
       },
       misc: {
@@ -261,11 +261,11 @@ const Data = [
         href: "https://getcryptic.net",
         unclinks: {
           android:
-            "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
+            "https://api.voxlis.net/sunc?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
           macos:
-            "https://sunc.rubis.app/?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
+            "https://api.voxlis.net/sunc?scrap=3ceXNUciuo4g64Ao&key=W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
           windows:
-            "https://sunc.rubis.app/?scrap=oJ5ZmP6adDtfYUch&key=3Rx06fXNoOJwMIWLUTsLNMeU0Zsb2oam",
+            "https://api.voxlis.net/sunc?scrap=oJ5ZmP6adDtfYUch&key=3Rx06fXNoOJwMIWLUTsLNMeU0Zsb2oam",
         },
       },
       misc: {
@@ -302,7 +302,7 @@ const Data = [
         plat: ["windows"],
         desc: "A good external exploit.",
         pros: [
-          "Has a Luau environment",
+          "Has a decompiler & code explorer",
           "Usermode product",
           "Rich in features",
         ],
@@ -416,7 +416,7 @@ const Data = [
         external: true,
         premium: false,
         hideunc: true,
-        free: false,
+        free: true,
         hide: false,
         lvl: null,
       },
@@ -440,8 +440,7 @@ const Data = [
         plat: ["macos"],
         desc: "A powerful exploit for macOS.",
         pros: [
-          "Multi-Inject support",
-          "Has a Trial version",
+          "Multi client support",
           "Has a decompiler",
           "100% sUNC",
           "Level 8",
@@ -454,7 +453,7 @@ const Data = [
         priceHref: "https://key-empire.com/#macsploit",
         unclinks: {
           macos:
-            "https://sunc.rubis.app/?scrap=9kH1EN8HIbXl9I2o&key=KrU695V4fbJuWZcwG9jMJen2M22mRbng",
+            "https://api.voxlis.net/sunc?scrap=9kH1EN8HIbXl9I2o&key=KrU695V4fbJuWZcwG9jMJen2M22mRbng",
         },
       },
       misc: {
@@ -537,7 +536,7 @@ const Data = [
         plat: ["android"],
         desc: "A powerful exploit with advanced features.",
         pros: ["Has a decompiler", "VNG Support", "Level 8"],
-        neutral: ["Fails sUNC checks", "Uses core technology from ArceusX"],
+        neutral: ["Fails sUNC checks"],
         cons: [],
       },
       links: {
@@ -589,7 +588,7 @@ const Data = [
         priceHref: "https://hydrogen.lat",
         unclinks: {
           macos:
-            "https://sunc.rubis.app/?scrap=5qh7GIfCDb8WZjtp&key=3Hq4Uz3Oc3X9G34ROz12ODY4VJIwXuUH",
+            "https://api.voxlis.net/sunc?scrap=5qh7GIfCDb8WZjtp&key=3Hq4Uz3Oc3X9G34ROz12ODY4VJIwXuUH",
         },
       },
       misc: {
@@ -641,7 +640,7 @@ const Data = [
         href: "https://seliware.com",
         priceHref: "https://www.key-empire.com/#seliware",
         unclinks: {
-          windows: "https://sunc.rubis.app/?scrap=tTRqgEkIh38zdyn8&key=Nu3OcXqyq9kJnUSvFs6Kac9kG94uTv9v",
+          windows: "https://api.voxlis.net/sunc?scrap=tTRqgEkIh38zdyn8&key=Nu3OcXqyq9kJnUSvFs6Kac9kG94uTv9v",
         },
       },
       misc: {
@@ -687,7 +686,7 @@ const Data = [
         href: "https://discord.gg/bunnilol",
         priceHref: "https://www.key-empire.com/#bunni",
         unclinks: {
-          windows: "https://sunc.rubis.app/?scrap=WpwrKdpIfaDE4Xc2&key=yge9xJKAMcbpo5SergRhV7X594EHc7n8",
+          windows: "https://api.voxlis.net/sunc?scrap=WpwrKdpIfaDE4Xc2&key=yge9xJKAMcbpo5SergRhV7X594EHc7n8",
         },
       },
       misc: {
@@ -726,14 +725,16 @@ const Data = [
         name: "Solara",
         plat: ["windows"],
         desc: "A free exploit with decent performance.",
-        pros: ["Has a decompiler", "No keysystem", "51% sUNC~"],
-        neutral: ["Level 3"],
+        pros: ["Multi client support", "Has a decompiler", "36% sUNC"],
+        neutral: ["Level 3", "Keysystem on download"],
         cons: [],
       },
       links: {
         href: "https://getsolara.dev",
         priceHref: null,
-        unclinks: {},
+        unclinks: {
+          windows: "https://api.voxlis.net/sunc?scrap=l0oHqqvAToR9vV6i&key=zoyflbbqeBuxCYDlGtUj5dvKgreRq9Zj",
+        },
       },
       misc: {
         editor: "voxlis.NET",
@@ -778,9 +779,9 @@ const Data = [
         href: "https://deltaexploits.gg",
         priceHref: null,
         unclinks: {
-          ios: "https://sunc.rubis.app/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
+          ios: "https://api.voxlis.net/sunc/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
           android:
-            "https://sunc.rubis.app/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
+            "https://api.voxlis.net/sunc/?scrap=YjWxOsGMMsBpfHlK&key=pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
         },
       },
       misc: {
@@ -818,14 +819,16 @@ const Data = [
         name: "Xeno",
         plat: ["windows"],
         desc: "A free exploit with basic features.",
-        pros: ["Has a decompiler", "No keysystem", "40% sUNC~"],
-        neutral: ["Level 3"],
+        pros: ["Multiple instance compatibility", "Has a decompiler"],
+        neutral: ["Level 3", "Fails sUNC checks", "Keysystem on download"],
         cons: [],
       },
       links: {
         href: "https://www.xeno.onl/",
         priceHref: "https://linkvertise.com/1319977/xeno",
-        unclinks: {},
+        unclinks: {
+          windows: "https://api.voxlis.net/sunc/?scrap=WEweppeG2InphuKF&key=n8zp808cs4lrQGa75Qfidvgt1xq5vy0H",
+        },
       },
       misc: {
         editor: "voxlis.NET",
@@ -911,7 +914,7 @@ const Data = [
         plat: ["android"],
         desc: "A powerful exploit with short key duration.",
         pros: ["2 day long keys", "Level 8"],
-        neutral: ["Fails sUNC checks", "Uses core technology from ArceusX"],
+        neutral: ["Fails sUNC checks"],
         cons: [],
       },
       links: {
