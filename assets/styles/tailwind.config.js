@@ -22,13 +22,19 @@ tailwind.config = {
                 "primary-border": "rgb(var(--primary-border) / <alpha-value>)",
                 "primary-glow": "rgb(var(--primary-glow) / <alpha-value>)",
             },
+
             boxShadow: {
                 glow: "0 0 20px rgb(var(--primary) / 0.5)",
                 soft: "0 10px 30px rgb(0 0 0 / 0.4)",
             },
+
             borderRadius: {
                 card: "0.75rem",
-            }
+            },
+
+            maxWidth: {
+                content: "110rem",
+            },
         }
     },
 };

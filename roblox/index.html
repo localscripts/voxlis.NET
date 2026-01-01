@@ -2,11 +2,10 @@
 <html lang="en" data-theme="red">
 
 <head>
-    <meta charset="UTF-8">
     <title>voxlis.NET</title>
 </head>
 
-<body class="bg-bg text-fg">
+<body class="bg-bg font-primary text-muted">
     <!-- these components get inserted into the head -->
     <CommonHead></CommonHead>
     <OpenGraph site_name="voxlis.NET" title="voxlis.NET | Ready to inject?"
@@ -17,17 +16,37 @@
 
     <MenuBar></MenuBar>
 
-    <!-- spacer for fixed header -->
-    <div class="h-16"></div>
+    <!-- we only have this div here so that the heart layer contents do not overflow -->
+    <div class="relative overflow-hidden">
+        <HeartLayer></HeartLayer>
 
-    <main class="max-w-7xl mx-auto px-6 py-12">
-        <div class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-8">
-            <h1 class="text-2xl font-semibold mb-4 text-white">hi world</h1>
-            <p class="text-muted">
-                placeholder content for now
-            </p>
-        </div>
-    </main>
+        <main class="relative z-10 max-w-content mx-auto px-6 py-12">
+            <div class="grid grid-cols-[260px_1fr_260px] gap-8">
+
+                <!-- left column -->
+                <aside class="space-y-6">
+                    <RobloxFilters></RobloxFilters>
+
+                    <SponsoredAd></SponsoredAd>
+                </aside>
+
+                <!-- centre column -->
+                <section class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-8">
+                    <h1 class="text-2xl font-semibold text-white mb-4">hello world</h1>
+                    <p class="text-muted">Main content goes here.</p>
+                </section>
+
+                <!-- right column -->
+                <aside class="space-y-6">
+                    <!-- TODO: advise against a bunch of these sponsored ads; they clutter the UI and there is no point for them -->
+                    <!-- because real advertisements havent been implemented on the old site and likely wont be implemented here either -->
+                    <SponsoredAd></SponsoredAd>
+                    <SponsoredAd></SponsoredAd>
+                </aside>
+
+            </div>
+        </main>
+    </div>
 
     <MainFooter></MainFooter>
 </body>

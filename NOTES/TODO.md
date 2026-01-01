@@ -13,5 +13,3 @@
   - TODO: ensure that bold elements in markdown are given a red colour, and stop using links for that functionality
 
 ## quick todo
-
-- add a tailwind value for 110rem width so that it isnt hardcoded into max-w-[110rem] in elements

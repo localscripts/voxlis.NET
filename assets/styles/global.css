@@ -1,8 +1,185 @@
-:root {
-  --bg: 0 0 0;
-  --fg: 255 255 255;
+/* @font-face {
+	font-family: "Voxlis";
+	src: url("/assets/fonts/voxlis.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+} */
 
-  --surface: 0 0 0;
-  --border: 255 255 255;
-  --muted: 156 163 175;
+/* -------------------------------------------------- */
+/* webkit customisations */
+/* -------------------------------------------------- */
+
+/* fix weird webkit focus flashes */
+/* the "flashes" I am referrign to happened when the search box was focused in the menubar */
+input,
+textarea,
+select,
+button {
+	-webkit-tap-highlight-color: transparent;
+}
+
+input:focus {
+	outline: none !important;
+	box-shadow: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+	box-shadow: 0 0 0px 1000px rgb(var(--surface)) inset !important;
+	-webkit-text-fill-color: rgb(var(--fg)) !important;
+	transition: background-color 9999s ease-in-out 0s;
+}
+
+/* -------------------------------------------------- */
+/* custom checkboxes and radios */
+/* -------------------------------------------------- */
+
+.filter-option {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	cursor: pointer;
+	user-select: none;
+}
+
+.filter-option input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.check-ui,
+.radio-ui {
+	width: 1.15rem;
+	height: 1.15rem;
+	background: rgb(var(--surface) / 0.6);
+	border: 1px solid rgb(var(--border) / 0.2);
+	display: grid;
+	place-items: center;
+	transition: all 0.15s ease;
+}
+
+.check-ui {
+	width: 1.15rem;
+	height: 1.15rem;
+	background: rgb(var(--surface) / 0.6);
+	border: 1px solid rgb(var(--border) / 0.2);
+	border-radius: 0.3rem;
+	position: relative;
+	transition: all 0.15s ease;
+}
+
+.check-ui::after {
+	content: "";
+	position: absolute;
+	inset: 3px;
+	background: white;
+	mask-image: url("/assets/icons/check.svg");
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: contain;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+}
+
+.radio-ui {
+	width: 1.15rem;
+	height: 1.15rem;
+	border-radius: 9999px;
+	background: rgb(var(--surface) / 0.6);
+	border: 1px solid rgb(var(--border) / 0.2);
+	display: grid;
+	place-items: center;
+	transition: all 0.15s ease;
+}
+
+.check-ui i {
+	font-size: 0.65rem;
+	color: white;
+	opacity: 0;
+	transform: scale(0.6);
+	transition: all 0.15s ease;
+}
+
+.radio-dot {
+	width: 0.45rem;
+	height: 0.45rem;
+	border-radius: 9999px;
+	background: rgb(var(--primary));
+	opacity: 0;
+	transition: all 0.15s ease;
+}
+
+.filter-option:hover .check-ui,
+.filter-option:hover .radio-ui {
+	border-color: rgb(var(--primary) / 0.4);
+}
+
+.filter-option input:checked + .check-ui {
+	background: rgb(var(--primary));
+	border-color: rgb(var(--primary));
+	box-shadow: 0 0 10px rgb(var(--primary) / 0.5);
+}
+
+.filter-option input:checked + .check-ui::after {
+	opacity: 1;
+}
+
+.filter-option input:checked + .check-ui i {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.filter-option input:checked + .radio-ui {
+	border-color: rgb(var(--primary));
+	box-shadow: 0 0 10px rgb(var(--primary) / 0.4);
+}
+
+.filter-option input:checked + .radio-ui .radio-dot {
+	opacity: 1;
+}
+
+/* -------------------------------------------------- */
+/* segmented buttons */
+/* -------------------------------------------------- */
+
+.segmented {
+	display: flex;
+	height: 2rem;
+	background: rgb(var(--surface) / 0.4);
+	border: 1px solid rgb(var(--border) / 0.15);
+	border-radius: 0.4rem;
+	overflow: hidden;
+}
+
+.segmented label {
+	flex: 1;
+	position: relative;
+	cursor: pointer;
+}
+
+.segmented input {
+	display: none;
+}
+
+.segmented span {
+	height: 100%;
+	display: grid;
+	place-items: center;
+	font-size: 0.8rem;
+	color: rgb(var(--muted));
+	transition: all 0.15s ease;
+	user-select: none;
+}
+
+.segmented label:not(:last-child) span {
+	border-right: 1px solid rgb(var(--border) / 0.1);
+}
+
+.segmented input:checked + span {
+	background: rgb(var(--primary));
+	color: white;
+	box-shadow: 0 0 8px rgb(var(--primary) / 0.5);
 }
