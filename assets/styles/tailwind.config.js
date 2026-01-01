@@ -1,6 +1,11 @@
 tailwind.config = {
     theme: {
         extend: {
+            fontFamily: {
+                // voxlis: ["Voxlis", "ui-sans-serif", "system-ui", "sans-serif"],
+                primary: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+            },
+
             colors: {
                 /* core surfaces */
                 bg: "rgb(var(--bg) / <alpha-value>)",

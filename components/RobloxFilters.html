@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html data-theme="red">
+
+<head>
+    <!-- sklair:remove -->
+    <style>
+        body {
+            background: black;
+        }
+    </style>
+
+    <script src="https://wcdn.numelon.com/sklair-shared/tailwindcss-3.4.17.js"></script>
+    <script src="/assets/styles/tailwind.config.js"></script>
+    <link rel="stylesheet" href="/assets/styles/global.css">
+    <link rel="stylesheet" href="/assets/styles/themes.css">
+
+    <script src=" https://wcdn.numelon.com/sklair-shared/font-awesome-6.5.2-cloudflare-cdnjs.min.js" defer></script>
+    <!-- sklair:remove-end -->
+</head>
+
+<body>
+    <div class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-6
+            transition-all duration-500
+            hover:border-primary/60
+            hover:shadow-glow">
+        <h2 class="text-lg font-voxlis font-semibold text-primary mb-4">Filters</h2>
+
+        <!-- platform -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Platform</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="space-y-2">
+                <label class="filter-option">
+                    <input type="checkbox">
+                    <span class="check-ui"></span>
+                    <span>Windows</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox">
+                    <span class="check-ui"></span>
+                    <span>macOS</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox">
+                    <span class="check-ui"></span>
+                    <span>Android</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox">
+                    <span class="check-ui"></span>
+                    <span>iOS</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- properties -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Properties</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="space-y-2">
+                <label class="filter-option">
+                    <input type="checkbox">
+                    <span class="check-ui"></span>
+                    <span>Verified</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox">
+                    <span class="check-ui"></span>
+                    <span>Premium</span>
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox">
+                    <span class="check-ui"></span>
+                    <span>Currently working</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- cheat type -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Cheat Type</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="segmented">
+                <label>
+                    <input type="radio" name="execType" checked>
+                    <span>Any</span>
+                </label>
+                <label>
+                    <input type="radio" name="execType">
+                    <span>External</span>
+                </label>
+                <label>
+                    <input type="radio" name="execType">
+                    <span>Executor</span>
+                </label>
+            </div>
+
+        </div>
+
+        <!-- key system -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Key System</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="segmented">
+                <label><input type="radio" name="keyType" checked><span>Any</span></label>
+                <label><input type="radio" name="keyType"><span>Keyed</span></label>
+                <label><input type="radio" name="keyType"><span>Keyless</span></label>
+            </div>
+        </div>
+
+        <!-- price -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Price</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="segmented">
+                <label><input type="radio" name="price" checked><span>All</span></label>
+                <label><input type="radio" name="price"><span>Free</span></label>
+                <label><input type="radio" name="price"><span>Paid</span></label>
+            </div>
+
+        </div>
+
+        <!-- sort -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Sort By</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+            <select class="w-full bg-surface/40 border border-border/10 rounded px-3 py-2">
+                <option>Recommended</option>
+                <option>Most popular</option>
+                <option>Least popular</option>
+                <option>Price: low to high</option>
+                <option>Price: high to low</option>
+            </select>
+        </div>
+
+        <button id="reset-filters" class="w-full py-2 border border-border/10 rounded hover:border-primary text-sm">
+            Reset filters
+        </button>
+    </div>
+</body>
+
+</html>
