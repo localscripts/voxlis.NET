@@ -18,11 +18,17 @@ function updateHearts(theme) {
     });
 }
 
+const favicon = document.querySelector("link[rel~='icon']");
+function updatePageIcon(theme) {
+    favicon.href = `/assets/img/hearts/heart.${theme}.svg`;
+}
+
 function updateAll() {
     const theme = document.documentElement.dataset.theme || "red";
     updateAds(theme);
     updateLogos(theme);
     updateHearts(theme);
+    updatePageIcon(theme);
 }
 
 document.addEventListener("DOMContentLoaded", updateAll);
