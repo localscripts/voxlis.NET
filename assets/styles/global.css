@@ -183,3 +183,44 @@ input:-webkit-autofill:focus {
 	color: white;
 	box-shadow: 0 0 8px rgb(var(--primary) / 0.5);
 }
+
+/* -------------------------------------------------- */
+/* prop chips */
+/* -------------------------------------------------- */
+
+.prop-chip {
+	position: relative;
+}
+
+.prop-chip input {
+	display: none;
+}
+
+.prop-chip span {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.3rem 0.6rem;
+	font-size: 0.7rem;
+	border-radius: 9999px;
+	background: rgb(var(--surface) / 0.4);
+	border: 1px solid rgb(var(--border) / 0.15);
+	color: rgb(var(--muted));
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.prop-chip i {
+	font-size: 0.7rem;
+}
+
+.prop-chip span:hover {
+	border-color: rgb(var(--primary) / 0.5);
+}
+
+.prop-chip input:checked + span {
+	background: rgb(var(--primary-soft));
+	color: white;
+	border-color: rgb(var(--primary));
+	box-shadow: 0 0 10px rgb(var(--primary) / 0.5);
+}

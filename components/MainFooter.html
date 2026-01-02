@@ -16,25 +16,64 @@
 
 <body class="bg-bg font-primary text-muted">
     <footer class="bg-black border-t border-border/10 backdrop-blur">
-        <div class="max-w-content mx-auto px-6 py-8 flex items-center justify-between">
+        <div class="max-w-content mx-auto px-6 py-8 space-y-4">
 
-            <!-- left side -->
-            <div class="flex items-center gap-4">
-                <a href="/" class="flex items-center">
-                    <img src="/assets/branding/voxlis.red.png" alt="voxlis.NET" class="h-12 select-none voxlis-logo" />
-                </a>
-                <span class="text-muted text-sm">
-                    &copy;
-                    <script>document.write(new Date().getFullYear())</script> voxlis.NET. All rights reserved.
-                </span>
+            <!-- top bar-->
+            <div class="flex items-center justify-between">
+
+                <!-- left side -->
+                <div class="flex items-center gap-4">
+                    <a href="/" class="flex items-center">
+                        <img src="/assets/branding/voxlis.red.png" alt="voxlis.NET"
+                            class="h-12 select-none voxlis-logo" />
+                    </a>
+
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-muted text-sm">
+                            &copy;
+                            <script>document.write(new Date().getFullYear())</script>
+                            voxlis.NET. All rights reserved.
+                        </span>
+
+                        <span class="text-xs text-muted">
+                            <a href="/tos" class="hover:text-primary transition">Terms of Service</a>
+                            ·
+                            <a href="/privacy" class="hover:text-primary transition">Privacy Policy</a>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- right side -->
+                <div class="flex items-center gap-6 text-sm text-muted">
+                    <a href="/suggest" class="hover:text-white transition">
+                        Make a suggestion
+                    </a>
+
+                    <a href="https://github.com/localscripts/voxlis.NET" class="hover:text-white transition">
+                        GitHub
+                    </a>
+                </div>
             </div>
 
-            <!-- right side -->
-            <div class="flex items-center gap-6 text-sm text-muted">
-                <a href="/suggest" class="hover:text-white transition">Make A Suggestion</a>
-                <a href="https://github.com/localscripts/voxlis.NET" class="hover:text-white transition">
-                    GitHub Repository
-                </a>
+            <!-- bottom bar -->
+            <div class="flex items-center justify-between text-xs text-muted">
+
+                <div>
+                    voxlis.NET is an independent community-driven directory. We do not distribute cheats or executables.
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="https://bespoke.numelon.com" target="_blank">
+                        <img src="https://wcdn.numelon.com/branding/credits.dark.svg?3"
+                            alt="Engineered by Numelon in the United Kingdom"
+                            class="h-7 opacity-70 hover:opacity-100 transition" />
+                    </a>
+
+                    <a href="/r/youtube">
+                        <img src="/assets/img/cat.png" alt="meow"
+                            class="h-8 transition-transform duration-300 hover:scale-125 select-none" />
+                    </a>
+                </div>
             </div>
 
         </div>

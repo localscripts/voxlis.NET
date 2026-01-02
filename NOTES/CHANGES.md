@@ -6,7 +6,8 @@ This document outlines some of the changes compared to the original site, before
 
 The old site incorrectly uses both tags, specifically for declaring an image (preview) for displaying in social media. These tags do not accept relative URLs - they must be absolute.
 
-## Filtering section
+<!-- mutual exclusion does not matter in filtering -->
+<!-- ## Filtering section
 
 The filtering section was an entire mess, containing an entire section pertaining to execution levels (which, no longer formally exist) and then the "show only" section allowing users to select multiple items which are mutually exclusive.
 
@@ -20,4 +21,17 @@ The use of segmented buttons here instead of a checklist not only saves vertical
 
 ![filtering section fixed](./images/filtering-fixed.png)
 
-Do note however that the image above (the new version) is just a screenshot of the first version, it is not finalised yet.
+Do note however that the image above (the new version) is just a screenshot of the first version, it is not finalised yet. -->
+
+## Voxlis logo dimensions
+
+All the original voxlis logo files contained a lot of empty space (transparency) and this would just cause a bunch of inconveniences in trying to exactly align the logo with text. It was possible to simply just add an empty div which occupied a few pixels of space to fix alignment, but doing that everywhere across the site would be counterproductive.
+
+![unnecessary transparent space in the voxlis logo breaking visual alignment](./images/voxlis-unnecessary-transparency.png)
+
+![unnecessary transparent space in the voxlis logo breaking visual alignment](./images/voxlis-logo-alignment.png)
+
+The fix was to simply remove all of the transparent space with Photoshop.
+
+![removing all the transparent space with photoshop](./images/voxlis-resize-logos.png)
+![removing all the transparent space with photoshop](./images/voxlis-resize.png)

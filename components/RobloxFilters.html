@@ -26,29 +26,70 @@
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
 
-            <div class="space-y-2">
-                <label class="filter-option">
-                    <input type="checkbox">
-                    <span class="check-ui"></span>
-                    <span>Windows</span>
+            <div class="flex flex-wrap gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="windows">
+                    <span>
+                        <i class="fa-brands fa-windows text-blue-400"></i>
+                        Windows
+                    </span>
                 </label>
-                <label class="filter-option">
-                    <input type="checkbox">
-                    <span class="check-ui"></span>
-                    <span>macOS</span>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="macos">
+                    <span>
+                        <i class="fa-brands fa-apple text-slate-300"></i>
+                        macOS
+                    </span>
                 </label>
-                <label class="filter-option">
-                    <input type="checkbox">
-                    <span class="check-ui"></span>
-                    <span>Android</span>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="android">
+                    <span>
+                        <i class="fa-brands fa-android text-green-400"></i>
+                        Android
+                    </span>
                 </label>
-                <label class="filter-option">
-                    <input type="checkbox">
-                    <span class="check-ui"></span>
-                    <span>iOS</span>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="ios">
+                    <span>
+                        <i class="fa-brands fa-apple text-white"></i>
+                        iOS
+                    </span>
                 </label>
             </div>
         </div>
+
+        <!-- design test: no colours for platform colours -->
+        <!-- <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Platform</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="flex flex-wrap gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="windows">
+                    <span><i class="fa-brands fa-windows"></i> Windows</span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="macos">
+                    <span><i class="fa-brands fa-apple"></i> macOS</span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="android">
+                    <span><i class="fa-brands fa-android"></i> Android</span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="ios">
+                    <span><i class="fa-brands fa-apple"></i> iOS</span>
+                </label>
+            </div>
+        </div> -->
 
         <!-- properties -->
         <div class="mb-6">
@@ -57,21 +98,29 @@
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
 
-            <div class="space-y-2">
-                <label class="filter-option">
-                    <input type="checkbox">
-                    <span class="check-ui"></span>
-                    <span>Verified</span>
+            <div class="flex flex-wrap gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="verified">
+                    <span>
+                        <i class="fa-solid fa-check-circle"></i>
+                        Verified
+                    </span>
                 </label>
-                <label class="filter-option">
-                    <input type="checkbox">
-                    <span class="check-ui"></span>
-                    <span>Premium</span>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="premium">
+                    <span>
+                        <i class="fa-solid fa-crown"></i>
+                        Premium
+                    </span>
                 </label>
-                <label class="filter-option">
-                    <input type="checkbox">
-                    <span class="check-ui"></span>
-                    <span>Currently working</span>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="working">
+                    <span>
+                        <i class="fa-solid fa-bolt"></i>
+                        Working
+                    </span>
                 </label>
             </div>
         </div>
@@ -83,21 +132,17 @@
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
 
-            <div class="segmented">
-                <label>
-                    <input type="radio" name="execType" checked>
-                    <span>Any</span>
+            <div class="flex gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="executor">
+                    <span>Internal (Executor)</span>
                 </label>
-                <label>
-                    <input type="radio" name="execType">
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="external">
                     <span>External</span>
                 </label>
-                <label>
-                    <input type="radio" name="execType">
-                    <span>Executor</span>
-                </label>
             </div>
-
         </div>
 
         <!-- key system -->
@@ -107,10 +152,16 @@
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
 
-            <div class="segmented">
-                <label><input type="radio" name="keyType" checked><span>Any</span></label>
-                <label><input type="radio" name="keyType"><span>Keyed</span></label>
-                <label><input type="radio" name="keyType"><span>Keyless</span></label>
+            <div class="flex gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="keyed">
+                    <span><i class="fa-solid fa-key"></i> Keyed</span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="keyless">
+                    <span><i class="fa-solid fa-unlock"></i> Keyless</span>
+                </label>
             </div>
         </div>
 
@@ -121,12 +172,17 @@
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
 
-            <div class="segmented">
-                <label><input type="radio" name="price" checked><span>All</span></label>
-                <label><input type="radio" name="price"><span>Free</span></label>
-                <label><input type="radio" name="price"><span>Paid</span></label>
-            </div>
+            <div class="flex gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="free">
+                    <span><i class="fa-solid fa-gift"></i> Free</span>
+                </label>
 
+                <label class="prop-chip">
+                    <input type="checkbox" name="paid">
+                    <span><i class="fa-solid fa-coins"></i> Paid</span>
+                </label>
+            </div>
         </div>
 
         <!-- sort -->
@@ -144,7 +200,11 @@
             </select>
         </div>
 
-        <button id="reset-filters" class="w-full py-2 border border-border/10 rounded hover:border-primary text-sm">
+        <!-- TODO: check button colour -->
+        <button id="reset-filters" class="w-full py-2 border border-border/10 rounded text-sm
+        transition-all duration-500
+        hover:border-primary/50
+        hover:text-primary">
             Reset filters
         </button>
     </div>
