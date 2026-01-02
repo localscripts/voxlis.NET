@@ -2,7 +2,7 @@ const layer = document.getElementById("heart-layer")
 
 function spawnHeart() {
     const heart = document.createElement("div")
-    heart.className = "heart"
+    heart.className = "heart heart-img"
 
     const scale = 0.4 + Math.random() * 0.8
 

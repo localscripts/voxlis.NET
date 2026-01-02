@@ -10,10 +10,19 @@ function updateLogos(theme) {
     });
 }
 
+function updateHearts(theme) {
+    const src = `/assets/img/hearts/heart.${theme}.svg`;
+    document.querySelectorAll(".heart-img").forEach(img => {
+        img.src = src;
+        img.style.backgroundImage = `url(${src})`
+    });
+}
+
 function updateAll() {
     const theme = document.documentElement.dataset.theme || "red";
     updateAds(theme);
     updateLogos(theme);
+    updateHearts(theme);
 }
 
 document.addEventListener("DOMContentLoaded", updateAll);
