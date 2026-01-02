@@ -33,11 +33,14 @@
 
         <!-- actual main panel -->
         <div class="absolute inset-0 flex items-center justify-center px-6 pointer-events-none">
-            <div
-                class="bg-surface/60 border border-border/15 rounded-card shadow-soft backdrop-blur p-6 w-full max-w-2xl pointer-events-auto">
-                <div class="flex items-start justify-between mb-5">
+            <div class="bg-surface/60 border border-border/15 rounded-card shadow-soft backdrop-blur 
+                p-4 sm:p-6 
+                w-full max-w-lg sm:max-w-2xl 
+                max-h-[90vh] overflow-y-auto
+                pointer-events-auto">
+                <div class="flex items-center justify-between mb-4 sm:mb-5">
                     <div>
-                        <h2 class="text-xl font-semibold text-white">Choose a theme</h2>
+                        <h2 class="text-lg sm:text-xl font-semibold text-white">Choose a theme</h2>
                     </div>
 
                     <button id="theme-modal-close" class="text-muted hover:text-white transition" aria-label="Close">
@@ -46,50 +49,50 @@
                 </div>
 
                 <!-- main part -->
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                     <button type="button" data-theme="red"
-                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
                         <div class="flex items-center justify-between">
-                            <div class="font-semibold text-sm text-white">Red</div>
+                            <div class="font-semibold text-sm sm:text-base text-white">Red</div>
                             <div class="h-3 w-3 rounded-full bg-red-500"></div>
                         </div>
-                        <div class="text-xs text-muted mt-1">Classic voxlis.NET</div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Classic voxlis.NET</div>
                     </button>
 
                     <button type="button" data-theme="blue"
-                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
                         <div class="flex items-center justify-between">
-                            <div class="font-semibold text-sm text-white">Blue</div>
+                            <div class="font-semibold text-sm sm:text-base text-white">Blue</div>
                             <div class="h-3 w-3 rounded-full bg-blue-500"></div>
                         </div>
-                        <div class="text-xs text-muted mt-1">Cool & calm</div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Cool & calm</div>
                     </button>
 
                     <button type="button" data-theme="green"
-                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
                         <div class="flex items-center justify-between">
-                            <div class="font-semibold text-sm text-white">Green</div>
+                            <div class="font-semibold text-sm sm:text-base text-white">Green</div>
                             <div class="h-3 w-3 rounded-full bg-green-500"></div>
                         </div>
-                        <div class="text-xs text-muted mt-1">Neon lush</div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Neon lush</div>
                     </button>
 
                     <button type="button" data-theme="orange"
-                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
                         <div class="flex items-center justify-between">
-                            <div class="font-semibold text-sm text-white">Orange</div>
+                            <div class="font-semibold text-sm sm:text-base text-white">Orange</div>
                             <div class="h-3 w-3 rounded-full bg-orange-500"></div>
                         </div>
-                        <div class="text-xs text-muted mt-1">Warm pop</div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Warm pop</div>
                     </button>
 
                     <button type="button" data-theme="purple"
-                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                        class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
                         <div class="flex items-center justify-between">
-                            <div class="font-semibold text-sm text-white">Purple</div>
+                            <div class="font-semibold text-sm sm:text-base text-white">Purple</div>
                             <div class="h-3 w-3 rounded-full bg-purple-500"></div>
                         </div>
-                        <div class="text-xs text-muted mt-1">Deep synth</div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Deep synth</div>
                     </button>
                 </div>
             </div>
