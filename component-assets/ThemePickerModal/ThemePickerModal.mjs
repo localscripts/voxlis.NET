@@ -5,14 +5,12 @@ const themeModal = document.getElementById("theme-modal");
 const themeBackdrop = document.getElementById("theme-modal-backdrop");
 
 const themeClose = document.getElementById("theme-modal-close");
-const themeCancel = document.getElementById("theme-modal-cancel");
 
 // --------------------------------------------------
 // --------------------------------------------------
 // --------------------------------------------------
 
 document.getElementById("theme-button").addEventListener("click", () => {
-    pendingTheme = document.documentElement.dataset.theme || "red";
     sync()
     fadeIn(themeModal)
 })
@@ -23,21 +21,21 @@ function close() {
 
 themeBackdrop.addEventListener("click", close);
 themeClose.addEventListener("click", close);
-themeCancel.addEventListener("click", close);
 
 // --------------------------------------------------
 // --------------------------------------------------
 // --------------------------------------------------
 
 const themeButtons = document.querySelectorAll(".theme-option");
-let pendingTheme = document.documentElement.dataset.theme || "red";
 
 // sync button selection with the current actual theme
 function sync() {
+    const activeTheme = document.documentElement.dataset.theme || "red";
+
     themeButtons.forEach(btn => {
         btn.classList.toggle(
             "is-selected",
-            btn.dataset.theme === pendingTheme
+            btn.dataset.theme === activeTheme
         );
     });
 }
@@ -45,22 +43,13 @@ function sync() {
 // select but dont apply the theme change yet
 themeButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-        pendingTheme = btn.dataset.theme;
+        const t = btn.dataset.theme
+
+        document.documentElement.dataset.theme = t;
+        localStorage.setItem("voxlis-theme", t);
+
         sync();
     });
-});
-
-// commits the actual theme
-document.getElementById("theme-modal-apply").addEventListener("click", () => {
-    document.documentElement.dataset.theme = pendingTheme;
-    localStorage.setItem("voxlis-theme", pendingTheme);
-    fadeOut(themeModal);
-});
-
-// cancel discards the pending theme
-themeCancel.addEventListener("click", () => {
-    pendingTheme = document.documentElement.dataset.theme;
-    fadeOut(themeModal);
 });
 
 // restore the saved theme on page load
