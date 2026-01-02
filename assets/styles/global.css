@@ -210,8 +210,13 @@ input:-webkit-autofill:focus {
 	transition: all 0.15s ease;
 }
 
-.prop-chip i {
-	font-size: 0.7rem;
+/* tailwind lg is 1024px */
+@media (max-width: 1024px) {
+	.prop-chip span {
+		padding: 0.5rem 0.8rem;
+		font-size: 0.9rem;
+		gap: 0.5rem;
+	}
 }
 
 .prop-chip span:hover {

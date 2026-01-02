@@ -15,8 +15,15 @@
 </head>
 
 <body class="bg-bg font-primary text-muted">
-    <header id="menubar" class="fixed top-0 left-0 right-0 h-20 bg-black backdrop-blur border-b border-border/10 z-50">
-        <div class="h-full max-w-content mx-auto px-6 flex items-center justify-between relative">
+    <header id="menubar" class="fixed top-0 left-0 right-0 z-50 bg-black backdrop-blur border-b border-border/10">
+
+        <!-- responsive layout as outlined below: -->
+        <!-- on mobile, the two bars act as normal, stacking on top of eachother. search bar is full width. -->
+        <!-- on desktop however, the second bar becomes absolute and therefore stacks ON TOP of the first bar -->
+        <!-- since the search bar is centered in both instances, (including on desktop), this gives the "illusion" (not really) that the search bar is in the middle -->
+
+        <!-- first bar -->
+        <div class="h-20 max-w-content mx-auto px-6 flex items-center justify-between relative">
 
             <!-- left area -->
             <div class="flex items-center gap-3">
@@ -25,53 +32,63 @@
                 </a>
             </div>
 
-            <!-- centre area -->
-            <div class="absolute left-1/2 -translate-x-1/2 w-full max-w-md">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-muted"></i>
-                    <input id="cheat-search" type="text" placeholder="Search cheats..." class="
-                        w-full
-                        bg-surface/40
-                        border border-border/10
-                        rounded-lg
-                        pl-11 pr-4 py-2
-                        text-sm text-fg placeholder-muted
-                        transition-all duration-500
-                        focus:outline-none
-                        focus:border-primary/60
-                        focus:shadow-glow
-                        focus-visible:outline-none
-                        focus-visible:ring-0
-                      " />
-
-                </div>
-            </div>
-
             <!-- right area -->
             <div class="flex items-center gap-5 text-muted">
-                <!-- <a href="/" class="hover:text-white transition">
-                    <i class="fa-solid fa-house text-lg"></i>
-                </a> -->
                 <a href="/r/discord" class="hover:text-white transition">
                     <i class="fa-brands fa-discord text-lg"></i>
                 </a>
                 <a href="/r/youtube" class="hover:text-white transition">
                     <i class="fa-brands fa-youtube text-lg"></i>
                 </a>
-
                 <a id="theme-button" class="hover:text-white text-bg transition cursor-pointer rainbow-glow">
                     <i class="fa-solid fa-paintbrush text-lg"></i>
                 </a>
-                <!-- we are specifically not using the theme-specified main colour (which is usually red) because it can change -->
-                <!-- <a href="#" class="hover:text-red-500 transition">
-                    <i class="fa-solid fa-flag text-lg"></i>
-                </a> -->
+            </div>
+
+        </div>
+
+        <!-- second bar, search -->
+        <div class="
+            relative
+            max-w-content mx-auto px-6
+            flex justify-center items-center
+
+            /* stacked on mobile and tablet */
+            h-16
+
+            /* acts as an overlay on desktop */
+            lg:absolute
+            lg:inset-x-0
+            lg:top-0
+            lg:h-20
+            lg:pointer-events-none
+        ">
+            <div class="
+                w-full
+                lg:w-[28rem]
+                relative
+                lg:pointer-events-auto
+            ">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-muted"></i>
+                <input id="cheat-search" type="text" placeholder="Search cheats..." class="
+                    w-full
+                    bg-surface/40
+                    border border-border/10
+                    rounded-lg
+                    pl-11 pr-4 py-2
+                    text-sm text-fg placeholder-muted
+                    transition-all duration-500
+                    focus:outline-none
+                    focus:border-primary/60
+                    focus:shadow-glow
+                " />
             </div>
         </div>
+
     </header>
 
-    <!-- spacer for fixed header -->
-    <div class="h-20"></div>
+    <!-- spoacer -->
+    <div class="h-[8.5rem] lg:h-20"></div>
 </body>
 
 </html>
