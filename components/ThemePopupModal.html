@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html data-theme="red">
+
+<head>
+    <!-- sklair:remove -->
+    <script src="https://wcdn.numelon.com/sklair-shared/tailwindcss-3.4.17.js"></script>
+    <script src="/assets/styles/tailwind.config.js"></script>
+    <link rel="stylesheet" href="/assets/styles/global.css">
+    <link rel="stylesheet" href="/assets/styles/themes.css">
+
+    <script src=" https://wcdn.numelon.com/sklair-shared/font-awesome-6.5.2-cloudflare-cdnjs.min.js" defer></script>
+
+    <script src="/assets/js/ThemeSync.js" defer></script>
+    <!-- sklair:remove-end -->
+
+    <script type="module" src="/component-assets/ThemePickerModal/ThemePickerModal.mjs" defer></script>
+
+    <style>
+        .theme-option.is-selected {
+            border-color: rgb(var(--primary));
+            background: rgb(var(--primary-soft));
+            box-shadow: 0 0 14px rgb(var(--primary) / 0.6);
+        }
+    </style>
+</head>
+
+<body class="bg-bg font-primary text-muted">
+    <!-- TODO: hidden, opacity-0 when not testing -->
+    <div id="theme-modal" class="fixed inset-0 z-[999] hidden opacity-0">
+        <!-- blur backdrop -->
+        <!-- TODO: decide whether we keep blur, because it is HEAVILY unoptimised on web!! -->
+        <div id="theme-modal-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+        <!-- actual main panel -->
+        <div class="absolute inset-0 flex items-center justify-center px-6">
+            <div class="w-full max-w-2xl">
+
+                <div class="bg-surface/60 border border-border/15 rounded-card shadow-soft backdrop-blur p-6">
+                    <div class="flex items-start justify-between mb-5">
+                        <div>
+                            <h2 class="text-xl font-voxlis font-semibold text-white">Choose a theme</h2>
+                        </div>
+
+                        <button id="theme-modal-close" class="text-muted hover:text-white transition"
+                            aria-label="Close">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- main part -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <button type="button" data-theme="red"
+                            class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-white">Red</div>
+                                <div class="h-3 w-3 rounded-full bg-red-500"></div>
+                            </div>
+                            <div class="text-xs text-muted mt-1">Classic voxlis.NET</div>
+                        </button>
+
+                        <button type="button" data-theme="blue"
+                            class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-white">Blue</div>
+                                <div class="h-3 w-3 rounded-full bg-blue-500"></div>
+                            </div>
+                            <div class="text-xs text-muted mt-1">Cool & calm</div>
+                        </button>
+
+                        <button type="button" data-theme="green"
+                            class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-white">Green</div>
+                                <div class="h-3 w-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <div class="text-xs text-muted mt-1">Neon lush</div>
+                        </button>
+
+                        <button type="button" data-theme="orange"
+                            class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-white">Orange</div>
+                                <div class="h-3 w-3 rounded-full bg-orange-500"></div>
+                            </div>
+                            <div class="text-xs text-muted mt-1">Warm pop</div>
+                        </button>
+
+                        <button type="button" data-theme="purple"
+                            class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3">
+                            <div class="flex items-center justify-between">
+                                <div class="font-semibold text-sm text-white">Purple</div>
+                                <div class="h-3 w-3 rounded-full bg-purple-500"></div>
+                            </div>
+                            <div class="text-xs text-muted mt-1">Deep synth</div>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center justify-end mt-6 pt-5 border-t border-border/10">
+                        <div class="flex items-center gap-2">
+                            <button id="theme-modal-cancel" type="button"
+                                class="px-3 py-2 rounded-lg border border-border/10 bg-surface/30 text-sm text-muted hover:text-white hover:border-primary/60 transition-all duration-300">
+                                Cancel
+                            </button>
+                            <button id="theme-modal-apply" type="button"
+                                class="px-3 py-2 rounded-lg bg-primary text-sm text-white shadow-glow hover:bg-primary-hover transition-all duration-300">
+                                Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -224,3 +224,43 @@ input:-webkit-autofill:focus {
 	border-color: rgb(var(--primary));
 	box-shadow: 0 0 10px rgb(var(--primary) / 0.5);
 }
+
+/* -------------------------------------------------- */
+/* rainbow glowing stuff */
+/* -------------------------------------------------- */
+
+.rainbow-glow {
+	position: relative;
+}
+
+.rainbow-glow::before {
+	content: "";
+	position: absolute;
+	inset: -6px;
+	border-radius: 9999px;
+	background: linear-gradient(
+		90deg,
+		#ffd29dc1,
+		#ff9ad5c1,
+		#9ad0ffc1,
+		#b6ffb0c1,
+		#ffd29dc1
+	);
+	background-size: 400% 100%;
+	filter: blur(8px);
+	opacity: 0.7;
+	z-index: -1;
+	animation: shimmer 5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
