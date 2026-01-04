@@ -97,6 +97,52 @@ const Data = [
       },
     },
   },
+    {
+    velocity: {
+      main: {
+        name: "Velocity",
+        plat: ["windows"],
+        desc: "An executor cuh!",
+        pros: ["Multi client support", "Has a decompiler", "94% sUNC", "Level 8"],
+        neutral: ["Stability issues", "Keysystem on download"],
+        cons: [],
+      },
+      links: {
+        href: "https://realvelocity.xyz/",
+        priceHref: null,
+        unclinks: {
+          windows:
+            "https://api.voxlis.net/sunc?scrap=vUmSXMfqk6hvAFyZ&key=bFvhbXbx00OqEmIGxadB84nKt6OTHPMS",
+        },
+      },
+      misc: {
+        editor: "voxlis.NET",
+        price: null,
+        period: null,
+      },
+      flags: {
+        hasKeySystem: true,
+        pricegray: false,
+        verified: false,
+        external: false,
+        premium: false,
+        hideunc: false,
+        free: false,
+        hide: false,
+        lvl: 8,
+      },
+      modals: {
+        info: null,
+        downtime: {
+          enabled: true,
+          icon: "/assets/cat.png",
+          title: "Hold on!",
+          desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
+          continue: "href",
+        },
+      },
+    },
+  },
   {
     wave: {
       main: {
