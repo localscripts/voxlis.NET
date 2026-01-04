@@ -117,7 +117,7 @@ const Data = [
       },
       misc: {
         editor: "voxlis.NET",
-        price: null,
+        price: "FREE",
         period: null,
       },
       flags: {
@@ -7845,6 +7845,7 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
 
