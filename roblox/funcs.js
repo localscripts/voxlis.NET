@@ -121,7 +121,7 @@ const Data = [
         period: null,
       },
       flags: {
-        hasKeySystem: true,
+        hasKeySystem: false,
         pricegray: false,
         verified: false,
         external: false,
@@ -7845,6 +7845,7 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
 
