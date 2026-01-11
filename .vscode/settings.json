@@ -1,22 +1,17 @@
 {
-	"[json]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-
-	"[markdown]": {
-		"editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
-	},
-
-	"[html]": {
-		"editor.defaultFormatter": "vscode.html-language-features"
-	},
-
-	"editor.formatOnSave": true,
-	"editor.formatOnPaste": true,
-
-	"prettier.useTabs": true,
-	"prettier.tabWidth": 4,
-	"prettier.singleQuote": false,
-
-	"editor.tabSize": 4
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "prettier.useTabs": true,
+    "prettier.tabWidth": 4,
+    "prettier.singleQuote": false,
+    "editor.tabSize": 4
 }
