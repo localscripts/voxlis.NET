@@ -111,20 +111,9 @@
                 ]
             }
         },
-        "visibility": {
-            "type": "object",
-            "description": "Controls how and if this exploit is displayed",
-            "required": [
-                "hidden",
-                "promoted"
-            ],
-            "additionalProperties": false,
-            "properties": {
-                "hidden": {
-                    "type": "boolean",
-                    "description": "If true, exploit will not be shown at all"
-                }
-            }
+        "hidden": {
+            "type": "boolean",
+            "description": "Controls whether the exploit is hidden"
         }
     }
 }
