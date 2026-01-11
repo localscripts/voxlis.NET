@@ -679,7 +679,9 @@ const Data = [
           "100% sUNC",
           "Level 8",
         ],
-        neutral: [],
+        neutral: [
+          "Vulnerable - public scripts"
+        ],
         cons: [],
       },
       links: {
@@ -7845,6 +7847,7 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
 
