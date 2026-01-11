@@ -17,6 +17,7 @@ local f = fs.readFileSync("1-normalised.json")
 local t = json.decode(f)
 
 local constructed = {}
+local global_pricing = {}
 
 for _, e in pairs(t) do
     local new = {}
@@ -55,3 +56,4 @@ end
 -- p(constructed)
 
 fs.writeFileSync("2-cleaned.json", json.encode(constructed, { indent = true }))
+fs.writeFileSync("2-globalpricing.json", json.encode(global_pricing, { indent = true }))

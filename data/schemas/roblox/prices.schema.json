@@ -1,0 +1,52 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"type": "object",
+	"description": "Global pricing table for all exploits",
+
+	"additionalProperties": {
+		"type": "object",
+		"description": "Pricing per platform",
+
+		"additionalProperties": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": ["id", "days", "price", "currency"],
+
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Unique SKU identifier for this price"
+					},
+
+					"days": {
+						"type": "integer",
+						"description": "Duration in days; -1 means lifetime",
+						"minimum": -1
+					},
+
+					"price": {
+						"type": "number",
+						"minimum": 0
+					},
+
+					"currency": {
+						"type": ["string", "null"],
+						"enum": ["USD", "EUR", "GBP", null]
+					}
+				},
+
+				"allOf": [
+					{
+						"if": {
+							"properties": { "price": { "const": 0 } }
+						},
+						"then": {
+							"properties": { "currency": { "const": null } }
+						}
+					}
+				]
+			}
+		}
+	}
+}
