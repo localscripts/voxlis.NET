@@ -9,11 +9,11 @@
 		"type": "object",
 		"description": "Pricing information for one exploit",
 
-		"required": ["purchaseUrl", "platforms"],
+		"required": ["purchase_url", "platforms"],
 		"additionalProperties": false,
 
 		"properties": {
-			"purchaseUrl": {
+			"purchase_url": {
 				"type": "string",
 				"format": "uri",
 				"description": "Where the user is sent to buy this exploit"
