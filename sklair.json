@@ -1,7 +1,9 @@
 {
+	"hooks": "./hooks",
+
 	"input": "./",
 	"components": "components",
-	"exclude": [".*", "OLD", "NOTES", "sklair", "LICENSE", "*.md"],
+	"exclude": [".*", "OLD", "NOTES", "sklair", "LICENSE", "data", "*.md"],
 
 	"output": "./build",
 
