@@ -1,0 +1,130 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "id",
+        "name",
+        "urls",
+        "platforms",
+        "sunc",
+        "tags",
+        "badges",
+        "visibility"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "Unique exploit identifier used for folder names and internal linking",
+            "pattern": "^[a-z0-9-]+$"
+        },
+        "name": {
+            "type": "string",
+            "description": "Display name shown on exploit cards",
+            "minLength": 1
+        },
+        "urls": {
+            "type": "object",
+            "description": "External links for this exploit",
+            "required": [
+                "website",
+                "purchase"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "website": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Official site or landing page"
+                },
+                "purchase": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Checkout or key system page"
+                }
+            }
+        },
+        "platforms": {
+            "type": "array",
+            "description": "Platforms supported by this exploit",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+                "enum": [
+                    "windows",
+                    "macos",
+                    "ios",
+                    "android"
+                ]
+            }
+        },
+        "sunc": {
+            "type": "object",
+            "description": "sUNC test results per platform",
+            "additionalProperties": {
+                "type": "object",
+                "required": [
+                    "scrapId",
+                    "key"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                    "scrapId": {
+                        "type": "string",
+                        "description": "Scrap ID used to fetch test data"
+                    },
+                    "key": {
+                        "type": "string",
+                        "description": "Access key for this exploit's sUNC tests"
+                    }
+                }
+            }
+        },
+        "tags": {
+            "type": "array",
+            "description": "Filterable traits, e.g. 'decompiler', 'undetected'",
+            "uniqueItems": true,
+            "__items_old_NOTUSED": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$"
+            },
+            "items": {
+                "enum": [
+                    "decompiler",
+                    "undetected",
+                    "key-system",
+                    "multi-instance",
+                    "kernel",
+                    "ai",
+                    "supports-vng" // supports Roblox VNG (Vietnam)
+                ]
+            }
+        },
+        "badges": {
+            "type": "array",
+            "description": "Special visual badges shown on cards",
+            "uniqueItems": true,
+            "items": {
+                "enum": [
+                    "verified",
+                    "premium"
+                ]
+            }
+        },
+        "visibility": {
+            "type": "object",
+            "description": "Controls how and if this exploit is displayed",
+            "required": [
+                "hidden",
+                "promoted"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "hidden": {
+                    "type": "boolean",
+                    "description": "If true, exploit will not be shown at all"
+                }
+            }
+        }
+    }
+}

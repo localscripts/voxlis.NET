@@ -1,51 +1,71 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://voxlis.net/schemas/prices.json",
+
 	"type": "object",
 	"description": "Global pricing table for all exploits",
 
 	"additionalProperties": {
 		"type": "object",
-		"description": "Pricing per platform",
+		"description": "Pricing information for one exploit",
 
-		"additionalProperties": {
-			"type": "array",
-			"items": {
+		"required": ["purchaseUrl", "platforms"],
+		"additionalProperties": false,
+
+		"properties": {
+			"purchaseUrl": {
+				"type": "string",
+				"format": "uri",
+				"description": "Where the user is sent to buy this exploit"
+			},
+
+			"platforms": {
 				"type": "object",
-				"required": ["id", "days", "price", "currency"],
+				"description": "Pricing per platform",
 
-				"properties": {
-					"id": {
-						"type": "string",
-						"description": "Unique SKU identifier for this price"
-					},
+				"additionalProperties": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": ["id", "days", "price", "currency"],
 
-					"days": {
-						"type": "integer",
-						"description": "Duration in days; -1 means lifetime",
-						"minimum": -1
-					},
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "Unique SKU identifier"
+							},
 
-					"price": {
-						"type": "number",
-						"minimum": 0
-					},
+							"days": {
+								"type": "integer",
+								"description": "Duration in days, -1 = lifetime",
+								"minimum": -1
+							},
 
-					"currency": {
-						"type": ["string", "null"],
-						"enum": ["USD", "EUR", "GBP", null]
-					}
-				},
+							"price": {
+								"type": "number",
+								"minimum": 0
+							},
 
-				"allOf": [
-					{
-						"if": {
-							"properties": { "price": { "const": 0 } }
+							"currency": {
+								"type": ["string", "null"],
+								"enum": ["USD", "EUR", "GBP", null]
+							}
 						},
-						"then": {
-							"properties": { "currency": { "const": null } }
-						}
+
+						"allOf": [
+							{
+								"if": {
+									"properties": { "price": { "const": 0 } }
+								},
+								"then": {
+									"properties": {
+										"currency": { "const": null }
+									}
+								}
+							}
+						]
 					}
-				]
+				}
 			}
 		}
 	}
