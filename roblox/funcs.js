@@ -10,7 +10,9 @@ const Data = [
           "Hybrid - kernel, usermode",
           "Rich in features",
         ],
-        neutral: [],
+        neutral: [
+          "Not user-friendly authentication"
+        ],
         cons: [],
       },
       links: {
@@ -7847,6 +7849,7 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
 
