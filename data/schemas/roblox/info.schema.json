@@ -80,9 +80,12 @@
 			"type": "array",
 			"description": "Filterable traits, e.g. 'decompiler', 'undetected'",
 			"uniqueItems": true,
-			"items": {
+			"__items_old_NOTUSED": {
 				"type": "string",
 				"pattern": "^[a-z0-9-]+$"
+			},
+			"items": {
+				"enum": ["decompiler", "undetected", "key-system"]
 			}
 		},
 
@@ -91,7 +94,7 @@
 			"description": "Special visual badges shown on cards",
 			"uniqueItems": true,
 			"items": {
-				"enum": ["verified", "trusted", "popular", "staff-pick"]
+				"enum": ["verified", "premium"]
 			}
 		},
 
@@ -104,10 +107,6 @@
 				"hidden": {
 					"type": "boolean",
 					"description": "If true, exploit will not be shown at all"
-				},
-				"promoted": {
-					"type": "boolean",
-					"description": "If true, exploit may be boosted in rankings"
 				}
 			}
 		}
