@@ -1,0 +1,291 @@
+[
+	{
+		"id": "xeno",
+		"name": "Xeno",
+		"sunc": {
+			"windows": {
+				"scrapId": "WEweppeG2InphuKF",
+				"key": "n8zp808cs4lrQGa75Qfidvgt1xq5vy0H"
+			}
+		},
+		"urls": {
+			"website": "https://www.xeno.onl/",
+			"purchase": "https://linkvertise.com/1319977/xeno"
+		}
+	},
+	{
+		"id": "velocity",
+		"name": "Velocity",
+		"sunc": {
+			"windows": {
+				"scrapId": "vUmSXMfqk6hvAFyZ",
+				"key": "bFvhbXbx00OqEmIGxadB84nKt6OTHPMS"
+			}
+		},
+		"urls": {
+			"website": "https://realvelocity.xyz/"
+		}
+	},
+	{
+		"id": "bunni",
+		"name": "Bunni",
+		"sunc": {
+			"windows": {
+				"scrapId": "WpwrKdpIfaDE4Xc2",
+				"key": "yge9xJKAMcbpo5SergRhV7X594EHc7n8"
+			}
+		},
+		"urls": {
+			"website": "https://discord.gg/bunnilol",
+			"purchase": "https://www.key-empire.com/#bunni"
+		}
+	},
+	{
+		"id": "macsploit",
+		"name": "Macsploit",
+		"sunc": {
+			"macos": {
+				"scrapId": "9kH1EN8HIbXl9I2o",
+				"key": "KrU695V4fbJuWZcwG9jMJen2M22mRbng"
+			}
+		},
+		"urls": {
+			"website": "https://www.raptor.fun/",
+			"purchase": "https://key-empire.com/#macsploit"
+		}
+	},
+	{
+		"id": "wave",
+		"name": "Wave",
+		"sunc": {
+			"windows": {
+				"scrapId": "chxc3Rtp1NOhSxAf",
+				"key": "KwyQ9vNKHEL9lcCXWMNu7pFxpGrtki7q"
+			}
+		},
+		"urls": {
+			"website": "https://getwave.gg/",
+			"purchase": "https://www.key-empire.com/#wave"
+		}
+	},
+	{
+		"id": "ronin",
+		"name": "Ronin",
+		"sunc": [],
+		"urls": {
+			"website": "https://getronin.xyz/",
+			"purchase": "https://www.key-empire.com/#ronin"
+		}
+	},
+	{
+		"id": "arceusx",
+		"name": "ArceusX",
+		"sunc": [],
+		"urls": {
+			"website": "https://spdmteam.com/",
+			"purchase": "https://www.key-empire.com/#arceusx"
+		}
+	},
+	{
+		"id": "matcha",
+		"name": "Matcha",
+		"sunc": [],
+		"urls": {
+			"website": "https://matcha.pink/discord",
+			"purchase": "https://www.key-empire.com/#matcha"
+		}
+	},
+	{
+		"id": "yerba",
+		"name": "Yerba",
+		"sunc": [],
+		"urls": {
+			"website": "https://yerba.wtf/",
+			"purchase": "https://www.key-empire.com/#yerba"
+		}
+	},
+	{
+		"id": "matrix",
+		"name": "Matrix",
+		"sunc": [],
+		"urls": {
+			"website": "https://matrixhubs.shop/",
+			"purchase": "http://matrixhubs.shop/"
+		}
+	},
+	{
+		"id": "hydrogen",
+		"name": "Hydrogen",
+		"sunc": {
+			"macos": {
+				"scrapId": "5qh7GIfCDb8WZjtp",
+				"key": "3Hq4Uz3Oc3X9G34ROz12ODY4VJIwXuUH"
+			}
+		},
+		"urls": {
+			"website": "https://hydrogen.lat",
+			"purchase": "https://hydrogen.lat"
+		}
+	},
+	{
+		"id": "volt",
+		"name": "Volt",
+		"sunc": {
+			"windows": {
+				"scrapId": "uWUvqDj5h0rMmJ0d",
+				"key": "E41gA1PNIk3zS8sZTUMNlF6kFS5NFmX3"
+			}
+		},
+		"urls": {
+			"website": "https://volt.bz/",
+			"purchase": "https://www.key-empire.com/#volt"
+		}
+	},
+	{
+		"id": "codex",
+		"name": "CodeX",
+		"sunc": [],
+		"urls": {
+			"website": "https://codex.lol/",
+			"purchase": "https://key-empire.com/#codex"
+		}
+	},
+	{
+		"id": "severe",
+		"name": "Severe",
+		"sunc": [],
+		"urls": {
+			"website": "https://discord.gg/4QmWjQCgzV",
+			"purchase": "https://discord.gg/4QmWjQCgzV"
+		}
+	},
+	{
+		"id": "sirhurt",
+		"name": "SirHurt",
+		"sunc": [],
+		"urls": {
+			"website": "https://sirhurt.net",
+			"purchase": "https://sirhurt.net"
+		}
+	},
+	{
+		"id": "vegax",
+		"name": "VegaX",
+		"sunc": [],
+		"urls": {
+			"website": "https://vegax.gg",
+			"purchase": "https://yap.com/"
+		}
+	},
+	{
+		"id": "aimmy",
+		"name": "Aimmy",
+		"sunc": [],
+		"urls": {
+			"website": "https://aimmy.dev",
+			"purchase": "https://yap.com/"
+		}
+	},
+	{
+		"id": "delta",
+		"name": "Delta",
+		"sunc": {
+			"android": {
+				"scrapId": "YjWxOsGMMsBpfHlK",
+				"key": "pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ"
+			},
+			"ios": {
+				"scrapId": "YjWxOsGMMsBpfHlK",
+				"key": "pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ"
+			}
+		},
+		"urls": {
+			"website": "https://deltaexploits.gg"
+		}
+	},
+	{
+		"id": "potassium",
+		"name": "Potassium",
+		"sunc": {
+			"windows": {
+				"scrapId": "p1oItowSFMvNrpuf",
+				"key": "hzn8j0diRfPUuqfNpMUetdC8kWheuziL"
+			}
+		},
+		"urls": {
+			"website": "https://potassium.pro/",
+			"purchase": "https://www.key-empire.com/#potassium"
+		}
+	},
+	{
+		"id": "serotonin",
+		"name": "Serotonin",
+		"sunc": [],
+		"urls": {
+			"website": "https://serotonin.best/",
+			"purchase": "https://key-empire.com/#serotonin"
+		}
+	},
+	{
+		"id": "cryptic",
+		"name": "Cryptic",
+		"sunc": {
+			"android": {
+				"scrapId": "3ceXNUciuo4g64Ao",
+				"key": "W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw"
+			},
+			"macos": {
+				"scrapId": "3ceXNUciuo4g64Ao",
+				"key": "W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw"
+			},
+			"windows": {
+				"scrapId": "oJ5ZmP6adDtfYUch",
+				"key": "3Rx06fXNoOJwMIWLUTsLNMeU0Zsb2oam"
+			}
+		},
+		"urls": {
+			"website": "https://getcryptic.net"
+		}
+	},
+	{
+		"id": "volcano",
+		"name": "Volcano",
+		"sunc": {
+			"windows": {
+				"scrapId": "HedSY7yUP0fYmxwX",
+				"key": "gZI2IInLbm9H6fWL9BhzTqqJliOEtlPT"
+			}
+		},
+		"urls": {
+			"website": "https://volcano.wtf",
+			"purchase": "https://www.key-empire.com/#volcano"
+		}
+	},
+	{
+		"id": "seliware",
+		"name": "Seliware",
+		"sunc": {
+			"windows": {
+				"scrapId": "tTRqgEkIh38zdyn8",
+				"key": "Nu3OcXqyq9kJnUSvFs6Kac9kG94uTv9v"
+			}
+		},
+		"urls": {
+			"website": "https://seliware.com",
+			"purchase": "https://www.key-empire.com/#seliware"
+		}
+	},
+	{
+		"id": "solara",
+		"name": "Solara",
+		"sunc": {
+			"windows": {
+				"scrapId": "l0oHqqvAToR9vV6i",
+				"key": "zoyflbbqeBuxCYDlGtUj5dvKgreRq9Zj"
+			}
+		},
+		"urls": {
+			"website": "https://getsolara.dev"
+		}
+	}
+]
