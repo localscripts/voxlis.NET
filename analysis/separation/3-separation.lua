@@ -30,6 +30,15 @@ local function fixMarkdown(md)
     end)) -- original markdown was using empty links to change the colour of some words, when they should be bold instead and we can change highlighting with styles on teh site
 end
 
+local function count(t)
+    local c = 0
+    for _ in pairs(t) do
+        c = c + 1
+    end
+
+    return c
+end
+
 for i, v in pairs(t) do
     local base = "./data/roblox/" .. v.name .. "/"
     fs.mkdirpSync(base)
@@ -54,9 +63,15 @@ for i, v in pairs(t) do
     local description_md = (v.description_md and fixMarkdown(v.description_md)) or nil
     --p(description_md)
 
-    -- jencsave(base .. "info.json", info)
-    -- jencsave(base .. "modals.json", modals)
-    -- jencsave(base .. "_misc.temp.json", misc)
+    jencsave(base .. "info.json", info)
+    if count(modals) >= 1 then
+        jencsave(base .. "modals.json", modals)
+    end
+
+    local anyFeatures = #misc.pros + #misc.cons + #misc.neutrals
+    if anyFeatures >= 1 then
+        jencsave(base .. "_misc.temp.json", misc)
+    end
 
     if description_md then
         fs.writeFileSync(base .. "description.md", description_md)
