@@ -3,7 +3,16 @@
 
 	"input": "./",
 	"components": "components",
-	"exclude": [".*", "OLD", "NOTES", "sklair", "LICENSE", "data", "*.md"],
+	"exclude": [
+		".*",
+		"OLD",
+		"UNUSED",
+		"NOTES",
+		"sklair",
+		"LICENSE",
+		"data",
+		"*.md"
+	],
 
 	"output": "./build",
 
