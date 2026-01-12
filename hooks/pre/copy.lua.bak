@@ -1,10 +1,3 @@
-local YELLOW = "\27[33m"
-local RESET = "\27[0m"
-function warn(fmt, ...)
-    local msg = string.format(fmt, ...)
-    print(string.format("[%sWARN%s] %s", YELLOW, RESET, msg))
-end
-
 local tinsert = table.insert
 
 local function ptebel(t)
@@ -174,31 +167,13 @@ end
 
 local info_schema, err = fs.read("project:data/schemas/roblox/info.schema.json")
 if not info_schema then
-    print("failed to read information schema")
     error(err)
 end
 
 info_schema, err = json.decode(info_schema)
 if not info_schema then
-    print("failed to parse information schema")
     error(err)
 end
-
-local prices_schema, err = fs.read("project:data/schemas/roblox/prices.schema.json")
-if not prices_schema then
-    print("failed to read market prices schema")
-    error(err)
-end
-
-prices_schema, err = json.decode(prices_schema)
-if not prices_schema then
-    print("failed to parse market prices schema")
-    error(err)
-end
-
---------------------------------------------------
---------------------------------------------------
---------------------------------------------------
 
 local constructed = {}
 
@@ -208,52 +183,27 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
     local exploitName = exploitDir.name
 
-    local dir = root .. exploitName .. "/"
-
-    local content, err = fs.read(dir .. "info.json")
-    if not content then
+    local contents, err = fs.read(root .. exploitName .. "/info.json")
+    if not contents then
         error(err)
     end
 
-    content, err = json.decode(content)
-    if not content then
+    local decoded, err = json.decode(contents)
+    if not decoded then
         error(err)
     end
 
     -- print(decoded.website)
 
-    local valid, err = validate(content, info_schema)
+    local valid, err = validate(decoded, info_schema)
     if not valid then
         error(err)
     end
 
-    content.name = exploitName
-    content.id = exploitName:gsub(" ", ""):lower()
+    decoded.name = exploitName
+    decoded.id = exploitName:gsub(" ", ""):lower()
 
-    --------------------------------------------------
-    --------------------------------------------------
-    --------------------------------------------------
-
-    local modals, err = fs.read(dir .. "modals.json")
-    if not modals then
-        warn("modals.json does not exist for %s; ignoring because it is optional", exploitName)
-    else
-        modals, err = json.decode(modals)
-        if not modals then
-            error(err)
-        end
-
-        content.modals = modals
-    end
-
-    local review, err = fs.read(dir .. "review.md")
-    if not review then
-        error(err)
-    end
-
-    content.review = review
-
-    tinsert(constructed, content)
+    tinsert(constructed, decoded)
 
     ::continue::
 end
@@ -271,12 +221,6 @@ end
 
 prices, err = json.decode(prices)
 if not prices then
-    error(err)
-end
-
-local validPrices, err = validate(prices, prices_schema)
-if not validPrices then
-    print("market prices file does not conform to the schema")
     error(err)
 end
 
