@@ -1,7 +1,6 @@
 {
 	"warning": {
 		"enabled": true,
-		"title": "Warning!",
-		"desc": "voxlis.NET recommends checking out 'MORE INFO' for Potassium so you know what you're getting. Would you like to continue to Potassium's website anyway?"
+		"description": "voxlis.NET recommends reading more about this product before continuing with any purchases, so you know what you are getting."
 	}
 }

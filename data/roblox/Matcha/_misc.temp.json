@@ -1,9 +1,0 @@
-{
-	"cons": [],
-	"neutrals": [],
-	"pros": [
-		"Has a decompiler & code explorer",
-		"Hybrid - kernel, usermode",
-		"Rich in features"
-	]
-}
