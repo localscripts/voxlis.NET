@@ -2,7 +2,7 @@ local YELLOW = "\27[33m"
 local RESET = "\27[0m"
 function warn(fmt, ...)
     local msg = string.format(fmt, ...)
-    print(string.format("[%sWARN%s] %s", YELLOW, RESET, msg))
+    print(string.format("[%sLUA WARNING%s] %s", YELLOW, RESET, msg))
 end
 
 local tinsert = table.insert
@@ -37,9 +37,15 @@ local function isArray(t)
     return true
 end
 
+local JSON_NULL = {}
+
 local function checkEnum(v, enum)
     for _, e in ipairs(enum) do
-        if v == e then return true end
+        if e == JSON_NULL then
+            if v == JSON_NULL then return true end
+        else
+            if v == e then return true end
+        end
     end
     return false
 end
@@ -49,9 +55,74 @@ local function isValidURI(s)
     return type(s) == "string" and s:match("^https?://[%w%-%._~:/%?#%[%]@!$&'()%*+,;=]+$")
 end
 
+local function checkType(v, t)
+    if t == "null" then return v == JSON_NULL end
+
+    if t == "object" then
+        return type(v) == "table" and (isEmptyTable(v) or not isArray(v))
+    end
+
+    if t == "array" then
+        return type(v) == "table" and (isEmptyTable(v) or isArray(v))
+    end
+
+    if t == "number" then return type(v) == "number" end
+    if t == "integer" then return type(v) == "number" and v % 1 == 0 end
+    if t == "string" then return type(v) == "string" end
+    if t == "boolean" then return type(v) == "boolean" end
+
+    return false
+end
+
+local function matchesType(v, t)
+    if type(t) == "table" then
+        for _, sub in ipairs(t) do
+            if checkType(v, sub) then return true end
+        end
+        return false
+    else
+        return checkType(v, t)
+    end
+end
+
 local validateValue, validate
 validateValue = function(v, schema, path)
+    -- const
+    if schema.const ~= nil then
+        if v ~= schema.const then
+            return false, fmt("%s must be %s", path, tostring(schema.const))
+        end
+    end
+
+    -- allOf
+    if schema.allOf then
+        for _, sub in ipairs(schema.allOf) do
+            local ok, err = validateValue(v, sub, path)
+            if not ok then return false, err end
+        end
+    end
+
+    -- if / then
+    if schema["if"] then
+        local condOk = validateValue(v, schema["if"], path)
+        if condOk == true and schema["then"] then
+            local ok2, err = validateValue(v, schema["then"], path)
+            if not ok2 then return false, err end
+        end
+    end
+
     local t = schema.type
+    if t then
+        if not matchesType(v, t) then
+            return false, fmt("%s has invalid type", path)
+        end
+    end
+
+    if type(v) == "number" and schema.minimum ~= nil then
+        if v < schema.minimum then
+            return false, fmt("%s must be >= %s", path, schema.minimum)
+        end
+    end
 
     if t == "object" then
         if type(v) ~= "table" then
@@ -96,33 +167,6 @@ validateValue = function(v, schema, path)
         end
 
         return true
-    elseif t == "string" then
-        if type(v) ~= "string" then
-            return false, fmt("%s must be a string", path)
-        end
-
-        if schema.minLength and #v < schema.minLength then
-            return false, fmt("%s must be at least %d characters", path, schema.minLength)
-        end
-
-        if schema.pattern and not v:match(schema.pattern) then
-            return false, fmt("%s does not match pattern %s", path, schema.pattern)
-        end
-
-        if schema.format == "uri" and not isValidURI(v) then
-            return false, fmt("%s must be a valid URI", path)
-        end
-
-        if schema.enum and not checkEnum(v, schema.enum) then
-            return false, fmt("%s must be one of %s", path, table.concat(schema.enum, ", "))
-        end
-
-        return true
-    elseif t == "boolean" then
-        if type(v) ~= "boolean" then
-            return false, fmt("%s must be a boolean", path)
-        end
-        return true
     end
 
     return true
@@ -131,7 +175,7 @@ end
 validate = function(t, schema, path)
     path = path or "root"
 
-    if schema.type == "object" then
+    if schema.type == "object" or schema.properties or schema.additionalProperties then
         local props = schema.properties or {}
         local required = schema.required or {}
         local additional = schema.additionalProperties
@@ -212,19 +256,19 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
     local content, err = fs.read(dir .. "info.json")
     if not content then
-        error(err)
+        error(fmt("failed to read information for %s: %s", exploitName, err))
     end
 
     content, err = json.decode(content)
     if not content then
-        error(err)
+        error(fmt("failed to parse information for %s: %s", exploitName, err))
     end
 
     -- print(decoded.website)
 
     local valid, err = validate(content, info_schema)
     if not valid then
-        error(err)
+        error(fmt("exploit information for %s is invalid (doesnt conform to schema): %s", exploitName, err))
     end
 
     content.name = exploitName
@@ -240,7 +284,7 @@ for _, exploitDir in pairs(fs.scandir(root)) do
     else
         modals, err = json.decode(modals)
         if not modals then
-            error(err)
+            error(fmt("failed to parse modals for %s: %s", exploitName, err))
         end
 
         content.modals = modals
@@ -248,7 +292,7 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
     local review, err = fs.read(dir .. "review.md")
     if not review then
-        error(err)
+        error(fmt("failed to read review for %s: %s", exploitName, err))
     end
 
     content.review = review
@@ -266,18 +310,17 @@ print("will check market data against the schema now...")
 
 local prices, err = fs.read("project:data/roblox/prices.json")
 if not prices then
-    error(err)
+    error(fmt("failed to read prices: %s", err))
 end
 
 prices, err = json.decode(prices)
 if not prices then
-    error(err)
+    error(fmt("failed to parse prices: %s", err))
 end
 
 local validPrices, err = validate(prices, prices_schema)
 if not validPrices then
-    print("market prices file does not conform to the schema")
-    error(err)
+    error(fmt("market prices file does not conform to the schema: %s", err))
 end
 
 -- TODO: check market data and ENSURE that each exploit listed in data/roblox/* also has a price entry in the market data file
