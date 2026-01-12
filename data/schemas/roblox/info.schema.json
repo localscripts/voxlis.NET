@@ -3,43 +3,24 @@
 	"type": "object",
 	"additionalProperties": false,
 	"required": [
-		"id",
-		"name",
-		"urls",
+		"type",
+		"website",
 		"platforms",
 		"sunc",
 		"tags",
 		"badges",
-		"visibility"
+		"hidden"
 	],
 	"properties": {
-		"id": {
+		"type": {
 			"type": "string",
-			"description": "Unique exploit identifier used for folder names and internal linking",
-			"pattern": "^[a-z0-9-]+$"
+			"description": "Whether the executor is internal or external",
+			"enum": ["internal", "external"]
 		},
-		"name": {
+		"website": {
 			"type": "string",
-			"description": "Display name shown on exploit cards",
-			"minLength": 1
-		},
-		"urls": {
-			"type": "object",
-			"description": "External links for this exploit",
-			"required": ["website", "purchase"],
-			"additionalProperties": false,
-			"properties": {
-				"website": {
-					"type": "string",
-					"format": "uri",
-					"description": "Official site or landing page"
-				},
-				"purchase": {
-					"type": "string",
-					"format": "uri",
-					"description": "Checkout or key system page"
-				}
-			}
+			"description": "Official site or landing page",
+			"format": "uri"
 		},
 		"platforms": {
 			"type": "array",
