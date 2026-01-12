@@ -1,8 +1,10 @@
+local tinsert = table.insert
+
 local function ptebel(t)
     local data = {}
 
     for name, val in pairs(t) do
-        table.insert(data, string.format("\t%s = %s", name, val))
+        tinsert(data, string.format("\t%s = %s", name, val))
     end
 
     print(string.format("{\n%s\n}", table.concat(data, "\n")))
@@ -173,11 +175,15 @@ if not info_schema then
     error(err)
 end
 
-local root = "project:data/roblox/"
-for _, file in pairs(fs.scandir(root)) do
-    if not file.isDir then goto continue end
+local constructed = {}
 
-    local contents, err = fs.read(root .. file.name .. "/info.json")
+local root = "project:data/roblox/"
+for _, exploitDir in pairs(fs.scandir(root)) do
+    if not exploitDir.isDir then goto continue end
+
+    local exploitName = exploitDir.name
+
+    local contents, err = fs.read(root .. exploitName .. "/info.json")
     if not contents then
         error(err)
     end
@@ -187,16 +193,29 @@ for _, file in pairs(fs.scandir(root)) do
         error(err)
     end
 
+    -- print(decoded.website)
+
     local valid, err = validate(decoded, info_schema)
     if not valid then
         error(err)
     end
 
+    decoded.name = exploitName
+    decoded.id = exploitName:gsub(" ", ""):lower()
+
+    tinsert(constructed, decoded)
+
     ::continue::
 end
+
+ptebel(constructed)
 
 print("all exploit information is valid according to the information schema!")
 
 print("will check market data schema now...")
 
 local prices, err = fs.read("project:data/roblox/prices.json")
+
+
+-- TODO: check market data and ENSURE that each exploit listed in data/roblox/* also has a price entry in the market data file
+-- error and exit if not
