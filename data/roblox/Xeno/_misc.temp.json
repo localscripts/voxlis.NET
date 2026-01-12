@@ -1,5 +1,0 @@
-{
-	"cons": [],
-	"neutrals": ["Level 3", "Fails sUNC checks", "Keysystem on download"],
-	"pros": ["Multiple instance compatibility", "Has a decompiler"]
-}
