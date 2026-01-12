@@ -26,7 +26,7 @@
 					"type": "array",
 					"items": {
 						"type": "object",
-						"required": ["id", "days", "price", "currency"],
+						"required": ["id", "days", "price"],
 
 						"properties": {
 							"id": {
@@ -60,6 +60,16 @@
 									"properties": {
 										"currency": { "const": null }
 									}
+								}
+							},
+							{
+								"if": {
+									"properties": {
+										"price": { "minimum": 0.01 }
+									}
+								},
+								"then": {
+									"required": ["currency"]
 								}
 							}
 						]
