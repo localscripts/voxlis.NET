@@ -15,6 +15,10 @@ end
 -- local required = ischema.required
 local fmt = string.format
 
+local function isEmptyTable(t)
+    return next(t) == nil
+end
+
 local function isArray(t)
     local n = 0
     for k in pairs(t) do
@@ -37,16 +41,27 @@ local function isValidURI(s)
 end
 
 local validateValue, validate
-local function validateValue(v, schema, path)
+validateValue = function(v, schema, path)
     local t = schema.type
 
     if t == "object" then
-        if type(v) ~= "table" or isArray(v) then
+        if type(v) ~= "table" then
             return false, fmt("%s must be an object", path)
         end
+
+        -- only reject arrays if non-empty
+        if not isEmptyTable(v) and isArray(v) then
+            return false, fmt("%s must be an object", path)
+        end
+
         return validate(v, schema, path)
     elseif t == "array" then
-        if type(v) ~= "table" or not isArray(v) then
+        if type(v) ~= "table" then
+            return false, fmt("%s must be an array", path)
+        end
+
+        -- only reject objects if non-empty
+        if not isEmptyTable(v) and not isArray(v) then
             return false, fmt("%s must be an array", path)
         end
 
@@ -104,7 +119,7 @@ local function validateValue(v, schema, path)
     return true
 end
 
-local function validate(t, schema, path)
+validate = function(t, schema, path)
     path = path or "root"
 
     if schema.type == "object" then
@@ -160,6 +175,8 @@ end
 
 local root = "project:data/roblox/"
 for _, file in pairs(fs.scandir(root)) do
+    if not file.isDir then goto continue end
+
     local contents, err = fs.read(root .. file.name .. "/info.json")
     if not contents then
         error(err)
@@ -171,5 +188,15 @@ for _, file in pairs(fs.scandir(root)) do
     end
 
     local valid, err = validate(decoded, info_schema)
-    print(valid, err)
+    if not valid then
+        error(err)
+    end
+
+    ::continue::
 end
+
+print("all exploit information is valid according to the information schema!")
+
+print("will check market data schema now...")
+
+local prices, err = fs.read("project:data/roblox/prices.json")
