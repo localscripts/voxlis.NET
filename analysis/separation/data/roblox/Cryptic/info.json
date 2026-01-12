@@ -1,0 +1,22 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "3Rx06fXNoOJwMIWLUTsLNMeU0Zsb2oam",
+			"scrapId": "oJ5ZmP6adDtfYUch"
+		},
+		"android": {
+			"key": "W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
+			"scrapId": "3ceXNUciuo4g64Ao"
+		},
+		"macos": {
+			"key": "W0FJ6cRxGGbr19RFWXCiAjUMmYn4oUtw",
+			"scrapId": "3ceXNUciuo4g64Ao"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["key-system"],
+	"platforms": ["windows", "macos", "ios", "android"],
+	"website": "https://getcryptic.net"
+}

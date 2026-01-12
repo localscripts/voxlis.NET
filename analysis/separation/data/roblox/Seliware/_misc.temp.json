@@ -1,0 +1,5 @@
+{
+	"cons": [],
+	"neutrals": ["Vulnerable - public scripts"],
+	"pros": ["Multi-Inject support", "Has a decompiler", "100% sUNC", "Level 8"]
+}

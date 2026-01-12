@@ -1,0 +1,18 @@
+{
+	"sunc": {
+		"android": {
+			"key": "pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
+			"scrapId": "YjWxOsGMMsBpfHlK"
+		},
+		"ios": {
+			"key": "pZ1KPbSD5egMFjZT2wWV9vTU6iHirhhQ",
+			"scrapId": "YjWxOsGMMsBpfHlK"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["key-system"],
+	"platforms": ["ios", "android"],
+	"website": "https://deltaexploits.gg"
+}
