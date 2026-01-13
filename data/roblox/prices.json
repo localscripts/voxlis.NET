@@ -1,1 +1,563 @@
-{}
+{
+	"matcha": {
+		"purchase_url": "https://www.key-empire.com/#matcha",
+		"platforms": {
+			"windows": [
+				{
+					"id": "matcha-lifetime",
+					"days": -1,
+					"price": 9.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"serotonin": {
+		"purchase_url": "https://www.key-empire.com/#serotonin",
+		"platforms": {
+			"windows": [
+				{
+					"id": "serotonin-30d",
+					"days": 30,
+					"price": 8.47,
+					"currency": "USD"
+				},
+				{
+					"id": "serotonin-90d",
+					"days": 90,
+					"price": 19.99,
+					"currency": "USD"
+				},
+				{
+					"id": "serotonin-365d",
+					"days": 365,
+					"price": 47.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"wave": {
+		"purchase_url": "https://www.key-empire.com/#wave",
+		"platforms": {
+			"windows": [
+				{
+					"id": "wave-1d",
+					"days": 1,
+					"price": 2.49,
+					"currency": "USD"
+				},
+				{
+					"id": "wave-7d",
+					"days": 7,
+					"price": 5.99,
+					"currency": "USD"
+				},
+				{
+					"id": "wave-30d",
+					"days": 30,
+					"price": 18.99,
+					"currency": "USD"
+				},
+				{
+					"id": "wave-90d",
+					"days": 90,
+					"price": 39.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"seliware": {
+		"purchase_url": "https://www.key-empire.com/#seliware",
+		"platforms": {
+			"windows": [
+				{
+					"id": "seliware-7d",
+					"days": 7,
+					"price": 3.99,
+					"currency": "USD"
+				},
+				{
+					"id": "seliware-30d",
+					"days": 30,
+					"price": 9.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"potassium": {
+		"purchase_url": "https://www.key-empire.com/#potassium",
+		"platforms": {
+			"windows": [
+				{
+					"id": "potassium-lifetime",
+					"days": -1,
+					"price": 22.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"bunni": {
+		"purchase_url": "https://www.key-empire.com/#bunni",
+		"platforms": {
+			"windows": [
+				{
+					"id": "bunni-1d",
+					"days": 1,
+					"price": 1.99,
+					"currency": "USD"
+				},
+				{
+					"id": "bunni-30d",
+					"days": 30,
+					"price": 9.99,
+					"currency": "USD"
+				},
+				{
+					"id": "bunni-lifetime",
+					"days": -1,
+					"price": 34.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"yerba": {
+		"purchase_url": "https://www.key-empire.com/#yerba",
+		"platforms": {
+			"windows": [
+				{
+					"id": "yerba-lifetime",
+					"days": -1,
+					"price": 9.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"volt": {
+		"purchase_url": "https://www.key-empire.com/#volt",
+		"platforms": {
+			"windows": [
+				{
+					"id": "volt-7d",
+					"days": 7,
+					"price": 4.99,
+					"currency": "USD"
+				},
+				{
+					"id": "volt-30d",
+					"days": 30,
+					"price": 16.99,
+					"currency": "USD"
+				},
+				{
+					"id": "volt-90d",
+					"days": 90,
+					"price": 44.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"volcano": {
+		"purchase_url": "https://www.key-empire.com/#volcano",
+		"platforms": {
+			"windows": [
+				{
+					"id": "volcano-7d",
+					"days": 7,
+					"price": 5.99,
+					"currency": "USD"
+				},
+				{
+					"id": "volcano-30d",
+					"days": 30,
+					"price": 19.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"ronin": {
+		"purchase_url": "https://www.key-empire.com/#ronin",
+		"platforms": {
+			"windows": [
+				{
+					"id": "ronin-7d",
+					"days": 7,
+					"price": 2.99,
+					"currency": "USD"
+				},
+				{
+					"id": "ronin-lifetime",
+					"days": -1,
+					"price": 9.98,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"aimmy": {
+		"purchase_url": "https://aimmy.dev",
+		"platforms": {
+			"windows": [
+				{
+					"id": "aimmy-lifetime",
+					"days": -1,
+					"price": 0,
+					"currency": null
+				}
+			]
+		}
+	},
+
+	"arceusx": {
+		"purchase_url": "https://whop.com/arceus-x",
+		"platforms": {
+			"android": [
+				{
+					"id": "arceusx-android-30d",
+					"days": 30,
+					"price": 7.47,
+					"currency": "USD"
+				}
+			],
+			"ios": [
+				{
+					"id": "arceusx-ios-30d",
+					"days": 30,
+					"price": 7.47,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"codex": {
+		"purchase_url": "https://key-empire.com/#codex",
+		"platforms": {
+			"android": [
+				{
+					"id": "codex-30d",
+					"days": 30,
+					"price": 4.99,
+					"currency": "USD"
+				},
+				{
+					"id": "codex-90d",
+					"days": 90,
+					"price": 9.99,
+					"currency": "USD"
+				},
+				{
+					"id": "codex-lifetime",
+					"days": -1,
+					"price": 19.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"macsploit": {
+		"purchase_url": "https://key-empire.com/#macsploit",
+		"platforms": {
+			"macos": [
+				{
+					"id": "macsploit-30d",
+					"days": 30,
+					"price": 4.99,
+					"currency": "USD"
+				},
+				{
+					"id": "macsploit-90d",
+					"days": 90,
+					"price": 9.99,
+					"currency": "USD"
+				},
+				{
+					"id": "macsploit-lifetime",
+					"days": -1,
+					"price": 19.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"cryptic": {
+		"purchase_url": "https://key-empire.com/#cryptic",
+		"platforms": {
+			"ios": [
+				{
+					"id": "cryptic-ios-30d",
+					"days": 30,
+					"price": 4.5,
+					"currency": "EUR"
+				},
+				{
+					"id": "cryptic-ios-90d",
+					"days": 90,
+					"price": 9.5,
+					"currency": "EUR"
+				},
+				{
+					"id": "cryptic-ios-lifetime",
+					"days": -1,
+					"price": 19.49,
+					"currency": "EUR"
+				}
+			],
+			"android": [
+				{
+					"id": "cryptic-android-30d",
+					"days": 30,
+					"price": 4.5,
+					"currency": "EUR"
+				},
+				{
+					"id": "cryptic-android-90d",
+					"days": 90,
+					"price": 9.5,
+					"currency": "EUR"
+				},
+				{
+					"id": "cryptic-android-lifetime",
+					"days": -1,
+					"price": 19.49,
+					"currency": "EUR"
+				}
+			],
+			"windows": [
+				{
+					"id": "cryptic-windows-7d",
+					"days": 7,
+					"price": 4.25,
+					"currency": "EUR"
+				},
+				{
+					"id": "cryptic-windows-30d",
+					"days": 30,
+					"price": 15.3,
+					"currency": "EUR"
+				},
+				{
+					"id": "cryptic-windows-90d",
+					"days": 90,
+					"price": 34,
+					"currency": "EUR"
+				}
+			],
+			"macos": [
+				{
+					"id": "cryptic-macos-30d",
+					"days": 30,
+					"price": 5.75,
+					"currency": "EUR"
+				},
+				{
+					"id": "cryptic-macos-lifetime",
+					"days": -1,
+					"price": 14.49,
+					"currency": null
+				}
+			]
+		}
+	},
+
+	"delta": {
+		"purchase_url": "https://shop.deltaexploits.gg",
+		"platforms": {
+			"ios": [
+				{
+					"id": "delta-ios-30d",
+					"days": 30,
+					"price": 8,
+					"currency": "USD"
+				}
+			],
+			"android": [
+				{
+					"id": "delta-android-30d",
+					"days": 30,
+					"price": 8,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"hydrogen": {
+		"purchase_url": "https://hydrogenmacos.selly.store/",
+		"platforms": {
+			"macos": [
+				{
+					"id": "hydrogen-7d",
+					"days": 7,
+					"price": 4,
+					"currency": "USD"
+				},
+				{
+					"id": "hydrogen-14d",
+					"days": 14,
+					"price": 6,
+					"currency": "USD"
+				},
+				{
+					"id": "hydrogen-30d",
+					"days": 30,
+					"price": 9,
+					"currency": "USD"
+				},
+				{
+					"id": "hydrogen-90d",
+					"days": 90,
+					"price": 30,
+					"currency": "USD"
+				},
+				{
+					"id": "hydrogen-lifetime",
+					"days": -1,
+					"price": 0,
+					"currency": null
+				}
+			]
+		}
+	},
+
+	"matrix": {
+		"purchase_url": "https://matrixhubs.shop/",
+		"platforms": {
+			"windows": [
+				{
+					"id": "matrix-lifetime",
+					"days": -1,
+					"price": 4.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"sirhurt": {
+		"purchase_url": "https://sirhurt.net/#purchase",
+		"platforms": {
+			"windows": [
+				{
+					"id": "sirhurt-7d",
+					"days": 7,
+					"price": 2.8,
+					"currency": "USD"
+				},
+				{
+					"id": "sirhurt-30d",
+					"days": 30,
+					"price": 9.5,
+					"currency": "USD"
+				},
+				{
+					"id": "sirhurt-lifetime",
+					"days": -1,
+					"price": 100,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"solara": {
+		"purchase_url": "https://getsolara.dev/",
+		"platforms": {
+			"windows": [
+				{
+					"id": "solara-lifetime",
+					"days": -1,
+					"price": 0,
+					"currency": null
+				}
+			]
+		}
+	},
+
+	"vegax": {
+		"purchase_url": "https://vegaexploits.com/product/vega-x-premium/",
+		"platforms": {
+			"android": [
+				{
+					"id": "vegax-30d",
+					"days": 30,
+					"price": 4.99,
+					"currency": "USD"
+				},
+				{
+					"id": "vegax-90d",
+					"days": 90,
+					"price": 12,
+					"currency": "USD"
+				},
+				{
+					"id": "vegax-lifetime",
+					"days": -1,
+					"price": 25,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
+	"velocity": {
+		"purchase_url": "https://realvelocity.xyz/",
+		"platforms": {
+			"windows": [
+				{
+					"id": "velocity-lifetime",
+					"days": -1,
+					"price": 0,
+					"currency": null
+				}
+			]
+		}
+	},
+
+	"xeno": {
+		"purchase_url": "https://www.xeno.onl/download",
+		"platforms": {
+			"windows": [
+				{
+					"id": "xeno-lifetime",
+					"days": -1,
+					"price": 0,
+					"currency": null
+				}
+			]
+		}
+	},
+
+	"severe": {
+		"purchase_url": "https://discord.gg/4QmWjQCgzV",
+		"platforms": {
+			"windows": [
+				{
+					"id": "severe-lifetime",
+					"days": -1,
+					"price": 20,
+					"currency": "USD"
+				}
+			]
+		}
+	}
+}
