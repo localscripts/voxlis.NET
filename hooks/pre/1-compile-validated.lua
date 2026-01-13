@@ -3,7 +3,7 @@ local RED = "\27[31m"
 local RESET = "\27[0m"
 local function warn(fmt, ...)
     local msg = string.format(fmt, ...)
-    print(string.format("[%sLUA WARNING%s] %s", YELLOW, RESET, msg))
+    print(string.format("[%s!%s] %s", YELLOW, RESET, msg))
 end
 
 local __error = error
@@ -252,7 +252,24 @@ end
 --------------------------------------------------
 --------------------------------------------------
 
-local _exploitIds = {}
+local function deepCopy(t)
+    local out = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            out[k] = deepCopy(v)
+        else
+            out[k] = v
+        end
+    end
+    return out
+end
+
+prices_schema.required = {}
+local baseIndividualPriceSchema = prices_schema.additionalProperties
+prices_schema.additionalProperties = false
+prices_schema.properties = {}
+
+-- local _exploitIds = {}
 local constructed = {}
 
 local root = "project:data/roblox/"
@@ -284,7 +301,22 @@ for _, exploitDir in pairs(fs.scandir(root)) do
     local id = exploitName:gsub(" ", ""):lower()
     content.id = id
 
-    _exploitIds[id] = content.platforms
+    tinsert(prices_schema.required, id)
+    local schemaCopy = deepCopy(baseIndividualPriceSchema)
+    prices_schema.properties[id] = schemaCopy
+
+    local platformsSchema = schemaCopy.properties.platforms
+    local platformItemSchema = platformsSchema.additionalProperties
+
+    platformsSchema.additionalProperties = false
+    platformsSchema.properties = {}
+    platformsSchema.required = content.platforms
+
+    for _, p in ipairs(content.platforms) do
+        platformsSchema.properties[p] = deepCopy(platformItemSchema)
+    end
+
+    -- _exploitIds[id] = content.platforms
 
     --------------------------------------------------
     --------------------------------------------------
@@ -292,7 +324,7 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
     local modals, err = fs.read(dir .. "modals.json")
     if not modals then
-        warn("modals.json does not exist for %s; ignoring because it is optional", exploitName)
+        warn("modals.json does not exist for %s; ignoring because it is OPTIONAL", exploitName)
     else
         modals, err = json.decode(modals)
         if not modals then
@@ -335,24 +367,22 @@ if not validPrices then
     error("market prices file does not conform to the schema: %s", err)
 end
 
-local _seenPrices = {}
-for i, v in pairs(prices) do
-    _seenPrices[i] = true
-end
+-- local _seenPrices = {}
+-- for i, v in pairs(prices) do
+--     _seenPrices[i] = true
+-- end
 
-for id, expectedPlatforms in pairs(_exploitIds) do
-    if not _seenPrices[id] then
-        error("pricing data for '%s' does not exist", id)
-    else
-        for _, platform in pairs(expectedPlatforms) do
-            if not prices[id].platforms[platform] then
-                error("expected platform '%s' to be present in pricing data for '%s' but it doesnt exist", platform, id)
-            end
-        end
-    end
-end
-
-
+-- for id, expectedPlatforms in pairs(_exploitIds) do
+--     if not _seenPrices[id] then
+--         error("pricing data for '%s' does not exist", id)
+--     else
+--         for _, platform in pairs(expectedPlatforms) do
+--             if not prices[id].platforms[platform] then
+--                 error("expected platform '%s' to be present in pricing data for '%s' but it doesnt exist", platform, id)
+--             end
+--         end
+--     end
+-- end
 
 --------------------------------------------------
 --------------------------------------------------
