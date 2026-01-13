@@ -1,8 +1,16 @@
 local YELLOW = "\27[33m"
+local RED = "\27[31m"
 local RESET = "\27[0m"
-function warn(fmt, ...)
+local function warn(fmt, ...)
     local msg = string.format(fmt, ...)
     print(string.format("[%sLUA WARNING%s] %s", YELLOW, RESET, msg))
+end
+
+local __error = error
+error = function(fmt, ...)
+    local msg = string.format(fmt, ...)
+    print(string.format("%sLUA ERROR: %s%s", RED, msg, RESET))
+    __error(msg)
 end
 
 local tinsert = table.insert
@@ -244,6 +252,7 @@ end
 --------------------------------------------------
 --------------------------------------------------
 
+local _exploitIds = {}
 local constructed = {}
 
 local root = "project:data/roblox/"
@@ -256,23 +265,26 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
     local content, err = fs.read(dir .. "info.json")
     if not content then
-        error(fmt("failed to read information for %s: %s", exploitName, err))
+        error("failed to read information for %s: %s", exploitName, err)
     end
 
     content, err = json.decode(content)
     if not content then
-        error(fmt("failed to parse information for %s: %s", exploitName, err))
+        error("failed to parse information for %s: %s", exploitName, err)
     end
 
     -- print(decoded.website)
 
     local valid, err = validate(content, info_schema)
     if not valid then
-        error(fmt("exploit information for %s is invalid (doesnt conform to schema): %s", exploitName, err))
+        error("exploit information for %s is invalid (doesnt conform to schema): %s", exploitName, err)
     end
 
     content.name = exploitName
-    content.id = exploitName:gsub(" ", ""):lower()
+    local id = exploitName:gsub(" ", ""):lower()
+    content.id = id
+
+    _exploitIds[id] = content.platforms
 
     --------------------------------------------------
     --------------------------------------------------
@@ -284,7 +296,7 @@ for _, exploitDir in pairs(fs.scandir(root)) do
     else
         modals, err = json.decode(modals)
         if not modals then
-            error(fmt("failed to parse modals for %s: %s", exploitName, err))
+            error("failed to parse modals for %s: %s", exploitName, err)
         end
 
         content.modals = modals
@@ -292,7 +304,7 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
     local review, err = fs.read(dir .. "review.md")
     if not review then
-        error(fmt("failed to read review for %s: %s", exploitName, err))
+        error("failed to read review for %s: %s", exploitName, err)
     end
 
     content.review = review
@@ -310,18 +322,71 @@ print("will check market data against the schema now...")
 
 local prices, err = fs.read("project:data/roblox/prices.json")
 if not prices then
-    error(fmt("failed to read prices: %s", err))
+    error("failed to read prices: %s", err)
 end
 
 prices, err = json.decode(prices)
 if not prices then
-    error(fmt("failed to parse prices: %s", err))
+    error("failed to parse prices: %s", err)
 end
 
 local validPrices, err = validate(prices, prices_schema)
 if not validPrices then
-    error(fmt("market prices file does not conform to the schema: %s", err))
+    error("market prices file does not conform to the schema: %s", err)
 end
 
--- TODO: check market data and ENSURE that each exploit listed in data/roblox/* also has a price entry in the market data file
--- error and exit if not
+local _seenPrices = {}
+for i, v in pairs(prices) do
+    _seenPrices[i] = true
+end
+
+for id, expectedPlatforms in pairs(_exploitIds) do
+    if not _seenPrices[id] then
+        error("pricing data for '%s' does not exist", id)
+    else
+        for _, platform in pairs(expectedPlatforms) do
+            if not prices[id].platforms[platform] then
+                error("expected platform '%s' to be present in pricing data for '%s' but it doesnt exist", platform, id)
+            end
+        end
+    end
+end
+
+
+
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
+
+local merged = {}
+
+for _, exploit in ipairs(constructed) do
+    local id = exploit.id
+    local priceblock = prices[id]
+
+    if not priceblock then
+        -- this error should NEVER happen, because we already validated everything above
+        -- but JUST in case, its a good idea to just stop processing and avoid wasting time
+        error("internal error (bit flipping??): market prices missing for %s", id)
+    end
+
+
+    exploit.pricing = priceblock
+
+    tinsert(merged, exploit)
+end
+
+local out = {
+    generatedAt = os.time(),
+    exploits = merged
+}
+
+local encoded, err = json.encode(out)
+if not encoded then
+    error("failed to encode final data: %s", err)
+end
+
+local success, err = fs.write("generated:roblox_generated.json", encoded)
+if not success then
+    error("failed to write generated data to disk: %s", err)
+end

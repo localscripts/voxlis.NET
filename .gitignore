@@ -3,6 +3,7 @@
 
 # TODO: temporary sklair binary
 sklair
+.sklair
 
 # sklair built items
 build
