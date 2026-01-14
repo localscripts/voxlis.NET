@@ -4,6 +4,7 @@
 	"additionalProperties": false,
 	"required": [
 		"type",
+		"keyed",
 		"website",
 		"platforms",
 		"sunc",
@@ -14,8 +15,12 @@
 	"properties": {
 		"type": {
 			"type": "string",
-			"description": "Whether the executor is internal or external",
+			"description": "Whether the cheat is internal (an executor) or external",
 			"enum": ["internal", "external"]
+		},
+		"keyed": {
+			"type": "boolean",
+			"description": "Whether the cheat has a key system"
 		},
 		"website": {
 			"type": "string",
@@ -24,7 +29,7 @@
 		},
 		"platforms": {
 			"type": "array",
-			"description": "Platforms supported by this exploit",
+			"description": "Platforms supported by this cheat",
 			"minItems": 1,
 			"uniqueItems": true,
 			"items": {
@@ -45,7 +50,7 @@
 					},
 					"key": {
 						"type": "string",
-						"description": "Access key for this exploit's sUNC tests"
+						"description": "Access key for this cheat's sUNC tests"
 					}
 				}
 			}
@@ -62,7 +67,6 @@
 				"enum": [
 					"decompiler",
 					"undetected",
-					"key-system",
 					"multi-instance",
 					"kernel",
 					"ai",

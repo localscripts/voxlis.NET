@@ -224,6 +224,25 @@ end
 --------------------------------------------------
 --------------------------------------------------
 
+local function isKeyEmpire(url)
+    if type(url) ~= "string" then
+        return false
+    end
+    local host = url:match("^%a+://([^/%?#]+)") or url:match("^([^/%?#]+)")
+
+    if not host then
+        return false
+    end
+
+    host = host:lower()
+
+    return host == "key-empire.com" or host == "www.key-empire.com"
+end
+
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
+
 local info_schema, err = fs.read("project:data/schemas/roblox/info.schema.json")
 if not info_schema then
     print("failed to read information schema")
@@ -271,6 +290,7 @@ prices_schema.properties = {}
 
 -- local _exploitIds = {}
 local constructed = {}
+local hiddenList = {}
 
 local root = "project:data/roblox/"
 for _, exploitDir in pairs(fs.scandir(root)) do
@@ -300,6 +320,8 @@ for _, exploitDir in pairs(fs.scandir(root)) do
     content.name = exploitName
     local id = exploitName:gsub(" ", ""):lower()
     content.id = id
+
+    if content.hidden then hiddenList[id] = true end
 
     tinsert(prices_schema.required, id)
     local schemaCopy = deepCopy(baseIndividualPriceSchema)
@@ -392,6 +414,7 @@ local merged = {}
 
 for _, exploit in ipairs(constructed) do
     local id = exploit.id
+    if hiddenList[id] then goto continue end
     local priceblock = prices[id]
 
     if not priceblock then
@@ -400,10 +423,12 @@ for _, exploit in ipairs(constructed) do
         error("internal error (bit flipping??): market prices missing for %s", id)
     end
 
-
     exploit.pricing = priceblock
+    exploit.pricing.keyempire = isKeyEmpire(priceblock.purchase_url) -- determines whether a button lights up as green etc
 
     tinsert(merged, exploit)
+
+    ::continue::
 end
 
 local out = {
