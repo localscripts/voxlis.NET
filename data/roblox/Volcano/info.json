@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://volcano.wtf"
+	"website": "https://volcano.wtf",
+	"keyed": false
 }

@@ -12,7 +12,8 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["key-system"],
+	"keyed": true,
+	"tags": [],
 	"platforms": ["ios", "android"],
 	"website": "https://deltaexploits.gg"
 }

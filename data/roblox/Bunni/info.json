@@ -8,7 +8,8 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["key-system"],
+	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://discord.gg/bunnilol"
+	"website": "https://discord.gg/bunnilol",
+	"keyed": true
 }

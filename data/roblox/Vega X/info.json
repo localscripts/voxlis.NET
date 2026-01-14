@@ -3,7 +3,8 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["key-system"],
+	"keyed": true,
+	"tags": [],
 	"platforms": ["android"],
 	"website": "https://vegax.gg"
 }

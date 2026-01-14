@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://getsolara.dev"
+	"website": "https://getsolara.dev",
+	"keyed": false
 }

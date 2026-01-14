@@ -5,5 +5,6 @@
 	"type": "external",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://matcha.pink/discord"
+	"website": "https://matcha.pink/discord",
+	"keyed": false
 }

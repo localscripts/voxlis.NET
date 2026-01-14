@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://realvelocity.xyz/"
+	"website": "https://realvelocity.xyz/",
+	"keyed": false
 }

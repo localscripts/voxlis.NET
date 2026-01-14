@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["macos"],
-	"website": "https://www.raptor.fun/"
+	"website": "https://www.raptor.fun/",
+	"keyed": false
 }

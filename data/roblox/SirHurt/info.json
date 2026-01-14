@@ -5,5 +5,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://sirhurt.net"
+	"website": "https://sirhurt.net",
+	"keyed": false
 }

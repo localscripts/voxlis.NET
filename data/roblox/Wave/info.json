@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://getwave.gg/"
+	"website": "https://getwave.gg/",
+	"keyed": false
 }

@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://volt.bz/"
+	"website": "https://volt.bz/",
+	"keyed": false
 }

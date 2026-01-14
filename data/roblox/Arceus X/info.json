@@ -3,7 +3,8 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["key-system"],
+	"tags": [],
 	"platforms": ["ios", "android"],
-	"website": "https://spdmteam.com/"
+	"website": "https://spdmteam.com/",
+	"keyed": true
 }

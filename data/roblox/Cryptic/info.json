@@ -16,7 +16,8 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["key-system"],
+	"keyed": true,
+	"tags": [],
 	"platforms": ["windows", "macos", "ios", "android"],
 	"website": "https://getcryptic.net"
 }

@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://www.xeno.onl/"
+	"website": "https://www.xeno.onl/",
+	"keyed": false
 }

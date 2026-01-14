@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://potassium.pro/"
+	"website": "https://potassium.pro/",
+	"keyed": false
 }
