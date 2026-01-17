@@ -1,0 +1,22 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"pro_summary": {
+			"type": "string",
+			"description": "A very short summary of all the pros of this cheat.",
+			"maxLength": 50
+		},
+		"neutral_summary": {
+			"type": "string",
+			"description": "A very short summary of all the neutral points about this cheat.",
+			"maxLength": 50
+		},
+		"con_summary": {
+			"type": "string",
+			"description": "A very short summary of all the cons of this cheat.",
+			"maxLength": 50
+		}
+	}
+}

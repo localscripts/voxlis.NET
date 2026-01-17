@@ -4,7 +4,6 @@
 	"additionalProperties": false,
 	"required": [
 		"type",
-		"keyed",
 		"website",
 		"platforms",
 		"sunc",
@@ -20,7 +19,7 @@
 		},
 		"keyed": {
 			"type": "boolean",
-			"description": "Whether the cheat has a key system"
+			"description": "Whether the cheat has a key system (defaults to true if omitted)"
 		},
 		"website": {
 			"type": "string",
@@ -59,18 +58,14 @@
 			"type": "array",
 			"description": "Filterable traits, e.g. 'decompiler', 'undetected'",
 			"uniqueItems": true,
-			"__items_old_NOTUSED": {
-				"type": "string",
-				"pattern": "^[a-z0-9-]+$"
-			},
 			"items": {
 				"enum": [
 					"decompiler",
 					"undetected",
-					"multi-instance",
 					"kernel",
 					"ai",
-					"supports-vng"
+					"supports-vng",
+					"multi-instance"
 				]
 			}
 		},
