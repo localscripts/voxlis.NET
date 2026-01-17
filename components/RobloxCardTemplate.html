@@ -1,0 +1,128 @@
+<template id="exploit-card-template">
+    <div class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-6 space-y-4">
+
+        <!-- header -->
+        <div class="flex items-start justify-between gap-4">
+
+            <div class="min-w-0">
+                <div class="flex items-center gap-2">
+
+                    <h3 class="text-lg font-semibold text-white truncate exploit-name">
+                        Name
+                    </h3>
+
+                    <i class="fa-solid fa-circle-check text-blue-400" title="Verified" data-badge="verified"></i>
+
+                    <i class="fa-solid fa-crown text-yellow-400" title="Premium" data-badge="premium"></i>
+
+                    <i class="fa-solid fa-triangle-exclamation text-yellow-400" title="Warning"
+                        data-badge="warning"></i>
+                </div>
+
+                <!-- platform -->
+                <div class="flex items-center gap-2 mt-1">
+                    <div class="h-6 w-6 rounded-md bg-blue-400/15 flex items-center justify-center" title="Windows"
+                        data-platform="windows">
+                        <i class="fa-brands fa-microsoft text-blue-400 text-sm"></i>
+                    </div>
+                    <div class="h-6 w-6 rounded-md bg-green-400/15 flex items-center justify-center" title="Android"
+                        data-platform="android">
+                        <i class="fa-brands fa-android text-green-400 text-sm"></i>
+                    </div>
+                    <div class="h-6 w-6 rounded-md bg-slate-300/15 flex items-center justify-center" title="macOS"
+                        data-platform="macos">
+                        <i class="fa-brands fa-apple text-slate-300 text-sm"></i>
+                    </div>
+                    <div class="h-6 w-6 rounded-md bg-white/15 flex items-center justify-center" title="iOS"
+                        data-platform="ios">
+                        <i class="fa-brands fa-apple text-white text-sm"></i>
+                    </div>
+
+                    <div class="h-6 px-2.5 rounded-md 
+                                bg-primary/10 border border-primary/20 
+                                flex items-center justify-center" title="Executor type">
+                        <span class="text-[10px] font-semibold tracking-wide uppercase text-primary executor-type">
+                            Internal
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- sUNC result -->
+            <div class="flex flex-col items-end gap-1 sunc-result">
+                <img src="https://sunc.su/sunc-full.png" class="h-4 select-none" alt="sUNC">
+                <div class="text-s font-semibold text-purple-400"><span class="sunc-percentage">-1</span>%</div>
+            </div>
+
+            <!-- no sUNC result -->
+            <div class="flex flex-col items-end gap-1 opacity-40 hidden sunc-none">
+                <img src="https://sunc.su/sunc-full.png" class="h-4 select-none grayscale" alt="sUNC">
+                <div class="text-s font-semibold text-muted">None</div>
+            </div>
+        </div>
+
+        <div class="space-y-1 text-sm">
+
+            <div class="flex items-center gap-2 text-emerald-400">
+                <i class="fa-solid fa-circle-check"></i>
+                <span class="pro-summary">Pro summary</span>
+            </div>
+
+            <div class="flex items-center gap-2 text-yellow-400">
+                <i class="fa-solid fa-circle-minus"></i>
+                <span class="neutral-summary">Neutral summary</span>
+            </div>
+
+            <div class="flex items-center gap-2 text-red-400">
+                <i class="fa-solid fa-circle-xmark"></i>
+                <span class="con-summary">Con summary</span>
+            </div>
+
+        </div>
+
+
+        <!-- tags -->
+        <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 text-xs rounded-full bg-surface/40 border border-border/10 text-muted feature-tag">
+                Lookup tag name
+            </span>
+        </div>
+
+        <!-- price -->
+        <div class="text-sm text-white">
+            <span class="price-paid">From <span class="font-semibold">(SYMBOL)(PRICE) (ISO)</span></span>
+            <span class="font-semibold hidden price-free">FREE</span> • <span class="key-length">7 days</span>
+            <span class="text-muted ml-1 price-additional-prices">+ x more price(s)</span>
+        </div>
+
+        <!-- bottom buttons -->
+        <div class="flex items-center gap-2 pt-2">
+
+            <!-- TODO: add regular button for non-key-empire purchases -->
+            <a href="#" class="flex items-center justify-center gap-2 px-3 py-2 rounded-lg
+                bg-green-500/10 border border-green-500/30
+                text-sm text-green-400
+                hover:bg-green-500/20 hover:border-green-500 
+                transition-all duration-500 purchase-button">
+                <img src="/assets/branding/key-empire.png" class="h-4" alt="">
+                <span>Buy</span>
+            </a>
+
+            <!-- info modal toggle -->
+            <button class="flex items-center gap-2 px-3 py-2 rounded-lg
+                      border border-blue-500/40 text-blue-400 text-sm
+                      hover:bg-blue-500/10 transition-all duration-500 info-button">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Info</span>
+            </button>
+
+            <a href="#" class="flex items-center justify-center px-3 py-2 rounded-lg
+                                              border border-border/10 text-muted
+                                              hover:text-white hover:border-primary/60
+                                              transition-all duration-500 website-button">
+                <i class="fa-solid fa-globe"></i>
+            </a>
+        </div>
+
+    </div>
+</template>

@@ -19,7 +19,7 @@ To start working on the site, clone the repository:
 git clone "https://github.com/localscripts/voxlis.NET" && cd "voxlis.NET"
 ```
 
-And then you can instantly start a local development server, whose address will be printed out in the console:
+And then you can instantly start a local development server, whose address will be printed out in the console at the start:
 
 ```bash
 sklair --debug serve
