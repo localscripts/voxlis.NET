@@ -16,8 +16,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"keyed": true,
-	"tags": [],
+	"tags": ["decompiler"],
 	"platforms": ["windows", "macos", "ios", "android"],
 	"website": "https://getcryptic.net"
 }

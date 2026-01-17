@@ -8,8 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": [],
+	"tags": ["decompiler"],
 	"platforms": ["windows"],
-	"website": "https://discord.gg/bunnilol",
-	"keyed": true
+	"website": "https://discord.gg/bunnilol"
 }

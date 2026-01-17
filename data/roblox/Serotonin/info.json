@@ -3,8 +3,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "external",
-	"tags": [],
+	"tags": ["kernel", "undetected"],
 	"platforms": ["windows"],
-	"website": "https://serotonin.best/",
-	"keyed": false
+	"website": "https://www.serotonin.win/"
 }

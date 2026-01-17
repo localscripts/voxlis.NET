@@ -3,7 +3,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "external",
-	"tags": [],
+	"tags": ["decompiler"],
 	"platforms": ["windows"],
 	"website": "https://discord.gg/4QmWjQCgzV",
 	"keyed": false

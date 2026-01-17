@@ -6,4 +6,3 @@
 ## What could improve
 
 - The failure of sUNC checks
-- Key system on download

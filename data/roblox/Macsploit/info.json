@@ -8,8 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": [],
+	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["macos"],
-	"website": "https://www.raptor.fun/",
-	"keyed": false
+	"website": "https://www.raptor.fun/"
 }

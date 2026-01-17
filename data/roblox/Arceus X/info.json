@@ -3,8 +3,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": [],
+	"tags": ["supports-vng"],
 	"platforms": ["ios", "android"],
-	"website": "https://spdmteam.com/",
-	"keyed": true
+	"website": "https://spdmteam.com/"
 }

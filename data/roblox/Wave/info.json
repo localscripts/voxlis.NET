@@ -8,7 +8,7 @@
 	"badges": [],
 	"hidden": true,
 	"type": "internal",
-	"tags": [],
+	"tags": ["decompiler"],
 	"platforms": ["windows"],
 	"website": "https://getwave.gg/",
 	"keyed": false

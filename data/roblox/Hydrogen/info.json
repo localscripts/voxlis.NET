@@ -8,8 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"keyed": true,
-	"tags": [],
+	"tags": ["decompiler"],
 	"platforms": ["macos"],
 	"website": "https://hydrogen.lat"
 }

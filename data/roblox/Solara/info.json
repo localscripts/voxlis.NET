@@ -8,7 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": [],
+	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
 	"website": "https://getsolara.dev",
 	"keyed": false

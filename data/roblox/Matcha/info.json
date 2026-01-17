@@ -3,8 +3,7 @@
 	"badges": ["premium"],
 	"hidden": false,
 	"type": "external",
-	"tags": [],
+	"tags": ["kernel"],
 	"platforms": ["windows"],
-	"website": "https://matcha.pink/discord",
-	"keyed": false
+	"website": "https://matcha.pink/discord"
 }

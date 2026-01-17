@@ -10,5 +10,6 @@ Auti occasionally posts Devlogs to his [YouTube channel](https://www.youtube.com
 
 ## What we like
 
+- Now runs in kernel mode
 - Has a Lua environment/code explorer
 - Rich in features

@@ -3,7 +3,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": [],
+	"tags": ["decompiler"],
 	"platforms": ["windows"],
 	"website": "https://sirhurt.net",
 	"keyed": false

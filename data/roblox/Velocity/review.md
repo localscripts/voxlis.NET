@@ -7,4 +7,3 @@
 ## What could improve
 
 - Stability issues
-- Key system on download

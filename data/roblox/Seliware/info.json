@@ -10,6 +10,5 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://seliware.com",
-	"keyed": false
+	"website": "https://seliware.com"
 }

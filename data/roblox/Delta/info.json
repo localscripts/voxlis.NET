@@ -12,8 +12,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"keyed": true,
-	"tags": [],
+	"tags": ["decompiler"],
 	"platforms": ["ios", "android"],
 	"website": "https://deltaexploits.gg"
 }

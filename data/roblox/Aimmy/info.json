@@ -3,7 +3,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "external",
-	"tags": [],
+	"tags": ["ai", "undetected"],
 	"platforms": ["windows"],
 	"website": "https://aimmy.dev",
 	"keyed": false
