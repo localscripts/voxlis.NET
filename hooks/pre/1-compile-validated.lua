@@ -15,20 +15,6 @@ end
 
 local tinsert = table.insert
 
-local function ptebel(t)
-    local data = {}
-
-    for name, val in pairs(t) do
-        tinsert(data, string.format("\t%s = %s", name, val))
-    end
-
-    print(string.format("{\n%s\n}", table.concat(data, "\n")))
-end
-
--- ischema is an abbreviation for info schema
--- local ischema = fs.read("project:data/schemas/roblox/info.schema.json")
--- ischema = json.decode(ischema)
-
 -- local required = ischema.required
 local fmt = string.format
 
@@ -224,48 +210,31 @@ end
 --------------------------------------------------
 --------------------------------------------------
 
-local function isKeyEmpire(url)
-    if type(url) ~= "string" then
-        return false
-    end
-    local host = url:match("^%a+://([^/%?#]+)") or url:match("^([^/%?#]+)")
-
-    if not host then
-        return false
+local function loadSchema(name, path)
+    local schema, err = fs.read(path)
+    if not schema then
+        error("failed to read %s schema: %s", name, err)
     end
 
-    host = host:lower()
+    schema, err = json.decode(schema)
+    if not schema then
+        error("failed to parse %s schema: %s", name, err)
+    end
 
-    return host == "key-empire.com" or host == "www.key-empire.com"
+    return schema
 end
 
---------------------------------------------------
---------------------------------------------------
---------------------------------------------------
+local schemas = {
+    info = loadSchema("exploit information", "project:data/schemas/roblox/info.schema.json"),
+    prices = loadSchema("market prices", "project:data/schemas/roblox/prices.schema.json"),
+    points = loadSchema("summary points", "project:data/schemas/roblox/points.schema.json")
+}
 
-local info_schema, err = fs.read("project:data/schemas/roblox/info.schema.json")
-if not info_schema then
-    print("failed to read information schema")
-    error(err)
-end
-
-info_schema, err = json.decode(info_schema)
-if not info_schema then
-    print("failed to parse information schema")
-    error(err)
-end
-
-local prices_schema, err = fs.read("project:data/schemas/roblox/prices.schema.json")
-if not prices_schema then
-    print("failed to read market prices schema")
-    error(err)
-end
-
-prices_schema, err = json.decode(prices_schema)
-if not prices_schema then
-    print("failed to parse market prices schema")
-    error(err)
-end
+-- we will dynamically construct the prices schema based off all exploit info
+schemas.prices.required = {}
+local baseIndividualPriceSchema = schemas.prices.additionalProperties
+schemas.prices.additionalProperties = false
+schemas.prices.properties = {}
 
 --------------------------------------------------
 --------------------------------------------------
@@ -283,10 +252,40 @@ local function deepCopy(t)
     return out
 end
 
-prices_schema.required = {}
-local baseIndividualPriceSchema = prices_schema.additionalProperties
-prices_schema.additionalProperties = false
-prices_schema.properties = {}
+local function emptyNil(str)
+    if str == "" then
+        return nil
+    else
+        return str
+    end
+end
+
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
+
+local function loadValidate(jsonfile, name, schema)
+    local file, err = fs.read(jsonfile)
+    if not file then
+        return file, fmt("could not read %s: %s", name, err)
+    end
+
+    file, err = json.decode(file)
+    if not file then
+        return file, fmt("could not decode %s: %s", name, err)
+    end
+
+    local valid, err = validate(file, schema)
+    if not valid then
+        return false, fmt("%s does not conform to the schema: %s", name, err)
+    end
+
+    return file
+end
+
+--------------------------------------------------
+--------------------------------------------------
+--------------------------------------------------
 
 -- local _exploitIds = {}
 local constructed = {}
@@ -300,32 +299,27 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
     local dir = root .. exploitName .. "/"
 
-    local content, err = fs.read(dir .. "info.json")
+    local content, err = loadValidate(dir .. "info.json", exploitName .. " information", schemas.info)
     if not content then
-        error("failed to read information for %s: %s", exploitName, err)
+        error(err)
     end
 
-    content, err = json.decode(content)
-    if not content then
-        error("failed to parse information for %s: %s", exploitName, err)
-    end
-
-    -- print(decoded.website)
-
-    local valid, err = validate(content, info_schema)
-    if not valid then
-        error("exploit information for %s is invalid (doesnt conform to schema): %s", exploitName, err)
+    if content.keyed == nil then
+        content.keyed = true
     end
 
     content.name = exploitName
     local id = exploitName:gsub(" ", ""):lower()
     content.id = id
 
+    table.sort(content.tags)
+    table.sort(content.badges)
+
     if content.hidden then hiddenList[id] = true end
 
-    tinsert(prices_schema.required, id)
+    tinsert(schemas.prices.required, id)
     local schemaCopy = deepCopy(baseIndividualPriceSchema)
-    prices_schema.properties[id] = schemaCopy
+    schemas.prices.properties[id] = schemaCopy
 
     local platformsSchema = schemaCopy.properties.platforms
     local platformItemSchema = platformsSchema.additionalProperties
@@ -344,9 +338,35 @@ for _, exploitDir in pairs(fs.scandir(root)) do
     --------------------------------------------------
     --------------------------------------------------
 
+    local review, err = fs.read(dir .. "review.md")
+    if not review then
+        error("failed to read review for %s: %s", exploitName, err)
+    end
+
+    content.review = review
+
+    --------------------------------------------------
+    --------------------------------------------------
+    --------------------------------------------------
+
+    local points, err = loadValidate(dir .. "points.json", "points for " .. exploitName, schemas.points)
+    if not points then
+        warn("pointsjson does not exist / does not comply for %s; ignoring because it is OPTIONAL: %s", exploitName, err)
+    else
+        content.summaries = {
+            pro = emptyNil(points.pro_summary),
+            neutral = emptyNil(points.neutral_summary),
+            con = emptyNil(points.con_summary)
+        }
+    end
+
+    --------------------------------------------------
+    --------------------------------------------------
+    --------------------------------------------------
+
     local modals, err = fs.read(dir .. "modals.json")
     if not modals then
-        warn("modals.json does not exist for %s; ignoring because it is OPTIONAL", exploitName)
+        -- warn("modals.json does not exist for %s; ignoring because it is OPTIONAL", exploitName)
     else
         modals, err = json.decode(modals)
         if not modals then
@@ -355,13 +375,6 @@ for _, exploitDir in pairs(fs.scandir(root)) do
 
         content.modals = modals
     end
-
-    local review, err = fs.read(dir .. "review.md")
-    if not review then
-        error("failed to read review for %s: %s", exploitName, err)
-    end
-
-    content.review = review
 
     tinsert(constructed, content)
 
@@ -374,41 +387,80 @@ print(fmt("validated information for %d exploits", #constructed))
 
 print("will check market data against the schema now...")
 
-local prices, err = fs.read("project:data/roblox/prices.json")
+local prices, err = loadValidate("project:data/roblox/prices.json", "prices", schemas.prices)
 if not prices then
-    error("failed to read prices: %s", err)
+    error(err)
 end
-
-prices, err = json.decode(prices)
-if not prices then
-    error("failed to parse prices: %s", err)
-end
-
-local validPrices, err = validate(prices, prices_schema)
-if not validPrices then
-    error("market prices file does not conform to the schema: %s", err)
-end
-
--- local _seenPrices = {}
--- for i, v in pairs(prices) do
---     _seenPrices[i] = true
--- end
-
--- for id, expectedPlatforms in pairs(_exploitIds) do
---     if not _seenPrices[id] then
---         error("pricing data for '%s' does not exist", id)
---     else
---         for _, platform in pairs(expectedPlatforms) do
---             if not prices[id].platforms[platform] then
---                 error("expected platform '%s' to be present in pricing data for '%s' but it doesnt exist", platform, id)
---             end
---         end
---     end
--- end
 
 --------------------------------------------------
 --------------------------------------------------
 --------------------------------------------------
+
+local function skuInfo(pricing)
+    local hasFree = false
+    local hasPaid = false
+    local paidCount = 0
+
+    local cheapest = nil
+
+    for _, skus in pairs(pricing.platforms or {}) do
+        for _, sku in ipairs(skus) do
+            local price = sku.price or 0
+
+            if price == 0 then
+                hasFree = true
+            else
+                hasPaid = true
+                paidCount = paidCount + 1
+
+                if not cheapest then
+                    cheapest = sku
+                else
+                    if price < cheapest.price then
+                        cheapest = sku
+                    elseif price == cheapest.price then
+                        local d1 = cheapest.days or math.huge
+                        local d2 = sku.days or math.huge
+
+                        -- prefer shorter duration over lifetime
+                        if d2 ~= -1 and (d1 == -1 or d2 < d1) then
+                            cheapest = sku
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    pricing.hasFree = hasFree
+    pricing.hasPaid = hasPaid
+    pricing.paidSkuCount = paidCount
+
+    if cheapest then
+        pricing.cheapestPaid = {
+            price = cheapest.price,
+            currency = cheapest.currency,
+            days = cheapest.days
+        }
+    end
+
+    return pricing
+end
+
+local function isKeyEmpire(url)
+    if type(url) ~= "string" then
+        return false
+    end
+    local host = url:match("^%a+://([^/%?#]+)") or url:match("^([^/%?#]+)")
+
+    if not host then
+        return false
+    end
+
+    host = host:lower()
+
+    return host == "key-empire.com" or host == "www.key-empire.com"
+end
 
 local merged = {}
 
@@ -423,7 +475,7 @@ for _, exploit in ipairs(constructed) do
         error("internal error (bit flipping??): market prices missing for %s", id)
     end
 
-    exploit.pricing = priceblock
+    exploit.pricing = skuInfo(priceblock)
     exploit.pricing.keyempire = isKeyEmpire(priceblock.purchase_url) -- determines whether a button lights up as green etc
 
     tinsert(merged, exploit)
