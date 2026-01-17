@@ -13,5 +13,29 @@
     "prettier.useTabs": true,
     "prettier.tabWidth": 4,
     "prettier.singleQuote": false,
-    "editor.tabSize": 4
+    "editor.tabSize": 4,
+    "Lua.diagnostics.globals": [
+        "fs",
+        "json"
+    ],
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "data/roblox/*/info.json"
+            ],
+            "url": "./data/schemas/roblox/info.schema.json"
+        },
+        {
+            "fileMatch": [
+                "data/roblox/*/points.json"
+            ],
+            "url": "./data/schemas/roblox/points.schema.json"
+        },
+        {
+            "fileMatch": [
+                "data/roblox/prices.json"
+            ],
+            "url": "./data/schemas/roblox/prices.schema.json"
+        }
+    ]
 }
