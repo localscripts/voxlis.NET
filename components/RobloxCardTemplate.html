@@ -6,7 +6,7 @@
 
         <!-- rainbow line, used for premium products -->
         <div class="absolute top-0 left-0 right-0 h-[3px]
-                    bg-gradient-to-r from-red-300 via-yellow-300 via-green-300 via-blue-300 to-purple-300
+                    bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400
                     topbar-premium hidden">
         </div>
 
@@ -43,9 +43,9 @@
                             data-platform="macos">
                             <i class="fa-brands fa-apple text-slate-300 text-sm"></i>
                         </div>
-                        <div class="h-6 w-6 rounded-md bg-white/15 flex items-center justify-center" title="iOS"
+                        <div class="h-6 w-6 rounded-md bg-slate-300/15 flex items-center justify-center" title="iOS"
                             data-platform="ios">
-                            <i class="fa-brands fa-apple text-white text-sm"></i>
+                            <i class="fa-brands fa-apple text-slate-300 text-sm"></i>
                         </div>
 
                         <div class="h-6 px-2.5 rounded-md 
@@ -108,47 +108,48 @@
             </div>
 
             <!-- bottom buttons -->
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex flex-col gap-2 pt-2">
+                <div class="flex gap-2 w-full">
+                    <!-- info modal toggle -->
+                    <button class="flex flex-1 justify-center items-center gap-2 px-3 py-2 rounded-lg
+                                                      border border-blue-500/40 text-blue-400 text-sm
+                                                      hover:bg-blue-500/10 transition-all duration-500 info-button">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Info</span>
+                    </button>
 
-                <!-- TODO: add regular button for non-key-empire purchases -->
-                <a href="#" class="flex items-center justify-center gap-2 px-3 py-2 rounded-lg
-                          bg-green-500/10 border border-green-500/30
-                          text-sm text-green-400
-                          hover:bg-green-500/20 hover:border-green-500
-                          transition-all duration-500
-                          whitespace-nowrap
-                          shrink-0
-                          purchase-keyempire">
-                    <img src="/assets/branding/key-empire.png" class="h-4 shrink-0" alt="Key Empire">
-                    <span>Buy</span>
-                </a>
+                    <a href="#" target="_blank"
+                        class="flex w-10 items-center justify-center px-3 py-2 rounded-lg
+                                                                              border border-border/10 text-muted
+                                                                              hover:text-white hover:border-primary/60
+                                                                              transition-all duration-500 website-button">
+                        <i class="fa-solid fa-globe"></i>
+                    </a>
+                </div>
 
-                <a href="#" target="_blank" class="flex items-center justify-center gap-2 px-3 py-2 rounded-lg
-                          bg-surface/40 border border-border/10
-                          text-sm text-white
-                          hover:border-primary/60 hover:text-primary
-                          transition-all duration-500
-                          whitespace-nowrap
-                          shrink-0
-                          purchase-regular">
-                    <i class="fa-solid fa-bag-shopping"></i>
-                    <span>Buy</span>
-                </a>
+                <div class="flex w-full">
+                    <!-- key empire purchase button -->
+                    <a href="#" class="flex w-full items-center justify-center gap-2 px-3 py-2 rounded-lg
+                                                       bg-green-500/10 border border-green-500/30
+                                                       text-sm text-green-400
+                                                       hover:bg-green-500/20 hover:border-green-500
+                                                       transition-all duration-500
+                                                       purchase-keyempire">
+                        <img src="/assets/branding/key-empire.png" class="h-4 shrink-0" alt="Key Empire">
+                        <span>Buy</span>
+                    </a>
 
-                <!-- info modal toggle -->
-                <button class="flex items-center gap-2 px-3 py-2 rounded-lg
-                                  border border-blue-500/40 text-blue-400 text-sm
-                                  hover:bg-blue-500/10 transition-all duration-500 info-button">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>Info</span>
-                </button>
-
-                <a href="#" target="_blank" class="flex items-center justify-center px-3 py-2 rounded-lg
-                                                          border border-border/10 text-muted
-                                                          hover:text-white hover:border-primary/60
-                                                          transition-all duration-500 website-button">
-                    <i class="fa-solid fa-globe"></i>
-                </a>
+                    <!-- regular purchase for non-KE -->
+                    <a href="#" target="_blank" class="flex w-full items-center justify-center gap-2 px-3 py-2 rounded-lg
+                                                       bg-surface/40 border border-border/10
+                                                       text-sm text-white
+                                                       hover:border-primary/60 hover:text-primary
+                                                       transition-all duration-500
+                                                       purchase-regular">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>Buy</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

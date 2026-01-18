@@ -483,6 +483,25 @@ for _, exploit in ipairs(constructed) do
     ::continue::
 end
 
+local function contains(t, x)
+    for _, v in pairs(t) do if v == x then return true end end
+    return false
+end
+
+local function rank(u)
+    if contains(u.badges, "premium") then return 1 end
+    if contains(u.badges, "verified") then return 2 end
+    return 3
+end
+
+table.sort(merged, function(a, b)
+    local ra, rb = rank(a), rank(b)
+    if ra ~= rb then
+        return ra < rb
+    end
+    return a.name:lower() < b.name:lower()
+end)
+
 local out = {
     generatedAt = os.time(),
     exploits = merged

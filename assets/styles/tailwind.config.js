@@ -25,7 +25,7 @@ tailwind.config = {
 
             boxShadow: {
                 glow: "0 0 20px rgb(var(--primary) / 0.5)",
-                soft: "0 10px 30px rgb(0 0 0 / 0.4)",
+                // soft: "0 10px 30px rgb(0 0 0 / 0.4)",
             },
 
             borderRadius: {
