@@ -33,7 +33,7 @@ tailwind.config = {
             },
 
             maxWidth: {
-                content: "110rem",
+                content: "120rem",
             },
         }
     },
