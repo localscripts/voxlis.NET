@@ -733,7 +733,7 @@ const Data = [
         cons: [],
       },
       links: {
-        href: "https://discord.gg/bunnilol",
+        href: "https://bunni.fun/",
         priceHref: "https://www.key-empire.com/#bunni",
         unclinks: {
           windows: "https://api.voxlis.net/sunc?scrap=WpwrKdpIfaDE4Xc2&key=yge9xJKAMcbpo5SergRhV7X594EHc7n8",
@@ -7849,6 +7849,7 @@ class CardScrollManager {
 
 // Initialize card scroll manager
 new CardScrollManager();
+
 
 
 
