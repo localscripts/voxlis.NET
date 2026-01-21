@@ -4,14 +4,14 @@ voxlist.NET is your go-to source for comparing exploits and cheats for Roblox an
 
 The main site is [voxlis.net](https://voxlis.net), however [voxlis.com](https://voxlis.com) and [robloxhackers.lol](https://robloxhackers.lol) are also active and simply redirect to the main site.
 
-## How do I add an executor?
+<!-- ## How do I add an executor?
 
 1. Go to [voxlis.net/suggest](https://voxlis.net/suggest), and fill in the information there.
-2. Copy the generated output and [create a new issue](/issues).
+2. Copy the generated output and [create a new issue](/issues). -->
 
 ## Contributing
 
-voxlis.NET uses the Sklair HTML compiler/build system to make the entire site modular and easy to maintain. Installation instructions for Sklair are available [here](https://sklair.numelon.com).
+voxlis.NET uses the Sklair HTML compiler/build system to make the entire site modular and easy to maintain. Installation instructions for Sklair are available [here](https://sklair.numelon.com/download).
 
 To start working on the site, clone the repository:
 
@@ -27,8 +27,12 @@ sklair --debug serve
 
 Please note that attempting to preview the HTML files in this repository regularly **WILL NOT WORK**, because the HTML files need to be compiled using [Sklair](https://sklair.numelon.com) first.
 
-<!-- ### JavaScript Definitions
+### Adding new cheats
 
-Please see [js-definitions.js](./NOTES/js-definition.js) for more information about how cheats are "defined".
+**If you wish to add an exploit/cheat, then do not modify any files other than the ones in `data/roblox`.**
 
-![image](https://github.com/user-attachments/assets/1b15f6ac-d16b-419e-b541-baaab9c98761) -->
+> [!WARNING]  
+> All present and new data inside the `data/roblox` directory must conform to the schemas defined in `data/schemas/roblox`. It is therefore ***heavily advisable*** that you make any modifications to this repository using [Visual Studio Code](https://code.visualstudio.com/), as it has support for JSON document editing according to a schema.
+>
+> **THE SITE WILL NOT COMPILE AT ALL, ON PURPOSE, IF ANY DATA DOES NOT CONFORM WITH THE SCHEMA.**
+> This is to ensure that all data is organised well and it does not become a rats nest like this repository once was.
