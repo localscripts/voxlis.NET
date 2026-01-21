@@ -1,4 +1,4 @@
-import { fadeIn, fadeOut } from "/assets/js/fadeInOut.mjs";
+import { fadeIn, fadeOut } from "/assets/js/Utilities.mjs";
 
 const themeModal = document.getElementById("theme-modal");
 
