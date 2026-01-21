@@ -338,7 +338,7 @@ for _, exploitDir in pairs(fs.scandir(root)) do
     --------------------------------------------------
     --------------------------------------------------
 
-    local review, err = fs.read(dir .. "review.md")
+    local review, err = fs.read("temp:roblox_reviews_md/" .. id .. "._html")
     if not review then
         error("failed to read review for %s: %s", exploitName, err)
     end
@@ -504,6 +504,7 @@ end)
 
 local out = {
     generatedAt = os.time(),
+    tags = schemas.info.properties.tags.items.enum,
     exploits = merged
 }
 
