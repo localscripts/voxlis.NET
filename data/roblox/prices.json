@@ -373,7 +373,7 @@
 					"id": "cryptic-macos-lifetime",
 					"days": -1,
 					"price": 14.49,
-					"currency": null
+					"currency": "EUR"
 				}
 			]
 		}

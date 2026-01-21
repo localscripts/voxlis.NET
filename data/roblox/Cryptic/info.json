@@ -14,7 +14,7 @@
 		}
 	},
 	"badges": [],
-	"hidden": false,
+	"hidden": true,
 	"type": "internal",
 	"tags": ["decompiler"],
 	"platforms": ["windows", "macos", "ios", "android"],

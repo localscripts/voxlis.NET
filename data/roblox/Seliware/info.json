@@ -8,7 +8,7 @@
 	"badges": ["premium"],
 	"hidden": false,
 	"type": "internal",
-	"tags": [],
+	"tags": ["decompiler", "multi-instance"],
 	"platforms": ["windows"],
 	"website": "https://seliware.com"
 }

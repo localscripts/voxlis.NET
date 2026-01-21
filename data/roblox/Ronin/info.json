@@ -1,7 +1,7 @@
 {
 	"sunc": {},
 	"badges": [],
-	"hidden": false,
+	"hidden": true,
 	"type": "external",
 	"tags": [],
 	"platforms": ["windows"],

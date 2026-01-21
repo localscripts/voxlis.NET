@@ -12,5 +12,4 @@ The developers operate under fresh accounts, and their identities remain unknown
 ## What could be better
 
 - Detection issues
-- Stability issues
-- Users have reported compatibility issues
+- Users have reported compatibility and stability issues
