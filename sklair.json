@@ -6,7 +6,7 @@
 		"path": "./hooks"
 	},
 
-	"input": "./",
+	"input": "./src",
 	"components": "components",
 	"exclude": [
 		".*",

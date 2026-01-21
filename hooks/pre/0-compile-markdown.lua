@@ -298,7 +298,7 @@ error = function(fmt, ...)
     __error(msg)
 end
 
-local root = "project:data/roblox/"
+local root = "project:../data/roblox/"
 for _, exploitDir in pairs(fs.scandir(root)) do
     if not exploitDir.isDir then goto continue end
 

@@ -225,9 +225,9 @@ local function loadSchema(name, path)
 end
 
 local schemas = {
-    info = loadSchema("exploit information", "project:data/schemas/roblox/info.schema.json"),
-    prices = loadSchema("market prices", "project:data/schemas/roblox/prices.schema.json"),
-    points = loadSchema("summary points", "project:data/schemas/roblox/points.schema.json")
+    info = loadSchema("exploit information", "project:../data/schemas/roblox/info.schema.json"),
+    prices = loadSchema("market prices", "project:../data/schemas/roblox/prices.schema.json"),
+    points = loadSchema("summary points", "project:../data/schemas/roblox/points.schema.json")
 }
 
 -- we will dynamically construct the prices schema based off all exploit info
@@ -291,7 +291,7 @@ end
 local constructed = {}
 local hiddenList = {}
 
-local root = "project:data/roblox/"
+local root = "project:../data/roblox/"
 for _, exploitDir in pairs(fs.scandir(root)) do
     if not exploitDir.isDir then goto continue end
 
@@ -387,7 +387,7 @@ print(fmt("validated information for %d exploits", #constructed))
 
 print("will check market data against the schema now...")
 
-local prices, err = loadValidate("project:data/roblox/prices.json", "prices", schemas.prices)
+local prices, err = loadValidate("project:../data/roblox/prices.json", "prices", schemas.prices)
 if not prices then
     error(err)
 end
