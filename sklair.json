@@ -1,5 +1,10 @@
 {
-	"hooks": "./hooks",
+	"$schema": "https://sklair.numelon.com/schema_0.3.0-prerelease.json",
+
+	"hooks": {
+		"enabled": true,
+		"path": "./hooks"
+	},
 
 	"input": "./",
 	"components": "components",
