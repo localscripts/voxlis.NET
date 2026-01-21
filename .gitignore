@@ -2,7 +2,8 @@ TODO.md
 
 # TODO: this is temporary again
 .OLD
-RobloxData.js
+RobloxData.mjs
+*.mjs
 
 # TODO: temporary sklair binary
 sklair

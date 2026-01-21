@@ -196,7 +196,7 @@ input:-webkit-autofill:focus {
 	display: none;
 }
 
-.prop-chip span {
+.prop-chip > span {
 	display: flex;
 	align-items: center;
 	gap: 0.4rem;

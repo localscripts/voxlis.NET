@@ -10,10 +10,11 @@
 
     <script src=" https://wcdn.numelon.com/sklair-shared/font-awesome-6.5.2-cloudflare-cdnjs.min.js" defer></script>
     <!-- sklair:remove-end -->
+
 </head>
 
 <body class="bg-bg font-primary text-muted">
-    <div class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-6">
+    <div class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-6" id="filters">
         <h2 class="text-lg font-semibold text-primary mb-4">Filters</h2>
 
         <!-- platform -->
@@ -25,7 +26,7 @@
 
             <div class="flex flex-wrap gap-2">
                 <label class="prop-chip">
-                    <input type="checkbox" name="windows">
+                    <input type="checkbox" name="windows" class="filter-input" data-filter-group="platform">
                     <span>
                         <i class="fa-brands fa-microsoft text-blue-400"></i>
                         Windows
@@ -33,7 +34,7 @@
                 </label>
 
                 <label class="prop-chip">
-                    <input type="checkbox" name="macos">
+                    <input type="checkbox" name="macos" class="filter-input" data-filter-group="platform">
                     <span>
                         <i class="fa-brands fa-apple text-slate-300"></i>
                         macOS
@@ -41,7 +42,7 @@
                 </label>
 
                 <label class="prop-chip">
-                    <input type="checkbox" name="android">
+                    <input type="checkbox" name="android" class="filter-input" data-filter-group="platform">
                     <span>
                         <i class="fa-brands fa-android text-green-400"></i>
                         Android
@@ -49,7 +50,7 @@
                 </label>
 
                 <label class="prop-chip">
-                    <input type="checkbox" name="ios">
+                    <input type="checkbox" name="ios" class="filter-input" data-filter-group="platform">
                     <span>
                         <i class="fa-brands fa-apple text-slate-300"></i>
                         iOS
@@ -58,35 +59,21 @@
             </div>
         </div>
 
-        <!-- properties -->
+        <!-- TODO: add uptime filter, allow users to filter by whether it is up or down rn -->
+
+        <!-- tags -->
         <div class="mb-6">
             <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
-                <span>Properties</span>
+                <span>Tags</span>
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
 
             <div class="flex flex-wrap gap-2">
-                <label class="prop-chip">
-                    <input type="checkbox" name="verified">
+                <label class="prop-chip filter-tag">
+                    <input type="checkbox" name="TEMPLATE_TAG" class="filter-input" data-filter-group="tag">
                     <span>
-                        <i class="fa-solid fa-check-circle"></i>
-                        Verified
-                    </span>
-                </label>
-
-                <label class="prop-chip">
-                    <input type="checkbox" name="premium">
-                    <span>
-                        <i class="fa-solid fa-crown"></i>
-                        Premium
-                    </span>
-                </label>
-
-                <label class="prop-chip">
-                    <input type="checkbox" name="working">
-                    <span>
-                        <i class="fa-solid fa-bolt"></i>
-                        Working
+                        <i class="filter-tag-icon"></i>
+                        <span class="filter-tag-text">Template tag</span>
                     </span>
                 </label>
             </div>
@@ -101,12 +88,12 @@
 
             <div class="flex gap-2">
                 <label class="prop-chip">
-                    <input type="checkbox" name="executor">
+                    <input type="checkbox" name="internal" class="filter-input" data-filter-group="type">
                     <span>Internal (Executor)</span>
                 </label>
 
                 <label class="prop-chip">
-                    <input type="checkbox" name="external">
+                    <input type="checkbox" name="external" class="filter-input" data-filter-group="type">
                     <span>External</span>
                 </label>
             </div>
@@ -121,12 +108,12 @@
 
             <div class="flex gap-2">
                 <label class="prop-chip">
-                    <input type="checkbox" name="keyed">
+                    <input type="checkbox" name="keyed" class="filter-input" data-filter-group="keyed">
                     <span><i class="fa-solid fa-key"></i> Keyed</span>
                 </label>
 
                 <label class="prop-chip">
-                    <input type="checkbox" name="keyless">
+                    <input type="checkbox" name="keyless" class="filter-input" data-filter-group="keyed">
                     <span><i class="fa-solid fa-unlock"></i> Keyless</span>
                 </label>
             </div>
@@ -141,12 +128,12 @@
 
             <div class="flex gap-2">
                 <label class="prop-chip">
-                    <input type="checkbox" name="free">
+                    <input type="checkbox" name="free" class="filter-input" data-filter-group="price">
                     <span><i class="fa-solid fa-gift"></i> Free</span>
                 </label>
 
                 <label class="prop-chip">
-                    <input type="checkbox" name="paid">
+                    <input type="checkbox" name="paid" class="filter-input" data-filter-group="price">
                     <span><i class="fa-solid fa-coins"></i> Paid</span>
                 </label>
             </div>
@@ -160,8 +147,9 @@
             </h3>
             <select class="w-full bg-surface/40 border border-border/10 rounded px-3 py-2 text-sm">
                 <option>Recommended</option>
-                <option>Most popular</option>
-                <option>Least popular</option>
+                <!-- TODO: add popularity using clicks etc from voxlis api -->
+                <!-- <option>Most popular</option> -->
+                <!-- <option>Least popular</option> -->
                 <option>Price: low to high</option>
                 <option>Price: high to low</option>
             </select>
