@@ -36,3 +36,11 @@ Please note that attempting to preview the HTML files in this repository regular
 >
 > **THE SITE WILL NOT COMPILE AT ALL, ON PURPOSE, IF ANY DATA DOES NOT CONFORM WITH THE SCHEMA.**
 > This is to ensure that all data is organised well and it does not become a rats nest like this repository once was.
+
+1. Navigate to the `data/roblox` folder.
+2. Create a new folder there, named after the cheat you want to add.
+   - E.g. `Some Executor`, so now you have this: `data/roblox/Some Executor`. Don't worry, spaces inside the folder name are fine!
+3. Create `info.json` inside of this new folder. This is the most important step.
+   - It is crucial that you use VSCode to write this file, as otherwise you will not have autocompletion. VScode will help you fill in the required fields according to the cheat information schema.
+4. Next, create `review.md`. This is important too, as the site will refuse to compile when a cheat does not have a review written. For initial submissions, it is fine to have this file filled with notes or other information that you have, since it will be checked anyway and very likely modified before your pull request is merged.
+5. (Optional) Create `points.json`. This is a simple JSON file with the keys `pro_summary`, `neutral_summary`, and `con_summary`. As the names imply, these are very short summaries to be put on each cheat card on the front page. It is recommended to keep these summaries under 50 characters so that people can quickly scan over this information. For anything longer, that is what `review.md` was designed for.
