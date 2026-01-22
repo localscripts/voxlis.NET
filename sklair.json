@@ -8,16 +8,7 @@
 
 	"input": "./src",
 	"components": "components",
-	"exclude": [
-		".*",
-		"OLD",
-		"UNUSED",
-		"NOTES",
-		"sklair",
-		"LICENSE",
-		"data",
-		"*.md"
-	],
+	"exclude": [".*", "OLD", "OTHER", "sklair", "LICENSE", "data", "*.md"],
 
 	"output": "./build",
 
