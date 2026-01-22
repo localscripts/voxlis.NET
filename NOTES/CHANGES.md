@@ -1,6 +1,10 @@
+# READ THIS PART
+
+This document is heavily outdated and **stopped being written ages ago**, since there were too many changes to document, and realistically coming back here to document every single change would have just made development slower. If you really care about all the meaningful changes, it is best to look at the commits and/or contact [Richy-Z](https://github.com/Richy-Z) for any explanations about implementation and the hard design decisions that were made along the way.
+
 # Changes/Comparison with the old version of the voxlis.NET site
 
-This document outlines some of the changes compared to the original site, before it got remade with Sklair (this current version of the site). Not everything is documented here, otherwise the list would be extensive; only the interesting and somewhat documentable stuff will be listed here.
+This document outlines some of the changes compared to the original site, before it got remade with Sklair (this current version of the site). <!-- Not everything is documented here, otherwise the list would be extensive; only the interesting and somewhat documentable stuff will be listed here. -->
 
 ## Incorrect usage of OpenGraph+Twitter (`og:image` and `twitter:image`) meta tags
 
