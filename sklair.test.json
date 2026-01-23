@@ -1,0 +1,19 @@
+{
+	"$schema": "https://sklair.numelon.com/schema_0.3.0-prerelease.json",
+
+	"hooks": {
+		"enabled": true,
+		"path": "./hooks"
+	},
+
+	"input": "./src",
+	"components": "components",
+	"exclude": [".*", "OLD", "OTHER", "sklair", "LICENSE", "data", "*.md"],
+
+	"output": "./build",
+
+	"preventFOUC": {
+		"enabled": true,
+		"colour": "#000000"
+	}
+}

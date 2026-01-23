@@ -1,0 +1,55 @@
+name: Deploy Sklair site
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Use Sklair cache
+              uses: actions/cache@v5
+              with:
+                  path: .sklair/cache
+                  key: sklair-cache-${{ runner.os }}-${{ hashFiles('sklair.json') }}
+                  restore-keys: |
+                      sklair-cache-${{ runner.os }}-
+
+            - name: Install Sklair
+              run: |
+                  wget https://github.com/numelon-oss/sklair-cli/releases/latest/download/sklair-linux-amd64
+                  chmod +x sklair-linux-amd64
+                  mv sklair-linux-amd64 /usr/local/bin/sklair
+
+            - name: Build Sklair site
+              run: |
+                  sklair build
+
+            - name: Deploy to GitHub Pages
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+                  BUILD_DIR=$(jq -r '.output // "build"' sklair.json)
+
+                  git fetch origin sklair-pages || true
+                  git checkout --orphan sklair-pages
+
+                  git rm -rf .
+                  cp -r "$BUILD_DIR"/* .
+
+                  touch .nojekyll
+
+                  git add .
+                  git commit -m "Deploy Sklair site"
+                  git push origin sklair-pages --force
