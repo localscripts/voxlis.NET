@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="red">
+
+<head>
+    <title>404 Not Found | Voxlis</title>
+</head>
+
+<body class="bg-bg font-primary text-muted">
+    <!-- these components get inserted into the head -->
+    <CommonHead></CommonHead>
+    <CommonHeadUI></CommonHeadUI>
+    <!-- end -->
+
+    <MenuBar></MenuBar>
+
+    <main class="relative z-10 max-w-content mx-auto px-6 py-24">
+        <div class="max-w-xl mx-auto text-center space-y-6">
+
+            <div class="flex justify-center">
+                <img alt="404 explosion illustration"
+                    class="h-80 select-none drop-shadow-[0_0_40px_rgba(255,100,100,0.15)] fruit-404" />
+            </div>
+
+            <div class="text-6xl font-bold text-primary select-none">
+                404
+            </div>
+
+            <h1 class="text-2xl font-semibold text-white">
+                This page doesn't exist
+            </h1>
+
+            <p class="text-muted leading-relaxed">
+                The page you're looking for might have been moved, renamed,
+                or never existed in the first place.
+            </p>
+
+            <div class="flex items-center justify-center gap-3 pt-4">
+                <a href="/" class="
+                    px-5 py-2.5 rounded-lg
+                    text-sm font-semibold
+                    text-primary
+                    border border-primary/40
+                    transition-all duration-500
+                    hover:bg-primary/10
+                    hover:border-primary
+                    hover:shadow-glow
+                ">
+                    Go back to voxlis.NET
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <style>
+        html[data-theme="red"] .fruit-404 {
+            content: url("/assets/img/404/watermelon.png");
+        }
+
+        html[data-theme="green"] .fruit-404 {
+            content: url("/assets/img/404/kiwi.png");
+        }
+
+        html[data-theme="blue"] .fruit-404 {
+            content: url("/assets/img/404/blueberries.png");
+        }
+
+        html[data-theme="orange"] .fruit-404 {
+            content: url("/assets/img/404/orange.png");
+        }
+
+        html[data-theme="purple"] .fruit-404 {
+            content: url("/assets/img/404/grapes.png");
+        }
+    </style>
+
+    <MainFooter></MainFooter>
+
+    <!-- when making SPAs with sklair, it is recommended to put the popup models last for clarity -->
+    <ThemePickerModal></ThemePickerModal>
+</body>
+
+</html>
