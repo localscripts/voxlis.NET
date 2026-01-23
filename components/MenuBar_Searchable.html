@@ -46,6 +46,46 @@
             </div>
 
         </div>
+
+        <!-- TODO: add sklair compiler directive to only include this when menubar=true (prop) -->
+        <!-- second bar, search -->
+        <div class="
+            relative
+            max-w-content mx-auto px-6
+            flex justify-center items-center
+
+            /* stacked on mobile and tablet */
+            h-16
+
+            /* acts as an overlay on desktop */
+            lg:absolute
+            lg:inset-x-0
+            lg:top-0
+            lg:h-20
+            lg:pointer-events-none
+        ">
+            <div class="
+                w-full
+                lg:w-[28rem]
+                relative
+                lg:pointer-events-auto
+            ">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-muted"></i>
+                <input id="cheat-search" type="text" placeholder="Search cheats..." class="
+                    w-full
+                    bg-surface/40
+                    border border-border/10
+                    rounded-lg
+                    pl-11 pr-4 py-2
+                    text-sm text-fg placeholder-muted
+                    transition-all duration-500
+                    focus:outline-none
+                    focus:border-primary/60
+                    focus:shadow-glow
+                " />
+            </div>
+        </div>
+
     </header>
 
     <!-- spoacer -->
