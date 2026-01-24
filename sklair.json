@@ -9,6 +9,7 @@
 	"input": "./src",
 	"components": "components",
 	"exclude": [".*", "OLD", "OTHER", "sklair", "LICENSE", "data", "*.md"],
+	"excludeCompile": ["old"],
 
 	"output": "./build",
 
