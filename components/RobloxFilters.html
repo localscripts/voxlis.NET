@@ -145,13 +145,13 @@
                 <span>Sort By</span>
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
-            <select class="w-full bg-surface/40 border border-border/10 rounded px-3 py-2 text-sm">
-                <option>Recommended</option>
+            <select id="sort-select" class="w-full bg-surface/40 border border-border/10 rounded px-3 py-2 text-sm">
+                <option value="recommended">Recommended</option>
                 <!-- TODO: add popularity using clicks etc from voxlis api, when asked to implement -->
-                <!-- <option>Most popular</option> -->
-                <!-- <option>Least popular</option> -->
-                <option>Price: low to high</option>
-                <option>Price: high to low</option>
+                <!-- <option value="popularity-asc">Most popular</option> -->
+                <!-- <option value="popularity-desc">Least popular</option> -->
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
             </select>
         </div>
 
