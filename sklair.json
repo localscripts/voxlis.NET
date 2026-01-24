@@ -1,18 +1,14 @@
 {
-	"hooks": "./hooks",
+	"$schema": "https://github.com/numelon-oss/sklair-cli/releases/download/v0.3.0/sklair-v0.3.0.schema.json",
+
+	"hooks": {
+		"enabled": true,
+		"path": "./hooks"
+	},
 
 	"input": "./src",
 	"components": "components",
-	"exclude": [
-		".*",
-		"OLD",
-		"OTHER",
-		"sklair",
-		"LICENSE",
-		"data",
-		"*.md",
-		"sklair.test.json"
-	],
+	"exclude": [".*", "OLD", "OTHER", "sklair", "LICENSE", "data", "*.md"],
 
 	"output": "./build",
 
