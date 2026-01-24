@@ -17,70 +17,70 @@
 
     <MenuBar_Searchable></MenuBar_Searchable>
 
-    <!-- we only have this div here so that the heart layer contents do not overflow -->
-    <div class="relative overflow-hidden">
+    <div class="overflow-hidden">
         <HeartLayer></HeartLayer>
+    </div>
 
-        <main class="relative z-10 max-w-content mx-auto px-6 py-12">
-            <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr_260px] gap-8">
-                <!-- left column -->
-                <aside class="space-y-6 order-2 lg:order-none">
+    <main class="relative z-10 max-w-content mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr_260px] gap-8">
+            <!-- left column -->
+            <aside class="space-y-6 order-2 lg:order-none">
+                <div class="sticky top-32 space-y-6">
                     <RobloxFilters></RobloxFilters>
-
                     <!-- <SponsoredAd></SponsoredAd> -->
-                </aside>
+                </div>
+            </aside>
 
-                <!-- centre column -->
-                <section class="order-1 lg:order-none space-y-8">
-                    <!-- announcement -->
-                    <div
-                        class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-6 flex items-center gap-4">
-                        <img class="h-10 heart-img select-none" alt="heart">
+            <!-- centre column -->
+            <section class="order-1 lg:order-none space-y-8">
+                <!-- announcement -->
+                <div class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-6 flex items-center gap-4">
+                    <img class="h-10 heart-img select-none" alt="heart">
 
-                        <div>
-                            <div class="text-sm font-semibold text-white">
-                                Thanks for 1,000 subscribers! 🎉
-                            </div>
-                            <div class="text-sm text-muted">
-                                Check out the Voxlis YouTube channel for cool videos.
-                            </div>
+                    <div>
+                        <div class="text-sm font-semibold text-white">
+                            Thanks for 1,000 subscribers! 🎉
                         </div>
-
-                        <a href="/r/youtube" class="
-                           ml-auto px-4 py-2 rounded-lg
-                           text-sm font-semibold
-                           text-primary
-                           border border-primary/40
-                           bg-transparent
-
-                           transition-all duration-500
-                           hover:bg-primary/10
-                           hover:border-primary
-                           hover:text-primary
-                           hover:shadow-glow
-                           ">
-                            Visit channel
-                        </a>
-
+                        <div class="text-sm text-muted">
+                            Check out the Voxlis YouTube channel for cool videos.
+                        </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="exploit-list">
-                        <RobloxCardTemplate></RobloxCardTemplate>
-                    </div>
+                    <a href="/r/youtube" class="
+                               ml-auto px-4 py-2 rounded-lg
+                               text-sm font-semibold
+                               text-primary
+                               border border-primary/40
+                               bg-transparent
+    
+                               transition-all duration-500
+                               hover:bg-primary/10
+                               hover:border-primary
+                               hover:text-primary
+                               hover:shadow-glow
+                               ">
+                        Visit channel
+                    </a>
 
-                </section>
+                </div>
 
-                <!-- right column -->
-                <aside class="space-y-6 hidden xl:block order-3 lg:order-none">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="exploit-list">
+                    <RobloxCardTemplate></RobloxCardTemplate>
+                </div>
+
+            </section>
+
+            <!-- right column -->
+            <aside class="space-y-6 hidden xl:block order-3 lg:order-none">
+                <div class="sticky top-32 space-y-6">
                     <!-- TODO: advise against a bunch of these sponsored ads; they clutter the UI and there is no point for them -->
                     <!-- because real advertisements havent been implemented on the old site and likely wont be implemented here either -->
                     <SponsoredAd></SponsoredAd>
                     <!-- <SponsoredAd></SponsoredAd> -->
-                </aside>
-
-            </div>
-        </main>
-    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
 
     <MainFooter></MainFooter>
 
