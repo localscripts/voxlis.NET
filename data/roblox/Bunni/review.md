@@ -9,7 +9,7 @@ Originally released under the name **"Swift"**, the brand was later sold and the
 ## What we like
 
 - Has a decompiler
-- Achieved 100% sUNC
+- Achieved a very high sUNC score
 
 ## What could improve
 
