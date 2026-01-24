@@ -13,7 +13,7 @@ Originally released under the name **"Swift"**, the brand was later sold and the
 
 ## What could improve
 
-- Stability issues have been reported, with the exploit causing lag on some devuces.
+- Stability issues have been reported, with the exploit causing lag on some devices.
 
 ## Additional notes
 
