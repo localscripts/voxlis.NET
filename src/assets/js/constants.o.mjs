@@ -1,6 +1,5 @@
 export const friendlyTags = {
     decompiler: ["Decompiler", "fa-code"],
-    undetected: ["Undetected", "fa-user-secret"],
     kernel: ["Kernel", "fa-microchip"],
     ai: ["AI", "fa-robot"],
     "multi-instance": ["Multi-instance", "fa-layer-group"],

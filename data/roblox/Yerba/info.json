@@ -3,7 +3,7 @@
 	"badges": [],
 	"hidden": true,
 	"type": "external",
-	"tags": ["decompiler", "undetected"],
+	"tags": ["decompiler"],
 	"platforms": ["windows"],
 	"website": "https://yerba.wtf/",
 	"keyed": false
