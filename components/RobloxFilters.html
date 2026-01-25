@@ -145,7 +145,17 @@
                 <span>Sort By</span>
                 <span class="flex-1 h-px bg-primary/30"></span>
             </h3>
-            <select id="sort-select" class="w-full bg-surface/40 border border-border/10 rounded px-3 py-2 text-sm">
+            <select id="sort-select" class="
+                w-full
+                bg-surface/40
+                border border-border/10
+                rounded
+                px-3 py-2
+                text-sm
+                [&_option]:text-white
+                [&_option]:bg-surface
+                [color-scheme:dark]
+              ">
                 <option value="recommended">Recommended</option>
                 <!-- TODO: add popularity using clicks etc from voxlis api, when asked to implement -->
                 <!-- <option value="popularity-asc">Most popular</option> -->
