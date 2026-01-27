@@ -9,7 +9,7 @@
 - On December 11th, 2025, [Volcano]() ditched the key system and switched to a fully paid model since Byfron’s changes made updating tough, and tons of users were bypassing the keys, costing the owner a lot of potential money.
 
 ## Developer Information
-- The main owner is [@coisop](), known for contributions to [Electron]() and [Volcano](). In 2019 work began on [RyoWrapper](), later renamed [RyoProto](); in 2020 [Neutron]() released as a paid LuaJIT wrapper; in 2021 [Electron]() launched as a free LuaJIT wrapper, the same year Luau dropped; [Electron]() eventually transitioned to [Proto Conversion]() with a Lua 5.1 to Luau transpiler; after the Luau source release the project continued using [Proto Conversion]() alongside direct Luau source integration; later development progressed into [Hyperion](), which remains in use today.
+- The main owner is [@coisop](), known for contributions to [Electron]() and [Volcano](). In 2019 work began on [RyoWrapper](), later renamed [RyoProto](); in 2020 [Neutron]() released as a paid LuaJIT wrapper; in 2021 [Electron]() launched as a free LuaJIT wrapper, the same year Luau dropped; [Electron]() eventually transitioned to [Proto Conversion]() with a Lua 5.1 to Luau transpiler; after the Luau source release the project continued using [Proto Conversion]() alongside direct Luau source integration; later development progressed into [Hyperion](), which remains in use today. ( **Test** )
 
 
 
