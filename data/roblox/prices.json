@@ -436,8 +436,8 @@
 					"currency": "USD"
 				},
 				{
-					"id": "hydrogen-lifetime",
-					"days": -1,
+					"id": "hydrogen-1d",
+					"days": 1,
 					"price": 0,
 					"currency": null
 				}
