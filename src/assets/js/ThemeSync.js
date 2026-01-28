@@ -1,3 +1,7 @@
+// TODO: many of these can be easily changed to regular CSS with data attributes
+// instead of manually doing this through JS
+// apart from the favicon I think, which still requires JS
+
 function updateAds(theme) {
     document.querySelectorAll(".sponsored-image").forEach(img => {
         img.src = `/assets/ads/voxlis.${theme}.big.png`;
