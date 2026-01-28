@@ -39,7 +39,7 @@ const Data = [
                 info: "## Exploit Performance  \n- [Matcha]() is an external cheat featuring a built-in menu that provides access to preset functions such as ESP, Aimbot, Noclip, and other similar tools. It does not support standard Lua execution, as it uses a custom Lua environment that runs within the cheat rather than inside the game. [Matcha’s]() authentication system can be somewhat unintuitive, so the initial setup may require extra time. However, the registration process is somewhat complex and not user friendly.\n\n## Background Information  \n- Before [Matcha]() launched in August 2024, the project itself was relatively small and low-visibility. It originally started as a simple external tool but saw rapid improvement throughout mid-2024.  \n- After restructuring, [Matcha]() began receiving consistent daily updates—even while [@Vault]() balanced school responsibilities. [@Vain]() was appointed to manage the staff team, improving coordination and overall structure. Staff operations are now organized, contributors are compensated, and the support team is publicly listed on the [Matcha Discord server]().  \n\n## Developer Background Information  \n- [Matcha]() is primarily developed by [@Vault](), who handles the core features and security. The project began when [@slamfrags]() asked [@Vault]() to create an external, which [Vault]() accepted partly due to financial needs.  \n- The initial management team consisted of [@geekn]() and [@slamfrags](); [@geekn]() left voluntarily, while [@slamfrags]() was later removed due to financial mismanagement and unprofessional conduct. Later on, [@slamfrags]() released his own external called [Yerba]().\n- After the removal, development accelerated and [@Vault]() brought trusted friends into the project, resulting in better structure, fair treatment of staff, and a more stable workflow.\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET), Matcha Discord Moderators & Matcha Owner\n",
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -91,7 +91,7 @@ const Data = [
                 },
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -137,7 +137,7 @@ const Data = [
                 info: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -183,7 +183,7 @@ const Data = [
                 info: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -235,7 +235,7 @@ const Data = [
                 info: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -287,7 +287,7 @@ const Data = [
                 info: "## Exploit Performance\n- [Volcano]() presents itself as a premium-quality product despite being free. However, the free version relies on a highly inconvenient key system that often feels designed to push users toward purchasing a bypass. As a result, the free tier functions more like a demo rather than something realistically usable without paying.\n\n## Background Information\n- [Volcano](), originally known as [Electron](), was created in December 2021. At the time, it wasn’t particularly notable and served mainly as an alternative used by a small subset of the community, especially since more popular options like [KRNL]() were available.\n- In June 2023, [Electron]() made a comeback with a UWP exploit. While they were not the first to achieve this method, they dominated the market significantly—likely due to having more name recognition than competitors like [Celery](), which was relatively unknown. Their key system was easy to complete, but the key duration was inconsistent, lasting anywhere from an hour to a full day.\n- After UWP got a Byfron patch, some time later, [Electron]() was planned for release on December 1st on the Windows client, but delays pushed it back. It launched successfully, then became inactive, returned, functioned temporarily, and disappeared again—though this period is not fully documented. After the second patch, communication largely stopped on their official Telegram, and their Discord was locked.\n- On April 22, 2024, they announced via Discord that [Electron]() would return under a new name: [Volcano](), with compensation for former [Electron]() users. It took time for [Volcano]() to regain traction, but it has since grown into a solid and active user base.\n- On December 11th, 2025, [Volcano]() ditched the key system and switched to a fully paid model since Byfron’s changes made updating tough, and tons of users were bypassing the keys, costing the owner a lot of potential money.\n\n## Developer Information\n- The main owner is [@coisop](), known for contributions to [Electron]() and [Volcano](). In 2019 work began on [RyoWrapper](), later renamed [RyoProto](); in 2020 [Neutron]() released as a paid LuaJIT wrapper; in 2021 [Electron]() launched as a free LuaJIT wrapper, the same year Luau dropped; [Electron]() eventually transitioned to [Proto Conversion]() with a Lua 5.1 to Luau transpiler; after the Luau source release the project continued using [Proto Conversion]() alongside direct Luau source integration; later development progressed into [Hyperion](), which remains in use today.\n\n\n\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & The [Volcano]() Creator",
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -335,7 +335,7 @@ const Data = [
                 info: "## Exploit Performance\n\n- [ NOTE ] { voxlis.NET } : To be tested\n\n## Background Information\n\n- [Cryptic](), originally released as an Android executor on December 7th, 2024, was not just another random pop-up executor; it became the first to achieve a verified 100% sUNC score. This achievement quickly established its reputation as a highly stable and reliable Android execution platform. Cryptic later entered a rough development period when its original developer transitioned to [Delta](), temporarily forcing the project to rely on the [Arceus X]() module. On November 28th, 2025, the team announced a full return to independence with the intent of restoring performance and refining user experience.\n\n- [Cryptic]() Windows released on December 27th, 2024, in partnership with [Argon](). The Windows version was later taken offline due to developer health concerns, with a confirmed relaunch scheduled for December 2025.\n\n- [Cryptic]() iOS launched on January 22nd, 2025, but had a short initial runtime due to development setbacks, with revival plans still active. [Cryptic]() macOS was released on November 17th, 2025, and contrary to speculation of discontinuation, the macOS build remains fully operational and continues receiving upkeep and optimization updates.\n\n## Developers Background Information\n- Kept private by the owners\n\n> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & Cryptic Team",
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -385,7 +385,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -429,7 +429,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -473,7 +473,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -525,7 +525,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -569,7 +569,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -613,7 +613,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -660,7 +660,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -714,7 +714,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -760,7 +760,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -807,7 +807,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -855,7 +855,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -901,7 +901,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -949,7 +949,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -993,7 +993,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -1038,7 +1038,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -1082,7 +1082,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -1126,7 +1126,7 @@ const Data = [
                 warning: null,
                 downtime: {
                     enabled: true,
-                    icon: "./assets/cat.png",
+                    icon: "/old/assets/cat.png",
                     title: "Hold on!",
                     desc: "This exploit is currently not updated for {unupdated_platforms}! Would you like to still visit its website?",
                     continue: "href",
@@ -3357,7 +3357,7 @@ ${this.renderCardFooter(exploit)}
                         platformName = "Windows";
                         break;
                     case "macos":
-                        iconHtml = `<img src="./assets/macos.svg" alt="macOS" style="width:16px; height:16px; vertical-align:middle;">`;
+                        iconHtml = `<img src="/old/assets/macos.svg" alt="macOS" style="width:16px; height:16px; vertical-align:middle;">`;
                         platformName = "macos";
                         break;
 
@@ -3705,7 +3705,7 @@ ${this.renderCardFooter(exploit)}
         <div class="price-text">
           <div class="text-container">
             <span class="text-switch visible" data-text="price"><i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}</span>
-            <span class="text-switch hidden" data-text="logo"><img src=".../assets/key-empire.png" alt="Key Empire" style="height: 1.2em; width: auto;"></span>
+            <span class="text-switch hidden" data-text="logo"><img src="/old/assets/key-empire.png" alt="Key Empire" style="height: 1.2em; width: auto;"></span>
           </div>
         </div>
       </button>
@@ -3773,7 +3773,7 @@ ${this.renderCardFooter(exploit)}
         <div class="price-text">
           <div class="text-container">
             <span class="text-switch visible" data-text="price"><i class="fas fa-tag"></i> ${exploit.price} ${exploit.period ? `<span class="prc-prd">${exploit.period}</span>` : ""}</span>
-            <span class="text-switch hidden" data-text="logo"><img src=".../assets/key-empire.png" alt="Key Empire" style="height: 1.2em; width: auto;"></span>
+            <span class="text-switch hidden" data-text="logo"><img src="/old/assets/key-empire.png" alt="Key Empire" style="height: 1.2em; width: auto;"></span>
           </div>
         </div>
       </button>
@@ -4649,7 +4649,7 @@ class ModalManager {
                     platformName = "Windows";
                     break;
                 case "macos":
-                    iconHtml = `<img src="./assets/macos.svg" alt="macOS" style="width:24px; height:24px;">`;
+                    iconHtml = `<img src="/old/assets/macos.svg" alt="macOS" style="width:24px; height:24px;">`;
                     platformName = "macOS";
                     break;
                 case "android":
@@ -4726,7 +4726,7 @@ class ModalManager {
 
         try {
             const response = await fetch(
-                `https://voxlis.net./assets/unc/${platform}/${exploit.id}.json`,
+                `https://voxlis.net/old/assets/unc/${platform}/${exploit.id}.json`,
             );
 
             if (response.status === 404) {
@@ -4824,7 +4824,7 @@ class ModalManager {
                     platformName = "Windows";
                     break;
                 case "macos":
-                    iconHtml = `<img src="./assets/macos.svg" alt="macOS" style="width:24px; height:24px;">`;
+                    iconHtml = `<img src="/old/assets/macos.svg" alt="macOS" style="width:24px; height:24px;">`;
                     platformName = "macOS";
                     break;
                 case "android":
@@ -4948,7 +4948,7 @@ class ModalManager {
 
         try {
             const response = await fetch(
-                `https://voxlis.net./assets/unc/${platform}/${exploit.id}.json`,
+                `https://voxlis.net/old/assets/unc/${platform}/${exploit.id}.json`,
             );
 
             if (response.status === 404) {
@@ -5225,7 +5225,7 @@ class ModalManager {
                     platformName = "Windows";
                     break;
                 case "macos":
-                    iconHtml = `<img src="./assets/macos.svg" alt="macOS" style="width:24px; height:24px;">`;
+                    iconHtml = `<img src="/old/assets/macos.svg" alt="macOS" style="width:24px; height:24px;">`;
                     platformName = "macOS";
                     break;
                 case "android":
@@ -6064,7 +6064,7 @@ class ModalManager {
 
     static async fetchUncData(id, name) {
         try {
-            const response = await fetch(`https://voxlis.net./assets/unc/${id}.json`);
+            const response = await fetch(`https://voxlis.net/old/assets/unc/${id}.json`);
 
             if (response.status === 404) {
                 ModalManager.showNotification(
@@ -6409,8 +6409,8 @@ class ThemeManager {
         logoSelectors.forEach((selector) => {
             const logoImg = document.querySelector(selector);
             if (logoImg) {
-                const themeLogoPath = `./assets/ads/${this.currentTheme}_voxlis.png`;
-                const defaultLogoPath = "./assets/ads/header.png";
+                const themeLogoPath = `/old/assets/ads/${this.currentTheme}_voxlis.png`;
+                const defaultLogoPath = "/old/assets/ads/header.png";
 
                 const testImg = new Image();
                 testImg.onload = () => {
@@ -6426,8 +6426,8 @@ class ThemeManager {
         adSelectors.forEach((selector) => {
             const adImgs = document.querySelectorAll(selector);
             adImgs.forEach((adImg) => {
-                const themeAdPath = `./assets/ads/ad-${this.currentTheme}-voxlis.png`;
-                const defaultAdPath = "./assets/ads/ad-red-voxlis.png";
+                const themeAdPath = `/old/assets/ads/ad-${this.currentTheme}-voxlis.png`;
+                const defaultAdPath = "/old/assets/ads/ad-red-voxlis.png";
 
                 const testImg = new Image();
                 testImg.onload = () => {
@@ -6450,12 +6450,12 @@ class ThemeManager {
                     currentSrc.includes("voxlis_small.png") ||
                     currentSrc.includes("_voxlis_small.png")
                 ) {
-                    newSrc = `./assets/ads/${this.currentTheme}_voxlis_small.png`;
+                    newSrc = `/old/assets/ads/${this.currentTheme}_voxlis_small.png`;
                 } else if (
                     currentSrc.includes("voxlis_big.png") ||
                     currentSrc.includes("_voxlis_big.png")
                 ) {
-                    newSrc = `./assets/ads/${this.currentTheme}_voxlis_big.png`;
+                    newSrc = `/old/assets/ads/${this.currentTheme}_voxlis_big.png`;
                 }
 
                 if (newSrc) {
@@ -6581,7 +6581,7 @@ class OptimizedHeartAnimation {
         });
         const currentTheme =
             document.documentElement.getAttribute("data-theme") || "red";
-        this.heartImageSrc = `./assets/ads/${currentTheme}-heart.svg`;
+        this.heartImageSrc = `/old/assets/ads/${currentTheme}-heart.svg`;
         this.hearts = [];
         this.heartImage = new Image();
         this.isRunning = false;
@@ -6658,7 +6658,7 @@ class OptimizedHeartAnimation {
         };
 
         this.heartImage.onerror = () => {
-            this.heartImageSrc = "./assets/ads/red-heart.svg";
+            this.heartImageSrc = "/old/assets/ads/red-heart.svg";
             this.heartImage.src = this.heartImageSrc;
             this.heartImage.onload = () => {
                 if (this.loader) this.loader.style.display = "none";
@@ -6702,7 +6702,7 @@ class OptimizedHeartAnimation {
             this.stop();
         }
 
-        const themeHeartPath = `./assets/ads/${theme}-heart.svg`;
+        const themeHeartPath = `/old/assets/ads/${theme}-heart.svg`;
         const newHeartImage = new Image();
 
         newHeartImage.onload = () => {
@@ -6745,7 +6745,7 @@ class OptimizedHeartAnimation {
             const fallbackImage = new Image();
             fallbackImage.onload = () => {
                 requestAnimationFrame(() => {
-                    this.heartImageSrc = "./assets/ads/red-heart.svg";
+                    this.heartImageSrc = "/old/assets/ads/red-heart.svg";
                     this.heartImage = fallbackImage;
 
                     const batchSize = 10;
@@ -6775,7 +6775,7 @@ class OptimizedHeartAnimation {
                     updateBatch();
                 });
             };
-            fallbackImage.src = "./assets/ads/red-heart.svg";
+            fallbackImage.src = "/old/assets/ads/red-heart.svg";
         };
 
         newHeartImage.src = themeHeartPath;
