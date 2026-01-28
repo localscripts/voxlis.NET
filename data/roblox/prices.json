@@ -110,6 +110,12 @@
 		"platforms": {
 			"windows": [
 				{
+					"id": "bunni-1d-free",
+					"days": 1,
+					"price": 0,
+					"currency": null
+				},
+				{
 					"id": "bunni-1d",
 					"days": 1,
 					"price": 1.99,
