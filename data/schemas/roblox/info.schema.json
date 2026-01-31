@@ -73,7 +73,7 @@
 			"description": "Special visual badges shown on cards",
 			"uniqueItems": true,
 			"items": {
-				"enum": ["verified", "premium"]
+				"enum": ["verified", "trending"]
 			}
 		},
 		"hidden": {
