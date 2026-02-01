@@ -1,0 +1,40 @@
+<div class="aspect-video bg-black relative overflow-hidden rounded-md group cursor-pointer" data-youtube="KKshbStBH_g">
+    <img src="https://img.youtube.com/vi/KKshbStBH_g/hqdefault.jpg"
+        class="w-full h-full object-cover brightness-75 group-hover:brightness-90 transition"
+        alt="What is a key system?" />
+
+    <!-- dark overlay -->
+    <div class="absolute inset-0 bg-black/50"></div>
+
+    <!-- play -->
+    <div class="absolute inset-0 flex items-center justify-center">
+        <div class="
+                                        h-14 w-14 rounded-full
+                                        bg-black/60 border border-white/20
+                                        flex items-center justify-center
+                                        text-primary
+                                        transition
+                                        group-hover:scale-105
+                                        group-hover:bg-black/80
+                                    ">
+            <i class="fa-solid fa-play ml-0.5"></i>
+        </div>
+    </div>
+
+    <script>
+        const el = document.currentScript.parentElement
+        el.addEventListener("click", () => {
+            const id = el.dataset.youtube;
+            // I am usually against embedding HTML inside of JavaScript.. but here its fine, its only a youtube snippet
+            el.innerHTML = `
+                <iframe
+                    class="w-full h-full"
+                    src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                ></iframe>
+            `;
+        });
+    </script>
+</div>

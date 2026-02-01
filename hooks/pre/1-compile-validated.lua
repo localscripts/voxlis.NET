@@ -489,7 +489,7 @@ local function contains(t, x)
 end
 
 local function rank(u)
-    if contains(u.badges, "premium") then return 1 end
+    if contains(u.badges, "trending") then return 1 end
     if contains(u.badges, "verified") then return 2 end
     return 3
 end
