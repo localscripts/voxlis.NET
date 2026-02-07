@@ -11,5 +11,5 @@
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
 	"website": "https://realvelocity.xyz/",
-	"keyed": true
+	"keyed": false
 }
