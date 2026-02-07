@@ -3,7 +3,7 @@
 	"badges": ["trending"],
 	"hidden": false,
 	"type": "external",
-	"tags": ["kernel"],
+	"tags": ["kernel", "decompiler"],
 	"platforms": ["windows"],
 	"website": "https://matcha.pink/discord"
 }
