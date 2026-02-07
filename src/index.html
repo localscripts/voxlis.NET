@@ -1,168 +1,43 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="red">
+<html lang="en">
 
 <head>
+    <meta http-equiv="refresh" content="0; url=/roblox">
+
     <title>voxlis.NET | Ready to inject?</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            background: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        a {
+            color: red;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
-<body class="bg-bg font-primary text-muted">
+<body>
     <!-- these components get inserted into the head -->
     <CommonHead></CommonHead>
-    <CommonHeadUI></CommonHeadUI>
     <OpenGraph site_name="voxlis.NET" title="voxlis.NET | Ready to inject?"
         description="Your go-to source for comparing exploits and cheats for Roblox and CS2." url="https://voxlis.net"
         image="https://voxlis.net/assets/img/opengraph.png" image_type="large">
     </OpenGraph>
     <!-- end -->
 
-    <MenuBar></MenuBar>
-
-    <main class="relative z-10 max-w-content mx-auto px-6 py-20">
-        <div class="mx-auto space-y-12">
-
-            <header class="text-center space-y-3">
-                <h1 class="text-3xl md:text-4xl font-semibold text-white">
-                    Choose your experience
-                </h1>
-                <p class="text-muted">
-                    We worked hard to bring you a brand new Voxlis experience. Choose between the classic layout or the
-                    new and improved version.
-                </p>
-            </header>
-
-            <div class="bg-yellow-500/10 border border-yellow-500/25 rounded-card px-5 py-4">
-                <div class="flex items-start gap-3">
-                    <i class="fa-solid fa-triangle-exclamation text-yellow-400 mt-0.5"></i>
-                    <div class="text-sm">
-                        <div class="font-semibold text-yellow-200">Old site retirement</div>
-                        <div class="text-yellow-200/80">
-                            The old website will be removed on <span class="text-white/80 font-semibold">25 February
-                                2026</span>.
-                            After that date, you'll be redirected to the new site automatically.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="experience-chooser">
-                <label class="group cursor-pointer">
-                    <input class="sr-only" type="radio" name="experience" value="old">
-                    <div class="
-              bg-surface/40 border border-border/10 rounded-card shadow-soft overflow-hidden
-              transition-all duration-500
-              group-hover:border-primary/40
-              group-has-[:checked]:border-primary/70
-              group-has-[:checked]:shadow-glow
-            ">
-                        <div class="p-5 flex items-center justify-between">
-                            <div>
-                                <div class="text-lg font-semibold text-white">Old site</div>
-                                <div class="text-sm text-muted mt-1">Classic layout, original feel.</div>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-border/10 bg-black/20">
-                            <img src="/assets/img/old.png" alt="Old voxlis preview"
-                                class="w-full h-64 md:h-80 xl:h-96 object-cover select-none" />
-                        </div>
-                    </div>
-                </label>
-
-                <label class="group cursor-pointer">
-                    <input class="sr-only" type="radio" name="experience" value="new" checked>
-                    <div class="
-              bg-surface/40 border border-border/10 rounded-card shadow-soft overflow-hidden
-              transition-all duration-500
-              group-hover:border-primary/40
-              group-has-[:checked]:border-primary/70
-              group-has-[:checked]:shadow-glow
-            ">
-                        <div class="p-5 flex items-center justify-between">
-                            <div>
-                                <div class="text-lg font-semibold text-white">New site</div>
-                                <div class="text-sm text-muted mt-1">Faster, cleaner, better filters.</div>
-                            </div>
-                            <div class="h-7 px-3 rounded-full bg-primary/15 border border-primary/25 flex items-center">
-                                <span
-                                    class="text-[11px] font-semibold tracking-wide uppercase text-primary">Recommended</span>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-border/10 bg-black/20">
-                            <img src="/assets/img/new.png" alt="New voxlis preview"
-                                class="w-full h-64 md:h-80 xl:h-96 object-cover select-none" />
-                        </div>
-                    </div>
-                </label>
-            </div>
-
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
-                <label class="flex items-center gap-3 select-none">
-                    <input id="remember-choice" type="checkbox"
-                        class="h-4 w-4 rounded border-border/30 bg-surface/40 text-primary focus:ring-0 focus:outline-none">
-                    <span class="text-sm text-muted">
-                        Remember my choice and take me there instantly next time
-                    </span>
-                </label>
-
-                <button id="continue-btn" class="
-                    inline-flex items-center justify-center gap-2
-                    px-5 py-2.5 rounded-lg
-                    text-sm font-semibold
-                    text-primary
-                    border border-primary/40
-                    transition-all duration-500
-                    hover:bg-primary/10
-                    hover:border-primary
-                    hover:shadow-glow
-                ">
-                    Continue
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            </div>
-
-        </div>
-    </main>
-
-    <script>
-        const OLD = "/old";
-        const NEW = "/roblox";
-
-        const V2REWRITEEXPERIENCE = "voxlis:experience_v2_rewrite";
-
-        const chooser = document.getElementById("experience-chooser");
-        const rememberEl = document.getElementById("remember-choice");
-        const continueBtn = document.getElementById("continue-btn");
-
-        const saved = localStorage.getItem(V2REWRITEEXPERIENCE);
-        if (saved) {
-            const pref = JSON.parse(saved);
-            if (pref?.remember && (pref.choice === "old" || pref.choice === "new")) {
-                location.replace(pref.choice === "old" ? OLD : NEW);
-            }
-        }
-
-        function getChoice() {
-            return chooser.querySelector('input[name="experience"]:checked')?.value ?? "new";
-        }
-
-        continueBtn.addEventListener("click", () => {
-            const choice = getChoice();
-
-            if (rememberEl.checked) {
-                localStorage.setItem(V2REWRITEEXPERIENCE, JSON.stringify({ choice, remember: true }));
-            } else {
-                localStorage.removeItem(V2REWRITEEXPERIENCE);
-            }
-
-            location.href = (choice === "old") ? OLD : NEW;
-        });
-    </script>
-
-    <MainFooter></MainFooter>
-
-    <!-- when making SPAs with sklair, it is recommended to put the popup models last for clarity -->
-    <ThemePickerModal></ThemePickerModal>
+    <h1>Redirecting…</h1>
+    <p>If you're not redirected, <a href="/roblox">click here</a>.</p>
 </body>
 
 </html>
