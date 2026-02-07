@@ -9,6 +9,7 @@ TODO.md
 # TODO: temporary sklair binary
 sklair
 .sklair
+*.exe
 
 # sklair built items
 build
