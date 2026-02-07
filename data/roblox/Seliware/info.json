@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": ["decompiler", "multi-instance"],
 	"platforms": ["windows"],
-	"website": "https://seliware.com"
+	"website": "https://seliware.com",
+	"keyed": false
 }

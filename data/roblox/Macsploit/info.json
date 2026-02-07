@@ -10,5 +10,6 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["macos"],
-	"website": "https://www.raptor.fun/"
+	"website": "https://www.raptor.fun/",
+	"keyed": false
 }
