@@ -8,7 +8,7 @@
 	"badges": ["trending"],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["multi-instance", "decompiler"],
+	"tags": ["multi-instance", "decompiler", "kernel"],
 	"platforms": ["windows"],
 	"website": "https://potassium.pro/",
 	"keyed": false

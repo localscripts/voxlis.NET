@@ -1,4 +1,4 @@
-**SirHurt** is a Windows executor with a 92% sUNC percentage. It performs consistently and supports a wide range of scripts.  
+**SirHurt** is a Windows executor which performs consistently and supports a wide range of scripts.  
 
 It was originally launched in December 2015 as a private cheat under the name "**AssHurt**". It was later renamed to "SirHurt" to make the product more marketable, particularly to younger users and their parents.
 
@@ -11,4 +11,4 @@ Past contributors include **Woffle** and **Aero**, though their current involvem
 ## What we like
 
 - Has a decompiler
-- 97% sUNC
+- High sUNC score

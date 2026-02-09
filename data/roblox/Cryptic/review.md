@@ -11,4 +11,4 @@ Cryptic later entered a rough development period, when its original developer tr
 ## What we like
 
 - Has a decompiler
-- High sUNC percentage across all platforms
+- High sUNC score across all platforms

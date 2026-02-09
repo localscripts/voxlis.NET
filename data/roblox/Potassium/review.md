@@ -6,7 +6,7 @@ The developers operate under fresh accounts, and their identities remain unknown
 
 - Has multi-instance support
 - Has a decompiler
-- 100% sUNC
+- High sUNC score
 - Works decently
 
 ## What could be better

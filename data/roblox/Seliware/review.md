@@ -16,7 +16,7 @@ A complete rewrite of Seliware has been underway since December and will launch 
 
 - Has multi-instance support
 - Has a decompiler
-- 100% sUNC
+- High sUNC score
 
 ## What could improve
 

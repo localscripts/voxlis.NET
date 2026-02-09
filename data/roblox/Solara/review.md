@@ -11,4 +11,4 @@ Solara is owned and managed by **@quivings**, who was previously active in the s
 
 ## What could improve
 
-- The low 36% sUNC score
+- Very low sUNC score
