@@ -8,4 +8,4 @@ Hydrogen is created by @xgladius, a well-known exploit developer and reverse eng
 - Support for Luarmor
 - Performance is comparable to a standard executor
 - Has a decompiler
-- 96% sUNC
+- High sUNC score

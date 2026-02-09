@@ -1,6 +1,6 @@
 ## Exploit Performance
 
-- **Volcano** offers multi-instance support, allowing you to run multiple accounts on a single PC. It also includes a decompiler for viewing client scripts in-game and provides 97% sUNC support, enabling access to functions that are normally unavailable, such as saving configurations and more. However, considering its price, there are better alternatives available as of January 2026.
+- **Volcano** offers multi-instance support, allowing you to run multiple accounts on a single PC. It also includes a decompiler for viewing client scripts in-game. However, considering its price, there are better alternatives available as of January 2026.
 
 ## Background Information
 

@@ -2,7 +2,7 @@
 
 - Has multi-instance support
 - Has a decompiler
-- 100% sUNC
+- High sUNC score
 
 ## What could improve
 

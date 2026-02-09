@@ -8,4 +8,4 @@ In 2024, the source code for Macsploit was open-sourced by @Peyton - the creator
 
 - Has multi-instance support
 - Has a decompiler
-- 100% sUNC
+- High sUNC score
