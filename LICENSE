@@ -1,21 +1,40 @@
-Custom License based on the MIT License
+PROPRIETARY LICENSE - ALL RIGHTS RESERVED
 
-Copyright (c) 2025 voxlis Network
+Copyright © Voxlis.
+Engineering Copyright © Numelon Ltd.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, and distribute copies of the Software,
-subject to the following conditions:
+All rights reserved.
 
-1. Commercial Use Restriction:
-   - The Software may NOT be used, in whole or in part, in any project, product, website, service, or platform that generates revenue (including but not limited to advertisements, subscriptions, sales, or donations) without prior written permission from the copyright holder.
-   - Permission must be requested and explicitly granted in writing by voxlis Network before any commercial use is allowed.
+This repository and all associated materials are proprietary and confidential.
+No permission is granted to copy, reproduce, modify, distribute, sublicense,
+sell, publish, or otherwise use any part of this repository or its contents,
+in whole or in part, without explicit prior written permission from Voxlis.
 
-2. Attribution:
-   - The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+This includes, but is not limited to:
 
-3. No Warranty:
-   - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- All source code
+- All data and datasets
+- Product information
+- Reviews, ratings, points, prices
+- Content, metadata, schemas, and structures
+- Any derived or generated outputs
 
-To request permission for commercial use, contact: bronysmith9@gmail.com.
+Ownership and Roles:
+Voxlis is the rightful owner of all product data, content, reviews, points,
+pricing, and related materials.
+Numelon Ltd is the engineering author and copyright holder of the source code,
+systems, and tooling developed for Voxlis under commission.
+
+License Supersession:
+This license applies to the entire repository and all future contributions and
+explicitly supersedes and overrides any prior license notices, including the
+MIT License, effective from commit:
+84eaaa5f09761169ff6e0fa71d9de0913b2321fc (<https://github.com/localscripts/voxlis.NET/commit/84eaaa5f09761169ff6e0fa71d9de0913b2321fc>)
+
+Governing Law:
+This license and any disputes arising from it shall be governed by and
+construed in accordance with the laws of the United Kingdom of Great Britain
+and Northern Ireland (UK).
+
+Unauthorised use, extraction, or reuse of this repository or its contents is
+strictly prohibited.

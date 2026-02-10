@@ -4,6 +4,9 @@ voxlist.NET is your go-to source for comparing exploits and cheats for Roblox an
 
 The main site is [voxlis.net](https://voxlis.net), however [voxlis.com](https://voxlis.com) and [robloxhackers.lol](https://robloxhackers.lol) are also active and simply redirect to the main site.
 
+> [!IMPORTANT]  
+> Please see the ["License and usage notice"](#license-and-usage-notice) section for more information about Voxlis data.
+
 <!-- ## How do I add an executor?
 
 1. Go to [voxlis.net/suggest](https://voxlis.net/suggest), and fill in the information there.
@@ -44,3 +47,17 @@ Please note that attempting to preview the HTML files in this repository regular
    - It is crucial that you use VSCode to write this file, as otherwise you will not have autocompletion. VScode will help you fill in the required fields according to the cheat information schema.
 4. Next, create `review.md`. This is important too, as the site will refuse to compile when a cheat does not have a review written. For initial submissions, it is fine to have this file filled with notes or other information that you have, since it will be checked anyway and very likely modified before your pull request is merged.
 5. (Optional) Create `points.json`. This is a simple JSON file with the keys `pro_summary`, `neutral_summary`, and `con_summary`. As the names imply, these are very short summaries to be put on each cheat card on the front page. It is recommended to keep these summaries under 50 characters so that people can quickly scan over this information. For anything longer, that is what `review.md` was designed for.
+
+## License and usage notice
+
+> [!WARNING]  
+> This repository is source-available, but **not fully open-source**.
+
+All source code, data, content, reviews, points, prices, and related materials are proprietary and protected.
+
+You may view this repository for transparency purposes only.
+You may **not** copy, extract, reuse, redistribute, or create derivative works from any part of this repository without explicit prior written permission from Voxlis.
+
+This license **supersedes** any prior licensing (including the MIT License) from commit [`84eaaa5f09761169ff6e0fa71d9de0913b2321fc`](https://github.com/localscripts/voxlis.NET/commit/84eaaa5f09761169ff6e0fa71d9de0913b2321fc) onward.
+
+See the [`LICENSE`](./LICENSE) file for full terms.
