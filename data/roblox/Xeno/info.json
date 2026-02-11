@@ -1,0 +1,10 @@
+{
+	"sunc": {},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["multi-instance", "decompiler"],
+	"platforms": ["windows"],
+	"website": "https://www.xeno.onl/",
+	"keyed": false
+}
