@@ -1,0 +1,21 @@
+.heart {
+	position: absolute;
+	top: -80px;
+	width: 32px;
+	height: 32px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	pointer-events: none;
+	opacity: 0.15;
+	animation: fallDown linear infinite;
+	transform: scale(var(--scale)) rotate(0deg);
+}
+
+@keyframes fallDown {
+	from {
+		transform: translateY(0) scale(var(--scale)) rotate(0deg);
+	}
+	to {
+		transform: translateY(120vh) scale(var(--scale)) rotate(360deg);
+	}
+}

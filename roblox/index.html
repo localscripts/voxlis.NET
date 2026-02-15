@@ -1,0 +1,1116 @@
+<!DOCTYPE html><html lang="en" data-theme="red"><head><meta charset="UTF-8"/><meta name="theme-color" content="#981817"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/><link rel="preconnect" href="https://wcdn.numelon.com"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/><style>
+        html {
+            visibility: hidden;
+            background: #000000;
+        }
+    </style><title>voxlis.NET | Roblox</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link rel="icon" href="/assets/img/hearts/heart.red.svg"/><link rel="stylesheet" href="/component-assets/HeartLayer/HeartLayer.css"/><link rel="stylesheet" href="/component-assets/RobloxExploitInfoModal/markdown.css"/><script type="module" src="/component-assets/RobloxExploitInfoModal/RobloxExploitInfoModal.o.mjs" defer=""></script>
+    <script src="https://wcdn.numelon.com/sklair-shared/tailwindcss-3.4.17.js"></script>
+    <script src="/assets/styles/tailwind.config.js"></script>
+    <link rel="stylesheet" href="/assets/styles/global.css"/>
+    <link rel="stylesheet" href="/assets/styles/themes.css"/>
+    <script src=" https://wcdn.numelon.com/sklair-shared/font-awesome-6.5.2-cloudflare-cdnjs.min.js" defer=""></script><script src="/assets/js/ThemeSync.js" defer=""></script><script type="module" src="/component-assets/ThemePickerModal/ThemePickerModal.o.mjs" defer=""></script>
+    <!-- Numelon PLSTRK -->
+    <script defer="" data-domain="voxlis.net" src="https://plstrk.numelon.com/js/script.file-downloads.outbound-links.js"></script>
+    <script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+    <style>
+        .theme-option.is-selected {
+            border-color: rgb(var(--primary));
+            background: rgb(var(--primary-soft));
+            box-shadow: 0 0 14px rgb(var(--primary) / 0.6);
+        }
+    </style><template id="exploit-card-template">
+    <div class="relative bg-surface/40 border border-border/10 rounded-b-card rounded-t-none shadow-soft p-6 py-7 flex flex-col">
+        <!-- accent line -->
+        <div class="absolute top-0 left-0 right-0 h-[3px] bg-primary topbar-normal"></div>
+
+        <!-- rainbow line, used for trending products -->
+        <div class="absolute top-0 left-0 right-0 h-[3px]
+                    bg-gradient-to-r from-red-400 via-yellow-400 via-green-400 via-blue-400 to-purple-400
+                    topbar-trending hidden">
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <!-- header -->
+            <div class="flex items-start justify-between gap-4">
+
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2">
+
+                        <h3 class="text-lg font-semibold text-white truncate exploit-name">
+                            Name
+                        </h3>
+
+                        <!-- TODO: add like backgrounds to the badges and add tolltip or something -->
+                        <i class="fa-solid fa-circle-check text-blue-400" title="Verified" data-badge="verified"></i>
+
+                        <i class="fa-solid fa-arrow-trend-up text-pink-400" title="Trending" data-badge="trending"></i>
+
+                        <i class="fa-solid fa-triangle-exclamation text-red-400" title="Warning" data-badge="warning"></i>
+                    </div>
+
+                    <!-- platform -->
+                    <div class="flex items-center gap-2 mt-1">
+                        <div class="h-6 w-6 rounded-md bg-blue-400/15 flex items-center justify-center" title="Windows" data-platform="windows">
+                            <i class="fa-brands fa-microsoft text-blue-400 text-sm"></i>
+                        </div>
+                        <div class="h-6 w-6 rounded-md bg-green-400/15 flex items-center justify-center" title="Android" data-platform="android">
+                            <i class="fa-brands fa-android text-green-400 text-sm"></i>
+                        </div>
+                        <div class="h-6 w-6 rounded-md bg-slate-300/15 flex items-center justify-center" title="macOS" data-platform="macos">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="h-3.5 w-3.5 opacity-80 text-white">
+                                <path fill="currentColor" fill-rule="evenodd" d="M11.995 1H5a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h8.566c-.292-1.067-.559-2.412-.773-3.78q-.384.03-.793.03c-3.882 0-6.337-2.153-7.124-3.334a.75.75 0 0 1 1.248-.832c.546.82 2.558 2.666 5.876 2.666q.298 0 .58-.02a42 42 0 0 1-.314-3.48H10a.75.75 0 0 1-.75-.75c0-4.425 1.767-9.934 2.745-12.5m3.133 22c-.312-1.022-.613-2.478-.854-4.015c2.538-.614 4.089-2.149 4.802-3.005a.75.75 0 1 0-1.152-.96a7.52 7.52 0 0 1-3.862 2.471c-.195-1.53-.312-2.982-.312-3.991a.75.75 0 0 0-.75-.75h-2.233c.197-4.37 2.01-9.696 2.839-11.75H19a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4zM6.5 6.75a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 1 .75-.75m10.75.75a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="h-6 w-6 rounded-md bg-slate-300/15 flex items-center justify-center" title="iOS" data-platform="ios">
+                            <i class="fa-brands fa-apple text-slate-300 text-sm"></i>
+                        </div>
+
+                        <div class="h-6 w-6 rounded-md flex items-center justify-center bg-orange-400/15 keyed" title="Has a key system">
+                            <i class="fa-solid fa-key text-orange-300/75 text-sm"></i>
+                        </div>
+
+                        <div class="h-6 px-2.5 rounded-md 
+                                            bg-primary/10 border border-primary/20 
+                                            flex items-center justify-center" title="Executor type">
+                            <span class="text-[10px] font-semibold tracking-wide uppercase text-primary executor-type">
+                                Internal
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- sUNC result -->
+                <div class="flex flex-col items-end gap-1 sunc-result">
+                    <img src="https://sunc.su/sunc-full.png" class="h-4 select-none" alt="sUNC"/>
+                    <div class="text-s font-semibold text-purple-400"><span class="sunc-percentage">__</span>%</div>
+                </div>
+
+                <!-- no sUNC result -->
+                <div class="flex flex-col items-end gap-1 opacity-40 hidden sunc-none">
+                    <img src="https://sunc.su/sunc-full.png" class="h-4 select-none grayscale" alt="sUNC"/>
+                    <div class="text-s font-semibold text-muted">None</div>
+                </div>
+            </div>
+
+            <div class="space-y-2 text-sm text-white/80">
+                <div class="flex items-start gap-2 text-sm leading-snug border-l-2 border-emerald-500/50 pl-3">
+                    <span class="pro-summary">
+                        Pro summary
+                    </span>
+                </div>
+
+
+                <div class="flex items-start gap-2 text-sm leading-snug border-l-2 border-yellow-500/50 pl-3">
+                    <span class="neutral-summary">Neutral summary</span>
+                </div>
+
+                <div class="flex items-start gap-2 text-sm leading-snug border-l-2 border-red-500/50 pl-3">
+                    <span class="con-summary">Con summary</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1"></div>
+
+        <div class="flex flex-col gap-2 pt-5">
+            <!-- tags -->
+            <div class="flex flex-wrap gap-2">
+                <span class="
+                        relative group
+                        px-3 py-1 text-sm rounded-full
+                        bg-surface/40 border border-border/10
+                        text-muted
+                        flex items-center gap-1
+                    ">
+                    <i class="text-muted feature-tag-icon"></i>
+                    <span class="feature-tag"></span>
+
+                    <!-- tooltip -->
+                    <span class="
+                        pointer-events-none
+                        absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                        max-w-[220px] w-max
+                        rounded-md
+                        bg-surface/95
+                        border border-border/40
+                        shadow-lg shadow-black/30
+                        px-2.5 py-1.5
+                        text-xs text-white
+                        text-center
+                        break-words
+                        opacity-0 scale-95
+                        transition-all duration-150
+                        group-hover:opacity-100
+                        group-hover:scale-100
+                        feature-tag-tooltip
+                    "></span>
+                </span>
+            </div>
+
+            <!-- price -->
+            <div class="text-sm text-white pt-2">
+                <span class="price-paid-multiple">From </span><span class="font-semibold price-value">(SYMBOL)(PRICE)
+                    (ISO)</span><span class="key-separator"> • <span class="key-length">X days</span></span>
+                <span class="text-muted ml-1 price-additional">+ y more price(s)</span>
+            </div>
+
+            <!-- bottom buttons -->
+            <div class="flex flex-col gap-2 pt-2">
+                <!-- info modal toggle -->
+                <button class="flex flex-1 justify-center items-center gap-2 px-3 py-2 rounded-lg
+                                                                      border border-blue-500/40 text-blue-400 text-sm
+                                                                      hover:bg-blue-500/10 transition-all duration-500 info-button">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Info</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</template><meta property="og:site_name" content="voxlis.NET"/><meta name="twitter:title" content="voxlis.NET | Roblox"/><meta property="og:title" content="voxlis.NET | Roblox"/><meta name="description" content="Your go-to source for comparing exploits and cheats for Roblox."/><meta name="twitter:description" content="Your go-to source for comparing exploits and cheats for Roblox."/><meta property="og:description" content="Your go-to source for comparing exploits and cheats for Roblox."/><meta name="twitter:image" content="https://voxlis.net/assets/img/opengraph.png"/><meta property="og:image" content="https://voxlis.net/assets/img/opengraph.png"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:url" content="https://voxlis.net/roblox"/><meta property="og:url" content="https://voxlis.net/roblox"/><meta property="og:type" content="website"/><meta name="generator" content="https://sklair.numelon.com"/></head>
+
+<body class="bg-bg font-primary text-muted">
+    <!-- these components get inserted into the head -->
+    
+
+
+
+    
+
+
+
+    
+    <!-- end -->
+
+    
+    <header id="menubar" class="fixed top-0 left-0 right-0 z-50 bg-bg backdrop-blur border-b border-border/10">
+
+        <!-- responsive layout as outlined below: -->
+        <!-- on mobile, the two bars act as normal, stacking on top of eachother. search bar is full width. -->
+        <!-- on desktop however, the second bar becomes absolute and therefore stacks ON TOP of the first bar -->
+        <!-- since the search bar is centered in both instances, (including on desktop), this gives the "illusion" (not really) that the search bar is in the middle -->
+
+        <!-- first bar -->
+        <div class="h-20 max-w-content mx-auto px-6 flex items-center justify-between relative">
+
+            <!-- left area -->
+            <div class="flex items-center gap-3">
+                <a href="/" class="flex items-center">
+                    <img src="/assets/branding/voxlis.red.png" alt="voxlis.NET" class="h-10 select-none voxlis-logo"/>
+                </a>
+            </div>
+
+            <!-- right area -->
+            <div class="flex items-center gap-5 text-muted">
+                <a href="/r/reddit" class="hover:text-white transition">
+                    <i class="fa-brands fa-reddit-alien text-lg"></i>
+                </a>
+                <a href="/r/discord" class="hover:text-white transition">
+                    <i class="fa-brands fa-discord text-lg"></i>
+                </a>
+                <a href="/r/youtube" class="hover:text-white transition">
+                    <i class="fa-brands fa-youtube text-lg"></i>
+                </a>
+                <a href="/r/trustpilot" class="hover:text-white transition">
+                    <i class="fa-solid fa-star text-lg"></i>
+                </a>
+                <a id="theme-button" class="hover:text-white text-bg transition cursor-pointer rainbow-glow">
+                    <i class="fa-solid fa-paintbrush text-lg"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- TODO: add sklair compiler directive to only include this when menubar=true (prop) -->
+        <!-- second bar, search -->
+        <div class="
+            relative
+            max-w-content mx-auto px-6
+            flex justify-center items-center
+
+            /* stacked on mobile and tablet */
+            h-16
+
+            /* acts as an overlay on desktop */
+            lg:absolute
+            lg:inset-x-0
+            lg:top-0
+            lg:h-20
+            lg:pointer-events-none
+        ">
+            <div class="
+                w-full
+                lg:w-[28rem]
+                relative
+                lg:pointer-events-auto
+            ">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-muted"></i>
+                <input id="cheat-search" type="text" placeholder="Search cheats..." class="
+                    w-full
+                    bg-surface/40
+                    border border-border/10
+                    rounded-lg
+                    pl-11 pr-4 py-2
+                    text-sm text-fg placeholder-muted
+                    transition-all duration-500
+                    focus:outline-none
+                    focus:border-primary/60
+                    focus:shadow-glow
+                "/>
+            </div>
+        </div>
+
+    </header>
+
+    <!-- spoacer -->
+    <div class="h-[8.5rem] lg:h-20"></div>
+
+
+
+
+    <div class="overflow-hidden">
+        
+    <div id="heart-layer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+    <script src="/component-assets/HeartLayer/HeartLayer.js"></script>
+
+
+
+    </div>
+
+    <main class="relative z-10 max-w-content mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] xl:grid-cols-[260px_1fr_260px] gap-8">
+            <!-- left column -->
+            <aside class="space-y-6 order-2 lg:order-none">
+                <div class="sticky top-32 space-y-6">
+                    
+    <div class="bg-surface/40 border border-border/10 rounded-card shadow-soft p-6" id="filters">
+        <h2 class="text-lg font-semibold text-primary mb-4">Filters</h2>
+
+        <!-- platform -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Platform</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="flex flex-wrap gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="windows" class="filter-input" data-filter-group="platform"/>
+                    <span>
+                        <i class="fa-brands fa-microsoft text-blue-400"></i>
+                        Windows
+                    </span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="macos" class="filter-input" data-filter-group="platform"/>
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="h-3.5 w-3.5 opacity-80 text-white">
+                            <path fill="currentColor" fill-rule="evenodd" d="M11.995 1H5a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h8.566c-.292-1.067-.559-2.412-.773-3.78q-.384.03-.793.03c-3.882 0-6.337-2.153-7.124-3.334a.75.75 0 0 1 1.248-.832c.546.82 2.558 2.666 5.876 2.666q.298 0 .58-.02a42 42 0 0 1-.314-3.48H10a.75.75 0 0 1-.75-.75c0-4.425 1.767-9.934 2.745-12.5m3.133 22c-.312-1.022-.613-2.478-.854-4.015c2.538-.614 4.089-2.149 4.802-3.005a.75.75 0 1 0-1.152-.96a7.52 7.52 0 0 1-3.862 2.471c-.195-1.53-.312-2.982-.312-3.991a.75.75 0 0 0-.75-.75h-2.233c.197-4.37 2.01-9.696 2.839-11.75H19a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4zM6.5 6.75a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 1 .75-.75m10.75.75a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        macOS
+                    </span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="android" class="filter-input" data-filter-group="platform"/>
+                    <span>
+                        <i class="fa-brands fa-android text-green-400"></i>
+                        Android
+                    </span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="ios" class="filter-input" data-filter-group="platform"/>
+                    <span>
+                        <i class="fa-brands fa-apple text-slate-300"></i>
+                        iOS
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <!-- TODO: add uptime filter, allow users to filter by whether it is up or down rn -->
+
+        <!-- tags -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Tags</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="flex flex-wrap gap-2">
+                <label class="prop-chip filter-tag">
+                    <input type="checkbox" name="TEMPLATE_TAG" class="filter-input" data-filter-group="tag"/>
+                    <span>
+                        <i class="filter-tag-icon"></i>
+                        <span class="filter-tag-text">Template tag</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <!-- cheat type -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Cheat Type</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="flex gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="internal" class="filter-input" data-filter-group="type"/>
+                    <span>Internal (Executor)</span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="external" class="filter-input" data-filter-group="type"/>
+                    <span>External</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- key system -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Key System</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="flex gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="keyed" class="filter-input" data-filter-group="keyed"/>
+                    <span><i class="fa-solid fa-key"></i> Keyed</span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="keyless" class="filter-input" data-filter-group="keyed"/>
+                    <span><i class="fa-solid fa-unlock"></i> Keyless</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- price -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Price</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+
+            <div class="flex gap-2">
+                <label class="prop-chip">
+                    <input type="checkbox" name="free" class="filter-input" data-filter-group="price"/>
+                    <span><i class="fa-solid fa-gift"></i> Free</span>
+                </label>
+
+                <label class="prop-chip">
+                    <input type="checkbox" name="paid" class="filter-input" data-filter-group="price"/>
+                    <span><i class="fa-solid fa-coins"></i> Paid</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- sort -->
+        <div class="mb-6">
+            <h3 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                <span>Sort By</span>
+                <span class="flex-1 h-px bg-primary/30"></span>
+            </h3>
+            <select id="sort-select" class="
+                w-full
+                bg-surface/40
+                border border-border/10
+                rounded
+                px-3 py-2
+                text-sm
+                [&amp;_option]:text-white
+                [&amp;_option]:bg-surface
+                [color-scheme:dark]
+              ">
+                <option value="recommended">Recommended</option>
+                <!-- TODO: add popularity using clicks etc from voxlis api, when asked to implement -->
+                <!-- <option value="popularity-asc">Most popular</option> -->
+                <!-- <option value="popularity-desc">Least popular</option> -->
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+            </select>
+        </div>
+
+        <button id="reset-filters" class="w-full py-2 border border-border/10 rounded text-sm
+        transition-all duration-500
+        hover:border-primary/60
+        hover:shadow-glow
+        hover:text-primary
+        ">
+            Reset filters
+        </button>
+    </div>
+
+
+
+                    <!-- <SponsoredAd></SponsoredAd> -->
+                </div>
+            </aside>
+
+            <!-- centre column -->
+            <section class="order-1 lg:order-none space-y-8 min-w-0">
+                <div class="
+    bg-surface/40 border border-border/10
+    rounded-card shadow-soft
+    p-6
+">
+    <div class="text-xs font-semibold uppercase tracking-widest text-primary mb-4">
+        Symbols &amp; tags explained
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div class="flex gap-3">
+            <i class="fa-solid fa-circle-check text-blue-400 mt-0.5"></i>
+            <div>
+                <div class="font-semibold text-white">Verified</div>
+                <div class="text-muted">
+                    Trusted based on extensive background checks and available information.
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <i class="fa-solid fa-arrow-trend-up text-pink-400 mt-0.5"></i>
+            <div>
+                <div class="font-semibold text-white">Trending</div>
+                <div class="text-muted">
+                    Consistently ranks highly based on user clicks.
+                    <span class="text-white/70">
+                        Snapshot from Dec 2025 while we rework the API.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 mt-0.5"></i>
+            <div>
+                <div class="font-semibold text-white">Warning</div>
+                <div class="text-muted">
+                    May be suspicious or lacks sufficient information after background checks.
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <i class="fa-solid fa-tag text-muted mt-0.5"></i>
+            <div>
+                <div class="font-semibold text-white">Tags</div>
+                <div class="text-muted">
+                    Hover over individual tags in each card to learn more.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <div class="grid grid-cols-1
+                            sm:grid-cols-2
+                            2xl:grid-cols-3
+                            gap-6" id="exploit-list">
+                    
+                </div>
+
+            </section>
+
+            <!-- right column -->
+            <aside class="space-y-6 hidden xl:block order-3 lg:order-none">
+                <div class="sticky top-32 space-y-6">
+                    <!-- key system explainer -->
+                    <div class="
+                        bg-surface/40 border border-border/10
+                        rounded-card shadow-soft
+                        overflow-hidden
+                    ">
+                        <div class="aspect-video bg-black">
+                            <div class="aspect-video bg-black relative overflow-hidden rounded-md group cursor-pointer" data-youtube="KKshbStBH_g">
+    <img src="https://img.youtube.com/vi/KKshbStBH_g/hqdefault.jpg" class="w-full h-full object-cover brightness-75 group-hover:brightness-90 transition" alt="What is a key system?"/>
+
+    <!-- dark overlay -->
+    <div class="absolute inset-0 bg-black/50"></div>
+
+    <!-- play -->
+    <div class="absolute inset-0 flex items-center justify-center">
+        <div class="
+                                        h-14 w-14 rounded-full
+                                        bg-black/60 border border-white/20
+                                        flex items-center justify-center
+                                        text-primary
+                                        transition
+                                        group-hover:scale-105
+                                        group-hover:bg-black/80
+                                    ">
+            <i class="fa-solid fa-play ml-0.5"></i>
+        </div>
+    </div>
+
+    <script>
+        const el = document.currentScript.parentElement
+        el.addEventListener("click", () => {
+            const id = el.dataset.youtube;
+            // I am usually against embedding HTML inside of JavaScript.. but here its fine, its only a youtube snippet
+            el.innerHTML = `
+                <iframe
+                    class="w-full h-full"
+                    src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                ></iframe>
+            `;
+        });
+    </script>
+</div>
+                        </div>
+
+                        <div class="p-5">
+                            <div class="text-sm font-semibold text-white mb-1">
+                                What is a key system?
+                            </div>
+                            <div class="text-sm text-muted">
+                                A short explanation of how cheat key systems work and why they exist.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- thx-->
+                    <div class="
+                                                bg-surface/40 border border-border/10
+                                                rounded-card shadow-soft
+                                                p-5
+                                                flex gap-4
+                                            ">
+                        <img class="h-10 heart-img select-none" alt="heart"/>
+
+                        <div class="flex-1">
+                            <div class="text-sm font-semibold text-white">
+                                Thanks for 1,000 subscribers! 🎉
+                            </div>
+                            <div class="text-sm text-muted mt-1">
+                                Check out the Voxlis YouTube channel for cool videos.
+                            </div>
+
+                            <a href="/r/youtube" class="
+                                                        inline-block mt-3
+                                                        px-4 py-2 rounded-lg
+                                                        text-sm font-semibold
+                                                        text-primary
+                                                        border border-primary/40
+                                                        transition-all duration-500
+                                                        hover:bg-primary/10
+                                                        hover:border-primary
+                                                        hover:shadow-glow
+                                                    ">
+                                Visit channel
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- reddit -->
+                    <div class="
+                                                bg-surface/40 border border-border/10
+                                                rounded-card shadow-soft
+                                                p-5
+                                                flex gap-4
+                                            ">
+                        <i class="fa-solid fa-star text-primary text-3xl"></i>
+
+                        <div class="flex-1">
+                            <div class="text-sm font-semibold text-white">
+                                Rate us on Trustpilot!
+                            </div>
+                            <div class="text-sm text-muted mt-1">
+                                We would appreciate an honest review of our new website on Trustpilot.
+                            </div>
+
+                            <a href="/r/trustpilot" class="
+                                                        inline-block mt-3
+                                                        px-4 py-2 rounded-lg
+                                                        text-sm font-semibold
+                                                        text-primary
+                                                        border border-primary/40
+                                                        transition-all duration-500
+                                                        hover:bg-primary/10
+                                                        hover:border-primary
+                                                        hover:shadow-glow
+                                                    ">
+                                Review us
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- TODO: advise against a bunch of these sponsored ads; they clutter the UI and there is no point for them -->
+                    <!-- because real advertisements havent been implemented on the old site and likely wont be implemented here either -->
+                    <!-- <SponsoredAd></SponsoredAd> -->
+                    <!-- <SponsoredAd></SponsoredAd> -->
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    
+    <footer class="bg-bg border-t border-border/10 backdrop-blur">
+        <div class="max-w-content mx-auto px-6 py-8 space-y-6">
+
+            <!-- top bar -->
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+
+                <!-- left side -->
+                <div class="flex items-center gap-4">
+                    <a href="/" class="flex items-center">
+                        <img src="/assets/branding/voxlis.red.png" alt="voxlis.NET" class="h-12 select-none voxlis-logo"/>
+                    </a>
+
+                    <div class="flex flex-col leading-tight">
+                        <span class="text-muted text-sm">
+                            All content, data, reviews, points, and pricing are proprietary and may not be used or
+                            reproduced
+                            without permission.
+
+                            <br/>
+
+                            ©
+                            <script>document.write(new Date().getFullYear())</script>
+                            Voxlis / voxlis.NET. All rights reserved.
+                        </span>
+
+                        <span class="text-xs text-muted">
+                            <a href="/tos" class="hover:text-primary transition">Terms of Service</a>
+                            ·
+                            <a href="/privacy" class="hover:text-primary transition">Privacy Policy</a>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- right side -->
+                <div class="flex items-center gap-6 text-sm text-muted">
+                    <a href="/suggest" class="hover:text-white transition">
+                        Make a suggestion
+                    </a>
+
+                    <a href="https://github.com/localscripts/voxlis.NET" class="hover:text-white transition">
+                        GitHub Repository
+                    </a>
+                </div>
+            </div>
+
+            <!-- bottom bar -->
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between text-xs text-muted">
+
+                <div class="max-w-xl">
+                    voxlis.NET is an independent community-driven directory. We do not distribute cheats or executables.
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="https://bespoke.numelon.com" target="_blank">
+                        <img src="https://wcdn.numelon.com/branding/credits.dark.svg?3" alt="Engineered by Numelon in the United Kingdom" class="h-7 opacity-70 hover:opacity-100 transition"/>
+                    </a>
+
+                    <a href="/r/youtube">
+                        <img src="/assets/img/cat.png" alt="meow" class="h-8 transition-transform duration-300 hover:scale-125 select-none"/>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+
+
+
+
+    <!-- when making SPAs with sklair, it is recommended to put the popup models last for clarity -->
+    
+    <!-- TODO: hidden, opacity-0 when not testing -->
+    <div id="theme-modal" class="fixed inset-0 z-[999] hidden opacity-0">
+        <!-- blur backdrop -->
+        <!-- TODO: decide whether we keep blur, because it is HEAVILY unoptimised on web!! -->
+        <div id="theme-modal-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+        <!-- actual main panel -->
+        <div class="absolute inset-0 flex items-center justify-center px-6 pointer-events-none">
+            <div class="bg-surface/60 border border-border/15 rounded-card shadow-soft backdrop-blur 
+                p-4 sm:p-6 
+                w-full max-w-lg sm:max-w-2xl 
+                max-h-[90vh] overflow-y-auto
+                pointer-events-auto">
+                <div class="flex items-center justify-between mb-4 sm:mb-5">
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-semibold text-white">Choose a theme</h2>
+                    </div>
+
+                    <button id="theme-modal-close" class="text-muted hover:text-white transition" aria-label="Close">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- main part -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+                    <button type="button" data-theme="red" class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="font-semibold text-sm sm:text-base text-white">Red</div>
+                            <div class="h-3 w-3 rounded-full bg-red-500"></div>
+                        </div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Classic voxlis.NET</div>
+                    </button>
+
+                    <button type="button" data-theme="blue" class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="font-semibold text-sm sm:text-base text-white">Blue</div>
+                            <div class="h-3 w-3 rounded-full bg-blue-500"></div>
+                        </div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Ocean</div>
+                    </button>
+
+                    <button type="button" data-theme="green" class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="font-semibold text-sm sm:text-base text-white">Green</div>
+                            <div class="h-3 w-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Nature</div>
+                    </button>
+
+                    <button type="button" data-theme="orange" class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="font-semibold text-sm sm:text-base text-white">Orange</div>
+                            <div class="h-3 w-3 rounded-full bg-orange-500"></div>
+                        </div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Honey</div>
+                    </button>
+
+                    <button type="button" data-theme="purple" class="theme-option group text-left rounded-lg border border-border/10 bg-surface/30 hover:border-primary/60 hover:shadow-glow transition-all duration-300 p-3 sm:p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="font-semibold text-sm sm:text-base text-white">Purple</div>
+                            <div class="h-3 w-3 rounded-full bg-purple-500"></div>
+                        </div>
+                        <div class="text-[11px] sm:text-xs text-muted mt-1">Lollipop</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    
+    <!-- TODO: hidden, opacity-0 when not testing -->
+    <div id="exploit-info-modal" class="fixed inset-0 z-[999] opacity-0 hidden">
+        <!-- blur backdrop -->
+        <div id="exploit-info-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+
+        <!-- for centering only, not the actual main panel -->
+        <div class="absolute inset-0 flex items-center justify-center px-6 pointer-events-none">
+            <!-- actual main panel -->
+            <div class="w-full max-w-6xl
+                max-h-[90svh] sm:max-h-[90vh]
+                overflow-y-auto lg:overflow-hidden
+                bg-surface/70 border border-border/15 rounded-card shadow-soft
+                p-4 sm:p-6
+                pointer-events-auto
+                flex flex-col
+            ">
+                <!-- top bar-->
+                <div class="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
+                    <!-- title, badges and meta -->
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-3">
+                            <h2 class="text-xl sm:text-2xl font-semibold text-white truncate exploit-name">
+                                Name
+                            </h2>
+
+                            <!-- badges -->
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-blue-400" title="Verified" data-badge="verified"></i>
+
+                                <i class="fa-solid fa-arrow-trend-up text-pink-400" title="Trending" data-badge="trending"></i>
+
+                                <i class="fa-solid fa-triangle-exclamation text-red-400" title="Warning" data-badge="warning"></i>
+                            </div>
+                        </div>
+
+                        <!-- platforms + executor type -->
+                        <div class="flex flex-wrap items-center gap-2 mt-2">
+                            <!-- platform icons in tinted squares -->
+                            <div class="h-7 w-7 rounded-md bg-blue-400/15 flex items-center justify-center" title="Windows" data-platform="windows">
+                                <i class="fa-brands fa-microsoft text-blue-400 text-sm"></i>
+                            </div>
+                            <div class="h-7 w-7 rounded-md bg-green-400/15 flex items-center justify-center" title="Android" data-platform="android">
+                                <i class="fa-brands fa-android text-green-400 text-sm"></i>
+                            </div>
+                            <div class="h-7 w-7 rounded-md bg-slate-300/15 flex items-center justify-center" title="macOS" data-platform="macos">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="h-3.5 w-3.5 opacity-80 text-white">
+                                    <path fill="currentColor" fill-rule="evenodd" d="M11.995 1H5a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h8.566c-.292-1.067-.559-2.412-.773-3.78q-.384.03-.793.03c-3.882 0-6.337-2.153-7.124-3.334a.75.75 0 0 1 1.248-.832c.546.82 2.558 2.666 5.876 2.666q.298 0 .58-.02a42 42 0 0 1-.314-3.48H10a.75.75 0 0 1-.75-.75c0-4.425 1.767-9.934 2.745-12.5m3.133 22c-.312-1.022-.613-2.478-.854-4.015c2.538-.614 4.089-2.149 4.802-3.005a.75.75 0 1 0-1.152-.96a7.52 7.52 0 0 1-3.862 2.471c-.195-1.53-.312-2.982-.312-3.991a.75.75 0 0 0-.75-.75h-2.233c.197-4.37 2.01-9.696 2.839-11.75H19a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4zM6.5 6.75a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 1 .75-.75m10.75.75a.75.75 0 0 0-1.5 0v2a.75.75 0 0 0 1.5 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div class="h-7 w-7 rounded-md bg-slate-300/15 flex items-center justify-center" title="iOS" data-platform="ios">
+                                <i class="fa-brands fa-apple text-slate-300 text-sm"></i>
+                            </div>
+
+                            <div class="h-7 px-3 rounded-md bg-orange-300/10 border border-orange-300/15 flex items-center gap-1.5 keyed" title="Has a key system">
+                                <i class="fa-solid fa-key text-orange-300/75 text-[11px]"></i>
+                                <span class="text-[11px] font-semibold tracking-wide uppercase text-orange-300/75">
+                                    Keyed
+                                </span>
+                            </div>
+
+                            <div class="h-7 px-3 rounded-md bg-primary/10 border border-primary/20 flex items-center" title="Executor type">
+                                <span class="text-[11px] font-semibold tracking-wide uppercase text-primary executor-type">
+                                    Internal
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- close button -->
+                    <button id="exploit-info-close" class="
+                            absolute top-0 right-0
+                            sm:static
+                            text-muted hover:text-white transition
+                        " aria-label="Close">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- mobile scroll hint -->
+                <div class="flex items-center justify-center gap-2
+                            text-xs text-muted/80
+                            lg:hidden">
+                    <i class="fa-solid fa-arrow-down animate-bounce"></i>
+                    <span>Scroll down to view the full review</span>
+                </div>
+
+                <!-- TODO: perhaps open another modal? -->
+                <!-- TODO: implement this later -->
+                <!-- sUNC information strip -->
+                <!-- TODO: change circle fill to sunc colour, not primary site colour -->
+                <!-- <button type="button" class="
+                        w-full flex items-center justify-between gap-4
+                        bg-surface/40 border border-border/15 rounded-xl px-4 py-3
+                        transition-all duration-500
+                        hover:border-primary/60 hover:shadow-glow
+                    " title="Open sUNC widget">
+                    <div class="flex items-center gap-3">
+                        <img src="https://sunc.su/sunc-full.png" class="h-5 select-none" alt="sUNC">
+                        <div class="text-sm text-muted">
+                            sUNC across platforms • click to view detailed widget
+                        </div>
+                    </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="relative h-10 w-10">
+                        <svg viewBox="0 0 36 36" class="h-10 w-10">
+                            <path d="M18 2.0845
+                                           a 15.9155 15.9155 0 0 1 0 31.831
+                                           a 15.9155 15.9155 0 0 1 0 -31.831" fill="none"
+                                stroke="rgb(var(--border) / 0.35)" stroke-width="3" stroke-linecap="round" />
+                            <path d="M18 2.0845
+                                           a 15.9155 15.9155 0 0 1 0 31.831
+                                           a 15.9155 15.9155 0 0 1 0 -31.831" fill="none"
+                                stroke="rgb(var(--primary) / 0.9)" stroke-width="3" stroke-dasharray="97, 100"
+                                stroke-linecap="round" />
+                        </svg>
+
+                        <div class="absolute inset-0 grid place-items-center">
+                            <span class="text-xs font-semibold text-white">97%</span>
+                        </div>
+                    </div>
+
+                    <div class="text-sm text-purple-300 font-semibold">
+                        High
+                    </div>
+                </div>
+                </button> -->
+
+                <!-- optional warning -->
+                <div class="mt-4 bg-red-500/10 border border-red-500/25 rounded-xl px-4 py-3 hidden warning-strip">
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-triangle-exclamation text-red-400 mt-0.5"></i>
+                        <div class="text-sm">
+                            <div class="font-semibold text-red-200">
+                                Warning
+                            </div>
+                            <div class="text-red-200/80 warning-text">
+                                Warning text
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAIN BODY -->
+                <div class="mt-6
+                            flex flex-col-reverse lg:grid
+                            lg:grid-cols-[1.3fr_0.9fr]
+                            gap-6
+                            flex-1 lg:min-h-0">
+                    <!-- left side -->
+                    <div class="bg-surface/40 border border-border/15 rounded-card p-5
+                                flex flex-col lg:min-h-0">
+                        <!-- TODO: youtube videos per exploit -->
+                        <!-- <div class="mb-4 rounded-xl overflow-hidden border border-border/10 bg-black/40 hidden">
+                            <div class="aspect-video grid place-items-center text-muted text-sm">
+                                YouTube embed TODO future
+                            </div>
+                        </div> -->
+
+                        <div class="exploit-info-review
+                            lg:flex-1 lg:min-h-0
+                            lg:overflow-y-auto lg:overscroll-contain
+                            text-sm leading-relaxed sm:leading-loose text-muted"></div>
+                    </div>
+
+                    <!-- right side -->
+                    <div class="flex flex-col lg:min-h-0">
+                        <!-- top, scrollable -->
+                        <div class="lg:flex-1 lg:min-h-0
+                                    lg:overflow-y-auto lg:overscroll-contain
+                                    space-y-4">
+                            <!-- summaries -->
+                            <div class="bg-surface/40 border border-border/15 rounded-card p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="text-xs font-semibold uppercase tracking-widest text-primary">
+                                        Quick summary
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-center gap-2 text-emerald-500">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                        <span class="summary-pro">Summary pro</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 text-yellow-500">
+                                        <i class="fa-solid fa-circle-minus"></i>
+                                        <span class="summary-neutral">Summary neutral</span>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 text-red-500">
+                                        <i class="fa-solid fa-circle-xmark"></i>
+                                        <span class="summary-con">Summary con</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- tags -->
+                            <div class="bg-surface/40 border border-border/15 rounded-card p-5 features-section">
+                                <div class="text-xs font-semibold uppercase tracking-widest text-primary mb-3">
+                                    Features
+                                </div>
+
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="relative group px-3 py-1 text-sm rounded-full bg-surface/40 border border-border/10 text-muted flex items-center gap-1">
+                                        <i class="text-muted feature-tag-icon"></i>
+                                        <span class="feature-tag"></span>
+
+                                        <!-- tooltip -->
+                                        <span class="
+                                            pointer-events-none
+                                            absolute bottom-full left-1/2 -translate-x-1/2 mb-2
+                                            max-w-[220px] w-max
+                                            rounded-md
+                                            bg-surface/95
+                                            border border-border/40
+                                            shadow-lg shadow-black/30
+                                            px-2.5 py-1.5
+                                            text-xs text-white
+                                            text-center
+                                            break-words
+                                            opacity-0 scale-95
+                                            transition-all duration-150
+                                            group-hover:opacity-100
+                                            group-hover:scale-100
+                                            feature-tag-tooltip
+                                        "></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- bottom, sticky(ish?) -->
+                        <div class="pt-4 space-y-4 shrink-0">
+                            <!-- pricing block -->
+                            <div class="bg-surface/40 border border-border/15 rounded-card p-5">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="text-xs font-semibold uppercase tracking-widest text-primary">
+                                        Pricing options
+                                    </div>
+                                    <div class="text-xs text-muted">
+                                        Cheapest:
+                                        <span class="text-white font-semibold cheapest-price">(SYMBOL)(PRICE)
+                                            (ISO)</span>
+                                        <span class="key-separator"> • <span class="key-length">x days</span></span>
+                                    </div>
+                                </div>
+
+                                <!-- platform tabs-->
+                                <div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar" data-sku-tabs="">
+                                    <button type="button" data-sku-tab-template="" aria-selected="false" class="hidden
+                                                                    px-3 py-1.5 rounded-full text-xs font-semibold
+                                                                    transition-all duration-500
+                                                            
+                                                                    bg-surface/40 border border-border/15 text-muted
+                                                                    hover:border-primary/40 hover:text-white
+                                                            
+                                                                    aria-selected:bg-primary/15
+                                                                    aria-selected:border-primary/25
+                                                                    aria-selected:text-primary
+                                                                ">
+                                        Platform
+                                    </button>
+                                </div>
+
+                                <!-- sku list -->
+                                <div class="space-y-2" data-sku-list="">
+                                    <div data-sku-row-template="" class="hidden
+                                                                 flex items-center justify-between
+                                                                 px-3 py-3 sm:py-2
+                                                                 rounded-lg bg-surface/30 border border-border/10">
+                                        <div class="text-sm text-white font-semibold sku-days">7 days</div>
+                                        <div class="text-sm text-white sku-price">
+                                            €4.25 <span class="text-muted text-xs sku-currency">EUR</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-xs text-muted mt-3">
+                                    Showing <span class="text-white/80 currenttab-platform">Windows</span> pricing.
+                                    Other platforms have different SKUs.
+                                </div>
+
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <!-- key-empire buy -->
+                                <a href="#" target="_blank" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 hover:bg-green-500/20 hover:border-green-500 transition-all duration-500 purchase-keyempire">
+                                    <img src="/assets/branding/key-empire.png" class="h-4" alt=""/>
+                                    <span class="text-sm font-semibold">Buy on Key-Empire</span>
+                                </a>
+
+                                <!-- regular purchase -->
+                                <a href="#" target="_blank" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-surface/40 border border-border/15 text-white hover:border-primary/60 hover:shadow-glow transition-all duration-500 purchase-regular">
+                                    <i class="fa-solid fa-bag-shopping"></i>
+                                    <span class="text-sm font-semibold">Buy or Get</span>
+                                </a>
+
+                                <!-- website -->
+                                <a href="#" target="_blank" class="sm:w-auto w-full flex items-center justify-center px-4 py-2.5 rounded-lg bg-surface/40 border border-border/15 text-muted hover:text-white hover:border-primary/60 transition-all duration-500 website-button">
+                                    <i class="fa-solid fa-globe"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script type="module" src="/assets/js/RobloxData.o.mjs" defer=""></script>
+
+
+<script>window.addEventListener("load", () => document.documentElement.style.visibility = "visible");</script></body></html>
