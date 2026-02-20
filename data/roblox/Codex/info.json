@@ -1,7 +1,7 @@
 {
 	"sunc": {},
 	"badges": [],
-	"hidden": false,
+	"hidden": true,
 	"type": "internal",
 	"tags": ["decompiler", "supports-vng"],
 	"platforms": ["android"],
