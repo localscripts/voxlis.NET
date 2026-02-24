@@ -6,7 +6,7 @@
 		}
 	},
 	"badges": ["verified"],
-	"hidden": true,
+	"hidden": false,
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
