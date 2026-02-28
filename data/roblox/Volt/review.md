@@ -1,5 +1,5 @@
 ## Exploit Performance  
-- You can obtain a Lua decompiler; however, most available options are paid, such as [Oracle](https://discord.gg/S3g4AX2g) for $10. Although **Volt** has been associated with **Krampus** and **AWP.GG**—both of which previously carried out exit scams—is currently operating reliably. The developers prioritize minimizing detection and preventing ban waves through **Hyperion** emulation techniques. That said, **Volt** may still occasionally experience bans even while emulating **Hyperion**, as no method remains undetectable indefinitely.
+- You can obtain a Lua decompiler; however, most available options are paid, such as **[Oracle](https://discord.gg/S3g4AX2g)** for $10. Although **Volt** has been associated with **Krampus** and **AWP.GG**—both of which previously carried out exit scams—is currently operating reliably. The developers prioritize minimizing detection and preventing ban waves through **Hyperion** emulation techniques. That said, **Volt** may still occasionally experience bans even while emulating **Hyperion**, as no method remains undetectable indefinitely.
 
 ## Background Information  
 - Between **February 12–14, 2024**, the first posts appeared on **Reddit** and **[V3rm.net](https://v3rm.net)** about a new executor called **Krampus** / **RO-EXEC**. It was regarded as the first legitimate executor to bypass **Hyperion**, and attention spread rapidly—usage surged, and videos circulated widely. However, on **May 11, 2024**, **Krampus** exit scammed. After detection, the team claimed in their **Discord** that they were investigating the trigger, then later announced that their Chinese developers had been arrested and that **Hyperion 4.0** had been released, providing fake documents as “proof.” Some time later, their **Discord** server was sold to a Robux casino, and no meaningful updates have been heard from the source since.
@@ -13,4 +13,4 @@
 
  
 
-> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [v3rm.net](https://v3rm.net)
+> Sources: *[reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers) & [v3rm.net](https://v3rm.net)*
