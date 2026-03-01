@@ -5,7 +5,7 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://www.xeno.onl/",
+	"website": "https://www.xeno.now/",
 	"keyed": false,
 	"hidden": false
 }
