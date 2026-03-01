@@ -11,5 +11,5 @@
 
 - After this incident, **Nihon** became largely inactive aside from smaller releases. On **January 11, 2025**, **Nihon** was officially discontinued. Shortly after, on **January 13, 2025**, the project rebranded to **Isaeva**, which was officially released on **February 22, 2025**.
 
-
+> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & Isaeva Team
 
