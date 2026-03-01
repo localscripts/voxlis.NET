@@ -13,4 +13,4 @@
 
  
 
-> Sources: *[reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers) & [v3rm.net](https://v3rm.net)*
+> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers) & [v3rm.net](https://v3rm.net)
