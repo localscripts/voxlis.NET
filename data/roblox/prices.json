@@ -151,6 +151,32 @@
 		}
 	},
 
+		"isaeva": {
+		"purchase_url": "https://key-empire.com/product/isaeva",
+		"platforms": {
+			"windows": [
+				{
+					"id": "isaeva-7d",
+					"days": 7,
+					"price": 4.99,
+					"currency": "USD"
+				},
+				{
+					"id": "isaeva-30d",
+					"days": 30,
+					"price": 17.99,
+					"currency": "USD"
+				},
+				{
+					"id": "isaeva-90d",
+					"days": 90,
+					"price": 44.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
 	"volt": {
 		"purchase_url": "https://key-empire.com/product/volt",
 		"platforms": {
