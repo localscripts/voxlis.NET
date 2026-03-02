@@ -412,9 +412,14 @@
 	},
 
 	"delta": {
-		"purchase_url": "https://shop.deltaexploits.gg",
+		"purchase_url": "https://deltaexploits.gg",
 		"platforms": {
 			"ios": [
+				{
+					"id": "delta-ios-free-1d",
+					"days": 1,
+					"price": 0
+				},
 				{
 					"id": "delta-ios-30d",
 					"days": 30,
@@ -423,6 +428,11 @@
 				}
 			],
 			"android": [
+				{
+					"id": "delta-android-free-1d",
+					"days": 1,
+					"price": 0
+				},
 				{
 					"id": "delta-android-30d",
 					"days": 30,
