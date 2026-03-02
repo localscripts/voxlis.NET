@@ -1,4 +1,3 @@
-## What we like
+delta is free, edited due of confusion, more info still in works
 
-- Has a decompiler
-- High sUNC score
+they have paid and free, free has keysysstem
