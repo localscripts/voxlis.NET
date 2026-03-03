@@ -9,7 +9,7 @@
 
 - In **early 2024**, development activity increased significantly, leading to an official release on **October 24, 2024**, where **Nihon** delivered its strongest and most refined performance period. However, on **February 3, 2025**, the team split following internal conflict. The owner stated that a former administrator and **Sero** had nuked the Discord server and banned users, while clarifying that **Zenith** was not involved and had returned the server vanity URL. No further public explanation was given.
 
-- After this incident, **Nihon** became largely inactive aside from smaller releases. On **January 11, 2025**, **Nihon** was officially discontinued. Shortly after, on **January 13, 2025**, the project rebranded to **Isaeva**, which was officially released on **February 22, 2025**.
+- After this incident, **Nihon** became largely inactive aside from smaller releases. On **January 11, 2026**, **Nihon** was officially discontinued. Shortly after, on **January 13, 2026**, the project rebranded to **Isaeva**, which was officially released on **February 22, 2026**.
 
 > Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers), [voxlis.NET](https://voxlis.NET) & Isaeva Team
 
