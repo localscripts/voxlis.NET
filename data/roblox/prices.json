@@ -1,6 +1,6 @@
 {
 	"matcha": {
-		"purchase_url": "https://www.key-empire.com/#matcha",
+		"purchase_url": "https://key-empire.com/product/matcha",
 		"platforms": {
 			"windows": [
 				{
@@ -14,7 +14,7 @@
 	},
 
 	"serotonin": {
-		"purchase_url": "https://www.key-empire.com/#serotonin",
+		"purchase_url": "https://key-empire.com/product/serotonin",
 		"platforms": {
 			"windows": [
 				{
@@ -40,7 +40,7 @@
 	},
 
 	"wave": {
-		"purchase_url": "https://www.key-empire.com/#wave",
+		"purchase_url": "https://key-empire.com/product/wave",
 		"platforms": {
 			"windows": [
 				{
@@ -72,7 +72,7 @@
 	},
 
 	"seliware": {
-		"purchase_url": "https://www.key-empire.com/#seliware",
+		"purchase_url": "https://key-empire.com/product/seliware",
 		"platforms": {
 			"windows": [
 				{
@@ -92,7 +92,7 @@
 	},
 
 	"potassium": {
-		"purchase_url": "https://www.key-empire.com/#potassium",
+		"purchase_url": "https://key-empire.com/product/potassium",
 		"platforms": {
 			"windows": [
 				{
@@ -106,7 +106,7 @@
 	},
 
 	"bunni": {
-		"purchase_url": "https://www.key-empire.com/#bunni",
+		"purchase_url": "https://key-empire.com/product/bunni",
 		"platforms": {
 			"windows": [
 				{
@@ -138,7 +138,7 @@
 	},
 
 	"yerba": {
-		"purchase_url": "https://www.key-empire.com/#yerba",
+		"purchase_url": "https://key-empire.com/product/yerba",
 		"platforms": {
 			"windows": [
 				{
@@ -151,8 +151,34 @@
 		}
 	},
 
+		"isaeva": {
+		"purchase_url": "https://key-empire.com/product/isaeva",
+		"platforms": {
+			"windows": [
+				{
+					"id": "isaeva-7d",
+					"days": 7,
+					"price": 4.99,
+					"currency": "USD"
+				},
+				{
+					"id": "isaeva-30d",
+					"days": 30,
+					"price": 17.99,
+					"currency": "USD"
+				},
+				{
+					"id": "isaeva-90d",
+					"days": 90,
+					"price": 44.99,
+					"currency": "USD"
+				}
+			]
+		}
+	},
+
 	"volt": {
-		"purchase_url": "https://beta.key-empire.com/product/volt",
+		"purchase_url": "https://key-empire.com/product/volt",
 		"platforms": {
 			"windows": [
 				{
@@ -178,7 +204,7 @@
 	},
 
 	"volcano": {
-		"purchase_url": "https://www.key-empire.com/#volcano",
+		"purchase_url": "https://key-empire.com/product/volcano",
 		"platforms": {
 			"windows": [
 				{
@@ -198,7 +224,7 @@
 	},
 
 	"ronin": {
-		"purchase_url": "https://www.key-empire.com/#ronin",
+		"purchase_url": "https://key-empire.com/product/ronin",
 		"platforms": {
 			"windows": [
 				{
@@ -254,7 +280,7 @@
 	},
 
 	"codex": {
-		"purchase_url": "https://key-empire.com/#codex",
+		"purchase_url": "/",
 		"platforms": {
 			"android": [
 				{
@@ -280,7 +306,7 @@
 	},
 
 	"macsploit": {
-		"purchase_url": "https://key-empire.com/#macsploit",
+		"purchase_url": "https://key-empire.com/product/macsploit",
 		"platforms": {
 			"macos": [
 				{
@@ -306,7 +332,7 @@
 	},
 
 	"cryptic": {
-		"purchase_url": "https://key-empire.com/#cryptic",
+		"purchase_url": "https://key-empire.com/",
 		"platforms": {
 			"ios": [
 				{
