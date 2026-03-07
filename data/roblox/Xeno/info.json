@@ -7,5 +7,5 @@
 	"platforms": ["windows"],
 	"website": "https://www.xeno.now/",
 	"keyed": false,
-	"hidden": false
+	"hidden": true
 }
