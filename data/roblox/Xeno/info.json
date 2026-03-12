@@ -6,6 +6,5 @@
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
 	"website": "https://www.xeno.now/",
-	"keyed": false,
-	"hidden": true
+	"keyed": false
 }
