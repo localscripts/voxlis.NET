@@ -10,6 +10,6 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://getsolara.gg",
+	"website": "https://solara.gg",
 	"keyed": false
 }
