@@ -1,0 +1,155 @@
+<div id="filterDrawer" class="filter-drawer" aria-hidden="true">
+  <div class="filter-drawer-overlay"></div>
+  <div class="filter-drawer-panel" role="dialog" aria-modal="true" aria-label="Filters">
+    <div class="filter-drawer-header">
+      <div class="filter-drawer-header-row">
+        <h2 class="filter-drawer-title">Filters</h2>
+        <button id="closeFilterDrawer" class="filter-drawer-close" type="button" aria-label="Close filters">
+          <i class="fas fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="filter-drawer-body">
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Sort by
+        </h3>
+        <div class="custom-dropdown filter-dropdown" id="filterSortDropdown">
+          <div class="custom-dropdown-selected" id="filterSortDropdownSelected">
+            <span>Recommended</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="custom-dropdown-options" id="filterSortDropdownOptions">
+            <div class="custom-dropdown-option selected" data-value="recommended">Recommended</div>
+            <div class="custom-dropdown-option" data-value="most-popular">Most Popular</div>
+            <div class="custom-dropdown-option" data-value="least-popular">Least Popular</div>
+            <div class="custom-dropdown-option" data-value="price-asc">Price: Low to High</div>
+            <div class="custom-dropdown-option" data-value="price-desc">Price: High to Low</div>
+            <div class="custom-dropdown-option" data-value="name-asc">Name: A to Z</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Platform
+        </h3>
+        <div class="filter-platform-grid">
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterWindows" data-platform="windows">
+            <label for="filterWindows">Windows</label>
+          </div>
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterMacos" data-platform="macos">
+            <label for="filterMacos">macOS</label>
+          </div>
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterAndroid" data-platform="android">
+            <label for="filterAndroid">Android</label>
+          </div>
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterIos" data-platform="ios">
+            <label for="filterIos">iOS</label>
+          </div>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Price
+        </h3>
+        <div class="filter-segmented-control">
+          <button class="filter-segment-button is-active" data-price="all" data-default="true" type="button">All</button>
+          <button class="filter-segment-button" data-price="free" type="button">Free</button>
+          <button class="filter-segment-button" data-price="paid" type="button">Paid</button>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Key
+        </h3>
+        <div class="filter-segmented-control">
+          <button class="filter-segment-button is-active" data-key="all" data-default="true" type="button">All</button>
+          <button class="filter-segment-button" data-key="keyless" type="button">No key system</button>
+          <button class="filter-segment-button" data-key="keysystem" type="button">Key System</button>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Type
+        </h3>
+        <div class="filter-segmented-control">
+          <button class="filter-segment-button is-active" data-type="all" data-default="true" type="button">All</button>
+          <button class="filter-segment-button" data-type="external" type="button">Cheat Menu</button>
+          <button class="filter-segment-button" data-type="executor" type="button">Executor</button>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Capabilities
+        </h3>
+        <div class="filter-checkbox-list">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterMultiInstance">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Multi-instance</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterDecompiler">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Decompiler</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterKernel">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Kernel</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterHighSunc">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">High sUNC</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Show only
+        </h3>
+        <div class="filter-checkbox-list">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterVerified">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Verified</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterPremium">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Premium</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterUpdated">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Updated</span>
+          </label>
+        </div>
+      </section>
+    </div>
+
+    <div class="filter-drawer-footer">
+      <button id="resetFilters" class="filter-reset-button" type="button">Reset</button>
+      <button id="applyFilters" class="filter-apply-button" type="button">Apply Filters</button>
+    </div>
+  </div>
+</div>

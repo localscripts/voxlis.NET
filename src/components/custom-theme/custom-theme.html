@@ -1,0 +1,97 @@
+<div class="custom-theme-control" id="customThemeControl">
+  <button
+    class="custom-theme-trigger"
+    id="customThemeTrigger"
+    type="button"
+    aria-label="Open custom theme modal"
+    aria-controls="customThemeModal"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+  >
+    <i class="fas fa-plus" aria-hidden="true"></i>
+  </button>
+
+  <div
+    class="custom-theme-modal"
+    id="customThemeModal"
+    hidden
+  >
+    <div
+      class="custom-theme-popover promo-card"
+      id="customThemePopover"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Custom theme"
+    >
+      <div class="custom-theme-gradient" aria-hidden="true"></div>
+      <div class="custom-theme-glow" aria-hidden="true"></div>
+      <div class="custom-theme-content">
+        <div class="custom-theme-content-row">
+          <div class="custom-theme-accent-bar" aria-hidden="true"></div>
+          <div class="custom-theme-main">
+            <div class="custom-theme-head">
+              <div class="custom-theme-heading">
+                <div class="custom-theme-eyebrow">Custom Theme</div>
+                <div class="custom-theme-title">Theme Share</div>
+                <p class="custom-theme-description">Name it, set a 128x128 icon, then copy, paste, or send.</p>
+              </div>
+              <button class="custom-theme-close" id="customThemeClose" type="button" aria-label="Close custom theme modal">
+                <i class="fas fa-xmark" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="custom-theme-meta">
+          <label class="custom-theme-field">
+            <span class="custom-theme-field-label">Theme Name</span>
+            <input
+              class="custom-theme-name-input"
+              id="customThemeNameInput"
+              type="text"
+              maxlength="48"
+              placeholder="My Theme"
+              autocomplete="off"
+            />
+          </label>
+          <div class="custom-theme-icon-panel">
+            <div class="custom-theme-field-label">Icon</div>
+            <button class="custom-theme-icon-button" id="customThemeIconButton" type="button" aria-label="Choose theme icon">
+              <span class="custom-theme-icon-frame">
+                <img class="custom-theme-icon-image" id="customThemeIconImage" alt="" hidden />
+                <span class="custom-theme-icon-placeholder" id="customThemeIconPlaceholder" aria-hidden="true">
+                  <i class="fas fa-palette"></i>
+                </span>
+              </span>
+              <span class="custom-theme-icon-meta">
+                <span class="custom-theme-icon-title">128 x 128</span>
+                <span class="custom-theme-icon-subtitle">PNG, JPG, WEBP, SVG</span>
+              </span>
+            </button>
+            <input class="custom-theme-icon-input" id="customThemeIconInput" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden />
+          </div>
+        </div>
+        <p class="custom-theme-error" id="customThemeError" hidden></p>
+        <div class="custom-theme-actions">
+          <button class="custom-theme-btn is-secondary" id="customThemePaste" type="button">
+            <span class="custom-theme-btn-icon" aria-hidden="true">
+              <i class="fas fa-paste"></i>
+            </span>
+            <span class="custom-theme-btn-label">Paste</span>
+          </button>
+          <button class="custom-theme-btn is-primary" id="customThemeCopy" type="button">
+            <span class="custom-theme-btn-icon" aria-hidden="true">
+              <i class="fas fa-copy"></i>
+            </span>
+            <span class="custom-theme-btn-label">Copy</span>
+          </button>
+          <button class="custom-theme-btn is-primary" id="customThemeSend" type="button">
+            <span class="custom-theme-btn-icon" aria-hidden="true">
+              <i class="fas fa-paper-plane"></i>
+            </span>
+            <span class="custom-theme-btn-label">Send</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
