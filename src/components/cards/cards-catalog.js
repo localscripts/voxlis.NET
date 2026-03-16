@@ -3,6 +3,7 @@
   const API_BASE_URL = "https://api.voxlis.net/api";
   const STATUS_API_URL = `${API_BASE_URL}/endpoints`;
   const SUNC_API_URL = `${API_BASE_URL}/sunc`;
+  const WARNING_MODAL_ENABLED = false;
   const CARD_NAME_OVERRIDES = {
     arceusx: "Arceus X",
     sirhurt: "SirHurt",
@@ -133,40 +134,56 @@
     return "";
   };
 
-  const formatPriceSummary = (offers) => {
-    if (!offers.length) return "Price unavailable";
+  const formatOfferSummary = (offer = {}) => {
+    const priceLabel = formatCurrency(offer.price, offer.currency);
+    const durationLabel = formatDuration(offer.days);
+    return durationLabel ? `${priceLabel} ${durationLabel}` : priceLabel;
+  };
+
+  const formatFromOfferSummary = (offer = {}) => {
+    const priceLabel = formatCurrency(offer.price, offer.currency);
+    if (offer.days === 1) {
+      return `From ${priceLabel} for 1 day`;
+    }
+
+    if (Number.isFinite(offer.days) && offer.days > 1) {
+      return `From ${priceLabel} for ${offer.days} days`;
+    }
+
+    const durationLabel = formatDuration(offer.days);
+    return durationLabel ? `From ${priceLabel} ${durationLabel}` : `From ${priceLabel}`;
+  };
+
+  const formatPriceSummary = (offers = []) => {
+    if (!Array.isArray(offers) || !offers.length) {
+      return "";
+    }
 
     const validOffers = offers
       .filter((offer) => Number.isFinite(Number(offer.price)))
       .map((offer) => ({ ...offer, price: Number(offer.price) }))
       .sort((left, right) => left.price - right.price || left.days - right.days);
 
-    if (!validOffers.length) return "Price unavailable";
+    if (!validOffers.length) {
+      return "";
+    }
 
     const freeOffer = validOffers.find((offer) => offer.price === 0);
     if (freeOffer) {
       const paidOffer = validOffers.find((offer) => offer.price > 0);
-      if (!paidOffer) return "FREE";
+      if (!paidOffer) {
+        return "FREE";
+      }
 
-      const duration = formatDuration(paidOffer.days);
-      return `FREE or from ${formatCurrency(paidOffer.price, paidOffer.currency)}${duration ? ` | ${duration}` : ""}`;
+      return formatFromOfferSummary(paidOffer).replace(/^From /, "FREE or from ");
     }
 
     const lowestOffer = validOffers[0];
-    const duration = formatDuration(lowestOffer.days);
-    const summary = `${formatCurrency(lowestOffer.price, lowestOffer.currency)}${duration ? ` | ${duration}` : ""}`;
-    return validOffers.length === 1 ? summary : `From ${summary}`;
-  };
-
-  const isKeyEmpirePurchaseUrl = (purchaseUrl = "") => /key-empire\.com/i.test(purchaseUrl);
-
-  const buildPriceMarkup = (offers, purchaseUrl = "") => {
-    const summary = formatPriceSummary(offers);
-    if (!isKeyEmpirePurchaseUrl(purchaseUrl) || summary === "Price unavailable") {
-      return escapeHtml(summary);
+    if (validOffers.length > 1) {
+      return formatFromOfferSummary(lowestOffer);
     }
 
-    return `${escapeHtml(summary)} on <strong class="ph-price-source">Key-Empire.com!</strong>`;
+    return formatOfferSummary(lowestOffer);
   };
 
   const getPrimarySuncSource = (info = {}) => {
@@ -289,14 +306,17 @@
   const buildSummaryLines = (card) => {
     const lines = [];
     const explicitGood = normalizeLineText(card.points?.pro_summary);
-    const explicitWarn = normalizeLineText(card.points?.con_summary || card.points?.neutral_summary);
+    const explicitNeutral = normalizeLineText(card.points?.neutral_summary);
+    const explicitCon = normalizeLineText(card.points?.con_summary);
 
     if (explicitGood) {
       lines.push({ className: "good", text: explicitGood });
     }
 
-    if (explicitWarn) {
-      lines.push({ className: "warn", text: explicitWarn });
+    if (explicitCon) {
+      lines.push({ className: "bad", text: explicitCon });
+    } else if (explicitNeutral) {
+      lines.push({ className: "warn", text: explicitNeutral });
     }
 
     return lines;
@@ -402,23 +422,40 @@
     return icons.length ? ` ${icons.join(" ")}` : "";
   };
 
-  const buildPlatformText = (info) =>
-    [...(info.platforms ?? [])]
-      .map((platform) => PLATFORM_LABELS[platform] ?? titleCase(platform))
-      .filter(Boolean)
-      .join(" + ");
+  const buildPlatformText = (info) => {
+    const platforms = Array.isArray(info.platforms)
+      ? [...new Set(info.platforms.filter(Boolean))]
+      : [];
+    const hasAndroid = platforms.includes("android");
+    const hasIos = platforms.includes("ios");
+    const collapseMobile = hasAndroid && hasIos;
+    const labels = [];
+    let mobileAdded = false;
+
+    platforms.forEach((platform) => {
+      if (collapseMobile && (platform === "ios" || platform === "android")) {
+        if (!mobileAdded) {
+          labels.push("Mobile");
+          mobileAdded = true;
+        }
+        return;
+      }
+
+      labels.push(PLATFORM_LABELS[platform] ?? titleCase(platform));
+    });
+
+    return labels.filter(Boolean).join(" + ");
+  };
 
   const buildTypeText = (info) => TYPE_LABELS[info.type] ?? "";
 
   const buildMetaText = (info) => {
-    const platformLabels = [...(info.platforms ?? [])]
-      .map((platform) => PLATFORM_LABELS[platform] ?? titleCase(platform))
-      .filter(Boolean);
+    const platformLabel = buildPlatformText(info);
     const typeLabel = buildTypeText(info);
     const fragments = [];
 
-    if (platformLabels.length) {
-      fragments.push(platformLabels.join(" + "));
+    if (platformLabel) {
+      fragments.push(platformLabel);
     }
     if (typeLabel) {
       fragments.push(typeLabel);
@@ -447,7 +484,7 @@
             };
 
             return buildInfoIconButton({
-              buttonClass: "ph-meta-tag-btn",
+              buttonClass: `ph-meta-tag-btn${tag === "kernel" ? " is-kernel-tag" : ""}`,
               iconClass: tagMeta.icon,
               title: tagMeta.label,
               message: tagMeta.message || `${tagMeta.label} is supported by this product.`,
@@ -463,6 +500,7 @@
     const platformText = buildPlatformText(card.info);
     const typeText = buildTypeText(card.info);
     const tagMarkup = buildTagChipMarkup(card.info.tags);
+    const priceSummary = formatPriceSummary(card.offers);
     const textLabel =
       platformText && !tagMarkup && typeText
         ? `${platformText} | ${typeText}`
@@ -470,10 +508,13 @@
 
     return `
       <p class="ph-title-meta">
-        ${buildPlatformIconMarkup(card, statusMap)}
-        ${textLabel ? `<span class="ph-title-meta-text">${escapeHtml(textLabel)}</span>` : ""}
-        ${textLabel && tagMarkup ? '<span class="ph-title-meta-sep" aria-hidden="true">|</span>' : ""}
-        ${tagMarkup}
+        <span class="ph-title-meta-main">
+          ${buildPlatformIconMarkup(card, statusMap)}
+          ${textLabel ? `<span class="ph-title-meta-text">${escapeHtml(textLabel)}</span>` : ""}
+          ${textLabel && tagMarkup ? '<span class="ph-title-meta-sep" aria-hidden="true">|</span>' : ""}
+          ${tagMarkup}
+        </span>
+        ${priceSummary ? `<span class="ph-title-price">${escapeHtml(priceSummary)}</span>` : ""}
       </p>
     `;
   };
@@ -516,20 +557,17 @@
   };
 
   const buildReviewDescription = (card, summaryLines = []) => {
-    const tags = Array.isArray(card.info.tags)
-      ? card.info.tags.map((tag) => normalizeLineText(tag)).filter(Boolean)
-      : [];
-
-    if (tags.length) {
-      return `"tags": ${JSON.stringify(tags)}`;
-    }
-
-    return summaryLines[0]?.text || buildMetaText(card.info) || "Additional information";
+    return summaryLines[0]?.text || "";
   };
 
   const buildRatingMarkup = (info, suncSummary) => {
     if (info.type === "external") {
-      return "";
+      return `
+        <div class="ph-rating ph-rating-external" aria-label="External">
+          <span class="ph-rating-external-main">External</span>
+          <span class="ph-rating-external-sub">Menu</span>
+        </div>
+      `;
     }
 
     const tracked = hasSuncTracking(info);
@@ -558,30 +596,30 @@
   }) => {
     const websiteHref = websiteUrl || purchaseUrl || "#";
     const warningAttributes =
-      warningConfig && websiteHref !== "#"
+      WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
         ? ` data-card-warning-slug="${escapeHtml(slug)}"`
         : "";
     const hasFreeOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) === 0);
     const hasPaidOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) > 0);
     const sponsorMarkup = /key-empire\.com/i.test(purchaseUrl ?? "")
       ? `
-        <a class="ph-sponsor-btn" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire"${warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
+        <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
           <span class="ph-sponsor-stack" aria-hidden="true">
             <img class="ph-sponsor-base-image" src="/public/assets/logo/keyempire-text.png" alt="">
             <span class="ph-sponsor-overlay-image"></span>
           </span>
         </a>
       `
-      : hasPaidOffer
+      : hasFreeOffer
         ? `
           <div class="ph-sponsor-btn ph-sponsor-note" role="note">
-            This product is not on Key-Empire
+            This product is free to use
           </div>
         `
-        : hasFreeOffer
+        : hasPaidOffer
           ? `
             <div class="ph-sponsor-btn ph-sponsor-note" role="note">
-              This product is free to use
+              This product is not on Key-Empire
             </div>
           `
           : "";
@@ -641,6 +679,10 @@
   };
 
   const handleWarningActionClick = (event) => {
+    if (!WARNING_MODAL_ENABLED) {
+      return;
+    }
+
     const trigger = event.target.closest("a[data-card-warning-slug]");
     if (!trigger) {
       return;
@@ -947,7 +989,6 @@
         </div>
         ${lineMarkup}
         ${buildCardMetaMarkup(card, statusMap)}
-        <p class="ph-price">${buildPriceMarkup(card.offers, card.pricing.purchase_url)}</p>
         ${buildActionMarkup({
           slug: card.slug,
           title: card.title,

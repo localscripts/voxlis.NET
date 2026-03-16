@@ -223,8 +223,7 @@
     const modalTitle = exploitName.endsWith(" Information")
       ? exploitName
       : `${exploitName} Information`;
-    const modalDescription =
-      String(description).trim() || "Additional product information.";
+    const modalDescription = String(description).trim();
     const requestToken = modalState.requestToken + 1;
 
     window.clearTimeout(modalState.closeTimerId);
@@ -236,6 +235,7 @@
     titleNode.textContent = modalTitle;
     nameNode.textContent = exploitName.replace(/\s+Information$/, "");
     descriptionNode.textContent = modalDescription;
+    descriptionNode.hidden = !modalDescription;
     markdownNode.innerHTML = LOADING_MARKUP;
     contentNode.scrollTop = 0;
 

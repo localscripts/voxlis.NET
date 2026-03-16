@@ -96,7 +96,7 @@
 .info-modal-exploit-name {
   font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   background: var(--prim-grd);
   -webkit-background-clip: text;
   background-clip: text;
@@ -108,12 +108,17 @@
   color: rgba(209, 213, 219, 1);
 }
 
+.info-modal-exploit-desc[hidden] {
+  display: none;
+}
+
 .info-modal-markdown {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 0.5rem;
   padding: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.05);
   color: rgba(209, 213, 219, 1);
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
@@ -302,4 +307,63 @@
 
 .info-modal-markdown pre::-webkit-scrollbar {
   height: 0.34rem;
+}
+
+@media (max-width: 640px) {
+  .info-modal-header {
+    padding: 1rem 1.1rem;
+  }
+
+  .info-modal-title {
+    font-size: 1.05rem;
+  }
+
+  .info-modal-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .info-modal-exploit-info {
+    gap: 0.35rem;
+    padding: 0.85rem;
+  }
+
+  .info-modal-exploit-name {
+    font-size: 1.18rem;
+  }
+
+  .info-modal-exploit-desc {
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+
+  .info-modal-markdown {
+    padding: 1rem;
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+
+  .info-modal-markdown h1 {
+    font-size: 1.2rem;
+  }
+
+  .info-modal-markdown h2 {
+    font-size: 1.06rem;
+  }
+
+  .info-modal-markdown h3 {
+    font-size: 0.96rem;
+  }
+
+  .info-modal-markdown code {
+    font-size: 0.8rem;
+  }
+
+  .info-modal-footer {
+    padding: 0.9rem 1rem;
+  }
+
+  .info-modal-close-btn {
+    font-size: 0.82rem;
+  }
 }
