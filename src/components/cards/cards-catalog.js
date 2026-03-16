@@ -21,6 +21,33 @@
     android: "fab fa-android",
     ios: "fab fa-apple",
   };
+  const TAG_METADATA = {
+    decompiler: {
+      icon: "fas fa-code",
+      label: "Decompiler",
+      message: "This product includes decompiler functionality.",
+    },
+    kernel: {
+      icon: "fas fa-microchip",
+      label: "Kernel",
+      message: "This product runs on kernel-level (Expect BSOD)",
+    },
+    ai: {
+      icon: "fas fa-robot",
+      label: "AI",
+      message: "This product includes AI-related features.",
+    },
+    "supports-vng": {
+      icon: "fas fa-globe",
+      label: "Supports VNG",
+      message: "This product supports VNG. (Vietnam client)",
+    },
+    "multi-instance": {
+      icon: "fas fa-layer-group",
+      label: "Multi-instance",
+      message: "This product supports running multiple instances at once.",
+    },
+  };
   const TYPE_LABELS = {
     internal: "Executor",
     external: "Cheat Menu",
@@ -33,7 +60,6 @@
     "'": "&#39;",
   };
   const suncRequestCache = new Map();
-  const WARNING_MODAL_EXIT_MS = 320;
   const DEFAULT_FILTERS = {
     search: "",
     sort: "recommended",
@@ -55,11 +81,6 @@
     cards: [],
     statusMap: {},
     filters: { ...DEFAULT_FILTERS },
-  };
-  const warningModalState = {
-    closeTimerId: 0,
-    pendingAction: null,
-    previousBodyOverflow: "",
   };
 
   const escapeHtml = (value = "") =>
@@ -135,6 +156,17 @@
     const duration = formatDuration(lowestOffer.days);
     const summary = `${formatCurrency(lowestOffer.price, lowestOffer.currency)}${duration ? ` | ${duration}` : ""}`;
     return validOffers.length === 1 ? summary : `From ${summary}`;
+  };
+
+  const isKeyEmpirePurchaseUrl = (purchaseUrl = "") => /key-empire\.com/i.test(purchaseUrl);
+
+  const buildPriceMarkup = (offers, purchaseUrl = "") => {
+    const summary = formatPriceSummary(offers);
+    if (!isKeyEmpirePurchaseUrl(purchaseUrl) || summary === "Price unavailable") {
+      return escapeHtml(summary);
+    }
+
+    return `${escapeHtml(summary)} on <strong class="ph-price-source">Key-Empire.com!</strong>`;
   };
 
   const getPrimarySuncSource = (info = {}) => {
@@ -290,34 +322,99 @@
     return null;
   };
 
+  const buildInfoIconButton = ({
+    iconClass,
+    iconToneClass = "",
+    buttonClass = "ph-title-icon-btn",
+    title,
+    message,
+    toastIcon = "fa-circle-info",
+  }) =>
+    `
+      <button
+        class="${escapeHtml(buttonClass)}"
+        type="button"
+        aria-label="${escapeHtml(title)}"
+        title="${escapeHtml(title)}"
+        data-card-icon-title="${escapeHtml(title)}"
+        data-card-icon-message="${escapeHtml(message)}"
+        data-card-icon-toast-icon="${escapeHtml(toastIcon)}"
+      >
+        <i class="${escapeHtml(iconClass)}${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" aria-hidden="true"></i>
+      </button>
+    `;
+
   const buildTitleIcons = (info, modals) => {
     const icons = [];
     const warningConfig = getModalWarningConfig(modals);
 
     if (Array.isArray(info.badges) && info.badges.includes("verified")) {
-      icons.push('<i class="fas fa-circle-check ph-good-ico" aria-hidden="true"></i>');
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-circle-check",
+          iconToneClass: "ph-good-ico",
+          title: "Verified",
+          message: "This product has a documentaded and verified 'MOREINFO'",
+          toastIcon: "fa-circle-check",
+        }),
+      );
     }
 
     if (Array.isArray(info.badges) && info.badges.includes("trending")) {
-      icons.push('<i class="fas fa-arrow-trend-up" aria-hidden="true"></i>');
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-arrow-trend-up",
+          title: "Trending",
+          message: "This product is currently marked as trending on the catalog.",
+          toastIcon: "fa-arrow-trend-up",
+        }),
+      );
     }
 
     if (warningConfig?.variant === "warningred") {
-      icons.push('<i class="fas fa-triangle-exclamation ph-warn-red-ico" aria-hidden="true"></i>');
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-triangle-exclamation",
+          iconToneClass: "ph-warn-red-ico",
+          title: "High-Risk Warning",
+          message:
+            warningConfig.description ||
+            "This product has a high-risk warning on voxlis.NET.",
+          toastIcon: "fa-triangle-exclamation",
+        }),
+      );
     }
 
     if (warningConfig?.variant === "warning") {
-      icons.push('<i class="fas fa-triangle-exclamation ph-warn-ico" aria-hidden="true"></i>');
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-triangle-exclamation",
+          iconToneClass: "ph-warn-ico",
+          title: "Warning",
+          message:
+            warningConfig.description ||
+            "voxlis.NET recommends reading more about this product before continuing.",
+          toastIcon: "fa-triangle-exclamation",
+        }),
+      );
     }
 
     return icons.length ? ` ${icons.join(" ")}` : "";
   };
 
+  const buildPlatformText = (info) =>
+    [...(info.platforms ?? [])]
+      .map((platform) => PLATFORM_LABELS[platform] ?? titleCase(platform))
+      .filter(Boolean)
+      .join(" + ");
+
+  const buildTypeText = (info) => TYPE_LABELS[info.type] ?? "";
+
   const buildMetaText = (info) => {
     const platformLabels = [...(info.platforms ?? [])]
       .map((platform) => PLATFORM_LABELS[platform] ?? titleCase(platform))
       .filter(Boolean);
-    const typeLabel = TYPE_LABELS[info.type];
+    const typeLabel = buildTypeText(info);
     const fragments = [];
 
     if (platformLabels.length) {
@@ -328,6 +425,106 @@
     }
 
     return fragments.join(" | ");
+  };
+
+  const buildTagChipMarkup = (tags = []) => {
+    const normalizedTags = Array.isArray(tags)
+      ? tags.map((tag) => normalizeLineText(tag)).filter(Boolean)
+      : [];
+
+    if (!normalizedTags.length) {
+      return "";
+    }
+
+    return `
+      <span class="ph-title-tags" aria-label="Feature tags">
+        ${normalizedTags
+          .map((tag) => {
+            const tagMeta = TAG_METADATA[tag] ?? {
+              icon: "fas fa-tag",
+              label: titleCase(tag),
+              message: `${titleCase(tag)} is supported by this product.`,
+            };
+
+            return buildInfoIconButton({
+              buttonClass: "ph-meta-tag-btn",
+              iconClass: tagMeta.icon,
+              title: tagMeta.label,
+              message: tagMeta.message || `${tagMeta.label} is supported by this product.`,
+              toastIcon: "fa-circle-info",
+            });
+          })
+          .join("")}
+      </span>
+    `;
+  };
+
+  const buildCardMetaMarkup = (card, statusMap) => {
+    const platformText = buildPlatformText(card.info);
+    const typeText = buildTypeText(card.info);
+    const tagMarkup = buildTagChipMarkup(card.info.tags);
+    const textLabel =
+      platformText && !tagMarkup && typeText
+        ? `${platformText} | ${typeText}`
+        : platformText || typeText;
+
+    return `
+      <p class="ph-title-meta">
+        ${buildPlatformIconMarkup(card, statusMap)}
+        ${textLabel ? `<span class="ph-title-meta-text">${escapeHtml(textLabel)}</span>` : ""}
+        ${textLabel && tagMarkup ? '<span class="ph-title-meta-sep" aria-hidden="true">|</span>' : ""}
+        ${tagMarkup}
+      </p>
+    `;
+  };
+
+  const getPlatformStateClass = (card, statusMap, platform) => {
+    const platformState = statusMap[card.slug]?.[platform];
+    if (platformState === true) {
+      return "is-updated";
+    }
+
+    if (platformState === false) {
+      return "is-not-updated";
+    }
+
+    return "is-status-unknown";
+  };
+
+  const buildPlatformIconMarkup = (card, statusMap) => {
+    const platforms = Array.isArray(card.info.platforms) ? card.info.platforms.filter(Boolean) : [];
+    if (!platforms.length) {
+      return `
+        <span class="ph-platform-icons" aria-hidden="true">
+          <i class="fas fa-microchip ph-title-meta-ico is-status-unknown"></i>
+        </span>
+      `;
+    }
+
+    return `
+      <span class="ph-platform-icons" aria-hidden="true">
+        ${platforms
+          .map((platform) => {
+            const iconClass = PLATFORM_ICONS[platform] ?? "fas fa-microchip";
+            const statusClass = getPlatformStateClass(card, statusMap, platform);
+            const label = PLATFORM_LABELS[platform] ?? titleCase(platform);
+            return `<i class="${escapeHtml(iconClass)} ph-title-meta-ico ${statusClass}" title="${escapeHtml(label)}"></i>`;
+          })
+          .join("")}
+      </span>
+    `;
+  };
+
+  const buildReviewDescription = (card, summaryLines = []) => {
+    const tags = Array.isArray(card.info.tags)
+      ? card.info.tags.map((tag) => normalizeLineText(tag)).filter(Boolean)
+      : [];
+
+    if (tags.length) {
+      return `"tags": ${JSON.stringify(tags)}`;
+    }
+
+    return summaryLines[0]?.text || buildMetaText(card.info) || "Additional information";
   };
 
   const buildRatingMarkup = (info, suncSummary) => {
@@ -349,7 +546,16 @@
     `;
   };
 
-  const buildActionMarkup = ({ slug, reviewUrl, websiteUrl, purchaseUrl, offers, warningConfig }) => {
+  const buildActionMarkup = ({
+    slug,
+    title,
+    reviewUrl,
+    reviewDescription,
+    websiteUrl,
+    purchaseUrl,
+    offers,
+    warningConfig,
+  }) => {
     const websiteHref = websiteUrl || purchaseUrl || "#";
     const warningAttributes =
       warningConfig && websiteHref !== "#"
@@ -386,7 +592,7 @@
           <a class="ph-action-btn" href="${escapeHtml(websiteHref)}" target="_blank" rel="noopener noreferrer"${warningAttributes}>
             <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Website
           </a>
-          <a class="ph-action-btn is-more" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer">
+          <a class="ph-action-btn is-more" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}">
             MORE <i class="fas fa-circle-info" aria-hidden="true"></i>
           </a>
         </div>
@@ -395,127 +601,42 @@
     `;
   };
 
-  const ensureWarningModal = () => {
-    let modal = document.getElementById("cardWarningModal");
-    if (modal) {
-      return modal;
+  const handleMoreInfoActionClick = (event) => {
+    const trigger = event.target.closest("a[data-card-review-url]");
+    if (!trigger) {
+      return;
     }
 
-    modal = document.createElement("div");
-    modal.className = "card-warning-modal";
-    modal.id = "cardWarningModal";
-    modal.hidden = true;
-    modal.innerHTML = `
-      <div class="card-warning-dialog" role="dialog" aria-modal="true" aria-labelledby="cardWarningTitle" aria-describedby="cardWarningDescription">
-        <div class="card-warning-head">
-          <div class="card-warning-icon" aria-hidden="true">
-            <i class="fas fa-triangle-exclamation"></i>
-          </div>
-          <div class="card-warning-copy">
-            <p class="card-warning-title" id="cardWarningTitle">Warning</p>
-            <p class="card-warning-description" id="cardWarningDescription"></p>
-          </div>
-        </div>
-        <div class="card-warning-actions">
-          <button class="card-warning-btn is-primary" type="button" data-card-warning-continue>
-            <span class="card-warning-btn-label">Press to continue</span>
-          </button>
-          <button class="card-warning-btn is-secondary" type="button" data-card-warning-close>Close</button>
-        </div>
-      </div>
-    `;
+    event.preventDefault();
+    const reviewUrl = trigger.dataset.cardReviewUrl || trigger.getAttribute("href") || "";
+    const title = trigger.dataset.cardReviewTitle || "More info";
+    const description = trigger.dataset.cardReviewDescription || "";
+    const opened = window.openMoreInfoModal?.({ title, description, reviewUrl }) ?? false;
 
-    modal.addEventListener("click", (event) => {
-      if (
-        event.target === modal ||
-        event.target.closest("[data-card-warning-close]")
-      ) {
-        closeWarningModal();
-      }
-    });
+    if (opened || !trigger.href) {
+      return;
+    }
 
-    const continueButton = modal.querySelector("[data-card-warning-continue]");
-    continueButton?.addEventListener("click", continueWarningModalAction);
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !modal.hidden) {
-        closeWarningModal();
-      }
-    });
-
-    document.body.appendChild(modal);
-    return modal;
+    window.open(trigger.href, trigger.getAttribute("target") || "_blank", "noopener");
   };
 
-  const completeWarningModalClose = () => {
-    const modal = document.getElementById("cardWarningModal");
-    if (!modal) return;
-
-    modal.hidden = true;
-    modal.classList.remove("is-open", "is-closing", "is-warning", "is-warningred");
-    warningModalState.pendingAction = null;
-    document.body.style.overflow = warningModalState.previousBodyOverflow;
-    warningModalState.previousBodyOverflow = "";
-    warningModalState.closeTimerId = 0;
-  };
-
-  function closeWarningModal() {
-    const modal = document.getElementById("cardWarningModal");
-    if (!modal || modal.hidden || modal.classList.contains("is-closing")) {
+  const handleTitleIconClick = (event) => {
+    const trigger = event.target.closest("button[data-card-icon-message]");
+    if (!trigger) {
       return;
     }
 
-    modal.classList.remove("is-open");
-    modal.classList.add("is-closing");
-    window.clearTimeout(warningModalState.closeTimerId);
-    warningModalState.closeTimerId = window.setTimeout(
-      completeWarningModalClose,
-      WARNING_MODAL_EXIT_MS,
-    );
-  }
+    event.preventDefault();
+    event.stopPropagation();
 
-  function continueWarningModalAction() {
-    const action = warningModalState.pendingAction;
-    closeWarningModal();
-
-    if (!action?.href) {
-      return;
-    }
-
-    if (action.target === "_blank") {
-      window.open(action.href, "_blank", "noopener");
-      return;
-    }
-
-    window.location.assign(action.href);
-  }
-
-  const openWarningModal = (warningConfig, action) => {
-    if (!warningConfig?.description || !action?.href) {
-      return;
-    }
-
-    const modal = ensureWarningModal();
-    const titleNode = modal.querySelector("#cardWarningTitle");
-    const descriptionNode = modal.querySelector("#cardWarningDescription");
-    const continueButton = modal.querySelector("[data-card-warning-continue]");
-
-    window.clearTimeout(warningModalState.closeTimerId);
-    warningModalState.pendingAction = action;
-    if (modal.hidden) {
-      warningModalState.previousBodyOverflow = document.body.style.overflow;
-    }
-    document.body.style.overflow = "hidden";
-
-    titleNode.textContent = warningConfig.title || "Warning";
-    descriptionNode.textContent = warningConfig.description;
-
-    modal.hidden = false;
-    modal.classList.remove("is-closing", "is-warning", "is-warningred");
-    modal.classList.add("is-open", warningConfig.variant === "warningred" ? "is-warningred" : "is-warning");
-
-    window.requestAnimationFrame(() => {
-      continueButton?.focus();
+    const title = trigger.dataset.cardIconTitle || "Notice";
+    const message = trigger.dataset.cardIconMessage || "";
+    window.showSiteToast?.({
+      key: `card-icon-info:${title}:${message}`,
+      title,
+      message,
+      duration: 3000,
+      icon: trigger.dataset.cardIconToastIcon || "fa-circle-info",
     });
   };
 
@@ -534,10 +655,36 @@
     }
 
     event.preventDefault();
-    openWarningModal(warningConfig, {
+    const action = {
       href: trigger.href,
       target: trigger.getAttribute("target") || "",
-    });
+    };
+    const opened = window.openCardWarningModal?.(warningConfig, action) ?? false;
+
+    if (opened) {
+      return;
+    }
+
+    if (action.target === "_blank") {
+      window.open(action.href, "_blank", "noopener");
+      return;
+    }
+
+    window.location.assign(action.href);
+  };
+
+  const handleCardActionClick = (event) => {
+    handleTitleIconClick(event);
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    handleMoreInfoActionClick(event);
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    handleWarningActionClick(event);
   };
 
   const normalizeStatusPayload = (payload) => {
@@ -624,21 +771,12 @@
     return "is-not-updated";
   };
 
-  const getStatusSortRank = (statusClass) => {
-    if (statusClass === "is-updated") return 0;
-    if (statusClass === "is-not-updated") return 1;
-    return 2;
-  };
-
-  const compareRecommended = (left, right, statusMap) => {
-    const leftStatus = getCardStatusClass(left, statusMap);
-    const rightStatus = getCardStatusClass(right, statusMap);
-    const statusRank = getStatusSortRank(leftStatus) - getStatusSortRank(rightStatus);
-
-    if (statusRank !== 0) return statusRank;
-
+  const compareRecommended = (left, right) => {
     const trendingRank = Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left));
     if (trendingRank !== 0) return trendingRank;
+
+    const randomRank = (left.randomSortKey ?? 0) - (right.randomSortKey ?? 0);
+    if (randomRank !== 0) return randomRank;
 
     return (left.catalogIndex ?? 0) - (right.catalogIndex ?? 0);
   };
@@ -742,7 +880,7 @@
           Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left)) ||
           Number(hasVerifiedBadge(right)) - Number(hasVerifiedBadge(left));
         if (popularityRank !== 0) return popularityRank;
-        return compareRecommended(left, right, statusMap);
+        return compareRecommended(left, right);
       }
 
       if (sort === "least-popular") {
@@ -750,7 +888,7 @@
           Number(hasTrendingBadge(left)) - Number(hasTrendingBadge(right)) ||
           Number(hasVerifiedBadge(left)) - Number(hasVerifiedBadge(right));
         if (popularityRank !== 0) return popularityRank;
-        return compareRecommended(left, right, statusMap);
+        return compareRecommended(left, right);
       }
 
       if (sort === "price-asc") {
@@ -771,14 +909,13 @@
         return left.title.localeCompare(right.title);
       }
 
-      return compareRecommended(left, right, statusMap);
+      return compareRecommended(left, right);
     });
 
   const renderCard = (card, statusMap) => {
     const reviewUrl = `${DATA_ROOT}/${encodeURIComponent(card.folderName)}/review.md`;
-    const primaryPlatform = card.info.platforms?.[0];
-    const platformIcon = PLATFORM_ICONS[primaryPlatform] ?? "fas fa-microchip";
     const summaryLines = buildSummaryLines(card);
+    const reviewDescription = buildReviewDescription(card, summaryLines);
     const warningConfig = getModalWarningConfig(card.modals);
     const lineMarkup = summaryLines.length
       ? `
@@ -809,14 +946,13 @@
           ${buildRatingMarkup(card.info, card.suncSummary)}
         </div>
         ${lineMarkup}
-        <p class="ph-title-meta">
-          <i class="${escapeHtml(platformIcon)} ph-title-meta-ico" aria-hidden="true"></i>
-          ${escapeHtml(buildMetaText(card.info))}
-        </p>
-        <p class="ph-price">${escapeHtml(formatPriceSummary(card.offers))}</p>
+        ${buildCardMetaMarkup(card, statusMap)}
+        <p class="ph-price">${buildPriceMarkup(card.offers, card.pricing.purchase_url)}</p>
         ${buildActionMarkup({
           slug: card.slug,
+          title: card.title,
           reviewUrl,
+          reviewDescription,
           websiteUrl: card.info.website,
           purchaseUrl: card.pricing.purchase_url,
           offers: card.offers,
@@ -915,6 +1051,7 @@
             points: points ?? {},
             modals,
             offers,
+            randomSortKey: Math.random(),
             hasFreeOffer,
             hasPaidOffer,
             minPaidPrice: paidPrices.length ? Math.min(...paidPrices) : Number.POSITIVE_INFINITY,
@@ -947,9 +1084,9 @@
     const grid = mount.querySelector(".cards-grid");
     if (!grid) return;
 
-    if (mount.dataset.warningModalBound !== "true") {
-      mount.addEventListener("click", handleWarningActionClick);
-      mount.dataset.warningModalBound = "true";
+    if (mount.dataset.cardActionBound !== "true") {
+      mount.addEventListener("click", handleCardActionClick);
+      mount.dataset.cardActionBound = "true";
     }
 
     try {
