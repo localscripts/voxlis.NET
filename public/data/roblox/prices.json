@@ -540,6 +540,12 @@
 		"platforms": {
 			"android": [
 				{
+					"id": "vegax-2d-free",
+					"days": 2,
+					"price": 0,
+					"currency": null
+				},
+				{
 					"id": "vegax-30d",
 					"days": 30,
 					"price": 4.99,
@@ -590,7 +596,7 @@
 	},
 
 	"severe": {
-		"purchase_url": "https://discord.gg/4QmWjQCgzV",
+		"purchase_url": "https://key-empire.com/product/severe",
 		"platforms": {
 			"windows": [
 				{

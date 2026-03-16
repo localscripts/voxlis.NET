@@ -1,7 +1,7 @@
 {
 	"sunc": {},
 	"badges": [],
-	"hidden": false,
+	"hidden": true,
 	"type": "internal",
 	"tags": ["supports-vng"],
 	"platforms": ["ios", "android"],
