@@ -186,6 +186,34 @@
     return formatOfferSummary(lowestOffer);
   };
 
+  const formatSponsorPriceSummary = (offers = []) => {
+    if (!Array.isArray(offers) || !offers.length) {
+      return "";
+    }
+
+    const validOffers = offers
+      .filter((offer) => Number.isFinite(Number(offer.price)))
+      .map((offer) => ({ ...offer, price: Number(offer.price) }))
+      .sort((left, right) => left.price - right.price || left.days - right.days);
+
+    if (!validOffers.length) {
+      return "";
+    }
+
+    const freeOffer = validOffers.find((offer) => offer.price === 0);
+    const paidOffer = validOffers.find((offer) => offer.price > 0);
+
+    if (freeOffer && !paidOffer) {
+      return "FREE";
+    }
+
+    if (paidOffer) {
+      return `From ${formatCurrency(paidOffer.price, paidOffer.currency)}`;
+    }
+
+    return "";
+  };
+
   const getPrimarySuncSource = (info = {}) => {
     const suncEntries = info.sunc;
     if (!suncEntries || typeof suncEntries !== "object") {
@@ -601,12 +629,17 @@
         : "";
     const hasFreeOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) === 0);
     const hasPaidOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) > 0);
+    const sponsorPriceSummary = formatSponsorPriceSummary(offers);
     const sponsorMarkup = /key-empire\.com/i.test(purchaseUrl ?? "")
       ? `
         <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
-          <span class="ph-sponsor-stack" aria-hidden="true">
-            <img class="ph-sponsor-base-image" src="/public/assets/logo/keyempire-text.png" alt="">
-            <span class="ph-sponsor-overlay-image"></span>
+          <span class="ph-sponsor-inline">
+            <span class="ph-sponsor-copy">Buy on</span>
+            <span class="ph-sponsor-stack" aria-hidden="true">
+              <img class="ph-sponsor-base-image" src="/public/assets/logo/keyempire-text.png" alt="">
+              <span class="ph-sponsor-overlay-image"></span>
+            </span>
+            ${sponsorPriceSummary ? `<span class="ph-sponsor-price">${escapeHtml(sponsorPriceSummary)}</span>` : ""}
           </span>
         </a>
       `
