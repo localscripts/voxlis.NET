@@ -1,15 +1,13 @@
-**Potassium** is an executor for Windows.
+## Exploit Performance
 
-The developers operate under fresh accounts, and their identities remain unknown. However, the quality of their product suggests this is not their first time creating similar tools. They may be using new aliases to avoid exposing their primary identities in the event of any issues or malicious activity, although the exact reason for their anonymity remains unclear.
+- **Potassium** can be inconsistent—sometimes it runs smoothly, while other times it may cause **BSODs (Blue Screen of Death)** due to its kernel-level nature. User feedback is mixed: some find it reliable, while others report frequent issues. Overall, performance varies significantly on the device, but if you’re not concerned about the developers’ completely unknown background, it offers decent value.
 
-## What we like
+## Background Information
 
-- Has multi-instance support
-- Has a decompiler
-- High sUNC score
-- Works decently
+* **Potassium** launched in **February 2025** and initially suffered from major issues, including poor stability, downtime, and frequent detections. Due to limited communication from the developers, detailed information is scarce. However, detection issues appear to have been resolved over time, and stability seems to have improved by alot.
 
-## What could be better
+## Developer Background
 
-- Detection issues
-- Users have reported compatibility and stability issues
+* The developers operate under newly created accounts, and their identities remain unknown. Despite this anonymity, the quality of the product suggests prior experience with similar tools. They may be using new aliases to avoid exposing their main identities in case of issues or potential malicious intent, though the exact reason remains unclear.
+
+> Sources: [reddit.com/r/robloxhackers](https://reddit.com/r/robloxhackers) & [voxlis.NET](https://voxlis.net)
