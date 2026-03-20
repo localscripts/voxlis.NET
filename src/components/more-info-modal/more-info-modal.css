@@ -240,18 +240,19 @@
 
 .info-modal-footer {
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
+  gap: 0.75rem;
   padding: 16px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+.info-modal-website-btn,
 .info-modal-close-btn {
-  background-color: var(--prim);
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
+  width: 100%;
+  border-radius: var(--rad);
+  padding: 0.5rem 1rem;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -259,16 +260,31 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
   transition:
-    all var(--smooth-duration) var(--smooth-ease);
+    box-shadow var(--smooth-duration) var(--smooth-ease),
+    background var(--smooth-duration) var(--smooth-ease),
+    background-color var(--smooth-duration) var(--smooth-ease),
+    border-color var(--smooth-duration) var(--smooth-ease),
+    transform var(--smooth-duration) var(--smooth-ease);
 }
 
-.info-modal-close-btn:hover {
-  background-color: var(--prim-hvr);
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 5px 15px rgba(var(--prim-rgb), 0.3);
+.info-modal-website-btn {
+  color: var(--fg);
+  background: var(--navbar-button-accent-background, var(--prim-grd));
+  border: 1px solid var(--navbar-button-accent-border, var(--sec-hvr-bdr));
+  text-decoration: none;
 }
 
+.info-modal-close-btn {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.info-modal-website-btn:focus-visible,
 .info-modal-close-btn:focus-visible {
   outline: none;
   box-shadow:
@@ -363,6 +379,7 @@
     padding: 0.9rem 1rem;
   }
 
+  .info-modal-website-btn,
   .info-modal-close-btn {
     font-size: 0.82rem;
   }

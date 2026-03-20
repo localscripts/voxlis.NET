@@ -715,6 +715,10 @@
   gap: 0.6rem;
 }
 
+.ph-primary-actions.is-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .ph-action-btn,
 .ph-sponsor-btn {
   display: inline-flex;
@@ -741,8 +745,25 @@
   color: rgba(203, 213, 225, 0.8);
 }
 
+.ph-action-btn.is-review.is-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
 .ph-action-btn i {
   color: currentColor;
+}
+
+.ph-action-btn.is-review.is-disabled .ph-action-label {
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.ph-action-btn.is-review.is-disabled i {
+  color: rgba(148, 163, 184, 0.45) !important;
+}
+
+.ph-action-btn.has-youtube-indicator i {
+  color: var(--prim) !important;
 }
 
 .ph-sponsor-btn {

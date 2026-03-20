@@ -107,6 +107,78 @@
     throw new Error(`Failed to load JSON (${path}): ${response.status}`);
   };
 
+  const normalizeMetadataValue = (value = "") => {
+    const trimmedValue = String(value).trim();
+    if (!trimmedValue) {
+      return "";
+    }
+
+    const quotedValueMatch = trimmedValue.match(/^(['"])([\s\S]*)\1$/);
+    return (quotedValueMatch ? quotedValueMatch[2] : trimmedValue).trim();
+  };
+
+  const parseReviewDocument = (source = "") => {
+    if (typeof window.parseReviewDocument === "function") {
+      return window.parseReviewDocument(source);
+    }
+
+    const normalizedSource = String(source).replace(/^\uFEFF/, "");
+    const parseMetadataBlock = (metadataSource = "") => {
+      const youtubeMatch = String(metadataSource).match(/^\s*youtube\s*:\s*(.+)\s*$/im);
+      return {
+        youtube: youtubeMatch ? normalizeMetadataValue(youtubeMatch[1]) : "",
+      };
+    };
+
+    const frontmatterMatch = normalizedSource.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n)?/);
+    if (frontmatterMatch) {
+      return {
+        metadata: parseMetadataBlock(frontmatterMatch[1]),
+        body: normalizedSource.slice(frontmatterMatch[0].length).replace(/^\s+/, ""),
+      };
+    }
+
+    const inlineYoutubeMatch = normalizedSource.match(/^\s*youtube\s*:\s*(.+?)\s*(?:\r?\n){1,2}/i);
+    if (inlineYoutubeMatch) {
+      return {
+        metadata: {
+          youtube: normalizeMetadataValue(inlineYoutubeMatch[1]),
+        },
+        body: normalizedSource.slice(inlineYoutubeMatch[0].length).replace(/^\s+/, ""),
+      };
+    }
+
+    return {
+      metadata: {
+        youtube: "",
+      },
+      body: normalizedSource,
+    };
+  };
+
+  const loadReviewDocument = async (path, { optional = false } = {}) => {
+    const response = await fetch(path, { cache: "no-cache" });
+    if (optional && response.status === 404) {
+      return {
+        metadata: {
+          youtube: "",
+        },
+        body: "",
+        exists: false,
+      };
+    }
+
+    if (!response.ok) {
+      throw new Error(`Failed to load review (${path}): ${response.status}`);
+    }
+
+    const source = await response.text();
+    return {
+      ...parseReviewDocument(source),
+      exists: true,
+    };
+  };
+
   const flattenOffers = (pricing = {}) =>
     Object.entries(pricing.platforms ?? {}).flatMap(([platform, offers]) =>
       (offers ?? []).map((offer) => ({ ...offer, platform })),
@@ -617,15 +689,25 @@
     title,
     reviewUrl,
     reviewDescription,
+    youtubeUrl,
+    hasYoutubeIndicator,
     websiteUrl,
     purchaseUrl,
     offers,
     warningConfig,
   }) => {
+    const reviewHref = String(youtubeUrl || "").trim();
+    const reviewButtonAttributes = reviewHref
+      ? ` href="${escapeHtml(reviewHref)}" target="_blank" rel="noopener noreferrer"`
+      : ` aria-disabled="true" tabindex="-1"`;
     const websiteHref = websiteUrl || purchaseUrl || "#";
-    const warningAttributes =
+    const websiteDataAttributes =
+      websiteHref !== "#"
+        ? ` data-card-website-url="${escapeHtml(websiteHref)}"`
+        : "";
+    const websiteWarningDataAttributes =
       WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
-        ? ` data-card-warning-slug="${escapeHtml(slug)}"`
+        ? ` data-card-website-warning-type="${escapeHtml(warningConfig.type)}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
         : "";
     const hasFreeOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) === 0);
     const hasPaidOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) > 0);
@@ -660,10 +742,10 @@
     return `
       <div class="ph-actions">
         <div class="ph-primary-actions">
-          <a class="ph-action-btn" href="${escapeHtml(websiteHref)}" target="_blank" rel="noopener noreferrer"${warningAttributes}>
-            <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Website
+          <a class="ph-action-btn is-review${hasYoutubeIndicator ? " has-youtube-indicator" : " is-disabled"}"${reviewButtonAttributes}>
+            <i class="fab fa-youtube" aria-hidden="true"></i> <span class="ph-action-label">Review</span>
           </a>
-          <a class="ph-action-btn is-more" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}">
+          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}"${websiteDataAttributes}${websiteWarningDataAttributes}>
             MORE <i class="fas fa-circle-info" aria-hidden="true"></i>
           </a>
         </div>
@@ -682,7 +764,22 @@
     const reviewUrl = trigger.dataset.cardReviewUrl || trigger.getAttribute("href") || "";
     const title = trigger.dataset.cardReviewTitle || "More info";
     const description = trigger.dataset.cardReviewDescription || "";
-    const opened = window.openMoreInfoModal?.({ title, description, reviewUrl }) ?? false;
+    const websiteUrl = trigger.dataset.cardWebsiteUrl || "";
+    const websiteWarningConfig = trigger.dataset.cardWebsiteWarningType
+      ? {
+          type: trigger.dataset.cardWebsiteWarningType,
+          title: trigger.dataset.cardWebsiteWarningTitle || "Important warning",
+          description: trigger.dataset.cardWebsiteWarningDescription || "",
+        }
+      : null;
+    const opened =
+      window.openMoreInfoModal?.({
+        title,
+        description,
+        reviewUrl,
+        websiteUrl,
+        websiteWarningConfig,
+      }) ?? false;
 
     if (opened || !trigger.href) {
       return;
@@ -988,7 +1085,7 @@
     });
 
   const renderCard = (card, statusMap) => {
-    const reviewUrl = `${DATA_ROOT}/${encodeURIComponent(card.folderName)}/review.md`;
+    const reviewUrl = card.reviewUrl || `${DATA_ROOT}/${encodeURIComponent(card.folderName)}/review.md`;
     const summaryLines = buildSummaryLines(card);
     const reviewDescription = buildReviewDescription(card, summaryLines);
     const warningConfig = getModalWarningConfig(card.modals);
@@ -1027,6 +1124,8 @@
           title: card.title,
           reviewUrl,
           reviewDescription,
+          youtubeUrl: card.youtubeUrl,
+          hasYoutubeIndicator: Boolean(card.youtubeUrl),
           websiteUrl: card.info.website,
           purchaseUrl: card.pricing.purchase_url,
           offers: card.offers,
@@ -1105,17 +1204,20 @@
     const cards = await Promise.all(
       visibleEntries.map(async (entry) => {
         try {
-          const [points, modals, suncSummary] = await Promise.all([
+          const reviewUrl = `${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/review.md`;
+          const [points, modals, reviewDocument, suncSummary] = await Promise.all([
             fetchJson(`${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/points.json`),
             fetchJson(`${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/modals.json`, {
               optional: true,
             }),
+            loadReviewDocument(reviewUrl, { optional: true }),
             entry.info.type === "external" ? Promise.resolve(null) : loadSuncSummary(entry.info),
           ]);
 
           const offers = flattenOffers(entry.pricing);
           const hasFreeOffer = offers.some((offer) => Number(offer.price) === 0);
           const hasPaidOffer = offers.some((offer) => Number(offer.price) > 0);
+          const youtubeUrl = String(entry.info.youtube || reviewDocument?.metadata?.youtube || "").trim();
           const paidPrices = offers
             .map((offer) => Number(offer.price))
             .filter((price) => Number.isFinite(price) && price > 0);
@@ -1125,6 +1227,8 @@
             points: points ?? {},
             modals,
             offers,
+            reviewUrl,
+            youtubeUrl,
             randomSortKey: Math.random(),
             hasFreeOffer,
             hasPaidOffer,
