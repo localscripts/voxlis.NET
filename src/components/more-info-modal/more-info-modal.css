@@ -93,6 +93,11 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.info-modal-exploit-info[hidden],
+.info-modal-exploit-name[hidden] {
+  display: none;
+}
+
 .info-modal-exploit-name {
   font-size: 1.5rem;
   font-weight: 700;
@@ -240,7 +245,6 @@
 
 .info-modal-footer {
   display: flex;
-  flex-direction: column;
   justify-content: flex-end;
   gap: 0.75rem;
   padding: 16px 24px;
@@ -250,7 +254,8 @@
 
 .info-modal-website-btn,
 .info-modal-close-btn {
-  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
   border-radius: var(--rad);
   padding: 0.5rem 1rem;
   font-size: 14px;
@@ -379,8 +384,16 @@
     padding: 0.9rem 1rem;
   }
 
+  .info-modal-footer {
+    flex-direction: column;
+  }
+
   .info-modal-website-btn,
   .info-modal-close-btn {
+    width: 100%;
+    flex: 1 1 auto;
     font-size: 0.82rem;
   }
 }
+
+

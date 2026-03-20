@@ -656,9 +656,7 @@
     `;
   };
 
-  const buildReviewDescription = (card, summaryLines = []) => {
-    return summaryLines[0]?.text || "";
-  };
+  const buildReviewDescription = () => "";
 
   const buildRatingMarkup = (info, suncSummary) => {
     if (info.type === "external") {
@@ -1305,3 +1303,5 @@
     normalizeLineText(catalogState.filters.search || window.__robloxCardsSearchQuery || "");
   window.initRobloxCardsCatalog = initRobloxCardsCatalog;
 })();
+
+

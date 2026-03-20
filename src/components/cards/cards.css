@@ -755,11 +755,11 @@
 }
 
 .ph-action-btn.is-review.is-disabled .ph-action-label {
-  color: rgba(148, 163, 184, 0.45);
+  color: rgba(148, 163, 184, 0.3);
 }
 
 .ph-action-btn.is-review.is-disabled i {
-  color: rgba(148, 163, 184, 0.45) !important;
+  color: rgba(148, 163, 184, 0.3) !important;
 }
 
 .ph-action-btn.has-youtube-indicator i {
@@ -810,7 +810,7 @@
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: rgba(148, 163, 184, 0.45);
+  color: rgba(148, 163, 184, 0.3);
   text-align: center;
 }
 
@@ -1232,3 +1232,5 @@
     font-size: 0.68rem;
   }
 }
+
+

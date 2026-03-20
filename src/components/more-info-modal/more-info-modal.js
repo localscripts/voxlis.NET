@@ -329,6 +329,7 @@
 
     const modal = ensureMoreInfoModal();
     const titleNode = modal.querySelector("#moreInfoModalTitle");
+    const infoNode = modal.querySelector(".info-modal-exploit-info");
     const nameNode = modal.querySelector("#moreInfoModalExploitName");
     const descriptionNode = modal.querySelector("#moreInfoModalExploitDesc");
     const markdownNode = modal.querySelector("#moreInfoModalMarkdown");
@@ -349,9 +350,13 @@
 
     modalState.requestToken = requestToken;
     titleNode.textContent = modalTitle;
-    nameNode.textContent = exploitName.replace(/\s+Information$/, "");
+    nameNode.textContent = "";
+    nameNode.hidden = true;
     descriptionNode.textContent = modalDescription;
     descriptionNode.hidden = !modalDescription;
+    if (infoNode) {
+      infoNode.hidden = !modalDescription;
+    }
     if (websiteButton) {
       websiteButton.hidden = !modalWebsiteUrl;
       websiteButton.setAttribute("href", modalWebsiteUrl || "#");
@@ -405,3 +410,5 @@
   window.openMoreInfoModal = openMoreInfoModal;
   window.closeMoreInfoModal = closeMoreInfoModal;
 })();
+
+
