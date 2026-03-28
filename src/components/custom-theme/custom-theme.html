@@ -1,0 +1,83 @@
+<div class="custom-theme-control" id="customThemeControl">
+  <button
+    class="custom-theme-trigger"
+    id="customThemeTrigger"
+    type="button"
+    aria-label="Edit theme colors"
+    aria-controls="customThemeModal"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+  >
+    <i class="fas fa-plus" aria-hidden="true"></i>
+  </button>
+
+  <div
+    class="custom-theme-modal"
+    id="customThemeModal"
+    hidden
+  >
+    <div
+      class="custom-theme-popover promo-card"
+      id="customThemePopover"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Theme editor"
+    >
+      <div class="custom-theme-gradient" aria-hidden="true"></div>
+      <div class="custom-theme-glow" aria-hidden="true"></div>
+      <div class="custom-theme-content">
+        <div class="custom-theme-content-row">
+          <button class="custom-theme-close" id="customThemeClose" type="button" aria-label="Close theme editor">
+            <i class="fas fa-xmark" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="custom-theme-meta">
+          <div class="custom-theme-color-grid">
+            <label class="custom-theme-color-field">
+              <span class="custom-theme-color-head">
+                <span class="custom-theme-color-title">Main</span>
+              </span>
+              <span class="custom-theme-color-control">
+                <input class="custom-theme-color-input" id="customThemeMainInput" type="color" value="#3B82F6" />
+                <span class="custom-theme-color-value" id="customThemeMainValue">#3B82F6</span>
+              </span>
+            </label>
+            <label class="custom-theme-color-field">
+              <span class="custom-theme-color-head">
+                <span class="custom-theme-color-title">Updated</span>
+              </span>
+              <span class="custom-theme-color-control">
+                <input class="custom-theme-color-input" id="customThemeUpdatedInput" type="color" value="#3B82F6" />
+                <span class="custom-theme-color-value" id="customThemeUpdatedValue">#3B82F6</span>
+              </span>
+            </label>
+            <label class="custom-theme-color-field">
+              <span class="custom-theme-color-head">
+                <span class="custom-theme-color-title">Not Updated</span>
+              </span>
+              <span class="custom-theme-color-control">
+                <input class="custom-theme-color-input" id="customThemeNotUpdatedInput" type="color" value="#9CA3AF" />
+                <span class="custom-theme-color-value" id="customThemeNotUpdatedValue">#9CA3AF</span>
+              </span>
+            </label>
+          </div>
+        </div>
+        <p class="custom-theme-error" id="customThemeError" hidden></p>
+        <div class="custom-theme-actions">
+          <button class="custom-theme-btn is-secondary" id="customThemeCancel" type="button">
+            <span class="custom-theme-btn-icon" aria-hidden="true">
+              <i class="fas fa-xmark"></i>
+            </span>
+            <span class="custom-theme-btn-label">Close</span>
+          </button>
+          <button class="custom-theme-btn is-primary" id="customThemeApply" type="button">
+            <span class="custom-theme-btn-icon" aria-hidden="true">
+              <i class="fas fa-palette"></i>
+            </span>
+            <span class="custom-theme-btn-label">Apply</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
