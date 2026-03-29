@@ -1,31 +1,58 @@
 (() => {
-  const {
-    dataRoot: DATA_ROOT = "/public/data/roblox",
-    statusApiUrl: STATUS_API_URL = "https://api.voxlis.net/api/endpoints",
-    suncApiUrl: SUNC_API_URL = "https://api.voxlis.net/api/sunc",
-    warningModalEnabled: WARNING_MODAL_ENABLED = false,
-    cardNameOverrides: CARD_NAME_OVERRIDES = {},
-    platformOrder: PLATFORM_ORDER = ["windows", "macos", "android", "ios"],
-    platformLabels: PLATFORM_LABELS = {},
-    platformIcons: PLATFORM_ICONS = {},
-    tagMetadata: TAG_METADATA = {},
-    filterableTags: FILTERABLE_TAGS = [],
-    typeLabels: TYPE_LABELS = {},
-    defaultFilters: DEFAULT_FILTERS = {
-      search: "",
-      sort: "random",
-      platforms: [],
-      price: "all",
-      key: "all",
-      type: "all",
-      tags: [],
-      verified: false,
-      trending: false,
-      warning: false,
-      updatedState: "all",
-      showInsecure: false,
+  const DATA_ROOT = "/public/data/roblox";
+  const API_BASE_URL = "https://api.voxlis.net/api";
+  const STATUS_API_URL = `${API_BASE_URL}/endpoints`;
+  const SUNC_API_URL = `${API_BASE_URL}/sunc`;
+  const WARNING_MODAL_ENABLED = false;
+  const CARD_NAME_OVERRIDES = {
+    arceusx: "Arceus X",
+    sirhurt: "SirHurt",
+    vegax: "Vega X",
+  };
+  const PLATFORM_ORDER = ["windows", "macos", "android", "ios"];
+  const PLATFORM_LABELS = {
+    windows: "Windows",
+    macos: "macOS",
+    android: "Android",
+    ios: "iOS",
+  };
+  const PLATFORM_ICONS = {
+    windows: "fab fa-windows",
+    macos: "fab fa-apple",
+    android: "fab fa-android",
+    ios: "fab fa-apple",
+  };
+  const TAG_METADATA = {
+    decompiler: {
+      icon: "fas fa-code",
+      label: "Decompiler",
+      message: "This product includes decompiler functionality.",
     },
-  } = window.VOXLIS_CONFIG?.robloxCards ?? {};
+    kernel: {
+      icon: "fas fa-microchip",
+      label: "Kernel",
+      message: "This product runs on kernel-level (Expect BSOD)",
+    },
+    ai: {
+      icon: "fas fa-robot",
+      label: "AI",
+      message: "This product includes AI-related features.",
+    },
+    "supports-vng": {
+      icon: "fas fa-globe",
+      label: "Supports VNG",
+      message: "This product supports VNG. (Vietnam client)",
+    },
+    "multi-instance": {
+      icon: "fas fa-layer-group",
+      label: "Multi-instance",
+      message: "This product supports running multiple instances at once.",
+    },
+  };
+  const TYPE_LABELS = {
+    internal: "Executor",
+    external: "Cheat Menu",
+  };
   const HTML_ESCAPE_MAP = {
     "&": "&amp;",
     "<": "&lt;",
@@ -34,6 +61,21 @@
     "'": "&#39;",
   };
   const suncRequestCache = new Map();
+  const DEFAULT_FILTERS = {
+    search: "",
+    sort: "recommended",
+    platforms: [],
+    price: "all",
+    key: "all",
+    type: "all",
+    verified: false,
+    premium: false,
+    updated: false,
+    multiInstance: false,
+    decompiler: false,
+    kernel: false,
+    highSunc: false,
+  };
   const catalogState = {
     mount: null,
     grid: null,
@@ -50,11 +92,6 @@
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, (character) => character.toUpperCase());
 
-  const normalizePath = (path = "/") => {
-    const trimmed = `${path}`.replace(/\/+$/, "");
-    return trimmed || "/";
-  };
-
   const getFolderName = (slug) => CARD_NAME_OVERRIDES[slug] ?? titleCase(slug);
 
   const fetchJson = async (path, { optional = false } = {}) => {
@@ -70,103 +107,10 @@
     throw new Error(`Failed to load JSON (${path}): ${response.status}`);
   };
 
-  const normalizeMetadataValue = (value = "") => {
-    const trimmedValue = String(value).trim();
-    if (!trimmedValue) {
-      return "";
-    }
-
-    const quotedValueMatch = trimmedValue.match(/^(['"])([\s\S]*)\1$/);
-    return (quotedValueMatch ? quotedValueMatch[2] : trimmedValue).trim();
-  };
-
-  const parseReviewDocument = (source = "") => {
-    if (typeof window.parseReviewDocument === "function") {
-      return window.parseReviewDocument(source);
-    }
-
-    const normalizedSource = String(source).replace(/^\uFEFF/, "");
-    const parseMetadataBlock = (metadataSource = "") => {
-      const youtubeMatch = String(metadataSource).match(/^\s*youtube\s*:\s*(.+)\s*$/im);
-      return {
-        youtube: youtubeMatch ? normalizeMetadataValue(youtubeMatch[1]) : "",
-      };
-    };
-
-    const frontmatterMatch = normalizedSource.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n)?/);
-    if (frontmatterMatch) {
-      return {
-        metadata: parseMetadataBlock(frontmatterMatch[1]),
-        body: normalizedSource.slice(frontmatterMatch[0].length).replace(/^\s+/, ""),
-      };
-    }
-
-    const inlineYoutubeMatch = normalizedSource.match(/^\s*youtube\s*:\s*(.+?)\s*(?:\r?\n){1,2}/i);
-    if (inlineYoutubeMatch) {
-      return {
-        metadata: {
-          youtube: normalizeMetadataValue(inlineYoutubeMatch[1]),
-        },
-        body: normalizedSource.slice(inlineYoutubeMatch[0].length).replace(/^\s+/, ""),
-      };
-    }
-
-    return {
-      metadata: {
-        youtube: "",
-      },
-      body: normalizedSource,
-    };
-  };
-
-  const loadReviewDocument = async (path, { optional = false } = {}) => {
-    const response = await fetch(path, { cache: "no-cache" });
-    if (optional && response.status === 404) {
-      return {
-        metadata: {
-          youtube: "",
-        },
-        body: "",
-        exists: false,
-      };
-    }
-
-    if (!response.ok) {
-      throw new Error(`Failed to load review (${path}): ${response.status}`);
-    }
-
-    const source = await response.text();
-    return {
-      ...parseReviewDocument(source),
-      exists: true,
-    };
-  };
-
-  const buildFreeLifetimeOffers = (platforms = []) => {
-    const normalizedPlatforms = Array.isArray(platforms)
-      ? [...new Set(platforms.filter((platform) => typeof platform === "string" && platform))]
-      : [];
-    const fallbackPlatforms = normalizedPlatforms.length ? normalizedPlatforms : ["windows"];
-
-    return fallbackPlatforms.map((platform) => ({
-      platform,
-      days: -1,
-      price: 0,
-    }));
-  };
-
-  const flattenOffers = (pricing = {}, fallbackOffers = []) => {
-    const directOffers = Array.isArray(pricing.offers)
-      ? pricing.offers
-      : Object.entries(pricing.platforms ?? {}).flatMap(([platform, offers]) =>
-          (offers ?? []).map((offer) => ({ ...offer, platform })),
-        );
-
-    const sourceOffers = directOffers.length ? directOffers : fallbackOffers;
-    return sourceOffers
-      .filter((offer) => offer && typeof offer === "object")
-      .map((offer) => ({ ...offer, platform: offer.platform || "" }));
-  };
+  const flattenOffers = (pricing = {}) =>
+    Object.entries(pricing.platforms ?? {}).flatMap(([platform, offers]) =>
+      (offers ?? []).map((offer) => ({ ...offer, platform })),
+    );
 
   const formatCurrency = (price, currency) => {
     if (!Number.isFinite(price)) return "Price unavailable";
@@ -368,18 +312,9 @@
       .filter(Boolean)
       .join(" ");
 
-  const hasInfoTag = (info = {}, tag = "") =>
-    Array.isArray(info.tags) && info.tags.includes(tag);
-
-  const isInsecureCard = (card) => hasInfoTag(card?.info, "insecure");
-
   const inferKeyedState = (info = {}, points = {}, offers = []) => {
     if (typeof info.keyed === "boolean") {
       return info.keyed;
-    }
-
-    if (hasInfoTag(info, "freemium")) {
-      return true;
     }
 
     const pointText = getCombinedPointText(points);
@@ -435,80 +370,9 @@
     return null;
   };
 
-  const getAvailableTitleIconEntries = (modals = {}) => [
-    {
-      key: "verified",
-      iconClass: "fas fa-circle-check",
-      iconToneClass: "ph-good-ico",
-      title: "Verified",
-      message: "This product has a documented and verified more info page.",
-      toastIcon: "fa-circle-check",
-    },
-    {
-      key: "trending",
-      iconClass: "fas fa-arrow-trend-up",
-      title: "Trending",
-      message: "This product is currently marked as trending on the catalog.",
-      toastIcon: "fa-arrow-trend-up",
-    },
-    {
-      key: "warning",
-      iconClass: "fas fa-triangle-exclamation",
-      iconToneClass: "ph-warn-ico",
-      title: "Warning",
-      message:
-        modals?.warning?.description ||
-        "voxlis.NET recommends reading more about this product before continuing.",
-      toastIcon: "fa-triangle-exclamation",
-    },
-    {
-      key: "warningred",
-      iconClass: "fas fa-triangle-exclamation",
-      iconToneClass: "ph-warn-red-ico",
-      title: "High-Risk Warning",
-      message:
-        modals?.warningred?.description ||
-        "This product has a high-risk warning on voxlis.NET.",
-      toastIcon: "fa-triangle-exclamation",
-    },
-  ];
-
-  const getTitleIconEntries = (info = {}, modals = {}) => {
-    const availableEntries = getAvailableTitleIconEntries(modals);
-    const warningConfig = getModalWarningConfig(modals);
-    const activeKeys = new Set();
-
-    if (Array.isArray(info.badges) && info.badges.includes("verified")) {
-      activeKeys.add("verified");
-    }
-
-    if (Array.isArray(info.badges) && info.badges.includes("trending")) {
-      activeKeys.add("trending");
-    }
-
-    if (warningConfig?.variant === "warning") {
-      activeKeys.add("warning");
-    }
-
-    if (warningConfig?.variant === "warningred") {
-      activeKeys.add("warningred");
-    }
-
-    return availableEntries.filter((entry) => activeKeys.has(entry.key));
-  };
-
-  const renderInfoIconMarkup = ({ iconClass, iconMarkup = "", iconToneClass = "", assetIcon = "" }) =>
-    iconMarkup ||
-    (assetIcon
-      ? `<span class="ph-asset-icon${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" style="--ph-asset-icon: url('/public/assets/${escapeHtml(assetIcon)}')" aria-hidden="true"></span>`
-      : `<i class="${escapeHtml(iconClass)}${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" aria-hidden="true"></i>`);
-
   const buildInfoIconButton = ({
-    key = "",
     iconClass,
-    iconMarkup = "",
     iconToneClass = "",
-    assetIcon = "",
     buttonClass = "ph-title-icon-btn",
     title,
     message,
@@ -523,88 +387,67 @@
         data-card-icon-title="${escapeHtml(title)}"
         data-card-icon-message="${escapeHtml(message)}"
         data-card-icon-toast-icon="${escapeHtml(toastIcon)}"
-        ${key ? `data-card-icon-key="${escapeHtml(key)}"` : ""}
       >
-        ${renderInfoIconMarkup({ iconClass, iconMarkup, iconToneClass, assetIcon })}
+        <i class="${escapeHtml(iconClass)}${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" aria-hidden="true"></i>
       </button>
     `;
 
   const buildTitleIcons = (info, modals) => {
-    const icons = getTitleIconEntries(info, modals).map((entry) => buildInfoIconButton(entry));
+    const icons = [];
+    const warningConfig = getModalWarningConfig(modals);
+
+    if (Array.isArray(info.badges) && info.badges.includes("verified")) {
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-circle-check",
+          iconToneClass: "ph-good-ico",
+          title: "Verified",
+          message: "This product has a documentaded and verified 'MOREINFO'",
+          toastIcon: "fa-circle-check",
+        }),
+      );
+    }
+
+    if (Array.isArray(info.badges) && info.badges.includes("trending")) {
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-arrow-trend-up",
+          title: "Trending",
+          message: "This product is currently marked as trending on the catalog.",
+          toastIcon: "fa-arrow-trend-up",
+        }),
+      );
+    }
+
+    if (warningConfig?.variant === "warningred") {
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-triangle-exclamation",
+          iconToneClass: "ph-warn-red-ico",
+          title: "High-Risk Warning",
+          message:
+            warningConfig.description ||
+            "This product has a high-risk warning on voxlis.NET.",
+          toastIcon: "fa-triangle-exclamation",
+        }),
+      );
+    }
+
+    if (warningConfig?.variant === "warning") {
+      icons.push(
+        buildInfoIconButton({
+          iconClass: "fas fa-triangle-exclamation",
+          iconToneClass: "ph-warn-ico",
+          title: "Warning",
+          message:
+            warningConfig.description ||
+            "voxlis.NET recommends reading more about this product before continuing.",
+          toastIcon: "fa-triangle-exclamation",
+        }),
+      );
+    }
+
     return icons.length ? ` ${icons.join(" ")}` : "";
-  };
-
-  const getTagEntry = (tag) => {
-    const normalizedTag = normalizeLineText(tag);
-    if (!normalizedTag) {
-      return null;
-    }
-
-    const tagMeta = TAG_METADATA[normalizedTag] ?? {
-      icon: "fas fa-circle-info",
-      label: titleCase(normalizedTag),
-      message: `${titleCase(normalizedTag)} is supported by this product.`,
-    };
-
-    return {
-      key: `tag:${normalizedTag}`,
-      iconClass: tagMeta.icon,
-      iconMarkup: tagMeta.iconMarkup,
-      iconToneClass: tagMeta.iconToneClass || "",
-      assetIcon: tagMeta.assetIcon || "",
-      title: tagMeta.label,
-      message: tagMeta.message || `${tagMeta.label} is supported by this product.`,
-      toastIcon: "fa-circle-info",
-    };
-  };
-
-  const getAvailableTagEntries = () =>
-    Object.keys(TAG_METADATA)
-      .map((tag) => getTagEntry(tag))
-      .filter(Boolean);
-
-  const getActiveTagEntries = (info = {}) =>
-    (Array.isArray(info.tags) ? info.tags : [])
-      .map((tag) => getTagEntry(tag))
-      .filter(Boolean);
-
-  const buildTitleIconModalContent = (card) => {
-    const activeEntries = [
-      ...getTitleIconEntries(card?.info, card?.modals),
-      ...getActiveTagEntries(card?.info),
-    ];
-    if (!activeEntries.length) {
-      return "";
-    }
-
-    const renderEntries = (entries) => `
-      <ul class="info-modal-notice-list" aria-label="Notification meanings">
-        ${entries
-          .map(
-            (entry) => `
-              <li class="info-modal-notice-item" data-info-modal-key="${escapeHtml(entry.key || "")}">
-                <span class="info-modal-notice-icon" aria-hidden="true">
-                  ${renderInfoIconMarkup(entry)}
-                </span>
-                <div class="info-modal-notice-copy">
-                  <p class="info-modal-notice-title">${escapeHtml(entry.title)}</p>
-                  <p class="info-modal-notice-text">${escapeHtml(entry.message)}</p>
-                </div>
-              </li>
-            `,
-          )
-          .join("")}
-      </ul>
-    `;
-
-    const activeHeading = card?.title ? `${card.title} Tags` : "Current Tags";
-
-    return `
-      <section class="info-modal-notice-group is-current-tags" aria-label="${escapeHtml(activeHeading)}">
-        <p class="info-modal-notice-heading">${escapeHtml(activeHeading)}</p>
-        ${renderEntries(activeEntries)}
-      </section>
-    `;
   };
 
   const buildPlatformText = (info) => {
@@ -662,32 +505,17 @@
       <span class="ph-title-tags" aria-label="Feature tags">
         ${normalizedTags
           .map((tag) => {
-            const tagEntry = getTagEntry(tag) ?? {
-              key: `tag:${tag}`,
-              iconClass: "fas fa-tag",
-              iconMarkup: "",
-              iconToneClass: "",
-              assetIcon: "",
-              title: titleCase(tag),
+            const tagMeta = TAG_METADATA[tag] ?? {
+              icon: "fas fa-tag",
+              label: titleCase(tag),
               message: `${titleCase(tag)} is supported by this product.`,
             };
-            const extraButtonClasses = [
-              tag === "kernel" ? "is-kernel-tag" : "",
-              tag === "usermode" ? "is-usermode-tag" : "",
-              tag === "insecure" ? "is-insecure-tag" : "",
-            ]
-              .filter(Boolean)
-              .join(" ");
 
             return buildInfoIconButton({
-              key: tagEntry.key,
-              buttonClass: `ph-meta-tag-btn${extraButtonClasses ? ` ${extraButtonClasses}` : ""}`,
-              iconClass: tagEntry.iconClass,
-              iconMarkup: tagEntry.iconMarkup,
-              iconToneClass: tagEntry.iconToneClass || "",
-              assetIcon: tagEntry.assetIcon || "",
-              title: tagEntry.title,
-              message: tagEntry.message || `${tagEntry.title} is supported by this product.`,
+              buttonClass: `ph-meta-tag-btn${tag === "kernel" ? " is-kernel-tag" : ""}`,
+              iconClass: tagMeta.icon,
+              title: tagMeta.label,
+              message: tagMeta.message || `${tagMeta.label} is supported by this product.`,
               toastIcon: "fa-circle-info",
             });
           })
@@ -756,44 +584,11 @@
     `;
   };
 
-  const buildReviewDescription = () => "";
-
-  const getCardReviewUrl = (card) =>
-    card?.reviewUrl || `${DATA_ROOT}/${encodeURIComponent(card?.folderName || card?.title || "Exploit")}/review.md`;
-
-  const getCardMoreInfoPath = (cardOrSlug) => {
-    const slug =
-      typeof cardOrSlug === "string"
-        ? cardOrSlug
-        : String(cardOrSlug?.slug || "").trim();
-
-    return slug ? `/${encodeURIComponent(slug)}/` : "";
+  const buildReviewDescription = (card, summaryLines = []) => {
+    return summaryLines[0]?.text || "";
   };
 
-  const buildCardMoreInfoOptions = (card) => {
-    if (!card) {
-      return null;
-    }
-
-    const summaryLines = buildSummaryLines(card);
-    const warningConfig = getModalWarningConfig(card.modals);
-
-    return {
-      title: card.title || "More info",
-      description: buildReviewDescription(card, summaryLines),
-      reviewUrl: getCardReviewUrl(card),
-      websiteUrl:
-        card.info?.website ||
-        card.pricing?.purchaseUrl ||
-        card.pricing?.purchase_url ||
-        "",
-      websiteWarningConfig: warningConfig,
-      modalPath: getCardMoreInfoPath(card),
-    };
-  };
-
-  const buildRatingMarkup = (card) => {
-    const info = card?.info ?? {};
+  const buildRatingMarkup = (info, suncSummary) => {
     if (info.type === "external") {
       return `
         <div class="ph-rating ph-rating-external" aria-label="External">
@@ -803,40 +598,17 @@
       `;
     }
 
-    const suncSource = getPrimarySuncSource(info);
-    const tracked = Boolean(suncSource);
+    const tracked = hasSuncTracking(info);
     const scoreLabel =
-      tracked && Number.isFinite(card?.suncSummary?.score)
-        ? `${card.suncSummary.score}%`
-        : tracked
-          ? "sUNC"
-          : "None";
-    const ratingMarkup = `
-      <span class="ph-rating-logo" aria-hidden="true">
-        <span class="ph-rating-logo-main"></span>
-        <span class="ph-rating-logo-s"></span>
-      </span>
-      <span class="ph-rating-val">${escapeHtml(scoreLabel)}</span>
-    `;
-
-    if (!tracked) {
-      return `
-        <div class="ph-rating is-none">
-          ${ratingMarkup}
-        </div>
-      `;
-    }
-
+      tracked && Number.isFinite(suncSummary?.score) ? `${suncSummary.score}%` : tracked ? "sUNC" : "None";
     return `
-      <button
-        class="ph-rating ph-rating-btn"
-        type="button"
-        data-card-sunc-open
-        aria-label="Open ${escapeHtml(card?.title || "this card")} sUNC widget"
-        title="Open sUNC widget"
-      >
-        ${ratingMarkup}
-      </button>
+      <div class="ph-rating${tracked ? "" : " is-none"}">
+        <span class="ph-rating-logo" aria-hidden="true">
+          <span class="ph-rating-logo-main"></span>
+          <span class="ph-rating-logo-s"></span>
+        </span>
+        <span class="ph-rating-val">${escapeHtml(scoreLabel)}</span>
+      </div>
     `;
   };
 
@@ -845,25 +617,15 @@
     title,
     reviewUrl,
     reviewDescription,
-    youtubeUrl,
-    hasYoutubeIndicator,
     websiteUrl,
     purchaseUrl,
     offers,
     warningConfig,
   }) => {
-    const reviewHref = String(youtubeUrl || "").trim();
-    const reviewButtonAttributes = reviewHref
-      ? ` href="${escapeHtml(reviewHref)}" target="_blank" rel="noopener noreferrer"`
-      : ` aria-disabled="true" tabindex="-1"`;
     const websiteHref = websiteUrl || purchaseUrl || "#";
-    const websiteDataAttributes =
-      websiteHref !== "#"
-        ? ` data-card-website-url="${escapeHtml(websiteHref)}"`
-        : "";
-    const websiteWarningDataAttributes =
+    const warningAttributes =
       WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
-        ? ` data-card-website-warning-type="${escapeHtml(warningConfig.type)}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
+        ? ` data-card-warning-slug="${escapeHtml(slug)}"`
         : "";
     const hasFreeOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) === 0);
     const hasPaidOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) > 0);
@@ -884,10 +646,7 @@
       : hasFreeOffer
         ? `
           <div class="ph-sponsor-btn ph-sponsor-note" role="note">
-            <span class="ph-sponsor-note-content">
-              <i class="fas fa-key" aria-hidden="true"></i>
-              <span>This product is free to use</span>
-            </span>
+            This product is free to use
           </div>
         `
         : hasPaidOffer
@@ -901,11 +660,11 @@
     return `
       <div class="ph-actions">
         <div class="ph-primary-actions">
-          <a class="ph-action-btn is-review${hasYoutubeIndicator ? " has-youtube-indicator" : " is-disabled"}"${reviewButtonAttributes}>
-            <i class="fab fa-youtube" aria-hidden="true"></i> <span class="ph-action-label">Review</span>
+          <a class="ph-action-btn" href="${escapeHtml(websiteHref)}" target="_blank" rel="noopener noreferrer"${warningAttributes}>
+            <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Website
           </a>
-          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}"${websiteDataAttributes}${websiteWarningDataAttributes}>
-            <span class="ph-action-icon is-info" aria-hidden="true"></span> More
+          <a class="ph-action-btn is-more" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}">
+            MORE <i class="fas fa-circle-info" aria-hidden="true"></i>
           </a>
         </div>
         ${sponsorMarkup}
@@ -920,61 +679,16 @@
     }
 
     event.preventDefault();
-    const article = trigger.closest("article[data-slug]");
-    const slug = article?.dataset.slug || "";
-    const card = catalogState.cards.find((entry) => entry.slug === slug);
-    const modalOptions =
-      buildCardMoreInfoOptions(card) || {
-        title: trigger.dataset.cardReviewTitle || "More info",
-        description: trigger.dataset.cardReviewDescription || "",
-        reviewUrl: trigger.dataset.cardReviewUrl || trigger.getAttribute("href") || "",
-        websiteUrl: trigger.dataset.cardWebsiteUrl || "",
-        websiteWarningConfig: trigger.dataset.cardWebsiteWarningType
-          ? {
-              type: trigger.dataset.cardWebsiteWarningType,
-              title: trigger.dataset.cardWebsiteWarningTitle || "Important warning",
-              description: trigger.dataset.cardWebsiteWarningDescription || "",
-            }
-          : null,
-        modalPath: getCardMoreInfoPath(slug),
-      };
-    const opened = window.openMoreInfoModal?.(modalOptions) ?? false;
+    const reviewUrl = trigger.dataset.cardReviewUrl || trigger.getAttribute("href") || "";
+    const title = trigger.dataset.cardReviewTitle || "More info";
+    const description = trigger.dataset.cardReviewDescription || "";
+    const opened = window.openMoreInfoModal?.({ title, description, reviewUrl }) ?? false;
 
     if (opened || !trigger.href) {
       return;
     }
 
     window.open(trigger.href, trigger.getAttribute("target") || "_blank", "noopener");
-  };
-
-  const handleSuncActionClick = (event) => {
-    const trigger = event.target.closest("button[data-card-sunc-open]");
-    if (!trigger) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const article = trigger.closest("article[data-slug]");
-    const slug = article?.dataset.slug || "";
-    const card = catalogState.cards.find((entry) => entry.slug === slug);
-    const source = getPrimarySuncSource(card?.info);
-    if (!source) {
-      return;
-    }
-
-    const opened =
-      window.openSuncModal?.({
-        title: card?.title ? `${card.title} sUNC` : "sUNC Widget",
-        scrapId: source.scrapId,
-        key: source.key,
-      }) ?? false;
-
-    if (!opened) {
-      const fallbackUrl = `https://sunc.rubis.app/?scrap=${encodeURIComponent(source.scrapId)}&key=${encodeURIComponent(source.key)}`;
-      window.open(fallbackUrl, "_blank", "noopener");
-    }
   };
 
   const handleTitleIconClick = (event) => {
@@ -985,27 +699,6 @@
 
     event.preventDefault();
     event.stopPropagation();
-
-    const article = trigger.closest("article[data-slug]");
-    const slug = article?.dataset.slug || "";
-    const card = catalogState.cards.find((entry) => entry.slug === slug);
-    const contentHtml = buildTitleIconModalContent(card);
-    const highlightContentKey = trigger.dataset.cardIconKey || "";
-    const opened =
-      contentHtml &&
-      (window.openMoreInfoModal?.({
-        title: card?.title ? `${card.title} Tags` : "Card Tags",
-        description: "",
-        contentHtml,
-        highlightContentKey,
-        preserveTitle: true,
-        hideWebsiteButton: true,
-      }) ??
-        false);
-
-    if (opened) {
-      return;
-    }
 
     const title = trigger.dataset.cardIconTitle || "Notice";
     const message = trigger.dataset.cardIconMessage || "";
@@ -1057,11 +750,6 @@
 
   const handleCardActionClick = (event) => {
     handleTitleIconClick(event);
-    if (event.defaultPrevented) {
-      return;
-    }
-
-    handleSuncActionClick(event);
     if (event.defaultPrevented) {
       return;
     }
@@ -1141,7 +829,6 @@
   const hasBadge = (card, badge) => Array.isArray(card.info.badges) && card.info.badges.includes(badge);
   const hasTrendingBadge = (card) => hasBadge(card, "trending");
   const hasVerifiedBadge = (card) => hasBadge(card, "verified");
-  const hasWarningBadge = (card) => Boolean(getModalWarningConfig(card?.modals));
 
   const getCardStatusClass = (card, statusMap) => {
     const platformStates = card.info.platforms
@@ -1159,7 +846,10 @@
     return "is-not-updated";
   };
 
-  const compareRandom = (left, right) => {
+  const compareRecommended = (left, right) => {
+    const trendingRank = Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left));
+    if (trendingRank !== 0) return trendingRank;
+
     const randomRank = (left.randomSortKey ?? 0) - (right.randomSortKey ?? 0);
     if (randomRank !== 0) return randomRank;
 
@@ -1174,35 +864,23 @@
 
   const normalizeFilters = (filters = {}) => ({
     search: normalizeLineText(filters.search || ""),
-    sort: filters.sort === "recommended" ? "random" : filters.sort || DEFAULT_FILTERS.sort,
+    sort: filters.sort || DEFAULT_FILTERS.sort,
     platforms: Array.isArray(filters.platforms)
       ? filters.platforms.filter((platform) => PLATFORM_ORDER.includes(platform))
       : [],
     price: filters.price || DEFAULT_FILTERS.price,
     key: filters.key || DEFAULT_FILTERS.key,
     type: filters.type || DEFAULT_FILTERS.type,
-    tags: [
-      ...new Set(
-        [
-          ...(Array.isArray(filters.tags) ? filters.tags : []),
-          filters.multiInstance ? "multi-instance" : "",
-          filters.decompiler ? "decompiler" : "",
-          filters.kernel ? "kernel" : "",
-        ].filter((tag) => FILTERABLE_TAGS.includes(tag)),
-      ),
-    ],
     verified: Boolean(filters.verified),
-    trending: Boolean(filters.trending),
-    warning: Boolean(filters.warning),
-    updatedState: ["all", "yes", "no"].includes(filters.updatedState) ? filters.updatedState : DEFAULT_FILTERS.updatedState,
-    showInsecure: Boolean(filters.showInsecure),
+    premium: Boolean(filters.premium),
+    updated: Boolean(filters.updated),
+    multiInstance: Boolean(filters.multiInstance),
+    decompiler: Boolean(filters.decompiler),
+    kernel: Boolean(filters.kernel),
+    highSunc: Boolean(filters.highSunc),
   });
 
   const matchesFilters = (card, statusMap, filters) => {
-    if (!filters.showInsecure && isInsecureCard(card)) {
-      return false;
-    }
-
     const searchTerms = filters.search.toLowerCase().split(/\s+/).filter(Boolean);
     if (searchTerms.length && !searchTerms.every((term) => card.searchText.includes(term))) {
       return false;
@@ -1243,24 +921,23 @@
       return false;
     }
 
-    if (filters.trending && !hasTrendingBadge(card)) {
+    if (filters.premium && !card.hasPaidOffer) {
       return false;
     }
 
-    if (filters.warning && !hasWarningBadge(card)) {
+    if (filters.updated && getCardStatusClass(card, statusMap) !== "is-updated") {
       return false;
     }
 
-    const cardStatusClass = getCardStatusClass(card, statusMap);
-    if (filters.updatedState === "yes" && cardStatusClass !== "is-updated") {
+    if (filters.multiInstance && !card.info.tags?.includes("multi-instance")) {
       return false;
     }
 
-    if (filters.updatedState === "no" && cardStatusClass === "is-updated") {
+    if (filters.decompiler && !card.info.tags?.includes("decompiler")) {
       return false;
     }
 
-    if (filters.tags.length && !filters.tags.every((tag) => hasInfoTag(card.info, tag))) {
+    if (filters.kernel && !card.info.tags?.includes("kernel")) {
       return false;
     }
 
@@ -1273,21 +950,20 @@
 
   const sortCards = (cards, statusMap, sort = DEFAULT_FILTERS.sort) =>
     [...cards].sort((left, right) => {
-      const trendingRank = Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left));
-      if (trendingRank !== 0) return trendingRank;
-
       if (sort === "most-popular") {
         const popularityRank =
+          Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left)) ||
           Number(hasVerifiedBadge(right)) - Number(hasVerifiedBadge(left));
         if (popularityRank !== 0) return popularityRank;
-        return compareRandom(left, right);
+        return compareRecommended(left, right);
       }
 
       if (sort === "least-popular") {
         const popularityRank =
+          Number(hasTrendingBadge(left)) - Number(hasTrendingBadge(right)) ||
           Number(hasVerifiedBadge(left)) - Number(hasVerifiedBadge(right));
         if (popularityRank !== 0) return popularityRank;
-        return compareRandom(left, right);
+        return compareRecommended(left, right);
       }
 
       if (sort === "price-asc") {
@@ -1308,11 +984,11 @@
         return left.title.localeCompare(right.title);
       }
 
-      return compareRandom(left, right);
+      return compareRecommended(left, right);
     });
 
   const renderCard = (card, statusMap) => {
-    const reviewUrl = getCardReviewUrl(card);
+    const reviewUrl = `${DATA_ROOT}/${encodeURIComponent(card.folderName)}/review.md`;
     const summaryLines = buildSummaryLines(card);
     const reviewDescription = buildReviewDescription(card, summaryLines);
     const warningConfig = getModalWarningConfig(card.modals);
@@ -1332,7 +1008,7 @@
 
     return `
       <article
-        class="exploit-card-placeholder ${statusClass}${hasTrendingBadge(card) ? " is-trending" : ""}"
+        class="exploit-card-placeholder ${statusClass}"
         data-slug="${escapeHtml(card.slug)}"
         data-title="${escapeHtml(card.title)}"
         data-platforms="${escapeHtml((card.info.platforms ?? []).join(","))}"
@@ -1342,7 +1018,7 @@
           <div class="ph-head-main">
             <h3 class="ph-title">${escapeHtml(card.title)}${buildTitleIcons(card.info, card.modals)}</h3>
           </div>
-          ${buildRatingMarkup(card)}
+          ${buildRatingMarkup(card.info, card.suncSummary)}
         </div>
         ${lineMarkup}
         ${buildCardMetaMarkup(card, statusMap)}
@@ -1351,10 +1027,8 @@
           title: card.title,
           reviewUrl,
           reviewDescription,
-          youtubeUrl: card.youtubeUrl,
-          hasYoutubeIndicator: Boolean(card.youtubeUrl),
           websiteUrl: card.info.website,
-          purchaseUrl: card.pricing.purchaseUrl || card.pricing.purchase_url,
+          purchaseUrl: card.pricing.purchase_url,
           offers: card.offers,
           warningConfig,
         })}
@@ -1381,25 +1055,14 @@
     `;
   };
 
-  const renderLoadingState = (grid, message = "Fetching API status...") => {
-    grid.classList.add("is-empty");
-    grid.innerHTML = `
-      <div class="cards-loading-state" role="status" aria-live="polite">
-        <img class="cards-loading-gif" src="/public/assets/loading.gif" alt="" />
-        <p class="cards-loading-copy">${escapeHtml(message)}</p>
-      </div>
-    `;
-  };
-
   const renderCatalogView = () => {
     const { mount, grid, cards, statusMap, filters } = catalogState;
     if (!mount || !grid) return;
 
-    const discoverableCards = cards.filter((card) => filters.showInsecure || !isInsecureCard(card));
-    const filteredCards = discoverableCards.filter((card) => matchesFilters(card, statusMap, filters));
+    const filteredCards = cards.filter((card) => matchesFilters(card, statusMap, filters));
     const sortedCards = sortCards(filteredCards, statusMap, filters.sort);
 
-    updateSummary(mount, sortedCards.length, discoverableCards.length);
+    updateSummary(mount, sortedCards.length, cards.length);
 
     if (!sortedCards.length) {
       renderEmptyState(grid, "No exploits match the current filters.");
@@ -1412,13 +1075,7 @@
 
   const loadCatalog = async () => {
     const prices = await fetchJson(`${DATA_ROOT}/prices.json`);
-    const freeProductSlugs = [
-      ...(Array.isArray(prices.freeProducts) ? prices.freeProducts : []),
-      ...(Array.isArray(prices.$freeProducts) ? prices.$freeProducts : []),
-    ].filter((slug) => typeof slug === "string" && slug);
-    const freeProducts = new Set(freeProductSlugs.map((slug) => slug.toLowerCase()));
-    const priceSlugs = Object.keys(prices).filter((slug) => slug !== "freeProducts" && !slug.startsWith("$"));
-    const slugs = [...new Set([...priceSlugs, ...freeProductSlugs])];
+    const slugs = Object.keys(prices);
 
     const infoEntries = await Promise.all(
       slugs.map(async (slug, catalogIndex) => {
@@ -1433,8 +1090,7 @@
             title: folderName,
             folderName,
             catalogIndex,
-            pricing: prices[slug] ?? {},
-            isListedFree: freeProducts.has(slug.toLowerCase()),
+            pricing: prices[slug],
             info,
           };
         } catch (error) {
@@ -1449,21 +1105,17 @@
     const cards = await Promise.all(
       visibleEntries.map(async (entry) => {
         try {
-          const reviewUrl = `${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/review.md`;
-          const [points, modals, reviewDocument, suncSummary] = await Promise.all([
+          const [points, modals, suncSummary] = await Promise.all([
             fetchJson(`${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/points.json`),
             fetchJson(`${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/modals.json`, {
               optional: true,
             }),
-            loadReviewDocument(reviewUrl, { optional: true }),
             entry.info.type === "external" ? Promise.resolve(null) : loadSuncSummary(entry.info),
           ]);
 
-          const fallbackOffers = entry.isListedFree ? buildFreeLifetimeOffers(entry.info.platforms) : [];
-          const offers = flattenOffers(entry.pricing, fallbackOffers);
+          const offers = flattenOffers(entry.pricing);
           const hasFreeOffer = offers.some((offer) => Number(offer.price) === 0);
           const hasPaidOffer = offers.some((offer) => Number(offer.price) > 0);
-          const youtubeUrl = String(entry.info.youtube || reviewDocument?.metadata?.youtube || "").trim();
           const paidPrices = offers
             .map((offer) => Number(offer.price))
             .filter((price) => Number.isFinite(price) && price > 0);
@@ -1473,8 +1125,6 @@
             points: points ?? {},
             modals,
             offers,
-            reviewUrl,
-            youtubeUrl,
             randomSortKey: Math.random(),
             hasFreeOffer,
             hasPaidOffer,
@@ -1513,9 +1163,6 @@
       mount.dataset.cardActionBound = "true";
     }
 
-    updateSummary(mount, 0, 0);
-    renderLoadingState(grid);
-
     try {
       const [cards, statusMap] = await Promise.all([loadCatalog(), loadUptimeStatus()]);
       if (!cards.length) {
@@ -1531,14 +1178,6 @@
       catalogState.filters = normalizeFilters({
         ...window.getRobloxCardsFilterState?.(),
         search: window.getRobloxCardsSearchQuery?.(),
-      });
-      window.registerMoreInfoModalPathResolver?.((path) => {
-        const normalizedTargetPath = normalizePath(path).toLowerCase();
-        const targetCard = catalogState.cards.find(
-          (entry) => normalizePath(getCardMoreInfoPath(entry)).toLowerCase() === normalizedTargetPath,
-        );
-
-        return targetCard ? buildCardMoreInfoOptions(targetCard) : null;
       });
       renderCatalogView();
     } catch (error) {
@@ -1562,8 +1201,3 @@
     normalizeLineText(catalogState.filters.search || window.__robloxCardsSearchQuery || "");
   window.initRobloxCardsCatalog = initRobloxCardsCatalog;
 })();
-
-
-
-
-

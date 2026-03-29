@@ -1,206 +1,111 @@
 (() => {
   const THEME_CHANGE_EVENT = "site-theme-change";
-  const DEFAULT_MAIN_HEX = "#3B82F6";
-  const DEFAULT_LOGO_HEX = "#60A5FA";
-  const DEFAULT_LOGO_OFFSET = 70;
-  const DEFAULT_GRADIENT_ENABLED = true;
-  const DEFAULT_NOT_UPDATED_HEX = "#9CA3AF";
+  const DEFAULT_HEX = "#3B82F6";
+  const DEFAULT_THEME_NAME = "Custom Theme";
+  const CUSTOM_THEME_NAME_STORAGE_KEY = "voxlis-custom-theme-name";
+  const CUSTOM_THEME_ICON_STORAGE_KEY = "voxlis-custom-theme-icon";
+  const CUSTOM_THEME_LOCKED = true;
   const MODAL_EXIT_MS = 240;
-
-  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-  const fallbackNormalizeHex = (value) => {
-    if (typeof value !== "string") return null;
-
-    const raw = value.trim().replace(/^#/, "");
-    if (!raw) return null;
-
-    const expanded = /^[0-9a-fA-F]{3}$/.test(raw)
-      ? raw.split("").map((char) => `${char}${char}`).join("")
-      : raw;
-
-    if (!/^[0-9a-fA-F]{6}$/.test(expanded)) return null;
-    return `#${expanded.toUpperCase()}`;
-  };
-
-  const normalizeHex = (value) =>
-    window.normalizeCustomSiteThemeHex?.(value) ?? fallbackNormalizeHex(value);
-
-  const hexToRgbString = (hex) => {
-    const normalized = normalizeHex(hex);
-    if (!normalized) return "59, 130, 246";
-
-    return [
-      Number.parseInt(normalized.slice(1, 3), 16),
-      Number.parseInt(normalized.slice(3, 5), 16),
-      Number.parseInt(normalized.slice(5, 7), 16),
-    ].join(", ");
-  };
-
-  const readHexFromStyles = (styles, names, fallback) => {
-    for (const name of names) {
-      const value = normalizeHex(styles.getPropertyValue(name).trim());
-      if (value) {
-        return value;
-      }
-    }
-
-    return fallback;
-  };
-
-  const rgbTokenToHex = (token) => {
-    const match = typeof token === "string"
-      ? token.match(/rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i)
-      : null;
-
-    if (!match) {
-      return null;
-    }
-
-    const [, r, g, b] = match;
-    return normalizeHex(
-      `#${[r, g, b]
-        .map((channel) => Number.parseInt(channel, 10).toString(16).padStart(2, "0"))
-        .join("")}`
-    );
-  };
-
-  const colorTokenToHex = (token) =>
-    normalizeHex(token) || rgbTokenToHex(token);
-
-  const readGradientStopHex = (value, index, fallback) => {
-    const matches =
-      typeof value === "string"
-        ? value.match(/#[0-9a-fA-F]{3,6}|rgba?\([^)]+\)/g)
-        : null;
-    const token = matches?.[index];
-    return colorTokenToHex(token) || fallback;
-  };
-
-  const readGradientStopPercent = (value, index, fallback) => {
-    const matches =
-      typeof value === "string"
-        ? [...value.matchAll(/(\d+(?:\.\d+)?)%/g)]
-        : [];
-    const nextValue = Number.parseFloat(matches[index]?.[1] || "");
-    return Number.isFinite(nextValue) ? nextValue : fallback;
-  };
-
-  const readStoredPercentValue = (value, fallback) => {
-    const nextValue = Number.parseFloat(typeof value === "string" ? value.trim() : "");
-    return Number.isFinite(nextValue) ? nextValue : fallback;
-  };
-
-  const readGradientEnabled = (styles, fillValue) => {
-    const storedValue = styles.getPropertyValue("--brand-gradient-enabled").trim();
-    if (storedValue === "0") return false;
-    if (storedValue === "1") return true;
-    return /linear-gradient/i.test(fillValue);
-  };
-
-  const readCurrentThemeColors = () => {
-    const styles = window.getComputedStyle(document.documentElement);
-    const main = readHexFromStyles(styles, ["--theme-color", "--prim"], DEFAULT_MAIN_HEX);
-    const headerOverlayFill = styles.getPropertyValue("--header-overlay-fill").trim();
-    const storedOffset = styles.getPropertyValue("--brand-gradient-offset").trim();
-    const gradientEnabled = readGradientEnabled(styles, headerOverlayFill);
-
-    return {
-      main,
-      updated: readHexFromStyles(styles, ["--status-updated-color", "--theme-color", "--prim"], main),
-      logo: readHexFromStyles(styles, ["--brand-gradient-color"], readGradientStopHex(headerOverlayFill, 0, DEFAULT_LOGO_HEX)),
-      logoOffset: clamp(
-        storedOffset
-          ? readStoredPercentValue(storedOffset, DEFAULT_LOGO_OFFSET)
-          : readGradientStopPercent(headerOverlayFill, 1, DEFAULT_LOGO_OFFSET),
-        20,
-        85
-      ),
-      gradientEnabled,
-      notUpdated: readHexFromStyles(styles, ["--status-not-updated-color"], DEFAULT_NOT_UPDATED_HEX),
-    };
-  };
-
-  const buildStatusThemeVars = ({ updated, notUpdated }) => ({
-    "--status-updated-color": updated,
-    "--status-updated-rgb": hexToRgbString(updated),
-    "--status-not-updated-color": notUpdated,
-    "--status-not-updated-rgb": hexToRgbString(notUpdated),
-    "--footer-status-live-color": "rgba(var(--status-updated-rgb), 0.95)",
-    "--footer-status-muted-color": "rgba(var(--status-not-updated-rgb), 0.9)",
-  });
-
-  const buildBrandOverlayVars = ({ logo, main, hover, logoOffset, gradientEnabled }) => {
-    const normalizedOffset = clamp(Math.round(logoOffset), 20, 85);
-    const solidFill = main;
-    const featuredFill = gradientEnabled
-      ? `linear-gradient(90deg, ${logo} 0%, ${main} ${normalizedOffset}%, #ffffff 100%)`
-      : solidFill;
-    const brandFill = gradientEnabled
-      ? `linear-gradient(90deg, ${logo} 0%, ${main} ${normalizedOffset}%, ${hover} 100%)`
-      : solidFill;
-
-    return {
-      "--brand-gradient-enabled": gradientEnabled ? "1" : "0",
-      "--brand-gradient-color": logo,
-      "--brand-gradient-offset": `${normalizedOffset}%`,
-      "--featured-overlay-fill": featuredFill,
-      "--banner-overlay-fill": brandFill,
-      "--header-overlay-fill": brandFill,
-    };
-  };
-
-  const mergeThemeCssText = (baseCssText, extraVars) => {
-    const lines = Object.entries(extraVars).map(([name, value]) => `  ${name}: ${value};`);
-    const trimmed = typeof baseCssText === "string" ? baseCssText.trim() : "";
-
-    if (!trimmed || !/\}\s*$/.test(trimmed)) {
-      return [
-        ':root[data-theme="custom"] {',
-        ...lines,
-        "}",
-      ].join("\n");
-    }
-
-    return trimmed.replace(/\}\s*$/, `\n${lines.join("\n")}\n}`);
-  };
+  const BUTTON_FEEDBACK_MS = 1400;
+  const ICON_SIZE = 128;
 
   const initCustomThemePicker = (scope = document) => {
     const control = scope.getElementById("customThemeControl");
     const trigger = scope.getElementById("customThemeTrigger");
     const modal = scope.getElementById("customThemeModal");
-    const error = scope.getElementById("customThemeError");
-    const closeButton = scope.getElementById("customThemeClose");
-    const cancelButton = scope.getElementById("customThemeCancel");
-    const applyButton = scope.getElementById("customThemeApply");
-    const mainInput = scope.getElementById("customThemeMainInput");
-    const updatedInput = scope.getElementById("customThemeUpdatedInput");
-    const notUpdatedInput = scope.getElementById("customThemeNotUpdatedInput");
-    const mainValue = scope.getElementById("customThemeMainValue");
-    const updatedValue = scope.getElementById("customThemeUpdatedValue");
-    const notUpdatedValue = scope.getElementById("customThemeNotUpdatedValue");
 
-    if (
-      !control ||
-      !trigger ||
-      !modal ||
-      !error ||
-      !closeButton ||
-      !cancelButton ||
-      !applyButton ||
-      !mainInput ||
-      !updatedInput ||
-      !notUpdatedInput ||
-      !mainValue ||
-      !updatedValue ||
-      !notUpdatedValue
-    ) {
+    if (!control || !trigger) {
       return;
     }
 
     if (control.dataset.customThemeBound === "true") {
       return;
     }
+
+    if (CUSTOM_THEME_LOCKED) {
+      const showLockedNotice = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        modal?.classList.remove("is-open", "is-closing");
+        if (modal) {
+          modal.hidden = true;
+        }
+
+        window.showSiteToast?.({
+          key: "custom-theme-locked",
+          title: "Locked For Now",
+          message: "Custom theme sharing is locked for now.",
+          duration: 3200,
+          icon: "fa-lock",
+        });
+      };
+
+      trigger.addEventListener("click", showLockedNotice);
+      trigger.setAttribute("aria-expanded", "false");
+      control.dataset.customThemeBound = "true";
+      return;
+    }
+
+    const nameInput = scope.getElementById("customThemeNameInput");
+    const iconButton = scope.getElementById("customThemeIconButton");
+    const iconInput = scope.getElementById("customThemeIconInput");
+    const iconImage = scope.getElementById("customThemeIconImage");
+    const iconPlaceholder = scope.getElementById("customThemeIconPlaceholder");
+    const error = scope.getElementById("customThemeError");
+    const copyButton = scope.getElementById("customThemeCopy");
+    const pasteButton = scope.getElementById("customThemePaste");
+    const sendButton = scope.getElementById("customThemeSend");
+    const closeButton = scope.getElementById("customThemeClose");
+
+    if (
+      !modal ||
+      !nameInput ||
+      !iconButton ||
+      !iconInput ||
+      !iconImage ||
+      !iconPlaceholder ||
+      !error ||
+      !copyButton ||
+      !pasteButton ||
+      !sendButton ||
+      !closeButton
+    ) {
+      return;
+    }
+
+    const getStoredHex = () =>
+      window.getStoredCustomSiteThemeHex?.() || DEFAULT_HEX;
+
+    const getActiveTheme = () =>
+      window.getActiveSiteTheme?.() || "blue";
+
+    const normalizeThemeName = (value) => {
+      const trimmed = typeof value === "string" ? value.trim() : "";
+      return trimmed || DEFAULT_THEME_NAME;
+    };
+
+    const getStoredThemeName = () =>
+      normalizeThemeName(window.localStorage.getItem(CUSTOM_THEME_NAME_STORAGE_KEY) || "");
+
+    const getStoredThemeIcon = () =>
+      window.localStorage.getItem(CUSTOM_THEME_ICON_STORAGE_KEY) || "";
+
+    const setStoredThemeName = (value) => {
+      const nextName = normalizeThemeName(value);
+      window.localStorage.setItem(CUSTOM_THEME_NAME_STORAGE_KEY, nextName);
+      return nextName;
+    };
+
+    const setStoredThemeIcon = (value) => {
+      const nextValue = typeof value === "string" ? value : "";
+      if (nextValue) {
+        window.localStorage.setItem(CUSTOM_THEME_ICON_STORAGE_KEY, nextValue);
+      } else {
+        window.localStorage.removeItem(CUSTOM_THEME_ICON_STORAGE_KEY);
+      }
+      return nextValue;
+    };
 
     let previousBodyOverflow = "";
     let closeTimerId = 0;
@@ -217,19 +122,145 @@
       previousBodyOverflow = "";
     };
 
-    const syncValueLabels = () => {
-      mainValue.textContent = normalizeHex(mainInput.value) || DEFAULT_MAIN_HEX;
-      updatedValue.textContent = normalizeHex(updatedInput.value) || DEFAULT_MAIN_HEX;
-      notUpdatedValue.textContent = normalizeHex(notUpdatedInput.value) || DEFAULT_NOT_UPDATED_HEX;
+    const flashButtonLabel = (button, label) => {
+      const labelNode = button.querySelector(".custom-theme-btn-label");
+      const defaultLabel = button.dataset.defaultLabel || labelNode?.textContent || button.textContent;
+      const currentTimerId = Number.parseInt(button.dataset.feedbackTimerId || "0", 10);
+
+      if (currentTimerId) {
+        window.clearTimeout(currentTimerId);
+      }
+
+      button.dataset.defaultLabel = defaultLabel;
+
+      if (labelNode) {
+        labelNode.textContent = label;
+      } else {
+        button.textContent = label;
+      }
+
+      const nextTimerId = window.setTimeout(() => {
+        if (labelNode) {
+          labelNode.textContent = defaultLabel;
+        } else {
+          button.textContent = defaultLabel;
+        }
+        button.dataset.feedbackTimerId = "0";
+      }, BUTTON_FEEDBACK_MS);
+
+      button.dataset.feedbackTimerId = `${nextTimerId}`;
     };
 
-    const syncInputsFromTheme = () => {
-      const colors = readCurrentThemeColors();
-      mainInput.value = colors.main;
-      updatedInput.value = colors.updated;
-      notUpdatedInput.value = colors.notUpdated;
-      syncValueLabels();
+    const syncIconPreview = (iconDataUrl = "") => {
+      if (iconDataUrl) {
+        iconImage.src = iconDataUrl;
+        iconImage.hidden = false;
+        iconPlaceholder.hidden = true;
+        return;
+      }
+
+      iconImage.removeAttribute("src");
+      iconImage.hidden = true;
+      iconPlaceholder.hidden = false;
+    };
+
+    const syncFields = () => {
+      nameInput.value = getStoredThemeName();
+      syncIconPreview(getStoredThemeIcon());
+    };
+
+    const readFileAsDataUrl = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : "");
+        reader.onerror = () => reject(new Error("Failed to read image."));
+        reader.readAsDataURL(file);
+      });
+
+    const loadImage = (src) =>
+      new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("Failed to load image."));
+        image.src = src;
+      });
+
+    const buildIconDataUrl = async (file) => {
+      const source = await readFileAsDataUrl(file);
+      const image = await loadImage(source);
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
+      if (!context) {
+        throw new Error("Canvas is unavailable.");
+      }
+
+      canvas.width = ICON_SIZE;
+      canvas.height = ICON_SIZE;
+      context.clearRect(0, 0, ICON_SIZE, ICON_SIZE);
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = "high";
+
+      const scale = Math.min(ICON_SIZE / image.width, ICON_SIZE / image.height);
+      const width = image.width * scale;
+      const height = image.height * scale;
+      const x = (ICON_SIZE - width) / 2;
+      const y = (ICON_SIZE - height) / 2;
+
+      context.drawImage(image, x, y, width, height);
+      return canvas.toDataURL("image/png");
+    };
+
+    const buildThemePackageText = () => {
+      const cssText = window.getCustomSiteThemeCssText?.() || "";
+      return JSON.stringify(
+        {
+          version: 1,
+          name: normalizeThemeName(nameInput.value),
+          icon: getStoredThemeIcon(),
+          css: cssText,
+        },
+        null,
+        2
+      );
+    };
+
+    const applyThemePackageText = (text) => {
+      const raw = typeof text === "string" ? text.trim() : "";
+      if (!raw) {
+        setError("Clipboard is empty.");
+        return false;
+      }
+
+      let payload = null;
+      let cssText = raw;
+
+      try {
+        payload = JSON.parse(raw);
+      } catch (_error) {
+        payload = null;
+      }
+
+      if (payload && typeof payload === "object") {
+        cssText = typeof payload.css === "string" ? payload.css.trim() : "";
+        const nextThemeName = normalizeThemeName(payload.name);
+        const nextIcon = typeof payload.icon === "string" ? payload.icon : "";
+
+        nameInput.value = nextThemeName;
+        setStoredThemeName(nextThemeName);
+        setStoredThemeIcon(nextIcon);
+        syncIconPreview(nextIcon);
+      }
+
+      const nextTheme = window.applyCustomSiteThemeCssText?.(cssText);
+      if (!nextTheme) {
+        setError("Clipboard theme is invalid.");
+        return false;
+      }
+
+      window.syncThemeSwitcherUI?.(document);
       setError("");
+      return true;
     };
 
     const closePopover = ({ restoreFocus = false } = {}) => {
@@ -261,105 +292,163 @@
       window.clearTimeout(closeTimerId);
       closeTimerId = 0;
 
-      syncInputsFromTheme();
+      syncFields();
       previousBodyOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       modal.hidden = false;
       modal.classList.remove("is-closing");
       trigger.classList.add("is-active");
       trigger.setAttribute("aria-expanded", "true");
+      setError("");
 
       requestAnimationFrame(() => {
         modal.classList.add("is-open");
-        mainInput.focus();
+        nameInput.focus();
+        nameInput.select();
       });
     };
 
-    const syncTriggerState = () => {
-      const isCustomActive = (window.getActiveSiteTheme?.() || "blue") === "custom";
-      const { main } = readCurrentThemeColors();
+    const syncState = () => {
+      const storedHex = getStoredHex();
+      const isCustomActive = getActiveTheme() === "custom";
 
-      if (isCustomActive) {
-        trigger.style.setProperty("color", main);
-      } else {
-        trigger.style.removeProperty("color");
+      trigger.style.setProperty("color", isCustomActive ? storedHex : "");
+
+      if (isModalOpen()) {
+        syncFields();
       }
     };
 
-    const applyColors = () => {
-      const currentTheme = readCurrentThemeColors();
-      const colors = {
-        main: normalizeHex(mainInput.value) || DEFAULT_MAIN_HEX,
-        updated: normalizeHex(updatedInput.value) || DEFAULT_MAIN_HEX,
-        logo: currentTheme.logo,
-        logoOffset: currentTheme.logoOffset,
-        gradientEnabled: currentTheme.gradientEnabled,
-        notUpdated: normalizeHex(notUpdatedInput.value) || DEFAULT_NOT_UPDATED_HEX,
-      };
+    const copyThemePackage = async () => {
+      const text = buildThemePackageText();
 
-      const baseTheme = window.applyCustomSiteTheme?.(colors.main);
-      if (!baseTheme) {
-        setError("Could not apply the main theme color.");
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          throw new Error("Clipboard copy is unavailable.");
+        }
+
+        flashButtonLabel(copyButton, "Copied");
+        setError("");
+      } catch (_error) {
+        setError("Clipboard copy was blocked.");
+      }
+    };
+
+    const pasteThemePackage = async () => {
+      if (!navigator.clipboard?.readText) {
+        setError("Clipboard paste was blocked.");
         return;
       }
 
-      const baseCssText = window.getCustomSiteThemeCssText?.() || "";
-      const hover = readHexFromStyles(
-        window.getComputedStyle(document.documentElement),
-        ["--prim-hvr"],
-        colors.main
-      );
-      const mergedCssText = mergeThemeCssText(baseCssText, {
-        ...buildStatusThemeVars(colors),
-        ...buildBrandOverlayVars({
-          logo: colors.logo,
-          main: colors.main,
-          hover,
-          logoOffset: colors.logoOffset,
-          gradientEnabled: colors.gradientEnabled,
-        }),
-      });
-      const appliedTheme = window.applyCustomSiteThemeCssText?.(mergedCssText);
+      try {
+        const nextText = await navigator.clipboard.readText();
+        if (!applyThemePackageText(nextText)) {
+          return;
+        }
 
-      if (!appliedTheme) {
-        setError("Could not save the theme colors.");
-        return;
+        flashButtonLabel(pasteButton, "Pasted");
+      } catch (_error) {
+        setError("Clipboard paste was blocked.");
       }
+    };
 
-      window.syncThemeSwitcherUI?.(document);
-      syncTriggerState();
-      closePopover({ restoreFocus: true });
+    const sendThemePackage = async () => {
+      const text = buildThemePackageText();
+      const title = normalizeThemeName(nameInput.value);
+
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title,
+            text,
+          });
+          flashButtonLabel(sendButton, "Sent");
+          setError("");
+          return;
+        }
+
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          flashButtonLabel(sendButton, "Copied");
+          setError("");
+          return;
+        }
+
+        throw new Error("Share is unavailable.");
+      } catch (error) {
+        if (error?.name === "AbortError") {
+          return;
+        }
+        setError("Share was blocked.");
+      }
     };
 
     trigger.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
 
-      if (isModalOpen()) {
-        closePopover();
+      if (!isModalOpen()) {
+        openPopover();
         return;
       }
 
-      openPopover();
+      closePopover();
     });
 
-    [closeButton, cancelButton].forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        closePopover({ restoreFocus: true });
-      });
-    });
-
-    [mainInput, updatedInput, notUpdatedInput].forEach((input) => {
-      input.addEventListener("input", () => {
-        syncValueLabels();
-        setError("");
-      });
-    });
-
-    applyButton.addEventListener("click", (event) => {
+    closeButton.addEventListener("click", (event) => {
       event.preventDefault();
-      applyColors();
+      closePopover({ restoreFocus: true });
+    });
+
+    nameInput.addEventListener("input", () => {
+      setStoredThemeName(nameInput.value);
+      setError("");
+    });
+
+    iconButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      iconInput.click();
+    });
+
+    iconInput.addEventListener("change", async () => {
+      const [file] = iconInput.files || [];
+      if (!file) {
+        return;
+      }
+
+      try {
+        const nextIcon = await buildIconDataUrl(file);
+        setStoredThemeIcon(nextIcon);
+        syncIconPreview(nextIcon);
+        setError("");
+      } catch (_error) {
+        setError("Icon import failed.");
+      } finally {
+        iconInput.value = "";
+      }
+    });
+
+    copyButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      copyButton.disabled = true;
+      await copyThemePackage();
+      copyButton.disabled = false;
+    });
+
+    pasteButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      pasteButton.disabled = true;
+      await pasteThemePackage();
+      pasteButton.disabled = false;
+    });
+
+    sendButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      sendButton.disabled = true;
+      await sendThemePackage();
+      sendButton.disabled = false;
     });
 
     modal.addEventListener("click", (event) => {
@@ -374,11 +463,11 @@
       }
     });
 
-    window.addEventListener(THEME_CHANGE_EVENT, syncTriggerState);
+    window.addEventListener(THEME_CHANGE_EVENT, syncState);
 
     control.dataset.customThemeBound = "true";
     trigger.setAttribute("aria-expanded", "false");
-    syncTriggerState();
+    syncState();
   };
 
   window.initCustomThemePicker = initCustomThemePicker;

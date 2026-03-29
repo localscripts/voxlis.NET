@@ -1,342 +1,16 @@
 (() => {
   const mount = document.getElementById("filterMount");
   if (!mount) return;
-  const onDomReady = window.VOXLIS_UTILS?.onDomReady ?? ((callback) => callback?.());
-  const loadHtmlPartial =
-    window.VOXLIS_UTILS?.loadHtmlPartial ??
-    (async (target, path) => {
-      const response = await fetch(path, { cache: "no-cache" });
-      if (!response.ok) {
-        throw new Error(`Failed to load partial (${path}): ${response.status}`);
-      }
-
-      target.innerHTML = await response.text();
-      return target;
-    });
 
   const FILTER_TRIGGER_SELECTOR =
     "#filterButton, #mobileMenuFilterButton, #mobileTopFilterButton, #mobileQuickFilterButton";
-  const DEFAULT_FILTERS = window.VOXLIS_CONFIG?.robloxCards?.defaultFilters ?? {
-    search: "",
-    sort: "random",
-    platforms: [],
-    price: "all",
-    key: "all",
-    type: "all",
-    tags: [],
-    verified: false,
-    trending: false,
-    warning: false,
-    updatedState: "all",
-    showInsecure: false,
-  };
-  const TAG_METADATA = window.VOXLIS_CONFIG?.robloxCards?.tagMetadata ?? {};
-  const DOM_IDS = {
-    platformList: "filterPlatformList",
-    tagList: "filterTagList",
-    showOnlyList: "filterShowOnlyList",
-    sortDropdown: "filterSortDropdown",
-    sortOptions: "filterSortDropdownOptions",
-    sortSelected: "filterSortDropdownSelected",
-    closeDrawer: "closeFilterDrawer",
-    applyFilters: "applyFilters",
-    resetFilters: "resetFilters",
-    insecureButton: "revealInsecureHold",
-    insecureLabel: "revealInsecureLabel",
-    insecureHint: "revealInsecureHint",
-  };
-  const SORT_OPTIONS = [
-    { value: "random", label: "Random" },
-    { value: "most-popular", label: "Most Popular" },
-    { value: "least-popular", label: "Least Popular" },
-    { value: "price-asc", label: "Price: Low to High" },
-    { value: "price-desc", label: "Price: High to Low" },
-    { value: "name-asc", label: "Name: A to Z" },
-  ];
-  const PLATFORM_OPTIONS = [
-    { id: "filterWindows", platform: "windows", label: "Windows", iconClass: "fab fa-windows" },
-    { id: "filterMacos", platform: "macos", label: "macOS", iconClass: "fab fa-apple" },
-    { id: "filterAndroid", platform: "android", label: "Android", iconClass: "fab fa-android" },
-    { id: "filterIos", platform: "ios", label: "iOS", iconClass: "fas fa-mobile-screen-button" },
-  ];
-  const TAG_OPTIONS = [
-    { id: "filterTagMultiInstance", tag: "multi-instance" },
-    { id: "filterTagDecompiler", tag: "decompiler" },
-    { id: "filterTagKernel", tag: "kernel", toneClass: "is-kernel" },
-    { id: "filterTagUsermode", tag: "usermode", toneClass: "is-usermode" },
-  ];
-  const SHOW_ONLY_FILTER_FALLBACK = [
-    { id: "filterVerified", field: "verified", label: "Verified", iconClass: "fas fa-circle-check", iconToneClass: "ph-good-ico", toneClass: "is-verified" },
-    { id: "filterTrending", field: "trending", label: "Trending", iconClass: "fas fa-arrow-trend-up", toneClass: "is-trending" },
-    { id: "filterWarning", field: "warning", label: "Warning", iconClass: "fas fa-triangle-exclamation", iconToneClass: "ph-warn-ico", toneClass: "is-warning" },
-  ];
-  const DEFAULT_SORT_VALUE = DEFAULT_FILTERS.sort || "random";
-  const INSECURE_HOLD_DURATION_MS = 5000;
 
   const byId = (id) => document.getElementById(id);
   const query = (selector, root = document) => root.querySelector(selector);
   const queryAll = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    })[character] || character);
-  const titleCase = (value = "") =>
-    String(value)
-      .replace(/[-_]+/g, " ")
-      .replace(/\b\w/g, (character) => character.toUpperCase());
-
-  let insecureUnlocked = false;
-  let insecureHoldFrameId = 0;
-  let insecureHoldStartedAt = 0;
-  let insecureHoldPointerId = null;
 
   const getDrawer = () => byId("filterDrawer");
-  const getSortDropdown = () => byId(DOM_IDS.sortDropdown);
-  const getInsecureHoldButton = () => byId(DOM_IDS.insecureButton);
-  const getInsecureHoldLabel = () => byId(DOM_IDS.insecureLabel);
-  const getInsecureHoldHint = () => byId(DOM_IDS.insecureHint);
-
-  const getShowOnlyFilterOptions = () => {
-    const configuredOptions = window.VOXLIS_CONFIG?.robloxCards?.showOnlyFilterOptions;
-    if (Array.isArray(configuredOptions) && configuredOptions.length) {
-      return configuredOptions.map((option) => ({ ...option }));
-    }
-    return SHOW_ONLY_FILTER_FALLBACK;
-  };
-
-  const getSortOptionLabel = (value = DEFAULT_SORT_VALUE) =>
-    SORT_OPTIONS.find((option) => option.value === value)?.label || "Random";
-
-  const buildCheckboxIconMarkup = ({ assetIcon = "", iconClass = "", iconToneClass = "", toneClass = "" }) => {
-    if (iconClass) {
-      return `<span class="filter-checkbox-icon${toneClass ? ` ${escapeHtml(toneClass)}` : ""}"><i class="${escapeHtml(iconClass)}${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" aria-hidden="true"></i></span>`;
-    }
-
-    if (assetIcon) {
-      return `<span class="filter-checkbox-icon${toneClass ? ` ${escapeHtml(toneClass)}` : ""}"><span class="filter-asset-icon" style="--filter-asset-icon: url('/public/assets/${escapeHtml(assetIcon)}')" aria-hidden="true"></span></span>`;
-    }
-
-    return "";
-  };
-
-  const buildCheckboxMarkup = ({
-    id,
-    label,
-    dataAttributes = "",
-    assetIcon = "",
-    iconClass = "",
-    iconToneClass = "",
-    toneClass = "",
-  }) => `
-    <label class="filter-checkbox">
-      <input type="checkbox" id="${escapeHtml(id)}"${dataAttributes ? ` ${dataAttributes}` : ""}>
-      <span class="filter-checkbox-mark"></span>
-      <span class="filter-checkbox-label">
-        ${buildCheckboxIconMarkup({ assetIcon, iconClass, iconToneClass, toneClass })}
-        <span class="filter-checkbox-copy">${escapeHtml(label)}</span>
-      </span>
-    </label>
-  `;
-
-  const buildPlatformOptionMarkup = ({ id, platform, label, iconClass }) => `
-    <div class="filter-platform-option">
-      <input type="checkbox" id="${escapeHtml(id)}" data-platform="${escapeHtml(platform)}">
-      <label for="${escapeHtml(id)}">
-        <span class="filter-platform-label">
-          <i class="${escapeHtml(iconClass)}" aria-hidden="true"></i>
-          <span>${escapeHtml(label)}</span>
-        </span>
-      </label>
-    </div>
-  `;
-
-  const buildTagFilterMarkup = ({ id, tag, toneClass = "" }) => {
-    const tagMeta = TAG_METADATA[tag] ?? {};
-    return buildCheckboxMarkup({
-      id,
-      label: tagMeta.label || titleCase(tag),
-      dataAttributes: `data-tag="${escapeHtml(tag)}"`,
-      assetIcon: tagMeta.assetIcon || "",
-      iconClass: tagMeta.assetIcon ? "" : tagMeta.icon || "",
-      iconToneClass: tagMeta.assetIcon ? "" : tagMeta.iconToneClass || "",
-      toneClass,
-    });
-  };
-
-  const buildShowOnlyFilterMarkup = ({ id, label, assetIcon = "", iconClass = "", iconToneClass = "", toneClass = "" }) =>
-    buildCheckboxMarkup({ id, label, assetIcon, iconClass, iconToneClass, toneClass });
-
-  const setSelectedSortOption = (option) => {
-    const selectedLabel = byId(DOM_IDS.sortSelected)?.querySelector("span");
-    const optionsRoot = byId(DOM_IDS.sortOptions);
-    if (!selectedLabel || !option || !optionsRoot) return;
-
-    selectedLabel.textContent = option.textContent?.trim() || getSortOptionLabel();
-    queryAll(".custom-dropdown-option", optionsRoot).forEach((node) => node.classList.remove("selected"));
-    option.classList.add("selected");
-  };
-
-  const renderSortOptions = () => {
-    const optionsRoot = byId(DOM_IDS.sortOptions);
-    if (!optionsRoot) return;
-
-    optionsRoot.innerHTML = SORT_OPTIONS
-      .map(
-        (option) =>
-          `<div class="custom-dropdown-option${option.value === DEFAULT_SORT_VALUE ? " selected" : ""}" data-value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</div>`,
-      )
-      .join("");
-
-    const defaultOption =
-      query(`[data-value="${DEFAULT_SORT_VALUE}"]`, optionsRoot) || query(".custom-dropdown-option", optionsRoot);
-    if (defaultOption) setSelectedSortOption(defaultOption);
-  };
-
-  const renderPlatformOptions = () => {
-    const list = byId(DOM_IDS.platformList);
-    if (!list) return;
-    list.innerHTML = PLATFORM_OPTIONS.map((option) => buildPlatformOptionMarkup(option)).join("");
-  };
-
-  const renderTagOptions = () => {
-    const list = byId(DOM_IDS.tagList);
-    if (!list) return;
-    list.innerHTML = TAG_OPTIONS.map((option) => buildTagFilterMarkup(option)).join("");
-  };
-
-  const renderShowOnlyFilterOptions = () => {
-    const list = byId(DOM_IDS.showOnlyList);
-    if (!list) return;
-    list.innerHTML = getShowOnlyFilterOptions().map((option) => buildShowOnlyFilterMarkup(option)).join("");
-  };
-
-  const setInsecureHoldProgress = (progress = 0) => {
-    getInsecureHoldButton()?.style.setProperty(
-      "--filter-insecure-progress",
-      `${Math.max(0, Math.min(progress, 1)) * 100}%`,
-    );
-  };
-
-  const syncInsecureButtonState = () => {
-    const button = getInsecureHoldButton();
-    if (!button) return;
-
-    button.classList.toggle("is-unlocked", insecureUnlocked);
-    button.classList.remove("is-holding");
-    button.setAttribute("aria-pressed", String(insecureUnlocked));
-    setInsecureHoldProgress(insecureUnlocked ? 1 : 0);
-
-    const label = getInsecureHoldLabel();
-    if (label) {
-      label.textContent = insecureUnlocked
-        ? "Insecure mode is enabled"
-        : "Hold 5 seconds to show insecure";
-    }
-
-    const hint = getInsecureHoldHint();
-    if (hint) {
-      hint.textContent = insecureUnlocked
-        ? "Working but not recommended or not yet verified executors are now visible until you reset filters."
-        : "Press and hold until the red fill reaches the end to unlock insecure filters.";
-    }
-  };
-
-  const stopInsecureHold = ({ keepProgress = false } = {}) => {
-    if (insecureHoldFrameId) {
-      window.cancelAnimationFrame(insecureHoldFrameId);
-      insecureHoldFrameId = 0;
-    }
-
-    const button = getInsecureHoldButton();
-    if (button && insecureHoldPointerId != null) {
-      try {
-        if (button.hasPointerCapture?.(insecureHoldPointerId)) {
-          button.releasePointerCapture?.(insecureHoldPointerId);
-        }
-      } catch {}
-    }
-
-    insecureHoldStartedAt = 0;
-    insecureHoldPointerId = null;
-    button?.classList.remove("is-holding");
-
-    if (!keepProgress) {
-      setInsecureHoldProgress(insecureUnlocked ? 1 : 0);
-    }
-  };
-
-  const applyFilters = () => {
-    window.applyRobloxCardsCatalogFilters?.(getCurrentFilters());
-  };
-
-  const unlockInsecureEntries = () => {
-    insecureUnlocked = true;
-    stopInsecureHold({ keepProgress: true });
-    syncInsecureButtonState();
-    applyFilters();
-  };
-
-  const tickInsecureHold = () => {
-    if (!insecureHoldStartedAt || insecureUnlocked) {
-      return;
-    }
-
-    const progress = Math.min((performance.now() - insecureHoldStartedAt) / INSECURE_HOLD_DURATION_MS, 1);
-    setInsecureHoldProgress(progress);
-
-    if (progress >= 1) {
-      unlockInsecureEntries();
-      return;
-    }
-
-    insecureHoldFrameId = window.requestAnimationFrame(tickInsecureHold);
-  };
-
-  const startInsecureHold = (event) => {
-    const button = getInsecureHoldButton();
-    if (!button || insecureUnlocked || insecureHoldStartedAt) return;
-
-    if (event.type === "pointerdown") {
-      if (event.button !== 0) return;
-      insecureHoldPointerId = event.pointerId;
-      button.setPointerCapture?.(event.pointerId);
-    }
-
-    if (event.type === "keydown") {
-      if (event.repeat || !["Enter", " "].includes(event.key)) return;
-      event.preventDefault();
-    }
-
-    insecureHoldStartedAt = performance.now();
-    button.classList.add("is-holding");
-    setInsecureHoldProgress(0);
-    insecureHoldFrameId = window.requestAnimationFrame(tickInsecureHold);
-  };
-
-  const endInsecureHold = (event = null) => {
-    if (!insecureHoldStartedAt && !insecureHoldFrameId) return;
-
-    if (event?.type === "keyup" && !["Enter", " "].includes(event.key)) {
-      return;
-    }
-
-    if (event?.pointerId != null && insecureHoldPointerId != null && event.pointerId !== insecureHoldPointerId) {
-      return;
-    }
-
-    stopInsecureHold({ keepProgress: insecureUnlocked });
-    syncInsecureButtonState();
-  };
-
-  const resetInsecureReveal = () => {
-    insecureUnlocked = false;
-    stopInsecureHold();
-    syncInsecureButtonState();
-  };
+  const getSortDropdown = () => byId("filterSortDropdown");
 
   const setDrawerOpen = (isOpen) => {
     const drawer = getDrawer();
@@ -366,15 +40,23 @@
   const openDrawer = () => {
     if (!getDrawer()) return;
     closeMobileNavbarPanels();
-    syncInsecureButtonState();
     setDrawerOpen(true);
     document.dispatchEvent(new CustomEvent("voxlis:filter-opened"));
   };
 
   const closeDrawer = () => {
-    endInsecureHold();
     getSortDropdown()?.classList.remove("is-open");
     setDrawerOpen(false);
+  };
+
+  const setSelectedSortOption = (option) => {
+    const selectedLabel = byId("filterSortDropdownSelected")?.querySelector("span");
+    const optionsRoot = byId("filterSortDropdownOptions");
+    if (!selectedLabel || !option || !optionsRoot) return;
+
+    selectedLabel.textContent = option.textContent?.trim() || "Recommended";
+    queryAll(".custom-dropdown-option", optionsRoot).forEach((node) => node.classList.remove("selected"));
+    option.classList.add("selected");
   };
 
   const setSingleActive = (clickedButton) => {
@@ -396,11 +78,9 @@
       button.classList.toggle("is-active", button.dataset.default === "true");
     });
 
-    const sortOptions = byId(DOM_IDS.sortOptions);
-    const defaultSortOption = sortOptions ? query(`[data-value="${DEFAULT_SORT_VALUE}"]`, sortOptions) : null;
+    const sortOptions = byId("filterSortDropdownOptions");
+    const defaultSortOption = sortOptions ? query('[data-value="recommended"]', sortOptions) : null;
     if (defaultSortOption) setSelectedSortOption(defaultSortOption);
-
-    resetInsecureReveal();
   };
 
   const getActiveSegmentValue = (attributeName, fallback = "all") => {
@@ -417,35 +97,41 @@
     const drawer = getDrawer();
     if (!drawer) {
       return {
-        search: window.getRobloxCardsSearchQuery?.() || DEFAULT_FILTERS.search || "",
-        sort: DEFAULT_SORT_VALUE,
-        platforms: Array.isArray(DEFAULT_FILTERS.platforms) ? [...DEFAULT_FILTERS.platforms] : [],
-        price: DEFAULT_FILTERS.price || "all",
-        key: DEFAULT_FILTERS.key || "all",
-        type: DEFAULT_FILTERS.type || "all",
-        tags: Array.isArray(DEFAULT_FILTERS.tags) ? [...DEFAULT_FILTERS.tags] : [],
-        verified: Boolean(DEFAULT_FILTERS.verified),
-        trending: Boolean(DEFAULT_FILTERS.trending),
-        warning: Boolean(DEFAULT_FILTERS.warning),
-        updatedState: DEFAULT_FILTERS.updatedState || "all",
-        showInsecure: insecureUnlocked,
+        search: window.getRobloxCardsSearchQuery?.() || "",
+        sort: "recommended",
+        platforms: [],
+        price: "all",
+        key: "all",
+        type: "all",
+        verified: false,
+        premium: false,
+        updated: false,
+        multiInstance: false,
+        decompiler: false,
+        kernel: false,
+        highSunc: false,
       };
     }
 
     return {
-      search: window.getRobloxCardsSearchQuery?.() || DEFAULT_FILTERS.search || "",
-      sort: query(`#${DOM_IDS.sortOptions} .custom-dropdown-option.selected`, drawer)?.dataset.value || DEFAULT_SORT_VALUE,
+      search: window.getRobloxCardsSearchQuery?.() || "",
+      sort: query("#filterSortDropdownOptions .custom-dropdown-option.selected", drawer)?.dataset.value || "recommended",
       platforms: queryAll('input[data-platform]:checked', drawer).map((input) => input.dataset.platform).filter(Boolean),
-      price: getActiveSegmentValue("data-price", DEFAULT_FILTERS.price || "all"),
-      key: getActiveSegmentValue("data-key", DEFAULT_FILTERS.key || "all"),
-      type: getActiveSegmentValue("data-type", DEFAULT_FILTERS.type || "all"),
-      tags: queryAll('input[data-tag]:checked', drawer).map((input) => input.dataset.tag).filter(Boolean),
+      price: getActiveSegmentValue("data-price", "all"),
+      key: getActiveSegmentValue("data-key", "all"),
+      type: getActiveSegmentValue("data-type", "all"),
       verified: Boolean(byId("filterVerified")?.checked),
-      trending: Boolean(byId("filterTrending")?.checked),
-      warning: Boolean(byId("filterWarning")?.checked),
-      updatedState: getActiveSegmentValue("data-updated", DEFAULT_FILTERS.updatedState || "all"),
-      showInsecure: insecureUnlocked,
+      premium: Boolean(byId("filterPremium")?.checked),
+      updated: Boolean(byId("filterUpdated")?.checked),
+      multiInstance: Boolean(byId("filterMultiInstance")?.checked),
+      decompiler: Boolean(byId("filterDecompiler")?.checked),
+      kernel: Boolean(byId("filterKernel")?.checked),
+      highSunc: Boolean(byId("filterHighSunc")?.checked),
     };
+  };
+
+  const applyFilters = () => {
+    window.applyRobloxCardsCatalogFilters?.(getCurrentFilters());
   };
 
   const setupDrawerEvents = () => {
@@ -462,18 +148,18 @@
 
       if (!drawer) return;
 
-      if (target.closest(".filter-drawer-overlay") || target.closest(`#${DOM_IDS.closeDrawer}`)) {
+      if (target.closest(".filter-drawer-overlay") || target.closest("#closeFilterDrawer")) {
         closeDrawer();
         return;
       }
 
-      if (target.closest(`#${DOM_IDS.applyFilters}`)) {
+      if (target.closest("#applyFilters")) {
         applyFilters();
         closeDrawer();
         return;
       }
 
-      if (target.closest(`#${DOM_IDS.resetFilters}`)) {
+      if (target.closest("#resetFilters")) {
         resetDrawerControls();
         applyFilters();
         return;
@@ -488,60 +174,27 @@
       const dropdown = getSortDropdown();
       if (!dropdown) return;
 
-      if (target.closest(`#${DOM_IDS.sortSelected}`)) {
+      if (target.closest("#filterSortDropdownSelected")) {
         dropdown.classList.toggle("is-open");
         return;
       }
 
-      const option = target.closest(`#${DOM_IDS.sortOptions} .custom-dropdown-option`);
+      const option = target.closest("#filterSortDropdownOptions .custom-dropdown-option");
       if (option) {
         setSelectedSortOption(option);
         dropdown.classList.remove("is-open");
         return;
       }
 
-      if (!target.closest(`#${DOM_IDS.sortDropdown}`)) {
+      if (!target.closest("#filterSortDropdown")) {
         dropdown.classList.remove("is-open");
       }
     });
 
-    document.addEventListener("pointerdown", (event) => {
-      const target = event.target;
-      if (!target.closest?.(`#${DOM_IDS.insecureButton}`)) return;
-      startInsecureHold(event);
-    });
-
-    document.addEventListener("pointerup", (event) => {
-      endInsecureHold(event);
-    });
-
-    document.addEventListener("pointercancel", (event) => {
-      endInsecureHold(event);
-    });
-
     document.addEventListener("keydown", (event) => {
-      if (event.target === getInsecureHoldButton()) {
-        startInsecureHold(event);
-      }
-
       if (event.key !== "Escape") return;
       if (!getDrawer()?.classList.contains("is-open")) return;
       closeDrawer();
-    });
-
-    document.addEventListener("keyup", (event) => {
-      if (event.target !== getInsecureHoldButton()) return;
-      endInsecureHold(event);
-    });
-
-    window.addEventListener("blur", () => {
-      endInsecureHold();
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        endInsecureHold();
-      }
     });
 
     document.addEventListener("voxlis:open-filter", openDrawer);
@@ -549,12 +202,11 @@
 
   const loadFilter = async () => {
     try {
-      await loadHtmlPartial(mount, "src/components/filter/filter.html");
-      renderSortOptions();
-      renderPlatformOptions();
-      renderTagOptions();
-      renderShowOnlyFilterOptions();
-      syncInsecureButtonState();
+      const response = await fetch("src/components/filter/filter.html", { cache: "no-cache" });
+      if (!response.ok) {
+        throw new Error(`Failed to load filter partial: ${response.status}`);
+      }
+      mount.innerHTML = await response.text();
     } catch (error) {
       console.error(error);
     }
@@ -564,5 +216,10 @@
 
   setupDrawerEvents();
 
-  onDomReady(loadFilter);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadFilter, { once: true });
+    return;
+  }
+
+  loadFilter();
 })();

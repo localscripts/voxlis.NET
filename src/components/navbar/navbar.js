@@ -286,24 +286,22 @@ const initNavbar = () => {
 (() => {
   const mount = byId("navbarMount");
   if (!mount) return;
-  const onDomReady = window.VOXLIS_UTILS?.onDomReady ?? ((callback) => callback?.());
-  const loadHtmlPartial =
-    window.VOXLIS_UTILS?.loadHtmlPartial ??
-    (async (target, path) => {
-      const response = await fetch(path, { cache: "no-cache" });
-      if (!response.ok) throw new Error(`Failed to load partial (${path}): ${response.status}`);
-      target.innerHTML = await response.text();
-      return target;
-    });
 
   const loadNavbar = async () => {
     try {
-      await loadHtmlPartial(mount, "src/components/navbar/navbar.html");
+      const response = await fetch("src/components/navbar/navbar.html", { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Failed to load navbar partial: ${response.status}`);
+      mount.innerHTML = await response.text();
       initNavbar();
     } catch (error) {
       console.error(error);
     }
   };
 
-  onDomReady(loadNavbar);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadNavbar, { once: true });
+    return;
+  }
+
+  loadNavbar();
 })();

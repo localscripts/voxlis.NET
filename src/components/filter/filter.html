@@ -13,26 +13,53 @@
     <div class="filter-drawer-body">
       <section class="filter-section">
         <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
           Sort by
         </h3>
         <div class="custom-dropdown filter-dropdown" id="filterSortDropdown">
           <div class="custom-dropdown-selected" id="filterSortDropdownSelected">
-            <span>Random</span>
+            <span>Recommended</span>
             <i class="fas fa-chevron-down"></i>
           </div>
-          <div class="custom-dropdown-options" id="filterSortDropdownOptions"></div>
+          <div class="custom-dropdown-options" id="filterSortDropdownOptions">
+            <div class="custom-dropdown-option selected" data-value="recommended">Recommended</div>
+            <div class="custom-dropdown-option" data-value="most-popular">Most Popular</div>
+            <div class="custom-dropdown-option" data-value="least-popular">Least Popular</div>
+            <div class="custom-dropdown-option" data-value="price-asc">Price: Low to High</div>
+            <div class="custom-dropdown-option" data-value="price-desc">Price: High to Low</div>
+            <div class="custom-dropdown-option" data-value="name-asc">Name: A to Z</div>
+          </div>
         </div>
       </section>
 
       <section class="filter-section">
         <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
           Platform
         </h3>
-        <div id="filterPlatformList" class="filter-platform-grid"></div>
+        <div class="filter-platform-grid">
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterWindows" data-platform="windows">
+            <label for="filterWindows">Windows</label>
+          </div>
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterMacos" data-platform="macos">
+            <label for="filterMacos">macOS</label>
+          </div>
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterAndroid" data-platform="android">
+            <label for="filterAndroid">Android</label>
+          </div>
+          <div class="filter-platform-option">
+            <input type="checkbox" id="filterIos" data-platform="ios">
+            <label for="filterIos">iOS</label>
+          </div>
+        </div>
       </section>
 
       <section class="filter-section">
         <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
           Price
         </h3>
         <div class="filter-segmented-control">
@@ -44,68 +71,79 @@
 
       <section class="filter-section">
         <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
+          Key
+        </h3>
+        <div class="filter-segmented-control">
+          <button class="filter-segment-button is-active" data-key="all" data-default="true" type="button">All</button>
+          <button class="filter-segment-button" data-key="keyless" type="button">No key system</button>
+          <button class="filter-segment-button" data-key="keysystem" type="button">Key System</button>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
           Type
         </h3>
         <div class="filter-segmented-control">
           <button class="filter-segment-button is-active" data-type="all" data-default="true" type="button">All</button>
-          <button class="filter-segment-button" data-type="external" type="button">External</button>
+          <button class="filter-segment-button" data-type="external" type="button">Cheat Menu</button>
           <button class="filter-segment-button" data-type="executor" type="button">Executor</button>
         </div>
       </section>
 
       <section class="filter-section">
         <h3 class="filter-section-title">
-          Key-System (tasks for free key)
+          <span class="filter-section-dot"></span>
+          Capabilities
         </h3>
-        <div class="filter-segmented-control">
-          <button class="filter-segment-button is-active" data-key="all" data-default="true" type="button">All</button>
-          <button class="filter-segment-button" data-key="keysystem" type="button">Yes</button>
-          <button class="filter-segment-button" data-key="keyless" type="button">No</button>
+        <div class="filter-checkbox-list">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterMultiInstance">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Multi-instance</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterDecompiler">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Decompiler</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterKernel">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Kernel</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterHighSunc">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">High sUNC</span>
+          </label>
         </div>
       </section>
 
       <section class="filter-section">
         <h3 class="filter-section-title">
-          Tags
-        </h3>
-        <div id="filterTagList" class="filter-checkbox-list filter-tag-list"></div>
-      </section>
-
-      <section class="filter-section">
-        <h3 class="filter-section-title">
+          <span class="filter-section-dot"></span>
           Show only
         </h3>
-        <div id="filterShowOnlyList" class="filter-checkbox-list"></div>
-      </section>
-
-      <section class="filter-section">
-        <h3 class="filter-section-title">
-          Updated
-        </h3>
-        <div class="filter-segmented-control">
-          <button class="filter-segment-button is-active" data-updated="all" data-default="true" type="button">All</button>
-          <button class="filter-segment-button" data-updated="yes" type="button">Yes</button>
-          <button class="filter-segment-button" data-updated="no" type="button">No</button>
+        <div class="filter-checkbox-list">
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterVerified">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Verified</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterPremium">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Premium</span>
+          </label>
+          <label class="filter-checkbox">
+            <input type="checkbox" id="filterUpdated">
+            <span class="filter-checkbox-mark"></span>
+            <span class="filter-checkbox-label">Updated</span>
+          </label>
         </div>
-      </section>
-
-      <section class="filter-section filter-insecure-section">
-        <h3 class="filter-section-title is-danger">
-          Insecure
-        </h3>
-        <button
-          id="revealInsecureHold"
-          class="filter-insecure-button"
-          type="button"
-          aria-pressed="false"
-          aria-describedby="revealInsecureHint"
-        >
-          <span class="filter-insecure-button-copy">
-            <span id="revealInsecureLabel" class="filter-insecure-button-title">Hold 5 seconds to show insecure</span>
-            <span class="filter-insecure-button-subtitle">Insecure mode shows working executors that are not recommended or not yet verified. Use it at your own risk.</span>
-          </span>
-        </button>
-        <p id="revealInsecureHint" class="filter-insecure-hint">Press and hold until the red fill reaches the end to unlock insecure filters.</p>
       </section>
     </div>
 

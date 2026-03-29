@@ -1,15 +1,19 @@
 (() => {
-  const onReady = window.VOXLIS_UTILS?.onDomReady ?? ((fn) => fn?.());
-  const loadInto =
-    window.VOXLIS_UTILS?.loadHtmlPartial ??
-    (async (mount, path) => {
-      const response = await fetch(path, { cache: "no-cache" });
-      if (!response.ok) {
-        throw new Error(`Failed to load partial (${path}): ${response.status}`);
-      }
-      mount.innerHTML = await response.text();
-      return mount;
-    });
+  const onReady = (fn) => {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn, { once: true });
+      return;
+    }
+    fn();
+  };
+
+  const loadInto = async (mount, path) => {
+    const response = await fetch(path, { cache: "no-cache" });
+    if (!response.ok) {
+      throw new Error(`Failed to load partial (${path}): ${response.status}`);
+    }
+    mount.innerHTML = await response.text();
+  };
 
   const initCardChipOverflow = (root = document) => {
     const chipWraps = [...root.querySelectorAll(".ph-chips-wrap")];
@@ -94,7 +98,7 @@
     try {
       const promoMount = document.getElementById("promoMount");
       if (promoMount) {
-        promoMount.innerHTML = window.getPromoMarkup?.() || "";
+        await loadInto(promoMount, "src/components/promo/promo.html");
       }
 
       const featuredMounts = [
@@ -105,7 +109,11 @@
       ].filter(Boolean);
 
       if (featuredMounts.length) {
-        const html = window.getFeaturedCardMarkup?.() || "";
+        const response = await fetch("src/components/featured/featured.html", { cache: "no-cache" });
+        if (!response.ok) {
+          throw new Error(`Failed to load featured partial: ${response.status}`);
+        }
+        const html = await response.text();
         featuredMounts.forEach((mount) => {
           mount.innerHTML = html;
         });
@@ -122,7 +130,6 @@
       const footerMount = document.getElementById("footerMount");
       if (footerMount) {
         await loadInto(footerMount, "src/components/footer/footer.html");
-        window.initSiteFooter?.(document);
         const customThemeMount = document.getElementById("customThemeMount");
         if (customThemeMount) {
           await loadInto(customThemeMount, "src/components/custom-theme/custom-theme.html");
