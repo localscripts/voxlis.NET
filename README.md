@@ -43,6 +43,7 @@ Because of that, use a local web server while developing.
 ## Project layout
 
 - `index.html`: main page shell
+- `docs/`: MkDocs-style documentation source for future docs.voxlis.net pages
 - `global.css`: global theme variables and shared page styling
 - `src/main.js`: bootstraps the page and loads component partials
 - `src/components/`: UI components such as cards, filter modal, navbar, footer, and popups

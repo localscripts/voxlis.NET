@@ -1,4 +1,7 @@
 (() => {
+  const THEME_CHANGE_EVENT = "site-theme-change";
+  const FEATURED_TRANSPARENT_CARD_CLASS = "featured-card--transparent";
+  const TRANSPARENT_CARD_THEMES = new Set(["kawaii"]);
   const escapeHtml = (value = "") =>
     String(value).replace(/[&<>"']/g, (character) => ({
       "&": "&amp;",
@@ -8,9 +11,17 @@
       "'": "&#39;",
     })[character] || character);
   const featuredConfig = window.VOXLIS_CONFIG?.featured ?? {};
-  const FEATURED_CARD_MARKUP = `
+  const shouldUseTransparentFeaturedCard = () =>
+    TRANSPARENT_CARD_THEMES.has(document.documentElement.dataset.theme || "");
+
+  const getFeaturedCardClassName = () =>
+    ["featured-card", shouldUseTransparentFeaturedCard() ? FEATURED_TRANSPARENT_CARD_CLASS : ""]
+      .filter(Boolean)
+      .join(" ");
+
+  const buildFeaturedCardMarkup = () => `
     <section class="featured-section" aria-label="${escapeHtml(featuredConfig.ariaLabel || "Featured sponsored card")}">
-      <div class="featured-card">
+      <div class="${getFeaturedCardClassName()}">
         <div class="featured-card-header">
           <h3 class="featured-card-title">${escapeHtml(featuredConfig.title || "Featured")}</h3>
           <button type="button" class="featured-hide-button">${escapeHtml(featuredConfig.hideButtonLabel || "Hide ads")}</button>
@@ -105,6 +116,22 @@
     }, getHideDuration());
   };
 
+  const hideFeaturedAds = (options = {}) => {
+    const nextOptions = options && typeof options === "object" ? options : {};
+    setFeaturedAdsHidden(true, nextOptions);
+  };
+
+  const showFeaturedAds = (options = {}) => {
+    const nextOptions = options && typeof options === "object" ? options : {};
+    setFeaturedAdsHidden(false, nextOptions);
+  };
+
+  const toggleFeaturedAdsHidden = (options = {}) => {
+    const mainLayout = document.querySelector(".main-lyt");
+    const isCurrentlyHidden = mainLayout?.classList.contains(LAYOUT_HIDDEN_CLASS);
+    setFeaturedAdsHidden(!isCurrentlyHidden, options && typeof options === "object" ? options : {});
+  };
+
   document.addEventListener("click", (event) => {
     const trigger = event.target.closest(HIDE_TRIGGER_SELECTOR);
     if (!trigger) return;
@@ -113,6 +140,19 @@
     setFeaturedAdsHidden(true, { animated: true });
   });
 
+  const syncFeaturedCardThemeClass = () => {
+    const shouldUseTransparentClass = shouldUseTransparentFeaturedCard();
+    document.querySelectorAll(".featured-card").forEach((card) => {
+      card.classList.toggle(FEATURED_TRANSPARENT_CARD_CLASS, shouldUseTransparentClass);
+    });
+  };
+
+  window.addEventListener(THEME_CHANGE_EVENT, syncFeaturedCardThemeClass);
+
   window.setFeaturedAdsHidden = setFeaturedAdsHidden;
-  window.getFeaturedCardMarkup = () => FEATURED_CARD_MARKUP;
+  window.hideFeaturedAds = hideFeaturedAds;
+  window.showFeaturedAds = showFeaturedAds;
+  window.toggleFeaturedAdsHidden = toggleFeaturedAdsHidden;
+  window.getFeaturedCardMarkup = () => buildFeaturedCardMarkup();
+  window.syncFeaturedCardThemeClass = syncFeaturedCardThemeClass;
 })();

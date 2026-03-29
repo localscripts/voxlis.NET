@@ -63,7 +63,10 @@
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--info-modal-outline);
-  background: linear-gradient(to right, rgba(var(--prim-rgb), 0.1), transparent);
+  background: var(
+    --info-modal-header-background,
+    linear-gradient(to right, rgba(var(--prim-rgb), 0.1), transparent)
+  );
 }
 
 .info-modal-title {
@@ -350,7 +353,7 @@
   background-color: rgba(0, 0, 0, 0.3);
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
-  font-family: "Fira Code", "Consolas", monospace;
+  font-family: var(--font-family-mono, "Fira Code", "Consolas", monospace);
   font-size: 0.875rem;
 }
 

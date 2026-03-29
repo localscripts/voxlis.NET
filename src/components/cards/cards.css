@@ -196,7 +196,9 @@
   position: relative;
   border-radius: var(--rad);
   border: 1px solid var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.82);
+  background: var(--card-surface-background, rgba(0, 0, 0, 0.82));
+  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
   overflow: hidden;
   transition: all var(--smooth-duration) var(--smooth-ease);
   height: 100%;
@@ -961,7 +963,6 @@
 
 .ph-action-btn.is-review {
   border-color: var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.68);
   color: rgba(203, 213, 225, 0.8);
 }
 

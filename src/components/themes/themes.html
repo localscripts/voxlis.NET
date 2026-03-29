@@ -48,9 +48,6 @@
             data-theme-panel="presets"
           >
             <section class="footer-theme-drawer-section">
-              <div class="footer-theme-drawer-options" id="siteThemeOptions"></div>
-            </section>
-            <section class="footer-theme-drawer-section">
               <h3 class="footer-theme-drawer-section-title">Visibility</h3>
               <div class="footer-theme-drawer-visibility">
                 <label class="footer-theme-drawer-toggle" for="siteHideFeaturedAds">
@@ -72,6 +69,80 @@
               </div>
             </section>
             <section class="footer-theme-drawer-section">
+              <div class="footer-theme-drawer-options" id="siteThemeOptions"></div>
+            </section>
+          </div>
+
+          <div
+            class="footer-theme-drawer-panel-view"
+            id="siteThemeDrawerPanelEditor"
+            role="tabpanel"
+            aria-labelledby="siteThemeDrawerTabEditor"
+            data-theme-panel="editor"
+            hidden
+          >
+            <section class="footer-theme-drawer-section">
+              <h3 class="footer-theme-drawer-section-title">Theme Colors</h3>
+              <div id="customThemeMount"></div>
+            </section>
+            <section class="footer-theme-drawer-section">
+              <h3 class="footer-theme-drawer-section-title">Background</h3>
+              <div class="footer-theme-drawer-background">
+                <label class="footer-theme-drawer-field" for="siteBackgroundUrl">
+                  <span class="footer-theme-drawer-field-title">Custom background link</span>
+                  <span class="footer-theme-drawer-field-note">PNG, JPG, GIF, WEBP, MP4, WEBM</span>
+                  <input
+                    class="footer-theme-drawer-input"
+                    id="siteBackgroundUrl"
+                    type="text"
+                    placeholder="https://example.com/background.mp4"
+                    spellcheck="false"
+                    autocomplete="off"
+                  >
+                </label>
+                <div class="footer-theme-drawer-background-actions">
+                  <button class="footer-theme-drawer-background-btn is-primary" id="siteBackgroundApply" type="button">
+                    Load Background
+                  </button>
+                  <button class="footer-theme-drawer-background-btn" id="siteBackgroundClear" type="button">
+                    Clear
+                  </button>
+                </div>
+                <p class="footer-theme-drawer-background-status" id="siteBackgroundStatus">
+                  Paste an image or video link to use as the site background.
+                </p>
+              </div>
+            </section>
+            <section class="footer-theme-drawer-section">
+              <h3 class="footer-theme-drawer-section-title">Surface Blur</h3>
+              <div class="footer-theme-drawer-visibility">
+                <label class="footer-theme-drawer-toggle" for="siteSurfaceBlurEnabled">
+                  <span class="footer-theme-drawer-toggle-copy">
+                    <span class="footer-theme-drawer-toggle-title">Turn tints into blur</span>
+                    <span class="footer-theme-drawer-toggle-note">Applies to cards, promo, and featured panels.</span>
+                  </span>
+                  <input class="footer-theme-drawer-toggle-input" id="siteSurfaceBlurEnabled" type="checkbox">
+                  <span class="footer-theme-drawer-toggle-ui" aria-hidden="true"></span>
+                </label>
+              </div>
+              <div class="footer-theme-drawer-setting footer-theme-drawer-setting-stack">
+                <div class="footer-theme-drawer-slider-head">
+                  <span>Blur strength</span>
+                  <span id="siteSurfaceBlurValue">12px</span>
+                </div>
+                <input
+                  class="footer-outline-slider footer-theme-drawer-slider"
+                  id="siteSurfaceBlurSlider"
+                  type="range"
+                  min="0"
+                  max="24"
+                  step="1"
+                  value="12"
+                  aria-label="Surface blur strength"
+                >
+              </div>
+            </section>
+            <section class="footer-theme-drawer-section">
               <h3 class="footer-theme-drawer-section-title">Outline</h3>
               <div class="footer-theme-drawer-setting">
                 <input
@@ -90,17 +161,6 @@
                 <span>Restore Defaults</span>
               </button>
             </section>
-          </div>
-
-          <div
-            class="footer-theme-drawer-panel-view"
-            id="siteThemeDrawerPanelEditor"
-            role="tabpanel"
-            aria-labelledby="siteThemeDrawerTabEditor"
-            data-theme-panel="editor"
-            hidden
-          >
-            <div id="customThemeMount"></div>
           </div>
         </div>
       </div>

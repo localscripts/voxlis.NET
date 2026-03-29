@@ -1,8 +1,10 @@
 .navbar-header {
-  position: sticky;
-  top: 0;
+  position: var(--navbar-position, sticky);
+  top: var(--navbar-top, 0px);
   z-index: 50;
-  background-color: var(--navbar-background, #000000);
+  background: var(--navbar-background, #000000);
+  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
   border-bottom: 1px solid transparent;
   overflow: visible;
   isolation: isolate;
@@ -23,9 +25,9 @@
 }
 
 .navbar-header.is-scrolled {
-  background-color: var(--navbar-background, #000000);
+  background: var(--navbar-background, #000000);
   border-bottom-color: var(--navbar-scrolled-border, rgba(255, 255, 255, 0.05));
-  top: 0 !important;
+  top: var(--navbar-top, 0px) !important;
   z-index: 51;
 }
 
@@ -237,7 +239,7 @@
 
 .navbar-links .navbar-link,
 .navbar-links .navbar-button {
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-family-ui, var(--font-family-base, "Open Sans", sans-serif));
   font-weight: 700;
   flex: 0 0 auto;
   flex-shrink: 0;
@@ -482,7 +484,9 @@
   left: 0;
   right: 0;
   z-index: 59;
-  background: var(--navbar-mobile-panel-background, var(--bg));
+  background: var(--navbar-mobile-panel-background, var(--navbar-background, #000000));
+  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
   border-bottom: 1px solid var(--sec-bdr);
   padding: 0.55rem 0 0.7rem;
 }
@@ -518,7 +522,9 @@
   gap: 0.9rem;
   padding-top: 0.85rem;
   padding-bottom: 0.95rem;
-  background: var(--navbar-mobile-panel-background, var(--bg));
+  background: var(--navbar-mobile-panel-background, var(--navbar-background, #000000));
+  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
   border-bottom: 1px solid var(--sec-bdr);
   box-shadow: var(--navbar-mobile-menu-shadow, 0 14px 28px rgba(0, 0, 0, 0.45));
 }
@@ -593,7 +599,7 @@
 }
 
 .navbar-warning-text {
-  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-family-system, system-ui, -apple-system, "Segoe UI", Arial, sans-serif);
   color: var(--fg);
   font-size: 0.74rem;
   font-weight: 600;

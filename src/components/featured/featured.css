@@ -13,8 +13,7 @@
 .featured-card {
   width: 100%;
   max-width: var(--featured-card-max-width);
-  background: var(--featured-card-background);
-  border: 1px solid var(--featured-card-border);
+  background: transparent;
   border-radius: var(--featured-card-radius);
   display: flex;
   flex-direction: column;
@@ -25,15 +24,53 @@
 .featured-card::before {
   content: "";
   position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(--card-surface-background, rgba(0, 0, 0, 0.82));
+  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  border: 1px solid var(--featured-card-border);
+  opacity: 1;
+}
+
+.featured-card::after {
+  content: "";
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: var(--featured-card-accent-height);
   background: var(--featured-card-accent-fill);
-  z-index: 1;
+  z-index: 2;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.featured-card.featured-card--transparent::before {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-color: rgba(255, 224, 242, 0.14);
+  opacity: 1;
+}
+
+.featured-card.featured-card--transparent::after {
+  opacity: 0.58;
+}
+
+.featured-card.featured-card--transparent .featured-card-header {
+  border-bottom-color: rgba(255, 224, 242, 0.14);
+}
+
+.featured-card.featured-card--transparent .featured-background-image {
+  opacity: 0;
 }
 
 .featured-card-header {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -71,19 +108,24 @@
 }
 
 .featured-card-body {
+  position: relative;
+  z-index: 1;
   padding: var(--featured-card-body-padding);
+  background: transparent;
 }
 
 .featured-media-link {
   position: relative;
   display: block;
   width: 100%;
-  background: var(--featured-image-background);
+  background: transparent;
   border-radius: var(--featured-image-radius);
   overflow: hidden;
 }
 
 .featured-background-image {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
@@ -95,6 +137,7 @@
 .featured-logo-overlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
   display: block;
   width: 100%;
   height: 100%;

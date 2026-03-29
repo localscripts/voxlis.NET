@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.75rem;
 }
 
 .sunc-modal-container[hidden] {
@@ -68,7 +69,7 @@
 
 .sunc-widget-shell {
   display: grid;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   width: 100%;
   height: auto;
   max-height: inherit;
@@ -112,15 +113,24 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
 }
 
 .sunc-widget-brand-mark-s {
   z-index: 1;
+  background: var(--prim);
+  -webkit-mask-image: url("/public/assets/ads/sunc_badge_s.svg");
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-image: url("/public/assets/ads/sunc_badge_s.svg");
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }
 
 .sunc-widget-brand-mark-word {
   z-index: 0;
+  object-fit: contain;
 }
 
 .sunc-widget-brand-copy {
@@ -193,7 +203,10 @@
 
 .sunc-widget-body {
   min-height: 0;
-  overflow: visible;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sunc-widget-main {
@@ -464,6 +477,7 @@
   justify-content: space-between;
   gap: 1rem;
   font-size: 0.8rem;
+  min-width: 0;
 }
 
 .sunc-widget-summary-metrics span {
@@ -472,12 +486,18 @@
   gap: 0.55rem;
   color: var(--sunc-muted);
   min-width: 0;
+  flex: 0 0 auto;
 }
 
 .sunc-widget-summary-metrics strong {
   color: rgba(248, 250, 252, 0.97);
   font-weight: 700;
   text-align: right;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sunc-widget-summary-actions,
@@ -685,37 +705,74 @@
 
   .sunc-widget-results {
     min-height: 0;
-    max-height: min(32vh, 16rem);
+    max-height: min(28vh, 14rem);
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .sunc-modal-container {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
   .sunc-modal {
-    width: min(100vw - 0.75rem, 52rem);
-    height: auto;
-    max-height: calc(100vh - 0.75rem);
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    transform: translateY(100%);
   }
 
   .sunc-widget-shell {
     width: 100%;
-  }
-
-  .sunc-widget-shell {
+    height: 100%;
     min-height: 0;
-    max-height: none;
+    max-height: 100%;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
   }
 
   @supports (height: 100dvh) {
     .sunc-modal {
-      height: auto;
-      max-height: calc(100dvh - 0.75rem);
+      height: 100dvh;
+      min-height: 100dvh;
+      max-height: 100dvh;
     }
+  }
+
+  .sunc-modal-container.is-open .sunc-modal {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .sunc-modal-container.is-closing .sunc-modal {
+    opacity: 1;
+    transform: translateY(100%);
   }
 
   .sunc-widget-topbar,
   .sunc-widget-main {
     padding-left: 0.85rem;
     padding-right: 0.85rem;
+  }
+
+  .sunc-widget-main {
+    gap: 0.85rem;
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .sunc-widget-summary-column {
+    grid-row: 1;
+  }
+
+  .sunc-widget-results-column {
+    grid-row: 2;
   }
 
   .sunc-widget-notice,
@@ -741,6 +798,42 @@
     font-size: 1rem;
   }
 
+  .sunc-widget-summary-card {
+    gap: 0.85rem;
+    padding: 0.9rem;
+  }
+
+  .sunc-widget-ring-wrap {
+    width: 8.75rem;
+    height: 8.75rem;
+  }
+
+  .sunc-widget-ring-percentage {
+    font-size: 1.7rem;
+  }
+
+  .sunc-widget-ring-passed {
+    font-size: 1rem;
+  }
+
+  .sunc-widget-failed-copy {
+    font-size: 0.8rem;
+  }
+
+  .sunc-widget-summary-metrics {
+    gap: 0.55rem;
+  }
+
+  .sunc-widget-summary-metrics p {
+    gap: 0.75rem;
+    font-size: 0.76rem;
+  }
+
+  .sunc-widget-results {
+    max-height: none;
+    overflow: visible;
+  }
+
   .sunc-widget-summary-link,
   .sunc-widget-inline-button,
   .sunc-widget-inline-link {
@@ -750,5 +843,20 @@
   .sunc-widget-summary-actions,
   .sunc-widget-state-actions {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .sunc-widget-summary-card {
+    padding: 0.82rem;
+  }
+
+  .sunc-widget-ring-wrap {
+    width: 8.2rem;
+    height: 8.2rem;
+  }
+
+  .sunc-widget-ring-percentage {
+    font-size: 1.55rem;
   }
 }

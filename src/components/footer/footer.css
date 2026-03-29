@@ -1,6 +1,8 @@
 .site-footer {
   position: relative;
   background-color: var(--footer-bg);
+  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
   border-top: 1px solid var(--footer-border);
   padding: var(--footer-padding-block) 0;
   margin-top: auto;
@@ -89,7 +91,7 @@
 .footer-nav-link {
   font-weight: 500;
   position: relative;
-  font-family: "Open Sans", sans-serif;
+  font-family: var(--font-family-ui, var(--font-family-base, "Open Sans", sans-serif));
 }
 
 .footer-modal-mount {

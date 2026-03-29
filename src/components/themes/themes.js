@@ -3,6 +3,9 @@
   const CUSTOM_THEME_STORAGE_KEY = "voxlis-custom-theme-hex";
   const CUSTOM_THEME_CSS_STORAGE_KEY = "voxlis-custom-theme-css";
   const OUTLINE_BRIGHTNESS_STORAGE_KEY = "voxlis-outline-brightness";
+  const BACKGROUND_MEDIA_STORAGE_KEY = "voxlis-background-media";
+  const SURFACE_BLUR_ENABLED_STORAGE_KEY = "voxlis-surface-blur-enabled";
+  const SURFACE_BLUR_STRENGTH_STORAGE_KEY = "voxlis-surface-blur-strength";
   const HIDE_FEATURED_ADS_STORAGE_KEY = "voxlis-hide-featured-ads";
   const HIDE_PROMO_STORAGE_KEY = "voxlis-hide-promo";
   const CUSTOM_THEME_ID = "custom";
@@ -13,15 +16,41 @@
   const OUTLINE_BRIGHTNESS_MIN = 0;
   const OUTLINE_BRIGHTNESS_MAX = 64;
   const OUTLINE_BRIGHTNESS_DEFAULT = 7;
+  const SURFACE_BLUR_MIN = 0;
+  const SURFACE_BLUR_MAX = 24;
+  const SURFACE_BLUR_DEFAULT = 12;
+  const BACKGROUND_MEDIA_DEFAULT_STATUS = "Paste an image or video link to use as the site background.";
+  const KAWAII_MOBILE_TINT_CLASS = "theme-kawaii-mobile-tint";
+  const KAWAII_MOBILE_TINT_MEDIA_QUERY = window.matchMedia("(max-width: 980px)");
+  const THEME_GROUPS = [
+    { id: "full", label: "Full Themes" },
+    { id: "accent", label: "Color Variants" },
+  ];
   const THEME_OPTIONS = [
-    { id: "blue", label: "Legacy", swatch: "#3B82F6" },
-    { id: "legacy", label: "Supermacy", swatch: "#EF4444" },
-    { id: "weao", label: "weao", swatch: "#1A1A1A" },
+    { id: "kawaii", label: "Kawaii", swatch: "#FF9AD5", group: "full", surfaceBlurEnabled: true, surfaceBlurStrength: 10, hideFeaturedAds: true },
+    { id: "blue", label: "Legacy", swatch: "#3B82F6", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
+    { id: "legacy", label: "Supermacy", swatch: "#EF4444", group: "full", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
+    { id: "weao", label: "weao", swatch: "#1A1A1A", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
   ];
   const VALID_THEMES = new Set(THEME_OPTIONS.map(({ id }) => id));
   const THEME_OPTION_MAP = new Map(THEME_OPTIONS.map((option) => [option.id, option]));
 
   const getThemeRoot = () => document.documentElement;
+  const getThemeTokenValue = (name, fallback = "") =>
+    window.getComputedStyle(getThemeRoot()).getPropertyValue(name).trim() || fallback;
+
+  const shouldUseKawaiiMobileTintMode = () => {
+    const root = getThemeRoot();
+    return root.dataset.theme === "kawaii" && KAWAII_MOBILE_TINT_MEDIA_QUERY.matches;
+  };
+
+  const syncKawaiiMobileTintModeClass = () => {
+    const root = getThemeRoot();
+    const nextState = shouldUseKawaiiMobileTintMode();
+    root.classList.toggle(KAWAII_MOBILE_TINT_CLASS, nextState);
+    return nextState;
+  };
+
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const parseTransitionTimeMs = (value = "") => {
     const trimmed = `${value}`.trim();
@@ -64,11 +93,40 @@
     return clamp(parsed, OUTLINE_BRIGHTNESS_MIN, OUTLINE_BRIGHTNESS_MAX);
   };
 
+  const normalizeSurfaceBlurStrength = (value) => {
+    const parsed = Number.parseInt(`${value ?? ""}`.trim(), 10);
+    if (!Number.isFinite(parsed)) {
+      return SURFACE_BLUR_DEFAULT;
+    }
+
+    return clamp(parsed, SURFACE_BLUR_MIN, SURFACE_BLUR_MAX);
+  };
+
   const normalizeBooleanPreference = (value) =>
     value === true ||
     value === "true" ||
     value === "1" ||
     value === 1;
+
+  const normalizeBackgroundMediaUrl = (value) => {
+    if (typeof value !== "string") return "";
+
+    const trimmed = value.trim();
+    const unwrapped = trimmed
+      .replace(/^url\((['"]?)(.*?)\1\)$/i, "$2")
+      .replace(/^(['"])(.*)\1$/, "$2")
+      .trim();
+
+    if (!unwrapped || /^none$/i.test(unwrapped) || /^javascript:/i.test(unwrapped)) {
+      return "";
+    }
+
+    try {
+      return new URL(unwrapped, window.location.href).href;
+    } catch {
+      return "";
+    }
+  };
 
   const normalizeHex = (value) => {
     if (typeof value !== "string") return null;
@@ -134,6 +192,64 @@
     return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
   };
 
+  const getBackgroundMediaType = (url) => {
+    const normalized = normalizeBackgroundMediaUrl(url);
+    if (!normalized) return null;
+
+    if (/^data:video\//i.test(normalized)) return "video";
+    if (/^data:image\//i.test(normalized)) return "image";
+
+    try {
+      const pathname = new URL(normalized).pathname.toLowerCase();
+      if (/\.(mp4|webm|ogg|ogv|m4v|mov)$/i.test(pathname)) {
+        return "video";
+      }
+    } catch {
+      return "image";
+    }
+
+    return "image";
+  };
+
+  const ensureBackgroundMediaLayer = () => {
+    let root = document.getElementById("siteBackgroundMedia");
+    let image = document.getElementById("siteBackgroundMediaImage");
+    let video = document.getElementById("siteBackgroundMediaVideo");
+
+    if (root && image && video) {
+      return { root, image, video };
+    }
+
+    root = document.createElement("div");
+    root.id = "siteBackgroundMedia";
+    root.className = "site-background-media";
+    root.setAttribute("aria-hidden", "true");
+    root.hidden = true;
+
+    image = document.createElement("img");
+    image.id = "siteBackgroundMediaImage";
+    image.className = "site-background-media-image";
+    image.alt = "";
+    image.decoding = "async";
+    image.loading = "eager";
+    image.hidden = true;
+
+    video = document.createElement("video");
+    video.id = "siteBackgroundMediaVideo";
+    video.className = "site-background-media-video";
+    video.hidden = true;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "auto";
+
+    root.append(image, video);
+    document.body.prepend(root);
+
+    return { root, image, video };
+  };
+
   const buildCustomThemeVars = (hex) => {
     const normalized = normalizeHex(hex);
     const rgb = hexToRgb(normalized);
@@ -181,9 +297,16 @@
   };
 
   const THEME_EDITOR_VAR_NAMES = [
+    "--font-family-base",
+    "--font-family-ui",
+    "--font-family-system",
+    "--font-family-mono",
+    "--theme-background-media-url",
     "--bg",
     "--fg",
     "--crd-bg",
+    "--site-border-color",
+    "--site-outline-color",
     "--crd-bdr",
     "--crd-hvr",
     "--prim",
@@ -230,6 +353,13 @@
     "--status-updated-rgb",
     "--status-not-updated-color",
     "--status-not-updated-rgb",
+    "--exploit-card-chrome",
+    "--card-surface-background",
+    "--card-surface-backdrop-blur",
+    "--kawaii-mobile-surface-tint",
+    "--kawaii-mobile-footer-tint",
+    "--kawaii-mobile-navbar-tint",
+    "--card-surface-tint",
     "--social-hover",
     "--card-hover",
     "--ad-color",
@@ -253,15 +383,13 @@
     "--srch-dflt-dyn",
     "--smooth-ease",
     "--smooth-duration",
-    "--blur-overlay",
-    "--blur-panel",
-    "--blur-strong",
-    "--blur-flash-start",
-    "--blur-flash-end",
     "--rad",
     "--hdr-h",
     "--navbar-height",
     "--navbar-background",
+    "--navbar-mobile-panel-background",
+    "--navbar-position",
+    "--navbar-top",
     "--navbar-scrolled-border",
     "--navbar-scroll-flash-gradient",
     "--navbar-search-max-width",
@@ -286,7 +414,6 @@
     "--navbar-mobile-quick-accent-radius",
     "--navbar-mobile-toggle-background",
     "--navbar-mobile-toggle-background-hover",
-    "--navbar-mobile-panel-background",
     "--navbar-mobile-menu-shadow",
     "--navbar-mobile-link-background",
     "--navbar-mobile-link-accent-background",
@@ -319,11 +446,11 @@
     "--surface-control-bg",
     "--surface-control-bg-hover",
     "--surface-overlay-bg",
+    "--info-modal-header-background",
     "--prim-glow-shadow",
     "--featured-section-spacing",
     "--featured-hide-duration",
     "--featured-card-max-width",
-    "--featured-card-background",
     "--featured-card-border",
     "--featured-card-radius",
     "--featured-card-header-padding",
@@ -357,8 +484,8 @@
     "--hero-width",
     "--promo-hero-max-width",
     "--promo-text-max-width",
+    "--promo-card-background",
     "--promo-card-padding",
-    "--promo-card-blur",
     "--promo-grid-fill",
     "--promo-glow-size",
     "--promo-glow-offset",
@@ -510,6 +637,23 @@
     return hexToOutlineBrightness(currentValue);
   };
 
+  const getStoredBackgroundMediaUrl = () =>
+    normalizeBackgroundMediaUrl(window.localStorage.getItem(BACKGROUND_MEDIA_STORAGE_KEY) || "");
+
+  const getThemeBackgroundMediaUrl = () =>
+    normalizeBackgroundMediaUrl(
+      window.getComputedStyle(getThemeRoot()).getPropertyValue("--theme-background-media-url")
+    );
+
+  const getEffectiveBackgroundMediaUrl = (storedOverride = getStoredBackgroundMediaUrl()) =>
+    storedOverride || getThemeBackgroundMediaUrl();
+
+  const getStoredSurfaceBlurEnabled = () =>
+    normalizeBooleanPreference(window.localStorage.getItem(SURFACE_BLUR_ENABLED_STORAGE_KEY));
+
+  const getStoredSurfaceBlurStrength = () =>
+    normalizeSurfaceBlurStrength(window.localStorage.getItem(SURFACE_BLUR_STRENGTH_STORAGE_KEY));
+
   const getStoredHideFeaturedAds = () =>
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_FEATURED_ADS_STORAGE_KEY));
 
@@ -532,6 +676,173 @@
       brightness,
       hex: outlineHex,
     };
+  };
+
+  const applyBackgroundMedia = (value, { persist = true } = {}) => {
+    const normalized = normalizeBackgroundMediaUrl(value);
+    const { root, image, video } = ensureBackgroundMediaLayer();
+    const isInitialReveal = root.dataset.backgroundInitialized !== "true";
+
+    const setBackgroundVisibility = (visible, { skipTransition = false } = {}) => {
+      root.classList.toggle("is-no-transition", skipTransition);
+      root.hidden = !visible;
+      root.classList.toggle("is-visible", visible);
+      document.body.classList.toggle("has-custom-background", visible);
+
+      if (!visible || !skipTransition) {
+        if (visible) {
+          root.dataset.backgroundInitialized = "true";
+        }
+        return;
+      }
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          root.classList.remove("is-no-transition");
+          root.dataset.backgroundInitialized = "true";
+        });
+      });
+    };
+
+    if (!normalized) {
+      image.onload = null;
+      image.onerror = null;
+      video.onloadeddata = null;
+      video.onerror = null;
+      setBackgroundVisibility(false);
+      image.hidden = true;
+      image.removeAttribute("src");
+      video.hidden = true;
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+
+      if (persist) {
+        window.localStorage.removeItem(BACKGROUND_MEDIA_STORAGE_KEY);
+      }
+      return "";
+    }
+
+    const mediaType = getBackgroundMediaType(normalized);
+    image.onload = null;
+    image.onerror = null;
+    video.onloadeddata = null;
+    video.onerror = null;
+
+    if (isInitialReveal) {
+      setBackgroundVisibility(false, { skipTransition: true });
+    } else {
+      setBackgroundVisibility(true);
+    }
+
+    if (mediaType === "video") {
+      image.hidden = true;
+      image.removeAttribute("src");
+      video.hidden = false;
+      if (isInitialReveal) {
+        video.onloadeddata = () => {
+          setBackgroundVisibility(true, { skipTransition: true });
+          video.onloadeddata = null;
+        };
+        video.onerror = () => {
+          setBackgroundVisibility(false);
+          video.onerror = null;
+        };
+      }
+      if (video.src !== normalized) {
+        video.src = normalized;
+      }
+      video.load();
+      if (isInitialReveal && video.readyState >= 2) {
+        setBackgroundVisibility(true, { skipTransition: true });
+        video.onloadeddata = null;
+      }
+      const playPromise = video.play();
+      if (playPromise?.catch) {
+        playPromise.catch(() => {});
+      }
+    } else {
+      video.hidden = true;
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+      image.hidden = false;
+      if (isInitialReveal) {
+        image.onload = () => {
+          setBackgroundVisibility(true, { skipTransition: true });
+          image.onload = null;
+        };
+        image.onerror = () => {
+          setBackgroundVisibility(false);
+          image.onerror = null;
+        };
+      }
+      image.src = normalized;
+      if (isInitialReveal && image.complete && image.naturalWidth > 0) {
+        setBackgroundVisibility(true, { skipTransition: true });
+        image.onload = null;
+      }
+    }
+
+    if (persist) {
+      window.localStorage.setItem(BACKGROUND_MEDIA_STORAGE_KEY, normalized);
+    }
+    return normalized;
+  };
+
+  const syncEffectiveBackgroundMedia = ({ storedOverride } = {}) => {
+    const effectiveValue = getEffectiveBackgroundMediaUrl(storedOverride);
+    applyBackgroundMedia(effectiveValue, { persist: false });
+    return effectiveValue;
+  };
+
+  const applySurfaceBlur = (
+    enabled,
+    strength = getStoredSurfaceBlurStrength(),
+    { persist = true } = {}
+  ) => {
+    const nextEnabled = Boolean(enabled);
+    const nextStrength = normalizeSurfaceBlurStrength(strength);
+    const root = getThemeRoot();
+    const useKawaiiMobileTintMode = nextEnabled && syncKawaiiMobileTintModeClass();
+    const blurValue = useKawaiiMobileTintMode ? "0px" : nextEnabled ? `${nextStrength}px` : "0px";
+    const surfaceTint = useKawaiiMobileTintMode
+      ? getThemeTokenValue("--kawaii-mobile-surface-tint", "rgba(28, 12, 34, 0.78)")
+      : nextEnabled
+        ? "rgba(0, 0, 0, 0.18)"
+        : "rgba(0, 0, 0, 0.82)";
+    const footerTint = useKawaiiMobileTintMode
+      ? getThemeTokenValue("--kawaii-mobile-footer-tint", "rgba(24, 10, 28, 0.84)")
+      : nextEnabled
+        ? "rgba(0, 0, 0, 0.16)"
+        : "rgba(0, 0, 0, 0.8)";
+    const navbarTint = useKawaiiMobileTintMode
+      ? getThemeTokenValue("--kawaii-mobile-navbar-tint", "#14081C")
+      : nextEnabled
+        ? surfaceTint
+        : "#000000";
+    root.style.setProperty("--card-surface-background", surfaceTint);
+    root.style.setProperty("--card-surface-tint", surfaceTint);
+    root.style.setProperty("--promo-card-background", surfaceTint);
+    root.style.setProperty("--footer-bg", footerTint);
+    root.style.setProperty("--navbar-background", navbarTint);
+    root.style.setProperty("--navbar-mobile-panel-background", navbarTint);
+    root.style.setProperty("--card-surface-backdrop-blur", blurValue);
+
+    if (persist) {
+      window.localStorage.setItem(SURFACE_BLUR_ENABLED_STORAGE_KEY, nextEnabled ? "1" : "0");
+      window.localStorage.setItem(SURFACE_BLUR_STRENGTH_STORAGE_KEY, String(nextStrength));
+    }
+
+    return {
+      enabled: nextEnabled,
+      strength: nextStrength,
+    };
+  };
+
+  const syncResponsiveThemeSurfaceMode = () => {
+    syncKawaiiMobileTintModeClass();
+    applySurfaceBlur(getStoredSurfaceBlurEnabled(), getStoredSurfaceBlurStrength(), { persist: false });
   };
 
   const applyFeaturedAdsVisibility = (hidden, { persist = true } = {}) => {
@@ -564,10 +875,17 @@
 
   const applyPresetTheme = (theme) => {
     const nextTheme = VALID_THEMES.has(theme) ? theme : DEFAULT_THEME_ID;
+    const preset = THEME_OPTION_MAP.get(nextTheme);
     const root = getThemeRoot();
     clearCustomThemeVars();
     root.dataset.theme = nextTheme;
     applyOutlineBrightness(getStoredOutlineBrightness(), { persist: false });
+    applySurfaceBlur(
+      Boolean(preset?.surfaceBlurEnabled),
+      preset?.surfaceBlurStrength ?? SURFACE_BLUR_DEFAULT
+    );
+    applyFeaturedAdsVisibility(Boolean(preset?.hideFeaturedAds));
+    syncEffectiveBackgroundMedia();
     window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
     emitThemeChange(nextTheme, null);
     return nextTheme;
@@ -585,6 +903,7 @@
     root.dataset.theme = CUSTOM_THEME_ID;
     applyThemeVars(vars);
     applyOutlineBrightness(getStoredOutlineBrightness(), { persist: false });
+    syncEffectiveBackgroundMedia();
     window.localStorage.setItem(THEME_STORAGE_KEY, CUSTOM_THEME_ID);
     window.localStorage.setItem(CUSTOM_THEME_STORAGE_KEY, customHex);
     window.localStorage.setItem(CUSTOM_THEME_CSS_STORAGE_KEY, normalizedCssText);
@@ -616,10 +935,14 @@
     clearStoredCustomTheme();
     const restoredTheme = applyPresetTheme(DEFAULT_THEME_ID);
     applyOutlineBrightness(OUTLINE_BRIGHTNESS_DEFAULT);
+    applyBackgroundMedia("");
+    applySurfaceBlur(false, SURFACE_BLUR_DEFAULT);
     applyFeaturedAdsVisibility(false);
     applyPromoVisibility(false);
     syncThemeSwitcherUI(scope);
     syncOutlineBrightnessUI(scope);
+    syncBackgroundMediaUI(scope);
+    syncSurfaceBlurUI(scope);
     syncVisibilityPreferencesUI(scope);
     return restoredTheme;
   };
@@ -631,11 +954,25 @@
     </div>
   `;
 
+  const buildThemeGroupMarkup = ({ id, label }) => {
+    const options = THEME_OPTIONS.filter((option) => option.group === id);
+    if (!options.length) return "";
+
+    return `
+      <section class="footer-theme-option-group" aria-label="${label}">
+        <h3 class="footer-theme-option-group-title">${label}</h3>
+        <div class="footer-theme-option-group-items">
+          ${options.map(buildThemeOptionMarkup).join("")}
+        </div>
+      </section>
+    `;
+  };
+
   const renderThemeOptions = (scope = document) => {
     const optionsRoot = scope.getElementById("siteThemeOptions");
     if (!optionsRoot || optionsRoot.dataset.rendered === "true") return;
 
-    optionsRoot.innerHTML = THEME_OPTIONS.map(buildThemeOptionMarkup).join("");
+    optionsRoot.innerHTML = THEME_GROUPS.map(buildThemeGroupMarkup).join("");
     optionsRoot.dataset.rendered = "true";
   };
 
@@ -702,6 +1039,62 @@
     slider.value = String(brightness);
   };
 
+  const setBackgroundMediaStatus = (scope, message, state = "default") => {
+    const status = scope.getElementById("siteBackgroundStatus");
+    if (!status) return;
+
+    status.textContent = message;
+    status.classList.toggle("is-error", state === "error");
+    status.classList.toggle("is-success", state === "success");
+  };
+
+  const syncBackgroundMediaUI = (scope = document, options = {}) => {
+    const input = scope.getElementById("siteBackgroundUrl");
+    if (!input) return;
+
+    const storedValue = options.value ?? getStoredBackgroundMediaUrl();
+    const themeValue = options.themeValue ?? getThemeBackgroundMediaUrl();
+    const effectiveValue = options.effectiveValue ?? getEffectiveBackgroundMediaUrl(storedValue);
+    input.value = storedValue;
+
+    if (options.statusMessage) {
+      setBackgroundMediaStatus(scope, options.statusMessage, options.statusState || "default");
+      return;
+    }
+
+    if (!effectiveValue) {
+      setBackgroundMediaStatus(scope, BACKGROUND_MEDIA_DEFAULT_STATUS);
+      return;
+    }
+
+    const type = getBackgroundMediaType(effectiveValue);
+    const label = type === "video" ? "Video" : "Image";
+    const isThemeBackgroundActive = !storedValue && Boolean(themeValue);
+    setBackgroundMediaStatus(
+      scope,
+      isThemeBackgroundActive
+        ? `Theme ${label.toLowerCase()} background is active.`
+        : `${label} background is active.`,
+      "success"
+    );
+  };
+
+  const syncSurfaceBlurUI = (scope = document) => {
+    const blurToggle = scope.getElementById("siteSurfaceBlurEnabled");
+    const blurSlider = scope.getElementById("siteSurfaceBlurSlider");
+    const blurValue = scope.getElementById("siteSurfaceBlurValue");
+    if (!blurToggle || !blurSlider || !blurValue) return;
+
+    const enabled = getStoredSurfaceBlurEnabled();
+    const strength = getStoredSurfaceBlurStrength();
+    applySurfaceBlur(enabled, strength, { persist: false });
+
+    blurToggle.checked = enabled;
+    blurSlider.value = String(strength);
+    blurSlider.disabled = !enabled;
+    blurValue.textContent = `${strength}px`;
+  };
+
   const syncVisibilityPreferencesUI = (scope = document) => {
     const hideFeaturedAdsInput = scope.getElementById("siteHideFeaturedAds");
     const hidePromoInput = scope.getElementById("siteHidePromo");
@@ -750,6 +1143,12 @@
     const drawer = scope.getElementById("siteThemeDrawer");
     const closeButton = scope.getElementById("closeThemeDrawer");
     const restoreDefaultsButton = scope.getElementById("siteThemeRestoreDefaults");
+    const backgroundMediaInput = scope.getElementById("siteBackgroundUrl");
+    const backgroundMediaApplyButton = scope.getElementById("siteBackgroundApply");
+    const backgroundMediaClearButton = scope.getElementById("siteBackgroundClear");
+    const surfaceBlurEnabledInput = scope.getElementById("siteSurfaceBlurEnabled");
+    const surfaceBlurSlider = scope.getElementById("siteSurfaceBlurSlider");
+    const surfaceBlurValue = scope.getElementById("siteSurfaceBlurValue");
     const hideFeaturedAdsInput = scope.getElementById("siteHideFeaturedAds");
     const hidePromoInput = scope.getElementById("siteHidePromo");
     const optionsRoot = scope.getElementById("siteThemeOptions");
@@ -758,13 +1157,20 @@
 
     if (drawer.dataset.themeBound === "true") {
       syncThemeSwitcherUI(scope);
+      syncBackgroundMediaUI(scope);
+      syncSurfaceBlurUI(scope);
+      syncVisibilityPreferencesUI(scope);
       return;
     }
 
     const activeTheme = applyTheme(getStoredTheme());
+    syncEffectiveBackgroundMedia();
+    applySurfaceBlur(getStoredSurfaceBlurEnabled(), getStoredSurfaceBlurStrength(), { persist: false });
     applyFeaturedAdsVisibility(getStoredHideFeaturedAds(), { persist: false });
     applyPromoVisibility(getStoredHidePromo(), { persist: false });
     syncSelectedOption(scope, activeTheme, getStoredCustomHex());
+    syncBackgroundMediaUI(scope);
+    syncSurfaceBlurUI(scope);
     syncVisibilityPreferencesUI(scope);
     setActiveThemeDrawerTab(scope, THEME_DRAWER_DEFAULT_TAB);
 
@@ -848,10 +1254,68 @@
       applyPromoVisibility(hidePromoInput.checked);
     });
 
+    const syncSurfaceBlurFromInputs = ({ persist = true } = {}) => {
+      const enabled = Boolean(surfaceBlurEnabledInput?.checked);
+      const strength = surfaceBlurSlider?.value ?? SURFACE_BLUR_DEFAULT;
+      const nextState = applySurfaceBlur(enabled, strength, { persist });
+
+      if (surfaceBlurSlider) {
+        surfaceBlurSlider.disabled = !nextState.enabled;
+        surfaceBlurSlider.value = String(nextState.strength);
+      }
+
+      if (surfaceBlurValue) {
+        surfaceBlurValue.textContent = `${nextState.strength}px`;
+      }
+    };
+
+    surfaceBlurEnabledInput?.addEventListener("change", () => {
+      syncSurfaceBlurFromInputs();
+    });
+
+    surfaceBlurSlider?.addEventListener("input", () => {
+      syncSurfaceBlurFromInputs();
+    });
+
     restoreDefaultsButton?.addEventListener("click", (event) => {
       event.preventDefault();
       restoreThemeDefaults(scope);
       setActiveThemeDrawerTab(scope, THEME_DRAWER_DEFAULT_TAB);
+    });
+
+    const applyBackgroundFromInput = () => {
+      const rawValue = backgroundMediaInput?.value || "";
+      const normalized = normalizeBackgroundMediaUrl(rawValue);
+
+      if (rawValue.trim() && !normalized) {
+        setBackgroundMediaStatus(scope, "Enter a valid image or video link.", "error");
+        return;
+      }
+
+      const appliedValue = applyBackgroundMedia(normalized);
+      syncBackgroundMediaUI(scope, { value: appliedValue, effectiveValue: appliedValue });
+    };
+
+    backgroundMediaApplyButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      applyBackgroundFromInput();
+    });
+
+    backgroundMediaClearButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      applyBackgroundMedia("");
+      const effectiveValue = syncEffectiveBackgroundMedia();
+      syncBackgroundMediaUI(scope, { value: "", effectiveValue });
+    });
+
+    backgroundMediaInput?.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      applyBackgroundFromInput();
+    });
+
+    backgroundMediaInput?.addEventListener("input", () => {
+      setBackgroundMediaStatus(scope, BACKGROUND_MEDIA_DEFAULT_STATUS);
     });
 
     optionsRoot.querySelectorAll(".footer-theme-option").forEach((option) => {
@@ -879,6 +1343,9 @@
 
     window.addEventListener(THEME_CHANGE_EVENT, () => {
       syncSelectedOption(scope, getStoredTheme(), getStoredCustomHex());
+      syncBackgroundMediaUI(scope);
+      syncSurfaceBlurUI(scope);
+      syncVisibilityPreferencesUI(scope);
     });
 
     drawer.addEventListener("click", (event) => {
@@ -912,7 +1379,17 @@
   };
 
   applyTheme(getStoredTheme());
+  syncKawaiiMobileTintModeClass();
   applyOutlineBrightness(getStoredOutlineBrightness(), { persist: false });
+  syncEffectiveBackgroundMedia();
+  applySurfaceBlur(getStoredSurfaceBlurEnabled(), getStoredSurfaceBlurStrength(), { persist: false });
+
+  window.addEventListener(THEME_CHANGE_EVENT, syncResponsiveThemeSurfaceMode);
+  if (typeof KAWAII_MOBILE_TINT_MEDIA_QUERY.addEventListener === "function") {
+    KAWAII_MOBILE_TINT_MEDIA_QUERY.addEventListener("change", syncResponsiveThemeSurfaceMode);
+  } else if (typeof KAWAII_MOBILE_TINT_MEDIA_QUERY.addListener === "function") {
+    KAWAII_MOBILE_TINT_MEDIA_QUERY.addListener(syncResponsiveThemeSurfaceMode);
+  }
 
   window.initSiteThemes = initSiteThemes;
   window.initThemeSwitcher = initSiteThemes;
@@ -923,9 +1400,12 @@
   window.restoreSiteThemeDefaults = (scope = document) => restoreThemeDefaults(scope);
   window.applyFeaturedAdsVisibilityPreference = applyFeaturedAdsVisibility;
   window.applyPromoVisibilityPreference = applyPromoVisibility;
+  window.applySiteBackgroundMedia = applyBackgroundMedia;
+  window.applySiteSurfaceBlur = applySurfaceBlur;
   window.applyCustomSiteTheme = applyCustomTheme;
   window.applyCustomSiteThemeCssText = applyCustomThemeCssText;
   window.getStoredCustomSiteThemeHex = getStoredCustomHex;
+  window.getStoredSiteBackgroundMediaUrl = getStoredBackgroundMediaUrl;
   window.getCustomSiteThemeCssText = () =>
     buildCustomThemeCssTextFromVars(collectThemeEditorVars());
   window.getActiveSiteTheme = getStoredTheme;

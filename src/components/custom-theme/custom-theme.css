@@ -425,7 +425,7 @@
   border-radius: var(--rad);
   background: var(--filter-option-background);
   color: var(--fg);
-  font: 600 0.84rem/1 "Open Sans", sans-serif;
+  font: 600 0.84rem/1 var(--font-family-ui, var(--font-family-base, "Open Sans", sans-serif));
   transition:
     border-color var(--smooth-duration) var(--smooth-ease),
     background-color var(--smooth-duration) var(--smooth-ease),

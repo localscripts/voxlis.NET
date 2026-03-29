@@ -176,11 +176,7 @@
           <div class="sunc-widget-topbar">
             <div class="sunc-widget-brand">
               <span class="sunc-widget-brand-mark" aria-hidden="true">
-                <img
-                  class="sunc-widget-brand-mark-s"
-                  src="/public/assets/ads/sunc_badge_s.svg"
-                  alt=""
-                >
+                <span class="sunc-widget-brand-mark-s"></span>
                 <img
                   class="sunc-widget-brand-mark-word"
                   src="/public/assets/ads/sunc_badge_white.svg"
