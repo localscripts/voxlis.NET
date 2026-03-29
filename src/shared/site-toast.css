@@ -260,7 +260,9 @@
   width: min(21rem, calc(100vw - 1.6rem));
   padding: 0.95rem 0.95rem 0.9rem;
   border-color: rgba(var(--prim-rgb), 0.22);
-  background: #000000;
+  background: var(--card-surface-background, rgba(0, 0, 0, 0.82));
+  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.34);
 }
 

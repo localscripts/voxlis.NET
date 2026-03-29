@@ -264,7 +264,7 @@
         }
 
         event.preventDefault();
-        openModal(key);
+        openModal(key, { pushHistory: false });
       });
     });
 

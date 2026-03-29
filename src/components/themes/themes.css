@@ -132,11 +132,10 @@
 }
 
 .footer-theme-drawer-tabs {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.3rem;
-  width: fit-content;
-  max-width: 100%;
+  width: 100%;
   padding: 0.25rem;
   border: 1px solid var(--filter-option-border);
   border-radius: calc(var(--rad) + 0.05rem);
@@ -144,7 +143,8 @@
 }
 
 .footer-theme-drawer-tab {
-  min-width: 6.25rem;
+  flex: 1 1 0;
+  min-width: 0;
   height: 2.35rem;
   min-height: 0;
   padding: 0.5rem 0.8rem;
@@ -245,6 +245,11 @@
   gap: 0.45rem;
 }
 
+.footer-theme-drawer-transfer {
+  display: grid;
+  gap: 0.45rem;
+}
+
 .footer-theme-drawer-field {
   display: grid;
   gap: 0.38rem;
@@ -283,6 +288,34 @@
     box-shadow var(--smooth-duration) var(--smooth-ease);
 }
 
+.footer-theme-drawer-textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 10rem;
+  padding: 0.8rem;
+  resize: vertical;
+  border: 1px solid var(--filter-option-border);
+  border-radius: calc(var(--rad) - 0.05rem);
+  background: rgba(0, 0, 0, 0.38);
+  color: var(--fg);
+  font: 600 0.75rem/1.45 var(--font-family-mono, ui-monospace, SFMono-Regular, Consolas, monospace);
+  transition:
+    border-color var(--smooth-duration) var(--smooth-ease),
+    background-color var(--smooth-duration) var(--smooth-ease),
+    box-shadow var(--smooth-duration) var(--smooth-ease);
+}
+
+.footer-theme-drawer-textarea::placeholder {
+  color: rgba(148, 163, 184, 0.72);
+}
+
+.footer-theme-drawer-textarea:focus {
+  outline: none;
+  border-color: var(--filter-option-border-active);
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 0 0 1px rgba(var(--prim-rgb), 0.2);
+}
+
 .footer-theme-drawer-input::placeholder {
   color: rgba(148, 163, 184, 0.72);
 }
@@ -297,6 +330,12 @@
 .footer-theme-drawer-background-actions {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+}
+
+.footer-theme-drawer-transfer-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.45rem;
 }
 
@@ -654,6 +693,10 @@
   }
 
   .footer-theme-drawer-background-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-theme-drawer-transfer-actions {
     grid-template-columns: 1fr;
   }
 }

@@ -1073,7 +1073,11 @@
           : null,
         modalPath: getCardMoreInfoPath(slug),
       };
-    const opened = window.openMoreInfoModal?.(modalOptions) ?? false;
+    const opened =
+      window.openMoreInfoModal?.({
+        ...modalOptions,
+        pushHistory: false,
+      }) ?? false;
 
     if (opened || !trigger.href) {
       return;

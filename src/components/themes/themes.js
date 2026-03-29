@@ -19,6 +19,8 @@
   const SURFACE_BLUR_MIN = 0;
   const SURFACE_BLUR_MAX = 24;
   const SURFACE_BLUR_DEFAULT = 12;
+  const THEME_TRANSFER_TYPE = "voxlis-theme";
+  const THEME_TRANSFER_VERSION = 1;
   const BACKGROUND_MEDIA_DEFAULT_STATUS = "Paste an image or video link to use as the site background.";
   const KAWAII_MOBILE_TINT_CLASS = "theme-kawaii-mobile-tint";
   const KAWAII_MOBILE_TINT_MEDIA_QUERY = window.matchMedia("(max-width: 980px)");
@@ -581,6 +583,22 @@
     return vars;
   };
 
+  const buildThemeTransferPayload = () => ({
+    type: THEME_TRANSFER_TYPE,
+    version: THEME_TRANSFER_VERSION,
+    sourceTheme: getStoredTheme(),
+    cssText: buildCustomThemeCssTextFromVars(collectThemeEditorVars()),
+    backgroundMediaUrl: getStoredBackgroundMediaUrl(),
+    surfaceBlurEnabled: getStoredSurfaceBlurEnabled(),
+    surfaceBlurStrength: getStoredSurfaceBlurStrength(),
+    outlineBrightness: getStoredOutlineBrightness(),
+    hideFeaturedAds: getStoredHideFeaturedAds(),
+    hidePromo: getStoredHidePromo(),
+  });
+
+  const buildThemeTransferText = () =>
+    JSON.stringify(buildThemeTransferPayload(), null, 2);
+
   const CUSTOM_THEME_VAR_NAMES = Object.keys(buildCustomThemeVars("#3B82F6"));
   let appliedCustomThemeVarNames = new Set(CUSTOM_THEME_VAR_NAMES);
 
@@ -659,6 +677,95 @@
 
   const getStoredHidePromo = () =>
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_PROMO_STORAGE_KEY));
+
+  const applyThemeTransferText = (source = "") => {
+    const trimmed = String(source).trim();
+    if (!trimmed) {
+      return {
+        ok: false,
+        message: "Paste theme data first.",
+      };
+    }
+
+    let parsed = null;
+    try {
+      parsed = JSON.parse(trimmed);
+    } catch {
+      parsed = null;
+    }
+
+    if (parsed && typeof parsed === "object") {
+      const cssText =
+        typeof parsed.cssText === "string" && parsed.cssText.trim()
+          ? parsed.cssText.trim()
+          : parsed.vars && typeof parsed.vars === "object"
+            ? buildCustomThemeCssTextFromVars(parsed.vars)
+            : "";
+      const rawThemeId =
+        typeof parsed.theme === "string" && parsed.theme.trim()
+          ? parsed.theme.trim()
+          : typeof parsed.sourceTheme === "string" && parsed.sourceTheme.trim()
+            ? parsed.sourceTheme.trim()
+            : "";
+      const importedThemeId = rawThemeId ? normalizeTheme(rawThemeId) : "";
+
+      const appliedTheme = cssText
+        ? applyCustomThemeCssText(cssText)
+        : importedThemeId && importedThemeId !== CUSTOM_THEME_ID
+          ? applyTheme(importedThemeId)
+          : null;
+
+      if (!appliedTheme) {
+        return {
+          ok: false,
+          message: "Theme data is missing a valid CSS or preset payload.",
+        };
+      }
+
+      if ("outlineBrightness" in parsed) {
+        applyOutlineBrightness(parsed.outlineBrightness);
+      }
+
+      if ("backgroundMediaUrl" in parsed) {
+        applyBackgroundMedia(parsed.backgroundMediaUrl);
+      }
+
+      if ("surfaceBlurEnabled" in parsed || "surfaceBlurStrength" in parsed) {
+        applySurfaceBlur(
+          normalizeBooleanPreference(parsed.surfaceBlurEnabled),
+          normalizeSurfaceBlurStrength(parsed.surfaceBlurStrength)
+        );
+      }
+
+      if ("hideFeaturedAds" in parsed) {
+        applyFeaturedAdsVisibility(parsed.hideFeaturedAds);
+      }
+
+      if ("hidePromo" in parsed) {
+        applyPromoVisibility(parsed.hidePromo);
+      }
+
+      syncEffectiveBackgroundMedia();
+
+      return {
+        ok: true,
+        message: "Theme imported successfully.",
+      };
+    }
+
+    const appliedTheme = applyCustomThemeCssText(trimmed);
+    if (!appliedTheme) {
+      return {
+        ok: false,
+        message: "Theme data is invalid. Paste exported JSON or CSS theme text.",
+      };
+    }
+
+    return {
+      ok: true,
+      message: "Theme CSS imported successfully.",
+    };
+  };
 
   const applyOutlineBrightness = (value, { persist = true } = {}) => {
     const brightness = normalizeOutlineBrightness(value);
@@ -1146,6 +1253,10 @@
     const backgroundMediaInput = scope.getElementById("siteBackgroundUrl");
     const backgroundMediaApplyButton = scope.getElementById("siteBackgroundApply");
     const backgroundMediaClearButton = scope.getElementById("siteBackgroundClear");
+    const themeTransferTextarea = scope.getElementById("siteThemeTransferData");
+    const themeTransferExportButton = scope.getElementById("siteThemeExportButton");
+    const themeTransferImportButton = scope.getElementById("siteThemeImportButton");
+    const themeTransferStatus = scope.getElementById("siteThemeTransferStatus");
     const surfaceBlurEnabledInput = scope.getElementById("siteSurfaceBlurEnabled");
     const surfaceBlurSlider = scope.getElementById("siteSurfaceBlurSlider");
     const surfaceBlurValue = scope.getElementById("siteSurfaceBlurValue");
@@ -1177,6 +1288,14 @@
     let previousBodyOverflow = "";
     let closeDrawerTimerId = 0;
     let lastThemeDrawerTrigger = null;
+
+    const setThemeTransferStatus = (message, state = "default") => {
+      if (!themeTransferStatus) return;
+
+      themeTransferStatus.textContent = message;
+      themeTransferStatus.classList.toggle("is-error", state === "error");
+      themeTransferStatus.classList.toggle("is-success", state === "success");
+    };
 
     const drawerPanel = drawer.querySelector(".footer-theme-drawer-panel");
 
@@ -1316,6 +1435,41 @@
 
     backgroundMediaInput?.addEventListener("input", () => {
       setBackgroundMediaStatus(scope, BACKGROUND_MEDIA_DEFAULT_STATUS);
+    });
+
+    themeTransferExportButton?.addEventListener("click", async (event) => {
+      event.preventDefault();
+
+      const nextValue = buildThemeTransferText();
+      if (themeTransferTextarea) {
+        themeTransferTextarea.value = nextValue;
+        themeTransferTextarea.focus();
+        themeTransferTextarea.select();
+      }
+
+      try {
+        await navigator.clipboard.writeText(nextValue);
+        setThemeTransferStatus("Theme exported and copied to the clipboard.", "success");
+      } catch {
+        setThemeTransferStatus("Theme exported. Copy it from the box above.", "success");
+      }
+    });
+
+    themeTransferImportButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const result = applyThemeTransferText(themeTransferTextarea?.value || "");
+      syncThemeSwitcherUI(scope);
+      syncOutlineBrightnessUI(scope);
+      syncBackgroundMediaUI(scope);
+      syncSurfaceBlurUI(scope);
+      syncVisibilityPreferencesUI(scope);
+
+      setThemeTransferStatus(result.message, result.ok ? "success" : "error");
+    });
+
+    themeTransferTextarea?.addEventListener("input", () => {
+      setThemeTransferStatus("Paste exported theme data here, then import it.");
     });
 
     optionsRoot.querySelectorAll(".footer-theme-option").forEach((option) => {

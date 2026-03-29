@@ -86,6 +86,32 @@
               <div id="customThemeMount"></div>
             </section>
             <section class="footer-theme-drawer-section">
+              <h3 class="footer-theme-drawer-section-title">Import / Export</h3>
+              <div class="footer-theme-drawer-transfer">
+                <label class="footer-theme-drawer-field" for="siteThemeTransferData">
+                  <span class="footer-theme-drawer-field-title">Theme data</span>
+                  <span class="footer-theme-drawer-field-note">Exports the current editor snapshot as JSON. CSS theme text imports also work.</span>
+                  <textarea
+                    class="footer-theme-drawer-textarea"
+                    id="siteThemeTransferData"
+                    placeholder="{&#10;  &quot;type&quot;: &quot;voxlis-theme&quot;,&#10;  &quot;cssText&quot;: &quot;...&quot;&#10;}"
+                    spellcheck="false"
+                  ></textarea>
+                </label>
+                <div class="footer-theme-drawer-transfer-actions">
+                  <button class="footer-theme-drawer-background-btn is-primary" id="siteThemeExportButton" type="button">
+                    Export Theme
+                  </button>
+                  <button class="footer-theme-drawer-background-btn" id="siteThemeImportButton" type="button">
+                    Import Theme
+                  </button>
+                </div>
+                <p class="footer-theme-drawer-background-status" id="siteThemeTransferStatus">
+                  Export a theme to copy it, or paste exported theme data here to import it.
+                </p>
+              </div>
+            </section>
+            <section class="footer-theme-drawer-section">
               <h3 class="footer-theme-drawer-section-title">Background</h3>
               <div class="footer-theme-drawer-background">
                 <label class="footer-theme-drawer-field" for="siteBackgroundUrl">
