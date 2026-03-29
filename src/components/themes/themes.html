@@ -1,0 +1,109 @@
+<section class="site-themes">
+  <div class="footer-theme-drawer" id="siteThemeDrawer" aria-hidden="true">
+    <div class="footer-theme-drawer-overlay" data-theme-drawer-close></div>
+    <div class="footer-theme-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="siteThemeDrawerTitle">
+      <div class="footer-theme-drawer-header">
+        <div class="footer-theme-drawer-header-row">
+          <h2 class="footer-theme-drawer-title" id="siteThemeDrawerTitle">Themes</h2>
+          <div class="footer-theme-drawer-actions">
+            <button class="footer-theme-drawer-close" id="closeThemeDrawer" type="button" aria-label="Close themes">
+              <i class="fas fa-xmark" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-theme-drawer-body">
+        <div class="footer-theme-drawer-tabs" role="tablist" aria-label="Theme tabs">
+          <button
+            class="footer-theme-drawer-tab is-active"
+            id="siteThemeDrawerTabPresets"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="siteThemeDrawerPanelPresets"
+            data-theme-tab="presets"
+          >
+            Presets
+          </button>
+          <button
+            class="footer-theme-drawer-tab"
+            id="siteThemeDrawerTabEditor"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="siteThemeDrawerPanelEditor"
+            data-theme-tab="editor"
+            tabindex="-1"
+          >
+            Editor
+          </button>
+        </div>
+
+        <div class="footer-theme-drawer-panels">
+          <div
+            class="footer-theme-drawer-panel-view is-active"
+            id="siteThemeDrawerPanelPresets"
+            role="tabpanel"
+            aria-labelledby="siteThemeDrawerTabPresets"
+            data-theme-panel="presets"
+          >
+            <section class="footer-theme-drawer-section">
+              <div class="footer-theme-drawer-options" id="siteThemeOptions"></div>
+            </section>
+            <section class="footer-theme-drawer-section">
+              <h3 class="footer-theme-drawer-section-title">Visibility</h3>
+              <div class="footer-theme-drawer-visibility">
+                <label class="footer-theme-drawer-toggle" for="siteHideFeaturedAds">
+                  <span class="footer-theme-drawer-toggle-copy">
+                    <span class="footer-theme-drawer-toggle-title">Always hide featured ads</span>
+                    <span class="footer-theme-drawer-toggle-note">Hide both featured side columns by default.</span>
+                  </span>
+                  <input class="footer-theme-drawer-toggle-input" id="siteHideFeaturedAds" type="checkbox">
+                  <span class="footer-theme-drawer-toggle-ui" aria-hidden="true"></span>
+                </label>
+                <label class="footer-theme-drawer-toggle" for="siteHidePromo">
+                  <span class="footer-theme-drawer-toggle-copy">
+                    <span class="footer-theme-drawer-toggle-title">Always hide promo</span>
+                    <span class="footer-theme-drawer-toggle-note">Hide the Discord community promo by default.</span>
+                  </span>
+                  <input class="footer-theme-drawer-toggle-input" id="siteHidePromo" type="checkbox">
+                  <span class="footer-theme-drawer-toggle-ui" aria-hidden="true"></span>
+                </label>
+              </div>
+            </section>
+            <section class="footer-theme-drawer-section">
+              <h3 class="footer-theme-drawer-section-title">Outline</h3>
+              <div class="footer-theme-drawer-setting">
+                <input
+                  class="footer-outline-slider footer-theme-drawer-slider"
+                  id="siteOutlineSlider"
+                  type="range"
+                  min="0"
+                  max="64"
+                  step="1"
+                  value="7"
+                  aria-label="Site outline brightness"
+                >
+              </div>
+              <button class="footer-theme-drawer-reset" id="siteThemeRestoreDefaults" type="button">
+                <i class="fas fa-rotate-left" aria-hidden="true"></i>
+                <span>Restore Defaults</span>
+              </button>
+            </section>
+          </div>
+
+          <div
+            class="footer-theme-drawer-panel-view"
+            id="siteThemeDrawerPanelEditor"
+            role="tabpanel"
+            aria-labelledby="siteThemeDrawerTabEditor"
+            data-theme-panel="editor"
+            hidden
+          >
+            <div id="customThemeMount"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

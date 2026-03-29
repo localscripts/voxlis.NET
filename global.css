@@ -4,20 +4,22 @@
   --bg: #000000;
   --fg: #ffffff;
   --crd-bg: rgba(0, 0, 0, 0.4);
-  --crd-bdr: rgba(255, 255, 255, 0.1);
+  --site-border-color: #070707;
+  --site-outline-color: var(--site-border-color);
+  --crd-bdr: var(--site-border-color);
   --crd-hvr: rgba(59, 130, 246, 0.2);
   --prim: #3b82f6;
   --prim-hvr: #2563eb;
   --prim-grd: linear-gradient(to right, #3b82f6, #2563eb);
   --prim-glw: rgba(59, 130, 246, 0.5);
   --sec: rgba(0, 0, 0, 0.3);
-  --sec-bdr: rgba(255, 255, 255, 0.1);
+  --sec-bdr: var(--site-border-color);
   --sec-hvr: rgba(59, 130, 246, 0.1);
   --sec-hvr-bdr: rgba(59, 130, 246, 0.5);
   --txt-mut: rgba(156, 163, 175, 1);
   --theme-color: #3b82f6;
   --footer-bg: rgba(0, 0, 0, 0.8);
-  --footer-border: rgba(255, 255, 255, 0.1);
+  --footer-border: var(--site-border-color);
   --footer-text: rgba(209, 213, 219, 1);
   --footer-muted: rgba(156, 163, 175, 1);
   --footer-max-width: 1200px;
@@ -59,8 +61,13 @@
   --footer-meta-text-size: 0.75rem;
   --footer-status-gap: 0.4rem;
   --footer-status-dot-size: 0.4rem;
-  --footer-status-live-color: rgba(var(--prim-rgb), 0.95);
-  --footer-status-muted-color: rgba(148, 163, 184, 0.9);
+  --status-updated-color: var(--theme-color);
+  --status-updated-rgb: var(--prim-rgb);
+  --status-not-updated-color: #9ca3af;
+  --status-not-updated-rgb: 156, 163, 175;
+  --exploit-card-chrome: var(--site-border-color);
+  --footer-status-live-color: rgba(var(--status-updated-rgb), 0.95);
+  --footer-status-muted-color: rgba(var(--status-not-updated-rgb), 0.9);
   --social-hover: #3b82f6;
   --card-hover: #3b82f6;
   --ad-color: #3b82f6;
@@ -97,7 +104,7 @@
   --mob-quick-solid-radius: 0.5rem;
   --navbar-height: var(--hdr-h);
   --navbar-background: #000000;
-  --navbar-scrolled-border: rgba(255, 255, 255, 0.05);
+  --navbar-scrolled-border: var(--site-border-color);
   --navbar-scroll-flash-gradient: linear-gradient(
     90deg,
     transparent 0%,
@@ -150,7 +157,7 @@
   --filter-option-background-active: var(--sec-hvr);
   --filter-option-border-active: var(--sec-hvr-bdr);
   --filter-option-text-active: var(--prim);
-  --filter-checkbox-background: rgba(255, 255, 255, 0.1);
+  --filter-checkbox-background: var(--filter-panel-background);
   --filter-checkbox-border: rgba(255, 255, 255, 0.2);
   --filter-checkbox-background-hover: var(--checkbx-color);
   --filter-checkbox-border-hover: var(--checkbx2-color);
@@ -169,10 +176,10 @@
   --featured-hide-duration: 220ms;
   --featured-card-max-width: 400px;
   --featured-card-background: var(--crd-bg);
-  --featured-card-border: var(--crd-bdr);
+  --featured-card-border: var(--site-border-color);
   --featured-card-radius: 0.75rem;
   --featured-card-header-padding: 0.625rem 0.9375rem;
-  --featured-card-header-border: rgba(255, 255, 255, 0.1);
+  --featured-card-header-border: var(--site-border-color);
   --featured-card-body-padding: 0.9375rem;
   --featured-card-accent-height: 0.25rem;
   --featured-card-accent-fill: var(--prim-grd);
@@ -256,6 +263,41 @@
   --header-overlay-fill: linear-gradient(90deg, #60a5fa 0%, #3b82f6 70%, #2563eb 100%);
 }
 
+:root[data-theme="weao"] {
+  --crd-hvr: rgba(26, 26, 26, 0.28);
+  --prim: #1a1a1a;
+  --prim-hvr: #2a2a2a;
+  --prim-grd: linear-gradient(to right, #1a1a1a, #2a2a2a);
+  --prim-glw: rgba(26, 26, 26, 0.58);
+  --sec-hvr: rgba(26, 26, 26, 0.16);
+  --sec-hvr-bdr: rgba(42, 42, 42, 0.7);
+  --theme-color: #1a1a1a;
+  --social-hover: #1a1a1a;
+  --card-hover: #1a1a1a;
+  --ad-color: #1a1a1a;
+  --ad2-color: #1a1a1a;
+  --ad3-color: linear-gradient(90deg, #1a1a1a, #2a2a2a);
+  --inp-color: #1a1a1a;
+  --inp2-color: rgba(26, 26, 26, 0.58);
+  --lbl-color: #1a1a1a;
+  --checkbx-color: rgba(26, 26, 26, 0.16);
+  --checkbx2-color: rgba(42, 42, 42, 0.4);
+  --prim-rgb: 26, 26, 26;
+  --warning-bg: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  --bdg-b-color: rgba(26, 26, 26, 0.14);
+  --bdg-color: rgba(42, 42, 42, 0.34);
+  --status-updated-color: #1CB554;
+  --status-updated-rgb: 28, 181, 84;
+  --status-not-updated-color: #E53535;
+  --status-not-updated-rgb: 229, 53, 53;
+  --footer-status-live-color: rgba(28, 181, 84, 0.95);
+  --footer-status-muted-color: rgba(229, 53, 53, 0.9);
+  --featured-overlay-fill: linear-gradient(90deg, #5a5a5a 0%, #1a1a1a 46%, #ffffff 100%);
+  --banner-overlay-fill: linear-gradient(90deg, #5a5a5a 0%, #1a1a1a 70%, #2a2a2a 100%);
+  --header-overlay-fill: linear-gradient(90deg, #5a5a5a 0%, #1a1a1a 70%, #2a2a2a 100%);
+}
+
+:root[data-theme="legacy"],
 :root[data-theme="red"] {
   --crd-hvr: rgba(239, 68, 68, 0.2);
   --prim: #ef4444;
@@ -816,7 +858,7 @@ html {
 
 *::-webkit-scrollbar-thumb {
   background: linear-gradient(to bottom, var(--prim), var(--prim-hvr));
-  border-radius: 999px;
+  border-radius: 0;
   border: 2px solid rgba(0, 0, 0, 0.7);
 }
 
@@ -897,3 +939,4 @@ button {
   min-height: 72vh;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(var(--prim-rgb), 0.02));
 }
+
