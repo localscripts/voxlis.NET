@@ -5,7 +5,7 @@
 			"scrapId": "p1oItowSFMvNrpuf"
 		}
 	},
-	"badges": ["trending", "verified"],
+	"badges": ["trending"],
 	"hidden": false,
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler", "kernel"],

@@ -1,8 +1,12 @@
 {
 	"sunc": {
+		"android": {
+			"key": "7Bj4cTyhj6xMs6QspSEbIpveNkKbqDyi",
+			"scrapId": "yIeDgSffMhQ1qYsg"
+		},
 		"ios": {
-			"key": "9BRz1IBo7t8vVBaHgnaOZ1xRDNNtdAF9",
-			"scrapId": "ju715lqo46qpiR1c"
+			"key": "jlOJasGrcMsw0fRLJ1Ykici3yINKtFgV",
+			"scrapId": "nHWT8DOl9gseJKi4"
 		}
 	},
 	"badges": [],
