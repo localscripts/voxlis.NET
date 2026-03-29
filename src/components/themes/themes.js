@@ -130,6 +130,26 @@
     }
   };
 
+  const normalizeThemeFontImportUrl = (value) => {
+    if (typeof value !== "string") return "";
+
+    const trimmed = value.trim();
+    const unwrapped = trimmed
+      .replace(/^url\((['"]?)(.*?)\1\)$/i, "$2")
+      .replace(/^(['"])(.*)\1$/, "$2")
+      .trim();
+
+    if (!unwrapped || /^none$/i.test(unwrapped) || /^javascript:/i.test(unwrapped)) {
+      return "";
+    }
+
+    try {
+      return new URL(unwrapped, window.location.href).href;
+    } catch {
+      return "";
+    }
+  };
+
   const normalizeHex = (value) => {
     if (typeof value !== "string") return null;
 
@@ -252,6 +272,32 @@
     return { root, image, video };
   };
 
+  const syncThemeFontImport = () => {
+    const href = normalizeThemeFontImportUrl(
+      window.getComputedStyle(getThemeRoot()).getPropertyValue("--theme-font-import-url")
+    );
+    const existing = document.getElementById("siteThemeFontStylesheet");
+
+    if (!href) {
+      existing?.remove();
+      return "";
+    }
+
+    const link = existing || document.createElement("link");
+    link.id = "siteThemeFontStylesheet";
+    link.rel = "stylesheet";
+
+    if (!existing) {
+      document.head.appendChild(link);
+    }
+
+    if (link.getAttribute("href") !== href) {
+      link.setAttribute("href", href);
+    }
+
+    return href;
+  };
+
   const buildCustomThemeVars = (hex) => {
     const normalized = normalizeHex(hex);
     const rgb = hexToRgb(normalized);
@@ -303,6 +349,7 @@
     "--font-family-ui",
     "--font-family-system",
     "--font-family-mono",
+    "--theme-font-import-url",
     "--theme-background-media-url",
     "--bg",
     "--fg",
@@ -986,6 +1033,7 @@
     const root = getThemeRoot();
     clearCustomThemeVars();
     root.dataset.theme = nextTheme;
+    syncThemeFontImport();
     applyOutlineBrightness(getStoredOutlineBrightness(), { persist: false });
     applySurfaceBlur(
       Boolean(preset?.surfaceBlurEnabled),
@@ -1009,6 +1057,7 @@
     clearCustomThemeVars();
     root.dataset.theme = CUSTOM_THEME_ID;
     applyThemeVars(vars);
+    syncThemeFontImport();
     applyOutlineBrightness(getStoredOutlineBrightness(), { persist: false });
     syncEffectiveBackgroundMedia();
     window.localStorage.setItem(THEME_STORAGE_KEY, CUSTOM_THEME_ID);

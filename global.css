@@ -18,6 +18,7 @@
   --font-family-ui: var(--font-family-base);
   --font-family-system: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-family-mono: "Fira Code", "Consolas", monospace;
+  --theme-font-import-url: none;
   --theme-background-media-url: none;
 
   /* Core colors + shared legacy aliases */

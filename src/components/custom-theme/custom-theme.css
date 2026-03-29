@@ -248,6 +248,12 @@
   gap: 0.45rem;
 }
 
+.custom-theme-font-grid {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.45rem;
+}
+
 .custom-theme-color-field {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

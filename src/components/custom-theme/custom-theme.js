@@ -1,9 +1,17 @@
 (() => {
   const THEME_CHANGE_EVENT = "site-theme-change";
   const DEFAULT_MAIN_HEX = "#3B82F6";
+  const DEFAULT_HOVER_HEX = "#2563EB";
   const DEFAULT_LOGO_HEX = "#60A5FA";
   const DEFAULT_LOGO_OFFSET = 70;
+  const DEFAULT_BACKGROUND_HEX = "#000000";
+  const DEFAULT_TEXT_HEX = "#FFFFFF";
   const DEFAULT_NOT_UPDATED_HEX = "#9CA3AF";
+  const DEFAULT_FONT_IMPORT_URL = "";
+  const DEFAULT_BASE_FONT_FAMILY = '"Open Sans", sans-serif';
+  const DEFAULT_UI_FONT_FAMILY = DEFAULT_BASE_FONT_FAMILY;
+  const DEFAULT_SYSTEM_FONT_FAMILY = 'system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
+  const DEFAULT_MONO_FONT_FAMILY = '"Fira Code", "Consolas", monospace';
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
@@ -89,6 +97,25 @@
     return Number.isFinite(nextValue) ? nextValue : fallback;
   };
 
+  const readTokenValue = (styles, name, fallback = "") => {
+    const value = String(styles.getPropertyValue(name) || "").trim();
+    if (!value || /^var\(/i.test(value)) {
+      return fallback;
+    }
+    return value;
+  };
+
+  const normalizeFontImportUrl = (value) => {
+    if (typeof value !== "string") return "";
+
+    const trimmed = value.trim().replace(/^(['"])(.*)\1$/, "$2").trim();
+    if (!trimmed || /^none$/i.test(trimmed)) {
+      return "";
+    }
+
+    return trimmed;
+  };
+
   const readGradientEnabled = (styles, fillValue) => {
     const storedValue = styles.getPropertyValue("--brand-gradient-enabled").trim();
     if (storedValue === "0") return false;
@@ -105,6 +132,9 @@
 
     return {
       main,
+      hover: readHexFromStyles(styles, ["--prim-hvr"], DEFAULT_HOVER_HEX),
+      background: readHexFromStyles(styles, ["--bg"], DEFAULT_BACKGROUND_HEX),
+      text: readHexFromStyles(styles, ["--fg"], DEFAULT_TEXT_HEX),
       updated: readHexFromStyles(styles, ["--status-updated-color", "--theme-color", "--prim"], main),
       logo: readHexFromStyles(styles, ["--brand-gradient-color"], readGradientStopHex(headerOverlayFill, 0, DEFAULT_LOGO_HEX)),
       logoOffset: clamp(
@@ -116,6 +146,19 @@
       ),
       gradientEnabled,
       notUpdated: readHexFromStyles(styles, ["--status-not-updated-color"], DEFAULT_NOT_UPDATED_HEX),
+    };
+  };
+
+  const readCurrentThemeFonts = () => {
+    const styles = window.getComputedStyle(document.documentElement);
+    const base = readTokenValue(styles, "--font-family-base", DEFAULT_BASE_FONT_FAMILY);
+
+    return {
+      fontImportUrl: normalizeFontImportUrl(readTokenValue(styles, "--theme-font-import-url", DEFAULT_FONT_IMPORT_URL)),
+      base,
+      ui: readTokenValue(styles, "--font-family-ui", base || DEFAULT_UI_FONT_FAMILY),
+      system: readTokenValue(styles, "--font-family-system", DEFAULT_SYSTEM_FONT_FAMILY),
+      mono: readTokenValue(styles, "--font-family-mono", DEFAULT_MONO_FONT_FAMILY),
     };
   };
 
@@ -168,9 +211,22 @@
     const error = scope.getElementById("customThemeError");
     const applyButton = scope.getElementById("customThemeApply");
     const mainInput = scope.getElementById("customThemeMainInput");
+    const hoverInput = scope.getElementById("customThemeHoverInput");
+    const logoInput = scope.getElementById("customThemeLogoInput");
+    const backgroundInput = scope.getElementById("customThemeBackgroundInput");
+    const textInput = scope.getElementById("customThemeTextInput");
+    const fontImportInput = scope.getElementById("customThemeFontImportInput");
+    const fontBaseInput = scope.getElementById("customThemeFontBaseInput");
+    const fontUiInput = scope.getElementById("customThemeFontUiInput");
+    const fontSystemInput = scope.getElementById("customThemeFontSystemInput");
+    const fontMonoInput = scope.getElementById("customThemeFontMonoInput");
     const updatedInput = scope.getElementById("customThemeUpdatedInput");
     const notUpdatedInput = scope.getElementById("customThemeNotUpdatedInput");
     const mainValue = scope.getElementById("customThemeMainValue");
+    const hoverValue = scope.getElementById("customThemeHoverValue");
+    const logoValue = scope.getElementById("customThemeLogoValue");
+    const backgroundValue = scope.getElementById("customThemeBackgroundValue");
+    const textValue = scope.getElementById("customThemeTextValue");
     const updatedValue = scope.getElementById("customThemeUpdatedValue");
     const notUpdatedValue = scope.getElementById("customThemeNotUpdatedValue");
 
@@ -179,9 +235,22 @@
       !error ||
       !applyButton ||
       !mainInput ||
+      !hoverInput ||
+      !logoInput ||
+      !backgroundInput ||
+      !textInput ||
+      !fontImportInput ||
+      !fontBaseInput ||
+      !fontUiInput ||
+      !fontSystemInput ||
+      !fontMonoInput ||
       !updatedInput ||
       !notUpdatedInput ||
       !mainValue ||
+      !hoverValue ||
+      !logoValue ||
+      !backgroundValue ||
+      !textValue ||
       !updatedValue ||
       !notUpdatedValue
     ) {
@@ -199,13 +268,27 @@
 
     const syncValueLabels = () => {
       mainValue.textContent = normalizeHex(mainInput.value) || DEFAULT_MAIN_HEX;
+      hoverValue.textContent = normalizeHex(hoverInput.value) || DEFAULT_HOVER_HEX;
+      logoValue.textContent = normalizeHex(logoInput.value) || DEFAULT_LOGO_HEX;
+      backgroundValue.textContent = normalizeHex(backgroundInput.value) || DEFAULT_BACKGROUND_HEX;
+      textValue.textContent = normalizeHex(textInput.value) || DEFAULT_TEXT_HEX;
       updatedValue.textContent = normalizeHex(updatedInput.value) || DEFAULT_MAIN_HEX;
       notUpdatedValue.textContent = normalizeHex(notUpdatedInput.value) || DEFAULT_NOT_UPDATED_HEX;
     };
 
     const syncInputsFromTheme = () => {
       const colors = readCurrentThemeColors();
+      const fonts = readCurrentThemeFonts();
       mainInput.value = colors.main;
+      hoverInput.value = colors.hover;
+      logoInput.value = colors.logo;
+      backgroundInput.value = colors.background;
+      textInput.value = colors.text;
+      fontImportInput.value = fonts.fontImportUrl;
+      fontBaseInput.value = fonts.base;
+      fontUiInput.value = fonts.ui;
+      fontSystemInput.value = fonts.system;
+      fontMonoInput.value = fonts.mono;
       updatedInput.value = colors.updated;
       notUpdatedInput.value = colors.notUpdated;
       syncValueLabels();
@@ -216,8 +299,11 @@
       const currentTheme = readCurrentThemeColors();
       const colors = {
         main: normalizeHex(mainInput.value) || DEFAULT_MAIN_HEX,
+        hover: normalizeHex(hoverInput.value) || DEFAULT_HOVER_HEX,
+        logo: normalizeHex(logoInput.value) || DEFAULT_LOGO_HEX,
+        background: normalizeHex(backgroundInput.value) || DEFAULT_BACKGROUND_HEX,
+        text: normalizeHex(textInput.value) || DEFAULT_TEXT_HEX,
         updated: normalizeHex(updatedInput.value) || DEFAULT_MAIN_HEX,
-        logo: currentTheme.logo,
         logoOffset: currentTheme.logoOffset,
         gradientEnabled: currentTheme.gradientEnabled,
         notUpdated: normalizeHex(notUpdatedInput.value) || DEFAULT_NOT_UPDATED_HEX,
@@ -230,17 +316,26 @@
       }
 
       const baseCssText = window.getCustomSiteThemeCssText?.() || "";
-      const hover = readHexFromStyles(
-        window.getComputedStyle(document.documentElement),
-        ["--prim-hvr"],
-        colors.main
-      );
+      const fontBase = fontBaseInput.value.trim() || DEFAULT_BASE_FONT_FAMILY;
+      const fontUi = fontUiInput.value.trim() || fontBase || DEFAULT_UI_FONT_FAMILY;
+      const fontSystem = fontSystemInput.value.trim() || DEFAULT_SYSTEM_FONT_FAMILY;
+      const fontMono = fontMonoInput.value.trim() || DEFAULT_MONO_FONT_FAMILY;
+      const fontImportUrl = normalizeFontImportUrl(fontImportInput.value);
       const mergedCssText = mergeThemeCssText(baseCssText, {
+        "--prim-hvr": colors.hover,
+        "--prim-grd": `linear-gradient(to right, ${colors.main}, ${colors.hover})`,
+        "--bg": colors.background,
+        "--fg": colors.text,
+        "--theme-font-import-url": fontImportUrl || "none",
+        "--font-family-base": fontBase,
+        "--font-family-ui": fontUi,
+        "--font-family-system": fontSystem,
+        "--font-family-mono": fontMono,
         ...buildStatusThemeVars(colors),
         ...buildBrandOverlayVars({
           logo: colors.logo,
           main: colors.main,
-          hover,
+          hover: colors.hover,
           logoOffset: colors.logoOffset,
           gradientEnabled: colors.gradientEnabled,
         }),
@@ -256,7 +351,20 @@
       setError("");
     };
 
-    [mainInput, updatedInput, notUpdatedInput].forEach((input) => {
+    [
+      mainInput,
+      hoverInput,
+      logoInput,
+      backgroundInput,
+      textInput,
+      fontImportInput,
+      fontBaseInput,
+      fontUiInput,
+      fontSystemInput,
+      fontMonoInput,
+      updatedInput,
+      notUpdatedInput,
+    ].forEach((input) => {
       input.addEventListener("input", () => {
         syncValueLabels();
         setError("");
