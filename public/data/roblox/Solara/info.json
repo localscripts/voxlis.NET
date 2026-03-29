@@ -1,0 +1,15 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "zoyflbbqeBuxCYDlGtUj5dvKgreRq9Zj",
+			"scrapId": "l0oHqqvAToR9vV6i"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["multi-instance", "decompiler"],
+	"platforms": ["windows"],
+	"website": "https://solara.gg",
+	"keyed": false
+}

@@ -1,0 +1,441 @@
+{
+  "freeProducts": [
+    "aimmy",
+    "solara",
+    "velocity",
+    "xeno",
+    "yub-x",
+    "madium"
+  ],
+  "matcha": {
+    "purchaseUrl": "https://key-empire.com/product/matcha",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.99
+      }
+    ]
+  },
+  "serotonin": {
+    "purchaseUrl": "https://key-empire.com/product/serotonin",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 8.47
+      },
+      {
+        "platform": "windows",
+        "days": 90,
+        "price": 19.99
+      },
+      {
+        "platform": "windows",
+        "days": 365,
+        "price": 47.99
+      }
+    ]
+  },
+  "wave": {
+    "purchaseUrl": "https://key-empire.com/product/wave",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 1,
+        "price": 2.49
+      },
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 5.99
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 18.99
+      },
+      {
+        "platform": "windows",
+        "days": 90,
+        "price": 39.99
+      }
+    ]
+  },
+  "seliware": {
+    "purchaseUrl": "https://key-empire.com/product/seliware",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 3.99
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 9.99
+      }
+    ]
+  },
+  "potassium": {
+    "purchaseUrl": "https://key-empire.com/product/potassium",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 22.99
+      }
+    ]
+  },
+  "bunni": {
+    "purchaseUrl": "https://key-empire.com/product/bunni",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 1,
+        "price": 0
+      },
+      {
+        "platform": "windows",
+        "days": 1,
+        "price": 1.99
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 9.99
+      },
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 34.99
+      }
+    ]
+  },
+  "yerba": {
+    "purchaseUrl": "https://key-empire.com/product/yerba",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.99
+      }
+    ]
+  },
+  "isaeva": {
+    "purchaseUrl": "https://key-empire.com/product/isaeva",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 4.99
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 17.99
+      },
+      {
+        "platform": "windows",
+        "days": 90,
+        "price": 44.99
+      }
+    ]
+  },
+  "volt": {
+    "purchaseUrl": "https://key-empire.com/product/volt",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 5.99
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 19.99
+      },
+      {
+        "platform": "windows",
+        "days": 90,
+        "price": 49.99
+      }
+    ]
+  },
+  "volcano": {
+    "purchaseUrl": "https://key-empire.com/product/volcano",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 5.99
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 19.99
+      }
+    ]
+  },
+  "ronin": {
+    "purchaseUrl": "https://key-empire.com/product/ronin",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 2.99
+      },
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.98
+      }
+    ]
+  },
+  "arceusx": {
+    "purchaseUrl": "https://whop.com/arceus-x",
+    "offers": [
+      {
+        "platform": "android",
+        "days": 30,
+        "price": 7.47
+      },
+      {
+        "platform": "ios",
+        "days": 30,
+        "price": 7.47
+      }
+    ]
+  },
+  "codex": {
+    "purchaseUrl": "/",
+    "offers": [
+      {
+        "platform": "android",
+        "days": 30,
+        "price": 4.99
+      },
+      {
+        "platform": "android",
+        "days": 90,
+        "price": 9.99
+      },
+      {
+        "platform": "android",
+        "days": -1,
+        "price": 19.99
+      }
+    ]
+  },
+  "macsploit": {
+    "purchaseUrl": "https://key-empire.com/product/macsploit",
+    "offers": [
+      {
+        "platform": "macos",
+        "days": 30,
+        "price": 4.99
+      },
+      {
+        "platform": "macos",
+        "days": 90,
+        "price": 9.99
+      },
+      {
+        "platform": "macos",
+        "days": -1,
+        "price": 19.99
+      }
+    ]
+  },
+  "cryptic": {
+    "purchaseUrl": "https://key-empire.com/",
+    "offers": [
+      {
+        "platform": "ios",
+        "days": 30,
+        "price": 4.5,
+        "currency": "EUR"
+      },
+      {
+        "platform": "ios",
+        "days": 90,
+        "price": 9.5,
+        "currency": "EUR"
+      },
+      {
+        "platform": "ios",
+        "days": -1,
+        "price": 19.49,
+        "currency": "EUR"
+      },
+      {
+        "platform": "android",
+        "days": 30,
+        "price": 4.5,
+        "currency": "EUR"
+      },
+      {
+        "platform": "android",
+        "days": 90,
+        "price": 9.5,
+        "currency": "EUR"
+      },
+      {
+        "platform": "android",
+        "days": -1,
+        "price": 19.49,
+        "currency": "EUR"
+      },
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 4.25,
+        "currency": "EUR"
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 15.3,
+        "currency": "EUR"
+      },
+      {
+        "platform": "windows",
+        "days": 90,
+        "price": 34,
+        "currency": "EUR"
+      },
+      {
+        "platform": "macos",
+        "days": 30,
+        "price": 5.75,
+        "currency": "EUR"
+      },
+      {
+        "platform": "macos",
+        "days": -1,
+        "price": 14.49,
+        "currency": "EUR"
+      }
+    ]
+  },
+  "delta": {
+    "purchaseUrl": "https://deltaexploits.gg",
+    "offers": [
+      {
+        "platform": "ios",
+        "days": 1,
+        "price": 0
+      },
+      {
+        "platform": "ios",
+        "days": 30,
+        "price": 8
+      },
+      {
+        "platform": "android",
+        "days": 1,
+        "price": 0
+      },
+      {
+        "platform": "android",
+        "days": 30,
+        "price": 8
+      }
+    ]
+  },
+  "hydrogen": {
+    "purchaseUrl": "https://hydrogenmacos.selly.store/",
+    "offers": [
+      {
+        "platform": "macos",
+        "days": 7,
+        "price": 4
+      },
+      {
+        "platform": "macos",
+        "days": 14,
+        "price": 6
+      },
+      {
+        "platform": "macos",
+        "days": 30,
+        "price": 9
+      },
+      {
+        "platform": "macos",
+        "days": 90,
+        "price": 30
+      },
+      {
+        "platform": "macos",
+        "days": 1,
+        "price": 0
+      }
+    ]
+  },
+  "matrix": {
+    "purchaseUrl": "https://matrixhubs.shop/",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 4.99
+      }
+    ]
+  },
+  "sirhurt": {
+    "purchaseUrl": "https://sirhurt.net/#purchase",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 2.8
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 9.5
+      },
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 100
+      }
+    ]
+  },
+  "vegax": {
+    "purchaseUrl": "https://vegaexploits.com/product/vega-x-premium/",
+    "offers": [
+      {
+        "platform": "android",
+        "days": 2,
+        "price": 0
+      },
+      {
+        "platform": "android",
+        "days": 30,
+        "price": 4.99
+      },
+      {
+        "platform": "android",
+        "days": 90,
+        "price": 12
+      },
+      {
+        "platform": "android",
+        "days": -1,
+        "price": 25
+      }
+    ]
+  },
+  "severe": {
+    "purchaseUrl": "https://key-empire.com/product/severe",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 20
+      }
+    ]
+  }
+}

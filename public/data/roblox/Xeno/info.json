@@ -1,0 +1,15 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "WI3hPM0Ad7VWhOoeUUyGqFNwpDhKcuI3",
+			"scrapId": "LIQQmgTeonzdhfjH"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["multi-instance", "decompiler"],
+	"platforms": ["windows"],
+	"website": "https://www.xeno.now/",
+	"keyed": false
+}

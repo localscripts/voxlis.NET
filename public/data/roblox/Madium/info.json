@@ -1,0 +1,15 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "OQmgqK45XrDn7h4gnRnGHIxVU1XUeeY0",
+			"scrapId": "jVLJDnmAJqLxKRoy"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["multi-instance", "decompiler", "freemium", "insecure"],
+	"platforms": ["windows"],
+	"website": "https://discord.gg/FWG7JEmCjN",
+	"keyed": true
+}

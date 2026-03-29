@@ -1,0 +1,14 @@
+{
+	"sunc": {
+		"ios": {
+			"key": "9BRz1IBo7t8vVBaHgnaOZ1xRDNNtdAF9",
+			"scrapId": "ju715lqo46qpiR1c"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["decompiler"],
+	"platforms": ["ios", "android"],
+	"website": "https://deltaexploits.gg"
+}

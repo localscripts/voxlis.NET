@@ -1,0 +1,15 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "rtE7bieSYFPDLDgb9RXoqMqBvrJNiYp1",
+			"scrapId": "rYE8ZYab4qNstKoG"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["multi-instance", "decompiler"],
+	"platforms": ["windows"],
+	"website": "https://getisaeva.xyz/login",
+	"keyed": false
+}
