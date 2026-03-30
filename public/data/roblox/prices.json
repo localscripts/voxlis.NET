@@ -122,6 +122,19 @@
       }
     ]
   },
+<<<<<<< HEAD
+    "cosmic": {
+    "purchaseUrl": "https://key-empire.com/product/cosmic",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.99
+      }
+    ]
+  },
+=======
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   "isaeva": {
     "purchaseUrl": "https://key-empire.com/product/isaeva",
     "offers": [

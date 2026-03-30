@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <circle cx="8" cy="7.25" r="3" fill="black"/>
   <path d="M3.5 19c0-3.4 2.85-5.75 6.5-5.75s6.5 2.35 6.5 5.75v1H3.5z" fill="black"/>
@@ -11,3 +12,18 @@
   <rect x="16.05" y="16.05" width="1.1" height="1" fill="black"/>
   <rect x="18.15" y="16.05" width="1.1" height="1" fill="black"/>
 </svg>
+=======
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <circle cx="8" cy="7.25" r="3" fill="black"/>
+  <path d="M3.5 19c0-3.4 2.85-5.75 6.5-5.75s6.5 2.35 6.5 5.75v1H3.5z" fill="black"/>
+  <rect x="14.75" y="10.25" width="5.25" height="5.25" rx="0.85" fill="black"/>
+  <rect x="13.25" y="11.15" width="1" height="1.1" fill="black"/>
+  <rect x="13.25" y="13.25" width="1" height="1.1" fill="black"/>
+  <rect x="20.5" y="11.15" width="1" height="1.1" fill="black"/>
+  <rect x="20.5" y="13.25" width="1" height="1.1" fill="black"/>
+  <rect x="16.05" y="8.75" width="1.1" height="1" fill="black"/>
+  <rect x="18.15" y="8.75" width="1.1" height="1" fill="black"/>
+  <rect x="16.05" y="16.05" width="1.1" height="1" fill="black"/>
+  <rect x="18.15" y="16.05" width="1.1" height="1" fill="black"/>
+</svg>
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9

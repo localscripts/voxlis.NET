@@ -72,7 +72,8 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: min(100%, 24rem);
+  width: 100%;
+  max-width: var(--filter-panel-max-width);
   background: var(--filter-panel-background);
   border-right: 1px solid var(--filter-panel-border);
   display: flex;
@@ -914,7 +915,7 @@
   }
 
   .footer-theme-drawer-panel {
-    width: min(100%, 22.5rem);
+    width: 100%;
   }
 
   .footer-theme-drawer-tabs {
@@ -937,5 +938,21 @@
 
   .footer-theme-drawer-transfer-actions {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-theme-drawer-panel {
+    max-width: none;
+  }
+
+  .footer-theme-drawer-header,
+  .footer-theme-drawer-body {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .footer-theme-drawer-header-row {
+    gap: 0.6rem;
   }
 }

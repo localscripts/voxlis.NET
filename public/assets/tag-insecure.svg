@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
   <path d="M12 4 21 20H3L12 4z"/>
   <path d="M12 9v5"/>
   <circle cx="12" cy="17.25" r="1" fill="black" stroke="none"/>
 </svg>
+=======
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 4 21 20H3L12 4z"/>
+  <path d="M12 9v5"/>
+  <circle cx="12" cy="17.25" r="1" fill="black" stroke="none"/>
+</svg>
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9

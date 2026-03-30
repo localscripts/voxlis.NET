@@ -1,15 +1,27 @@
 {
 	"sunc": {
 		"windows": {
+<<<<<<< HEAD
+			"key": "7xfGYFy9TkhdSWbArOlTKjeFOT1QpvVB",
+			"scrapId": "6SjWmrjIt4DprFNM"
+=======
 			"key": "OQmgqK45XrDn7h4gnRnGHIxVU1XUeeY0",
 			"scrapId": "jVLJDnmAJqLxKRoy"
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
 		}
 	},
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
+<<<<<<< HEAD
+	"tags": ["multi-instance", "decompiler"],
+	"platforms": ["windows"],
+	"website": "https://discord.gg/FWG7JEmCjN",
+	"keyed": false
+=======
 	"tags": ["multi-instance", "decompiler", "freemium", "insecure"],
 	"platforms": ["windows"],
 	"website": "https://discord.gg/FWG7JEmCjN",
 	"keyed": true
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
 }

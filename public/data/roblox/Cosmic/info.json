@@ -1,0 +1,15 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "fcJsVcIWsH4F45XI1pD0y86nHWeUh2RQ",
+			"scrapId": "zgNgFqdHp8qC7kBC"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["multi-instance", "decompiler"],
+	"platforms": ["windows"],
+	"website": "https://cosmic.best",
+	"keyed": true
+}

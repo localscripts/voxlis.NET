@@ -44,6 +44,10 @@
     insecureButton: "revealInsecureHold",
     insecureLabel: "revealInsecureLabel",
     insecureHint: "revealInsecureHint",
+<<<<<<< HEAD
+    insecureCount: "revealInsecureCount",
+=======
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   };
   const SORT_OPTIONS = [
     { value: "random", label: "Random" },
@@ -71,7 +75,11 @@
     { id: "filterWarning", field: "warning", label: "Warning", iconClass: "fas fa-triangle-exclamation", iconToneClass: "ph-warn-ico", toneClass: "is-warning" },
   ];
   const DEFAULT_SORT_VALUE = DEFAULT_FILTERS.sort || "random";
+<<<<<<< HEAD
+  const INSECURE_REVEAL_STORAGE_KEY = "voxlis.filter.showInsecure";
+=======
   const INSECURE_HOLD_DURATION_MS = 5000;
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
 
   const byId = (id) => document.getElementById(id);
   const query = (selector, root = document) => root.querySelector(selector);
@@ -89,10 +97,38 @@
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, (character) => character.toUpperCase());
 
+<<<<<<< HEAD
+  const readStoredInsecureReveal = () => {
+    try {
+      const storedValue = window.localStorage.getItem(INSECURE_REVEAL_STORAGE_KEY);
+      if (storedValue == null) {
+        return Boolean(DEFAULT_FILTERS.showInsecure);
+      }
+
+      return storedValue === "1" || storedValue === "true";
+    } catch {
+      return Boolean(DEFAULT_FILTERS.showInsecure);
+    }
+  };
+
+  const persistInsecureReveal = (value) => {
+    try {
+      if (value) {
+        window.localStorage.setItem(INSECURE_REVEAL_STORAGE_KEY, "1");
+        return;
+      }
+
+      window.localStorage.removeItem(INSECURE_REVEAL_STORAGE_KEY);
+    } catch {}
+  };
+
+  let insecureUnlocked = readStoredInsecureReveal();
+=======
   let insecureUnlocked = false;
   let insecureHoldFrameId = 0;
   let insecureHoldStartedAt = 0;
   let insecureHoldPointerId = null;
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   let insecureOptionCount = 0;
 
   const getDrawer = () => byId("filterDrawer");
@@ -100,8 +136,14 @@
   const getInsecureHoldButton = () => byId(DOM_IDS.insecureButton);
   const getInsecureHoldLabel = () => byId(DOM_IDS.insecureLabel);
   const getInsecureHoldHint = () => byId(DOM_IDS.insecureHint);
+<<<<<<< HEAD
+  const getInsecureCountBadge = () => byId(DOM_IDS.insecureCount);
+  const formatInsecureCount = (count = 0) =>
+    `${count} warning entr${count === 1 ? "y" : "ies"}`;
+=======
   const formatInsecureCount = (count = 0) =>
     `${count} insecure option${count === 1 ? "" : "s"}`;
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
 
   const getShowOnlyFilterOptions = () => {
     const configuredOptions = window.VOXLIS_CONFIG?.robloxCards?.showOnlyFilterOptions;
@@ -217,6 +259,8 @@
     list.innerHTML = getShowOnlyFilterOptions().map((option) => buildShowOnlyFilterMarkup(option)).join("");
   };
 
+<<<<<<< HEAD
+=======
   const setInsecureHoldProgress = (progress = 0) => {
     getInsecureHoldButton()?.style.setProperty(
       "--filter-insecure-progress",
@@ -224,11 +268,22 @@
     );
   };
 
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const syncInsecureButtonState = () => {
     const button = getInsecureHoldButton();
     if (!button) return;
 
     button.classList.toggle("is-unlocked", insecureUnlocked);
+<<<<<<< HEAD
+    button.setAttribute("aria-pressed", String(insecureUnlocked));
+    button.setAttribute("aria-expanded", String(insecureUnlocked));
+
+    const label = getInsecureHoldLabel();
+    if (label) {
+      label.textContent = insecureUnlocked
+        ? "Showing warning results"
+        : "Show warning results";
+=======
     button.classList.remove("is-holding");
     button.setAttribute("aria-pressed", String(insecureUnlocked));
     setInsecureHoldProgress(insecureUnlocked ? 1 : 0);
@@ -239,13 +294,25 @@
       label.textContent = insecureUnlocked
         ? `Insecure mode is enabled${countSuffix}`
         : `Hold 5 seconds to show insecure${countSuffix}`;
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     }
 
     const hint = getInsecureHoldHint();
     if (hint) {
       hint.textContent = insecureUnlocked
+<<<<<<< HEAD
+        ? `${insecureOptionCount > 0 ? `${formatInsecureCount(insecureOptionCount)} are` : "These entries are"} included in the catalog until you turn this off or reset filters.`
+        : `High-risk or not-yet-verified entries stay hidden by default${insecureOptionCount > 0 ? `. There are ${formatInsecureCount(insecureOptionCount)} available.` : "."}`;
+    }
+
+    const countBadge = getInsecureCountBadge();
+    if (countBadge) {
+      countBadge.hidden = insecureOptionCount <= 0;
+      countBadge.textContent = formatInsecureCount(insecureOptionCount);
+=======
         ? `${insecureOptionCount > 0 ? `${formatInsecureCount(insecureOptionCount)} are` : "These entries are"} now visible until you reset filters.`
         : `Press and hold until the red fill reaches the end to unlock insecure filters${insecureOptionCount > 0 ? `. There are ${formatInsecureCount(insecureOptionCount)} available.` : "."}`;
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     }
   };
 
@@ -255,6 +322,8 @@
     syncInsecureButtonState();
   };
 
+<<<<<<< HEAD
+=======
   const stopInsecureHold = ({ keepProgress = false } = {}) => {
     if (insecureHoldFrameId) {
       window.cancelAnimationFrame(insecureHoldFrameId);
@@ -279,17 +348,29 @@
     }
   };
 
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const applyFilters = () => {
     window.applyRobloxCardsCatalogFilters?.(getCurrentFilters());
   };
 
+<<<<<<< HEAD
+  const toggleInsecureReveal = (nextValue = !insecureUnlocked) => {
+    insecureUnlocked = Boolean(nextValue);
+    persistInsecureReveal(insecureUnlocked);
+=======
   const unlockInsecureEntries = () => {
     insecureUnlocked = true;
     stopInsecureHold({ keepProgress: true });
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     syncInsecureButtonState();
     applyFilters();
   };
 
+<<<<<<< HEAD
+  const resetInsecureReveal = () => {
+    insecureUnlocked = false;
+    persistInsecureReveal(false);
+=======
   const tickInsecureHold = () => {
     if (!insecureHoldStartedAt || insecureUnlocked) {
       return;
@@ -345,6 +426,7 @@
   const resetInsecureReveal = () => {
     insecureUnlocked = false;
     stopInsecureHold();
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     syncInsecureButtonState();
   };
 
@@ -382,7 +464,10 @@
   };
 
   const closeDrawer = () => {
+<<<<<<< HEAD
+=======
     endInsecureHold();
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     getSortDropdown()?.classList.remove("is-open");
     setDrawerOpen(false);
   };
@@ -495,6 +580,14 @@
         return;
       }
 
+<<<<<<< HEAD
+      if (target.closest(`#${DOM_IDS.insecureButton}`)) {
+        toggleInsecureReveal();
+        return;
+      }
+
+=======
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
       const dropdown = getSortDropdown();
       if (!dropdown) return;
 
@@ -515,6 +608,9 @@
       }
     });
 
+<<<<<<< HEAD
+    document.addEventListener("keydown", (event) => {
+=======
     document.addEventListener("pointerdown", (event) => {
       const target = event.target;
       if (!target.closest?.(`#${DOM_IDS.insecureButton}`)) return;
@@ -534,11 +630,14 @@
         startInsecureHold(event);
       }
 
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
       if (event.key !== "Escape") return;
       if (!getDrawer()?.classList.contains("is-open")) return;
       closeDrawer();
     });
 
+<<<<<<< HEAD
+=======
     document.addEventListener("keyup", (event) => {
       if (event.target !== getInsecureHoldButton()) return;
       endInsecureHold(event);
@@ -554,6 +653,7 @@
       }
     });
 
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     document.addEventListener("voxlis:open-filter", openDrawer);
   };
 

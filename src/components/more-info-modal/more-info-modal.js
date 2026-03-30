@@ -22,7 +22,7 @@
   const NULL_REVIEW_MARKUP = `
     <div class="info-modal-null-review">
       <p class="info-modal-null-review-message">
-        Hmm, the owner of this software needs to contact us in order to be verified, its safe but not considered trusted, yet
+        Hmm, the owner of this software needs to contact us in order to be verified, it's safe but not verified yet.
       </p>
       <img
         class="info-modal-null-review-image"

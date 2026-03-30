@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
+	"pro_summary": "Easy-to-use UI & installation",
+=======
 	"pro_summary": "Hyperion emulation and an easy-to-use UI",
+>>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
 	"neutral_summary": "Repeated exit scams, recently detected",
 	"con_summary": ""
 }
