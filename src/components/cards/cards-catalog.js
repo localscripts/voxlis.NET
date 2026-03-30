@@ -37,19 +37,11 @@
   const catalogState = {
     mount: null,
     grid: null,
-<<<<<<< HEAD
     cards: [],
     statusMap: {},
     filters: { ...DEFAULT_FILTERS },
   };
 
-=======
-    cards: [],
-    statusMap: {},
-    filters: { ...DEFAULT_FILTERS },
-  };
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const escapeHtml = (value = "") =>
     String(value).replace(/[&<>"']/g, (character) => HTML_ESCAPE_MAP[character]);
 
@@ -62,7 +54,6 @@
     const trimmed = `${path}`.replace(/\/+$/, "");
     return trimmed || "/";
   };
-<<<<<<< HEAD
 
   const getFolderName = (slug) => CARD_NAME_OVERRIDES[slug] ?? titleCase(slug);
 
@@ -151,96 +142,6 @@
     };
   };
 
-=======
-
-  const getFolderName = (slug) => CARD_NAME_OVERRIDES[slug] ?? titleCase(slug);
-
-  const fetchJson = async (path, { optional = false } = {}) => {
-    const response = await fetch(path, { cache: "no-cache" });
-    if (response.ok) {
-      return response.json();
-    }
-
-    if (optional && response.status === 404) {
-      return null;
-    }
-
-    throw new Error(`Failed to load JSON (${path}): ${response.status}`);
-  };
-
-  const normalizeMetadataValue = (value = "") => {
-    const trimmedValue = String(value).trim();
-    if (!trimmedValue) {
-      return "";
-    }
-
-    const quotedValueMatch = trimmedValue.match(/^(['"])([\s\S]*)\1$/);
-    return (quotedValueMatch ? quotedValueMatch[2] : trimmedValue).trim();
-  };
-
-  const parseReviewDocument = (source = "") => {
-    if (typeof window.parseReviewDocument === "function") {
-      return window.parseReviewDocument(source);
-    }
-
-    const normalizedSource = String(source).replace(/^\uFEFF/, "");
-    const parseMetadataBlock = (metadataSource = "") => {
-      const youtubeMatch = String(metadataSource).match(/^\s*youtube\s*:\s*(.+)\s*$/im);
-      return {
-        youtube: youtubeMatch ? normalizeMetadataValue(youtubeMatch[1]) : "",
-      };
-    };
-
-    const frontmatterMatch = normalizedSource.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*(?:\r?\n)?/);
-    if (frontmatterMatch) {
-      return {
-        metadata: parseMetadataBlock(frontmatterMatch[1]),
-        body: normalizedSource.slice(frontmatterMatch[0].length).replace(/^\s+/, ""),
-      };
-    }
-
-    const inlineYoutubeMatch = normalizedSource.match(/^\s*youtube\s*:\s*(.+?)\s*(?:\r?\n){1,2}/i);
-    if (inlineYoutubeMatch) {
-      return {
-        metadata: {
-          youtube: normalizeMetadataValue(inlineYoutubeMatch[1]),
-        },
-        body: normalizedSource.slice(inlineYoutubeMatch[0].length).replace(/^\s+/, ""),
-      };
-    }
-
-    return {
-      metadata: {
-        youtube: "",
-      },
-      body: normalizedSource,
-    };
-  };
-
-  const loadReviewDocument = async (path, { optional = false } = {}) => {
-    const response = await fetch(path, { cache: "no-cache" });
-    if (optional && response.status === 404) {
-      return {
-        metadata: {
-          youtube: "",
-        },
-        body: "",
-        exists: false,
-      };
-    }
-
-    if (!response.ok) {
-      throw new Error(`Failed to load review (${path}): ${response.status}`);
-    }
-
-    const source = await response.text();
-    return {
-      ...parseReviewDocument(source),
-      exists: true,
-    };
-  };
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const buildFreeLifetimeOffers = (platforms = []) => {
     const normalizedPlatforms = Array.isArray(platforms)
       ? [...new Set(platforms.filter((platform) => typeof platform === "string" && platform))]
@@ -266,7 +167,6 @@
       .filter((offer) => offer && typeof offer === "object")
       .map((offer) => ({ ...offer, platform: offer.platform || "" }));
   };
-<<<<<<< HEAD
 
   const formatCurrency = (price, currency) => {
     if (!Number.isFinite(price)) return "Price unavailable";
@@ -453,194 +353,6 @@
     return suncRequestCache.get(cacheKey);
   };
 
-=======
-
-  const formatCurrency = (price, currency) => {
-    if (!Number.isFinite(price)) return "Price unavailable";
-    if (!currency) return `$${price.toFixed(2)}`;
-
-    try {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency,
-        maximumFractionDigits: 2,
-      }).format(price);
-    } catch {
-      return `$${price.toFixed(2)}`;
-    }
-  };
-
-  const formatDuration = (days) => {
-    if (days === -1) return "Lifetime";
-    if (days === 1) return "1 Day";
-    if (Number.isFinite(days) && days > 1) return `${days} Days`;
-    return "";
-  };
-
-  const formatOfferSummary = (offer = {}) => {
-    const priceLabel = formatCurrency(offer.price, offer.currency);
-    const durationLabel = formatDuration(offer.days);
-    return durationLabel ? `${priceLabel} ${durationLabel}` : priceLabel;
-  };
-
-  const formatFromOfferSummary = (offer = {}) => {
-    const priceLabel = formatCurrency(offer.price, offer.currency);
-    if (offer.days === 1) {
-      return `From ${priceLabel} for 1 day`;
-    }
-
-    if (Number.isFinite(offer.days) && offer.days > 1) {
-      return `From ${priceLabel} for ${offer.days} days`;
-    }
-
-    const durationLabel = formatDuration(offer.days);
-    return durationLabel ? `From ${priceLabel} ${durationLabel}` : `From ${priceLabel}`;
-  };
-
-  const formatPriceSummary = (offers = []) => {
-    if (!Array.isArray(offers) || !offers.length) {
-      return "";
-    }
-
-    const validOffers = offers
-      .filter((offer) => Number.isFinite(Number(offer.price)))
-      .map((offer) => ({ ...offer, price: Number(offer.price) }))
-      .sort((left, right) => left.price - right.price || left.days - right.days);
-
-    if (!validOffers.length) {
-      return "";
-    }
-
-    const freeOffer = validOffers.find((offer) => offer.price === 0);
-    if (freeOffer) {
-      const paidOffer = validOffers.find((offer) => offer.price > 0);
-      if (!paidOffer) {
-        return "FREE";
-      }
-
-      return formatFromOfferSummary(paidOffer).replace(/^From /, "FREE or from ");
-    }
-
-    const lowestOffer = validOffers[0];
-    if (validOffers.length > 1) {
-      return formatFromOfferSummary(lowestOffer);
-    }
-
-    return formatOfferSummary(lowestOffer);
-  };
-
-  const formatSponsorPriceSummary = (offers = []) => {
-    if (!Array.isArray(offers) || !offers.length) {
-      return "";
-    }
-
-    const validOffers = offers
-      .filter((offer) => Number.isFinite(Number(offer.price)))
-      .map((offer) => ({ ...offer, price: Number(offer.price) }))
-      .sort((left, right) => left.price - right.price || left.days - right.days);
-
-    if (!validOffers.length) {
-      return "";
-    }
-
-    const freeOffer = validOffers.find((offer) => offer.price === 0);
-    const paidOffer = validOffers.find((offer) => offer.price > 0);
-
-    if (freeOffer && !paidOffer) {
-      return "FREE";
-    }
-
-    if (paidOffer) {
-      return `From ${formatCurrency(paidOffer.price, paidOffer.currency)}`;
-    }
-
-    return "";
-  };
-
-  const getPrimarySuncSource = (info = {}) => {
-    const suncEntries = info.sunc;
-    if (!suncEntries || typeof suncEntries !== "object") {
-      return null;
-    }
-
-    const preferredPlatforms = Array.isArray(info.platforms) ? info.platforms : [];
-    const orderedPlatforms = [
-      ...new Set([...preferredPlatforms, ...PLATFORM_ORDER, ...Object.keys(suncEntries)]),
-    ];
-
-    for (const platform of orderedPlatforms) {
-      const source = suncEntries[platform];
-      if (!source || typeof source !== "object") {
-        continue;
-      }
-
-      if (source.scrapId && source.key) {
-        return {
-          platform,
-          scrapId: source.scrapId,
-          key: source.key,
-        };
-      }
-    }
-
-    return null;
-  };
-
-  const hasSuncTracking = (info) => Boolean(getPrimarySuncSource(info));
-
-  const normalizeSuncSummary = (payload) => {
-    if (!payload || typeof payload !== "object") {
-      return null;
-    }
-
-    if (Number.isFinite(Number(payload.score))) {
-      return {
-        score: Math.round(Number(payload.score)),
-      };
-    }
-
-    const passedCount = Array.isArray(payload.tests?.passed) ? payload.tests.passed.length : 0;
-    const failedTests = payload.tests?.failed;
-    const failedCount = Array.isArray(failedTests)
-      ? failedTests.length
-      : failedTests && typeof failedTests === "object"
-        ? Object.keys(failedTests).length
-        : 0;
-    const totalCount = passedCount + failedCount;
-
-    if (!totalCount) {
-      return null;
-    }
-
-    return {
-      score: Math.round((passedCount / totalCount) * 100),
-    };
-  };
-
-  const loadSuncSummary = async (info) => {
-    const source = getPrimarySuncSource(info);
-    if (!source) {
-      return null;
-    }
-
-    const cacheKey = `${source.scrapId}:${source.key}`;
-    if (!suncRequestCache.has(cacheKey)) {
-      const request = fetchJson(
-        `${SUNC_API_URL}?scrap=${encodeURIComponent(source.scrapId)}&key=${encodeURIComponent(source.key)}`,
-      )
-        .then((payload) => normalizeSuncSummary(payload))
-        .catch((error) => {
-          console.warn("Failed to load sUNC summary.", error);
-          return null;
-        });
-
-      suncRequestCache.set(cacheKey, request);
-    }
-
-    return suncRequestCache.get(cacheKey);
-  };
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const normalizeLineText = (value = "") => String(value).replace(/\s+/g, " ").trim();
   const buildSearchText = (parts = []) =>
     normalizeLineText(
@@ -777,13 +489,8 @@
     [points.pro_summary, points.neutral_summary, points.con_summary]
       .map((value) => normalizeLineText(value))
       .filter(Boolean)
-<<<<<<< HEAD
       .join(" ");
 
-=======
-      .join(" ");
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const hasInfoTag = (info = {}, tag = "") =>
     Array.isArray(info.tags) && info.tags.includes(tag);
 
@@ -800,7 +507,6 @@
     );
     return stats;
   };
-<<<<<<< HEAD
 
   const inferKeyedState = (info = {}, points = {}, offers = []) => {
     if (typeof info.keyed === "boolean") {
@@ -932,145 +638,11 @@
       ? `<span class="ph-asset-icon${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" style="--ph-asset-icon: url('/public/assets/${escapeHtml(assetIcon)}')" aria-hidden="true"></span>`
       : `<i class="${escapeHtml(iconClass)}${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" aria-hidden="true"></i>`);
 
-=======
-
-  const inferKeyedState = (info = {}, points = {}, offers = []) => {
-    if (typeof info.keyed === "boolean") {
-      return info.keyed;
-    }
-
-    if (hasInfoTag(info, "freemium")) {
-      return true;
-    }
-
-    const pointText = getCombinedPointText(points);
-    if (/\b(no key(?: system)?|keyless)\b/i.test(pointText)) {
-      return false;
-    }
-
-    if (/\b(key ?system|keysystem|long keys?|requires? keys?)\b/i.test(pointText)) {
-      return true;
-    }
-
-    const hasFreeOffer = offers.some((offer) => Number(offer.price) === 0);
-    const hasPaidOffer = offers.some((offer) => Number(offer.price) > 0);
-    return hasFreeOffer && hasPaidOffer;
-  };
-
-  const buildSummaryLines = (card) => {
-    const lines = [];
-    const explicitGood = normalizeLineText(card.points?.pro_summary);
-    const explicitNeutral = normalizeLineText(card.points?.neutral_summary);
-    const explicitCon = normalizeLineText(card.points?.con_summary);
-
-    if (explicitGood) {
-      lines.push({ className: "good", text: explicitGood });
-    }
-
-    if (explicitCon) {
-      lines.push({ className: "bad", text: explicitCon });
-    } else if (explicitNeutral) {
-      lines.push({ className: "warn", text: explicitNeutral });
-    }
-
-    return lines;
-  };
-
-  const getModalWarningConfig = (modals = {}) => {
-    if (modals?.warningred?.enabled) {
-      return {
-        variant: "warningred",
-        title: "Warning",
-        description: modals.warningred.description || "",
-      };
-    }
-
-    if (modals?.warning?.enabled) {
-      return {
-        variant: "warning",
-        title: "Warning",
-        description: modals.warning.description || "",
-      };
-    }
-
-    return null;
-  };
-
-  const getAvailableTitleIconEntries = (modals = {}) => [
-    {
-      key: "verified",
-      iconClass: "fas fa-circle-check",
-      iconToneClass: "ph-good-ico",
-      title: "Verified",
-      message: "This product has a documented and verified more info page.",
-      toastIcon: "fa-circle-check",
-    },
-    {
-      key: "trending",
-      iconClass: "fas fa-arrow-trend-up",
-      title: "Trending",
-      message: "This product is currently marked as trending on the catalog.",
-      toastIcon: "fa-arrow-trend-up",
-    },
-    {
-      key: "warning",
-      iconClass: "fas fa-triangle-exclamation",
-      iconToneClass: "ph-warn-ico",
-      title: "Warning",
-      message:
-        modals?.warning?.description ||
-        "voxlis.NET recommends reading more about this product before continuing.",
-      toastIcon: "fa-triangle-exclamation",
-    },
-    {
-      key: "warningred",
-      iconClass: "fas fa-triangle-exclamation",
-      iconToneClass: "ph-warn-red-ico",
-      title: "High-Risk Warning",
-      message:
-        modals?.warningred?.description ||
-        "This product has a high-risk warning on voxlis.NET.",
-      toastIcon: "fa-triangle-exclamation",
-    },
-  ];
-
-  const getTitleIconEntries = (info = {}, modals = {}) => {
-    const availableEntries = getAvailableTitleIconEntries(modals);
-    const warningConfig = getModalWarningConfig(modals);
-    const activeKeys = new Set();
-
-    if (Array.isArray(info.badges) && info.badges.includes("verified")) {
-      activeKeys.add("verified");
-    }
-
-    if (Array.isArray(info.badges) && info.badges.includes("trending")) {
-      activeKeys.add("trending");
-    }
-
-    if (warningConfig?.variant === "warning") {
-      activeKeys.add("warning");
-    }
-
-    if (warningConfig?.variant === "warningred") {
-      activeKeys.add("warningred");
-    }
-
-    return availableEntries.filter((entry) => activeKeys.has(entry.key));
-  };
-
-  const renderInfoIconMarkup = ({ iconClass, iconMarkup = "", iconToneClass = "", assetIcon = "" }) =>
-    iconMarkup ||
-    (assetIcon
-      ? `<span class="ph-asset-icon${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" style="--ph-asset-icon: url('/public/assets/${escapeHtml(assetIcon)}')" aria-hidden="true"></span>`
-      : `<i class="${escapeHtml(iconClass)}${iconToneClass ? ` ${escapeHtml(iconToneClass)}` : ""}" aria-hidden="true"></i>`);
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const buildInfoIconButton = ({
     key = "",
     iconClass,
     iconMarkup = "",
     iconToneClass = "",
-<<<<<<< HEAD
     assetIcon = "",
     buttonClass = "ph-title-icon-btn",
     title,
@@ -1078,15 +650,6 @@
     toastIcon = "fa-circle-info",
   }) =>
     `
-=======
-    assetIcon = "",
-    buttonClass = "ph-title-icon-btn",
-    title,
-    message,
-    toastIcon = "fa-circle-info",
-  }) =>
-    `
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
       <button
         class="${escapeHtml(buttonClass)}"
         type="button"
@@ -1099,7 +662,6 @@
       >
         ${renderInfoIconMarkup({ iconClass, iconMarkup, iconToneClass, assetIcon })}
       </button>
-<<<<<<< HEAD
     `;
 
   const buildTitleIcons = (info, modals) => {
@@ -1141,54 +703,10 @@
       .map((tag) => getTagEntry(tag))
       .filter(Boolean);
 
-=======
-    `;
-
-  const buildTitleIcons = (info, modals) => {
-    const icons = getTitleIconEntries(info, modals).map((entry) => buildInfoIconButton(entry));
-    return icons.length ? ` ${icons.join(" ")}` : "";
-  };
-
-  const getTagEntry = (tag) => {
-    const normalizedTag = normalizeLineText(tag);
-    if (!normalizedTag) {
-      return null;
-    }
-
-    const tagMeta = TAG_METADATA[normalizedTag] ?? {
-      icon: "fas fa-circle-info",
-      label: titleCase(normalizedTag),
-      message: `${titleCase(normalizedTag)} is supported by this product.`,
-    };
-
-    return {
-      key: `tag:${normalizedTag}`,
-      iconClass: tagMeta.icon,
-      iconMarkup: tagMeta.iconMarkup,
-      iconToneClass: tagMeta.iconToneClass || "",
-      assetIcon: tagMeta.assetIcon || "",
-      title: tagMeta.label,
-      message: tagMeta.message || `${tagMeta.label} is supported by this product.`,
-      toastIcon: "fa-circle-info",
-    };
-  };
-
-  const getAvailableTagEntries = () =>
-    Object.keys(TAG_METADATA)
-      .map((tag) => getTagEntry(tag))
-      .filter(Boolean);
-
-  const getActiveTagEntries = (info = {}) =>
-    (Array.isArray(info.tags) ? info.tags : [])
-      .map((tag) => getTagEntry(tag))
-      .filter(Boolean);
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const buildTitleIconModalContent = (card) => {
     const activeEntries = [
       ...getTitleIconEntries(card?.info, card?.modals),
       ...getActiveTagEntries(card?.info),
-<<<<<<< HEAD
     ];
     if (!activeEntries.length) {
       return "";
@@ -1197,23 +715,12 @@
     const renderEntries = (entries) => `
       <ul class="info-modal-notice-list" aria-label="Notification meanings">
         ${entries
-=======
-    ];
-    if (!activeEntries.length) {
-      return "";
-    }
-
-    const renderEntries = (entries) => `
-      <ul class="info-modal-notice-list" aria-label="Notification meanings">
-        ${entries
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
           .map(
             (entry) => `
               <li class="info-modal-notice-item" data-info-modal-key="${escapeHtml(entry.key || "")}">
                 <span class="info-modal-notice-icon" aria-hidden="true">
                   ${renderInfoIconMarkup(entry)}
                 </span>
-<<<<<<< HEAD
                 <div class="info-modal-notice-copy">
                   <p class="info-modal-notice-title">${escapeHtml(entry.title)}</p>
                   <p class="info-modal-notice-text">${escapeHtml(entry.message)}</p>
@@ -1288,82 +795,6 @@
 
     return `
       <span class="ph-title-tags" aria-label="Feature tags">
-=======
-                <div class="info-modal-notice-copy">
-                  <p class="info-modal-notice-title">${escapeHtml(entry.title)}</p>
-                  <p class="info-modal-notice-text">${escapeHtml(entry.message)}</p>
-                </div>
-              </li>
-            `,
-          )
-          .join("")}
-      </ul>
-    `;
-
-    const activeHeading = card?.title ? `${card.title} Tags` : "Current Tags";
-
-    return `
-      <section class="info-modal-notice-group is-current-tags" aria-label="${escapeHtml(activeHeading)}">
-        <p class="info-modal-notice-heading">${escapeHtml(activeHeading)}</p>
-        ${renderEntries(activeEntries)}
-      </section>
-    `;
-  };
-
-  const buildPlatformText = (info) => {
-    const platforms = Array.isArray(info.platforms)
-      ? [...new Set(info.platforms.filter(Boolean))]
-      : [];
-    const hasAndroid = platforms.includes("android");
-    const hasIos = platforms.includes("ios");
-    const collapseMobile = hasAndroid && hasIos;
-    const labels = [];
-    let mobileAdded = false;
-
-    platforms.forEach((platform) => {
-      if (collapseMobile && (platform === "ios" || platform === "android")) {
-        if (!mobileAdded) {
-          labels.push("Mobile");
-          mobileAdded = true;
-        }
-        return;
-      }
-
-      labels.push(PLATFORM_LABELS[platform] ?? titleCase(platform));
-    });
-
-    return labels.filter(Boolean).join(" + ");
-  };
-
-  const buildTypeText = (info) => TYPE_LABELS[info.type] ?? "";
-
-  const buildMetaText = (info) => {
-    const platformLabel = buildPlatformText(info);
-    const typeLabel = buildTypeText(info);
-    const fragments = [];
-
-    if (platformLabel) {
-      fragments.push(platformLabel);
-    }
-    if (typeLabel) {
-      fragments.push(typeLabel);
-    }
-
-    return fragments.join(" | ");
-  };
-
-  const buildTagChipMarkup = (tags = []) => {
-    const normalizedTags = Array.isArray(tags)
-      ? tags.map((tag) => normalizeLineText(tag)).filter(Boolean)
-      : [];
-
-    if (!normalizedTags.length) {
-      return "";
-    }
-
-    return `
-      <span class="ph-title-tags" aria-label="Feature tags">
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
         ${normalizedTags
           .map((tag) => {
             const tagEntry = getTagEntry(tag) ?? {
@@ -1380,13 +811,8 @@
               tag === "usermode" ? "is-usermode-tag" : "",
               tag === "insecure" ? "is-insecure-tag" : "",
             ]
-<<<<<<< HEAD
               .filter(Boolean)
               .join(" ");
-=======
-              .filter(Boolean)
-              .join(" ");
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
 
             return buildInfoIconButton({
               key: tagEntry.key,
@@ -1400,7 +826,6 @@
               toastIcon: "fa-circle-info",
             });
           })
-<<<<<<< HEAD
           .join("")}
       </span>
     `;
@@ -1464,71 +889,6 @@
           .join("")}
       </span>
     `;
-=======
-          .join("")}
-      </span>
-    `;
-  };
-
-  const buildCardMetaMarkup = (card, statusMap) => {
-    const platformText = buildPlatformText(card.info);
-    const typeText = buildTypeText(card.info);
-    const tagMarkup = buildTagChipMarkup(card.info.tags);
-    const priceSummary = formatPriceSummary(card.offers);
-    const textLabel =
-      platformText && !tagMarkup && typeText
-        ? `${platformText} | ${typeText}`
-        : platformText || typeText;
-
-    return `
-      <p class="ph-title-meta">
-        <span class="ph-title-meta-main">
-          ${buildPlatformIconMarkup(card, statusMap)}
-          ${textLabel ? `<span class="ph-title-meta-text">${escapeHtml(textLabel)}</span>` : ""}
-          ${textLabel && tagMarkup ? '<span class="ph-title-meta-sep" aria-hidden="true">|</span>' : ""}
-          ${tagMarkup}
-        </span>
-        ${priceSummary ? `<span class="ph-title-price">${escapeHtml(priceSummary)}</span>` : ""}
-      </p>
-    `;
-  };
-
-  const getPlatformStateClass = (card, statusMap, platform) => {
-    const platformState = statusMap[card.slug]?.[platform];
-    if (platformState === true) {
-      return "is-updated";
-    }
-
-    if (platformState === false) {
-      return "is-not-updated";
-    }
-
-    return "is-status-unknown";
-  };
-
-  const buildPlatformIconMarkup = (card, statusMap) => {
-    const platforms = Array.isArray(card.info.platforms) ? card.info.platforms.filter(Boolean) : [];
-    if (!platforms.length) {
-      return `
-        <span class="ph-platform-icons" aria-hidden="true">
-          <i class="fas fa-microchip ph-title-meta-ico is-status-unknown"></i>
-        </span>
-      `;
-    }
-
-    return `
-      <span class="ph-platform-icons" aria-hidden="true">
-        ${platforms
-          .map((platform) => {
-            const iconClass = PLATFORM_ICONS[platform] ?? "fas fa-microchip";
-            const statusClass = getPlatformStateClass(card, statusMap, platform);
-            const label = PLATFORM_LABELS[platform] ?? titleCase(platform);
-            return `<i class="${escapeHtml(iconClass)} ph-title-meta-ico ${statusClass}" title="${escapeHtml(label)}"></i>`;
-          })
-          .join("")}
-      </span>
-    `;
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   };
 
   const buildReviewDescription = () => "";
@@ -1568,7 +928,6 @@
   };
 
   const buildRatingMarkup = (card) => {
-<<<<<<< HEAD
     const info = card?.info ?? {};
     if (info.type === "external") {
       return `
@@ -1657,96 +1016,6 @@
           </span>
         </a>
       `
-=======
-    const info = card?.info ?? {};
-    if (info.type === "external") {
-      return `
-        <div class="ph-rating ph-rating-external" aria-label="External">
-          <span class="ph-rating-external-main">External</span>
-          <span class="ph-rating-external-sub">Menu</span>
-        </div>
-      `;
-    }
-
-    const suncSource = getPrimarySuncSource(info);
-    const tracked = Boolean(suncSource);
-    const scoreLabel =
-      tracked && Number.isFinite(card?.suncSummary?.score)
-        ? `${card.suncSummary.score}%`
-        : tracked
-          ? "sUNC"
-          : "None";
-    const ratingMarkup = `
-      <span class="ph-rating-logo" aria-hidden="true">
-        <span class="ph-rating-logo-main"></span>
-        <span class="ph-rating-logo-s"></span>
-      </span>
-      <span class="ph-rating-val">${escapeHtml(scoreLabel)}</span>
-    `;
-
-    if (!tracked) {
-      return `
-        <div class="ph-rating is-none">
-          ${ratingMarkup}
-        </div>
-      `;
-    }
-
-    return `
-      <button
-        class="ph-rating ph-rating-btn"
-        type="button"
-        data-card-sunc-open
-        aria-label="Open ${escapeHtml(card?.title || "this card")} sUNC widget"
-        title="Open sUNC widget"
-      >
-        ${ratingMarkup}
-      </button>
-    `;
-  };
-
-  const buildActionMarkup = ({
-    slug,
-    title,
-    reviewUrl,
-    reviewDescription,
-    youtubeUrl,
-    hasYoutubeIndicator,
-    websiteUrl,
-    purchaseUrl,
-    offers,
-    warningConfig,
-  }) => {
-    const reviewHref = String(youtubeUrl || "").trim();
-    const reviewButtonAttributes = reviewHref
-      ? ` href="${escapeHtml(reviewHref)}" target="_blank" rel="noopener noreferrer"`
-      : ` aria-disabled="true" tabindex="-1"`;
-    const websiteHref = websiteUrl || purchaseUrl || "#";
-    const websiteDataAttributes =
-      websiteHref !== "#"
-        ? ` data-card-website-url="${escapeHtml(websiteHref)}"`
-        : "";
-    const websiteWarningDataAttributes =
-      WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
-        ? ` data-card-website-warning-type="${escapeHtml(warningConfig.type)}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
-        : "";
-    const hasFreeOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) === 0);
-    const hasPaidOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) > 0);
-    const sponsorPriceSummary = formatSponsorPriceSummary(offers);
-    const sponsorMarkup = /key-empire\.com/i.test(purchaseUrl ?? "")
-      ? `
-        <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
-          <span class="ph-sponsor-inline">
-            <span class="ph-sponsor-copy">Buy on</span>
-            <span class="ph-sponsor-stack" aria-hidden="true">
-              <img class="ph-sponsor-base-image" src="/public/assets/logo/keyempire-text.png" alt="">
-              <span class="ph-sponsor-overlay-image"></span>
-            </span>
-            ${sponsorPriceSummary ? `<span class="ph-sponsor-price">${escapeHtml(sponsorPriceSummary)}</span>` : ""}
-          </span>
-        </a>
-      `
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
       : hasFreeOffer
         ? `
           <div class="ph-sponsor-btn ph-sponsor-note" role="note">
@@ -1756,7 +1025,6 @@
             </span>
           </div>
         `
-<<<<<<< HEAD
         : hasPaidOffer
           ? `
             <div class="ph-sponsor-btn ph-sponsor-note" role="note">
@@ -1780,31 +1048,6 @@
     `;
   };
 
-=======
-        : hasPaidOffer
-          ? `
-            <div class="ph-sponsor-btn ph-sponsor-note" role="note">
-              This product is not on Key-Empire
-            </div>
-          `
-          : "";
-
-    return `
-      <div class="ph-actions">
-        <div class="ph-primary-actions">
-          <a class="ph-action-btn is-review${hasYoutubeIndicator ? " has-youtube-indicator" : " is-disabled"}"${reviewButtonAttributes}>
-            <i class="fab fa-youtube" aria-hidden="true"></i> <span class="ph-action-label">Review</span>
-          </a>
-          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}"${websiteDataAttributes}${websiteWarningDataAttributes}>
-            <span class="ph-action-icon is-info" aria-hidden="true"></span> More
-          </a>
-        </div>
-        ${sponsorMarkup}
-      </div>
-    `;
-  };
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const handleMoreInfoActionClick = (event) => {
     const trigger = event.target.closest("a[data-card-review-url]");
     if (!trigger) {
@@ -1839,7 +1082,6 @@
     if (opened || !trigger.href) {
       return;
     }
-<<<<<<< HEAD
 
     window.open(trigger.href, trigger.getAttribute("target") || "_blank", "noopener");
   };
@@ -1868,42 +1110,11 @@
         key: source.key,
       }) ?? false;
 
-=======
-
-    window.open(trigger.href, trigger.getAttribute("target") || "_blank", "noopener");
-  };
-
-  const handleSuncActionClick = (event) => {
-    const trigger = event.target.closest("button[data-card-sunc-open]");
-    if (!trigger) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const article = trigger.closest("article[data-slug]");
-    const slug = article?.dataset.slug || "";
-    const card = catalogState.cards.find((entry) => entry.slug === slug);
-    const source = getPrimarySuncSource(card?.info);
-    if (!source) {
-      return;
-    }
-
-    const opened =
-      window.openSuncModal?.({
-        title: card?.title ? `${card.title} sUNC` : "sUNC Widget",
-        scrapId: source.scrapId,
-        key: source.key,
-      }) ?? false;
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     if (!opened) {
       const fallbackUrl = `https://sunc.rubis.app/?scrap=${encodeURIComponent(source.scrapId)}&key=${encodeURIComponent(source.key)}`;
       window.open(fallbackUrl, "_blank", "noopener");
     }
   };
-<<<<<<< HEAD
 
   const handleTitleIconClick = (event) => {
     const trigger = event.target.closest("button[data-card-icon-message]");
@@ -1914,18 +1125,6 @@
     event.preventDefault();
     event.stopPropagation();
 
-=======
-
-  const handleTitleIconClick = (event) => {
-    const trigger = event.target.closest("button[data-card-icon-message]");
-    if (!trigger) {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     const article = trigger.closest("article[data-slug]");
     const slug = article?.dataset.slug || "";
     const card = catalogState.cards.find((entry) => entry.slug === slug);
@@ -1941,7 +1140,6 @@
         preserveTitle: true,
         hideWebsiteButton: true,
       }) ??
-<<<<<<< HEAD
         false);
 
     if (opened) {
@@ -2139,205 +1337,6 @@
     showInsecure: Boolean(filters.showInsecure),
   });
 
-=======
-        false);
-
-    if (opened) {
-      return;
-    }
-
-    const title = trigger.dataset.cardIconTitle || "Notice";
-    const message = trigger.dataset.cardIconMessage || "";
-    window.showSiteToast?.({
-      key: `card-icon-info:${title}:${message}`,
-      title,
-      message,
-      duration: 3000,
-      icon: trigger.dataset.cardIconToastIcon || "fa-circle-info",
-    });
-  };
-
-  const handleWarningActionClick = (event) => {
-    if (!WARNING_MODAL_ENABLED) {
-      return;
-    }
-
-    const trigger = event.target.closest("a[data-card-warning-slug]");
-    if (!trigger) {
-      return;
-    }
-
-    const slug = trigger.dataset.cardWarningSlug;
-    const card = catalogState.cards.find((entry) => entry.slug === slug);
-    const warningConfig = getModalWarningConfig(card?.modals);
-
-    if (!warningConfig || !trigger.href) {
-      return;
-    }
-
-    event.preventDefault();
-    const action = {
-      href: trigger.href,
-      target: trigger.getAttribute("target") || "",
-    };
-    const opened = window.openCardWarningModal?.(warningConfig, action) ?? false;
-
-    if (opened) {
-      return;
-    }
-
-    if (action.target === "_blank") {
-      window.open(action.href, "_blank", "noopener");
-      return;
-    }
-
-    window.location.assign(action.href);
-  };
-
-  const handleCardActionClick = (event) => {
-    handleTitleIconClick(event);
-    if (event.defaultPrevented) {
-      return;
-    }
-
-    handleSuncActionClick(event);
-    if (event.defaultPrevented) {
-      return;
-    }
-
-    handleMoreInfoActionClick(event);
-    if (event.defaultPrevented) {
-      return;
-    }
-
-    handleWarningActionClick(event);
-  };
-
-  const normalizeStatusPayload = (payload) => {
-    if (!payload || typeof payload !== "object") {
-      return {};
-    }
-
-    const hasPlatformBuckets = PLATFORM_ORDER.some(
-      (platform) => payload[platform] && typeof payload[platform] === "object",
-    );
-
-    if (hasPlatformBuckets) {
-      const normalized = {};
-
-      PLATFORM_ORDER.forEach((platform) => {
-        const platformEntries = payload[platform];
-        if (!platformEntries || typeof platformEntries !== "object") {
-          return;
-        }
-
-        Object.entries(platformEntries).forEach(([slug, value]) => {
-          const updated =
-            typeof value === "boolean"
-              ? value
-              : value && typeof value === "object" && typeof value.updated === "boolean"
-                ? value.updated
-                : null;
-
-          if (typeof updated !== "boolean") {
-            return;
-          }
-
-          normalized[slug] ??= {};
-          normalized[slug][platform] = updated;
-        });
-      });
-
-      return normalized;
-    }
-
-    return Object.fromEntries(
-      Object.entries(payload)
-        .filter(([slug, value]) => slug !== "TEST" && value && typeof value === "object")
-        .map(([slug, value]) => [
-          slug,
-          Object.fromEntries(
-            Object.entries(value).filter(
-              ([platform, state]) =>
-                PLATFORM_ORDER.includes(platform) && typeof state === "boolean",
-            ),
-          ),
-        ])
-        .filter(([, platforms]) => Object.keys(platforms).length > 0),
-    );
-  };
-
-  const loadUptimeStatus = async () => {
-    try {
-      const payload = await fetchJson(STATUS_API_URL);
-      return normalizeStatusPayload(payload);
-    } catch (error) {
-      console.warn("Failed to load exploit status feed.", error);
-      return {};
-    }
-  };
-
-  const hasBadge = (card, badge) => Array.isArray(card.info.badges) && card.info.badges.includes(badge);
-  const hasTrendingBadge = (card) => hasBadge(card, "trending");
-  const hasVerifiedBadge = (card) => hasBadge(card, "verified");
-  const hasWarningBadge = (card) => Boolean(getModalWarningConfig(card?.modals));
-
-  const getCardStatusClass = (card, statusMap) => {
-    const platformStates = card.info.platforms
-      ?.map((platform) => statusMap[card.slug]?.[platform])
-      .filter((value) => typeof value === "boolean");
-
-    if (!platformStates?.length) {
-      return "is-status-unknown";
-    }
-
-    if (platformStates.some(Boolean)) {
-      return "is-updated";
-    }
-
-    return "is-not-updated";
-  };
-
-  const compareRandom = (left, right) => {
-    const randomRank = (left.randomSortKey ?? 0) - (right.randomSortKey ?? 0);
-    if (randomRank !== 0) return randomRank;
-
-    return (left.catalogIndex ?? 0) - (right.catalogIndex ?? 0);
-  };
-
-  const getSortablePrice = (card) => {
-    if (card.hasFreeOffer) return 0;
-    if (Number.isFinite(card.minPaidPrice)) return card.minPaidPrice;
-    return Number.POSITIVE_INFINITY;
-  };
-
-  const normalizeFilters = (filters = {}) => ({
-    search: normalizeLineText(filters.search || ""),
-    sort: filters.sort === "recommended" ? "random" : filters.sort || DEFAULT_FILTERS.sort,
-    platforms: Array.isArray(filters.platforms)
-      ? filters.platforms.filter((platform) => PLATFORM_ORDER.includes(platform))
-      : [],
-    price: filters.price || DEFAULT_FILTERS.price,
-    key: filters.key || DEFAULT_FILTERS.key,
-    type: filters.type || DEFAULT_FILTERS.type,
-    tags: [
-      ...new Set(
-        [
-          ...(Array.isArray(filters.tags) ? filters.tags : []),
-          filters.multiInstance ? "multi-instance" : "",
-          filters.decompiler ? "decompiler" : "",
-          filters.kernel ? "kernel" : "",
-        ].filter((tag) => FILTERABLE_TAGS.includes(tag)),
-      ),
-    ],
-    verified: Boolean(filters.verified),
-    trending: Boolean(filters.trending),
-    warning: Boolean(filters.warning),
-    updatedState: ["all", "yes", "no"].includes(filters.updatedState) ? filters.updatedState : DEFAULT_FILTERS.updatedState,
-    showInsecure: Boolean(filters.showInsecure),
-  });
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const matchesFilters = (card, statusMap, filters) => {
     if (!filters.showInsecure && isInsecureCard(card)) {
       return false;
@@ -2347,7 +1346,6 @@
     if (searchTerms.length && !searchTerms.every((term) => matchesSearchTerm(card, term))) {
       return false;
     }
-<<<<<<< HEAD
 
     if (
       filters.platforms.length &&
@@ -2452,118 +1450,11 @@
       return compareRandom(left, right);
     });
 
-=======
-
-    if (
-      filters.platforms.length &&
-      !filters.platforms.some((platform) => (card.info.platforms ?? []).includes(platform))
-    ) {
-      return false;
-    }
-
-    if (filters.price === "free" && !card.hasFreeOffer) {
-      return false;
-    }
-
-    if (filters.price === "paid" && (!card.hasPaidOffer || card.hasFreeOffer)) {
-      return false;
-    }
-
-    if (filters.key === "keyless" && card.isKeyed) {
-      return false;
-    }
-
-    if (filters.key === "keysystem" && !card.isKeyed) {
-      return false;
-    }
-
-    if (filters.type === "external" && card.cardType !== "external") {
-      return false;
-    }
-
-    if (filters.type === "executor" && card.cardType !== "executor") {
-      return false;
-    }
-
-    if (filters.verified && !hasVerifiedBadge(card)) {
-      return false;
-    }
-
-    if (filters.trending && !hasTrendingBadge(card)) {
-      return false;
-    }
-
-    if (filters.warning && !hasWarningBadge(card)) {
-      return false;
-    }
-
-    const cardStatusClass = getCardStatusClass(card, statusMap);
-    if (filters.updatedState === "yes" && cardStatusClass !== "is-updated") {
-      return false;
-    }
-
-    if (filters.updatedState === "no" && cardStatusClass === "is-updated") {
-      return false;
-    }
-
-    if (filters.tags.length && !filters.tags.every((tag) => hasInfoTag(card.info, tag))) {
-      return false;
-    }
-
-    if (filters.highSunc && !(Number.isFinite(card.suncSummary?.score) && card.suncSummary.score >= 90)) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const sortCards = (cards, statusMap, sort = DEFAULT_FILTERS.sort) =>
-    [...cards].sort((left, right) => {
-      const trendingRank = Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left));
-      if (trendingRank !== 0) return trendingRank;
-
-      if (sort === "most-popular") {
-        const popularityRank =
-          Number(hasVerifiedBadge(right)) - Number(hasVerifiedBadge(left));
-        if (popularityRank !== 0) return popularityRank;
-        return compareRandom(left, right);
-      }
-
-      if (sort === "least-popular") {
-        const popularityRank =
-          Number(hasVerifiedBadge(left)) - Number(hasVerifiedBadge(right));
-        if (popularityRank !== 0) return popularityRank;
-        return compareRandom(left, right);
-      }
-
-      if (sort === "price-asc") {
-        const priceRank = getSortablePrice(left) - getSortablePrice(right);
-        if (priceRank !== 0) return priceRank;
-        return left.title.localeCompare(right.title);
-      }
-
-      if (sort === "price-desc") {
-        const leftPrice = Number.isFinite(getSortablePrice(left)) ? getSortablePrice(left) : -1;
-        const rightPrice = Number.isFinite(getSortablePrice(right)) ? getSortablePrice(right) : -1;
-        const priceRank = rightPrice - leftPrice;
-        if (priceRank !== 0) return priceRank;
-        return left.title.localeCompare(right.title);
-      }
-
-      if (sort === "name-asc") {
-        return left.title.localeCompare(right.title);
-      }
-
-      return compareRandom(left, right);
-    });
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const renderCard = (card, statusMap) => {
     const reviewUrl = getCardReviewUrl(card);
     const summaryLines = buildSummaryLines(card);
     const reviewDescription = buildReviewDescription(card, summaryLines);
     const warningConfig = getModalWarningConfig(card.modals);
-<<<<<<< HEAD
     const lineMarkup = summaryLines.length
       ? `
         <div class="ph-lines">
@@ -2607,51 +1498,6 @@
           warningConfig,
         })}
       </article>
-=======
-    const lineMarkup = summaryLines.length
-      ? `
-        <div class="ph-lines">
-          ${summaryLines
-            .map(
-              (line) =>
-                `<p class="ph-line ${line.className}">${escapeHtml(line.text)}</p>`,
-            )
-            .join("")}
-        </div>
-      `
-      : "";
-    const statusClass = getCardStatusClass(card, statusMap);
-
-    return `
-      <article
-        class="exploit-card-placeholder ${statusClass}${hasTrendingBadge(card) ? " is-trending" : ""}"
-        data-slug="${escapeHtml(card.slug)}"
-        data-title="${escapeHtml(card.title)}"
-        data-platforms="${escapeHtml((card.info.platforms ?? []).join(","))}"
-        data-status="${escapeHtml(statusClass)}"
-      >
-        <div class="ph-head">
-          <div class="ph-head-main">
-            <h3 class="ph-title">${escapeHtml(card.title)}${buildTitleIcons(card.info, card.modals)}</h3>
-          </div>
-          ${buildRatingMarkup(card)}
-        </div>
-        ${lineMarkup}
-        ${buildCardMetaMarkup(card, statusMap)}
-        ${buildActionMarkup({
-          slug: card.slug,
-          title: card.title,
-          reviewUrl,
-          reviewDescription,
-          youtubeUrl: card.youtubeUrl,
-          hasYoutubeIndicator: Boolean(card.youtubeUrl),
-          websiteUrl: card.info.website,
-          purchaseUrl: card.pricing.purchaseUrl || card.pricing.purchase_url,
-          offers: card.offers,
-          warningConfig,
-        })}
-      </article>
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     `;
   };
 
@@ -2747,7 +1593,6 @@
 
     scheduleSummaryTextFit(mount);
   };
-<<<<<<< HEAD
 
   const renderEmptyState = (grid, message = "The Roblox catalog data could not be loaded right now.") => {
     grid.classList.add("is-empty");
@@ -2770,30 +1615,6 @@
     const { mount, grid, cards, statusMap, filters } = catalogState;
     if (!mount || !grid) return;
 
-=======
-
-  const renderEmptyState = (grid, message = "The Roblox catalog data could not be loaded right now.") => {
-    grid.classList.add("is-empty");
-    grid.innerHTML = `
-      <div class="cards-empty-state">${escapeHtml(message)}</div>
-    `;
-  };
-
-  const renderLoadingState = (grid, message = "Fetching API status...") => {
-    grid.classList.add("is-empty");
-    grid.innerHTML = `
-      <div class="cards-loading-state" role="status" aria-live="polite">
-        <img class="cards-loading-gif" src="/public/assets/loading.gif" alt="" />
-        <p class="cards-loading-copy">${escapeHtml(message)}</p>
-      </div>
-    `;
-  };
-
-  const renderCatalogView = () => {
-    const { mount, grid, cards, statusMap, filters } = catalogState;
-    if (!mount || !grid) return;
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     const discoverableCards = cards.filter((card) => filters.showInsecure || !isInsecureCard(card));
     const filteredCards = discoverableCards.filter((card) => matchesFilters(card, statusMap, filters));
     const sortedCards = sortCards(filteredCards, statusMap, filters.sort);
@@ -2807,7 +1628,6 @@
     );
 
     updateSummary(mount, sortedCards.length, discoverableCards.length, updatedCount, notUpdatedCount);
-<<<<<<< HEAD
 
     if (!sortedCards.length) {
       renderEmptyState(grid, "No exploits match the current filters.");
@@ -2818,18 +1638,6 @@
     grid.innerHTML = sortedCards.map((card) => renderCard(card, statusMap)).join("");
   };
 
-=======
-
-    if (!sortedCards.length) {
-      renderEmptyState(grid, "No exploits match the current filters.");
-      return;
-    }
-
-    grid.classList.remove("is-empty");
-    grid.innerHTML = sortedCards.map((card) => renderCard(card, statusMap)).join("");
-  };
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   const loadCatalog = async () => {
     const prices = await fetchJson(`${DATA_ROOT}/prices.json`);
     const freeProductSlugs = [
@@ -2839,7 +1647,6 @@
     const freeProducts = new Set(freeProductSlugs.map((slug) => slug.toLowerCase()));
     const priceSlugs = Object.keys(prices).filter((slug) => slug !== "freeProducts" && !slug.startsWith("$"));
     const slugs = [...new Set([...priceSlugs, ...freeProductSlugs])];
-<<<<<<< HEAD
 
     const infoEntries = await Promise.all(
       slugs.map(async (slug, catalogIndex) => {
@@ -2849,17 +1656,6 @@
           const info = await fetchJson(`${DATA_ROOT}/${encodeURIComponent(folderName)}/info.json`);
           if (info.hidden) return null;
 
-=======
-
-    const infoEntries = await Promise.all(
-      slugs.map(async (slug, catalogIndex) => {
-        const folderName = getFolderName(slug);
-
-        try {
-          const info = await fetchJson(`${DATA_ROOT}/${encodeURIComponent(folderName)}/info.json`);
-          if (info.hidden) return null;
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
           return {
             slug,
             title: folderName,
@@ -2869,7 +1665,6 @@
             isListedFree: freeProducts.has(slug.toLowerCase()),
             info,
           };
-<<<<<<< HEAD
         } catch (error) {
           console.error(error);
           return null;
@@ -2914,52 +1709,6 @@
             minPaidPrice: paidPrices.length ? Math.min(...paidPrices) : Number.POSITIVE_INFINITY,
             isKeyed: inferKeyedState(entry.info, points ?? {}, offers),
             cardType: entry.info.type === "external" ? "external" : "executor",
-=======
-        } catch (error) {
-          console.error(error);
-          return null;
-        }
-      }),
-    );
-
-    const visibleEntries = infoEntries.filter(Boolean);
-
-    const cards = await Promise.all(
-      visibleEntries.map(async (entry) => {
-        try {
-          const reviewUrl = `${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/review.md`;
-          const [points, modals, reviewDocument, suncSummary] = await Promise.all([
-            fetchJson(`${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/points.json`),
-            fetchJson(`${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/modals.json`, {
-              optional: true,
-            }),
-            loadReviewDocument(reviewUrl, { optional: true }),
-            entry.info.type === "external" ? Promise.resolve(null) : loadSuncSummary(entry.info),
-          ]);
-
-          const fallbackOffers = entry.isListedFree ? buildFreeLifetimeOffers(entry.info.platforms) : [];
-          const offers = flattenOffers(entry.pricing, fallbackOffers);
-          const hasFreeOffer = offers.some((offer) => Number(offer.price) === 0);
-          const hasPaidOffer = offers.some((offer) => Number(offer.price) > 0);
-          const youtubeUrl = String(entry.info.youtube || reviewDocument?.metadata?.youtube || "").trim();
-          const paidPrices = offers
-            .map((offer) => Number(offer.price))
-            .filter((price) => Number.isFinite(price) && price > 0);
-
-          return {
-            ...entry,
-            points: points ?? {},
-            modals,
-            offers,
-            reviewUrl,
-            youtubeUrl,
-            randomSortKey: Math.random(),
-            hasFreeOffer,
-            hasPaidOffer,
-            minPaidPrice: paidPrices.length ? Math.min(...paidPrices) : Number.POSITIVE_INFINITY,
-            isKeyed: inferKeyedState(entry.info, points ?? {}, offers),
-            cardType: entry.info.type === "external" ? "external" : "executor",
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
             searchText: buildSearchText([
               entry.title,
               entry.slug,
@@ -2980,7 +1729,6 @@
             ]),
             suncSummary,
           };
-<<<<<<< HEAD
         } catch (error) {
           console.error(error);
           return null;
@@ -2997,24 +1745,6 @@
     const grid = mount.querySelector(".cards-grid");
     if (!grid) return;
 
-=======
-        } catch (error) {
-          console.error(error);
-          return null;
-        }
-      }),
-    );
-
-    return cards.filter(Boolean);
-  };
-
-  const initRobloxCardsCatalog = async (mount) => {
-    if (!mount) return;
-
-    const grid = mount.querySelector(".cards-grid");
-    if (!grid) return;
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
     if (mount.dataset.cardActionBound !== "true") {
       mount.addEventListener("click", handleCardActionClick);
       mount.dataset.cardActionBound = "true";
@@ -3034,15 +1764,9 @@
         renderEmptyState(grid);
         return;
       }
-<<<<<<< HEAD
 
       catalogState.mount = mount;
       catalogState.grid = grid;
-=======
-
-      catalogState.mount = mount;
-      catalogState.grid = grid;
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
       catalogState.cards = cards;
       catalogState.statusMap = statusMap;
       catalogState.filters = normalizeFilters({
@@ -3067,21 +1791,12 @@
       renderEmptyState(grid);
     }
   };
-<<<<<<< HEAD
 
   window.applyRobloxCardsCatalogFilters = (filters = {}) => {
     catalogState.filters = normalizeFilters({ ...catalogState.filters, ...filters });
     window.__robloxCardsSearchQuery = catalogState.filters.search;
     renderCatalogView();
   };
-=======
-
-  window.applyRobloxCardsCatalogFilters = (filters = {}) => {
-    catalogState.filters = normalizeFilters({ ...catalogState.filters, ...filters });
-    window.__robloxCardsSearchQuery = catalogState.filters.search;
-    renderCatalogView();
-  };
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
   window.setRobloxCardsSearchQuery = (search = "") => {
     catalogState.filters = normalizeFilters({ ...catalogState.filters, search });
     window.__robloxCardsSearchQuery = catalogState.filters.search;
@@ -3092,16 +1807,8 @@
   window.getRobloxCardsCatalogStats = getCatalogStats;
   window.initRobloxCardsCatalog = initRobloxCardsCatalog;
 })();
-<<<<<<< HEAD
 
 
 
 
 
-=======
-
-
-
-
-
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9

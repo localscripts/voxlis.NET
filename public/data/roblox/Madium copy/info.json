@@ -1,8 +1,8 @@
 {
 	"sunc": {
 		"windows": {
-			"key": "7xfGYFy9TkhdSWbArOlTKjeFOT1QpvVB",
-			"scrapId": "6SjWmrjIt4DprFNM"
+			"key": "fcJsVcIWsH4F45XI1pD0y86nHWeUh2RQ",
+			"scrapId": "zgNgFqdHp8qC7kBC"
 		}
 	},
 	"badges": [],
@@ -10,6 +10,6 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://discord.gg/FWG7JEmCjN",
-	"keyed": false
+	"website": "https://cosmic.best",
+	"keyed": true
 }

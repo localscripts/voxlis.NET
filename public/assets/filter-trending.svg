@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
   <path d="M4.5 15.5 9.25 10.75l3.15 3.15 6.1-6.1"/>
   <path d="M13.75 7.8h4.75v4.75"/>
 </svg>
-=======
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M4.5 15.5 9.25 10.75l3.15 3.15 6.1-6.1"/>
-  <path d="M13.75 7.8h4.75v4.75"/>
-</svg>
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9

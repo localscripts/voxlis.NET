@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <circle cx="12" cy="7.5" r="3.25" fill="black"/>
   <path d="M5 19c0-3.65 3.1-6.1 7-6.1s7 2.45 7 6.1v1H5z" fill="black"/>
 </svg>
-=======
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <circle cx="12" cy="7.5" r="3.25" fill="black"/>
-  <path d="M5 19c0-3.65 3.1-6.1 7-6.1s7 2.45 7 6.1v1H5z" fill="black"/>
-</svg>
->>>>>>> cfc99b71afb6ee9d56449534a4b79be361c8e5f9
