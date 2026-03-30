@@ -1,39 +1,104 @@
 (() => {
-  const THEME_STORAGE_KEY = "voxlis-theme";
-  const CUSTOM_THEME_STORAGE_KEY = "voxlis-custom-theme-hex";
-  const CUSTOM_THEME_CSS_STORAGE_KEY = "voxlis-custom-theme-css";
-  const OUTLINE_BRIGHTNESS_STORAGE_KEY = "voxlis-outline-brightness";
-  const BACKGROUND_MEDIA_STORAGE_KEY = "voxlis-background-media";
-  const SURFACE_BLUR_ENABLED_STORAGE_KEY = "voxlis-surface-blur-enabled";
-  const SURFACE_BLUR_STRENGTH_STORAGE_KEY = "voxlis-surface-blur-strength";
-  const HIDE_FEATURED_ADS_STORAGE_KEY = "voxlis-hide-featured-ads";
-  const HIDE_PROMO_STORAGE_KEY = "voxlis-hide-promo";
-  const CUSTOM_THEME_ID = "custom";
-  const DEFAULT_THEME_ID = "blue";
-  const THEME_CHANGE_EVENT = "site-theme-change";
-  const THEME_DRAWER_EXIT_FALLBACK_MS = 260;
-  const THEME_DRAWER_DEFAULT_TAB = "presets";
-  const OUTLINE_BRIGHTNESS_MIN = 0;
-  const OUTLINE_BRIGHTNESS_MAX = 64;
-  const OUTLINE_BRIGHTNESS_DEFAULT = 7;
-  const SURFACE_BLUR_MIN = 0;
-  const SURFACE_BLUR_MAX = 24;
-  const SURFACE_BLUR_DEFAULT = 12;
-  const THEME_TRANSFER_TYPE = "voxlis-theme";
-  const THEME_TRANSFER_VERSION = 1;
-  const BACKGROUND_MEDIA_DEFAULT_STATUS = "Paste an image or video link to use as the site background.";
-  const KAWAII_MOBILE_TINT_CLASS = "theme-kawaii-mobile-tint";
-  const KAWAII_MOBILE_TINT_MEDIA_QUERY = window.matchMedia("(max-width: 980px)");
-  const THEME_GROUPS = [
-    { id: "full", label: "Full Themes" },
-    { id: "accent", label: "Color Variants" },
-  ];
-  const THEME_OPTIONS = [
-    { id: "kawaii", label: "Kawaii", swatch: "#FF9AD5", group: "full", surfaceBlurEnabled: true, surfaceBlurStrength: 10, hideFeaturedAds: true },
-    { id: "blue", label: "Legacy", swatch: "#3B82F6", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
-    { id: "legacy", label: "Supermacy", swatch: "#EF4444", group: "full", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
-    { id: "weao", label: "weao", swatch: "#1A1A1A", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
-  ];
+  const themeConfig = window.VOXLIS_CONFIG?.themes ?? {};
+  const storageKeys = themeConfig.storageKeys ?? {};
+  const themeIds = themeConfig.ids ?? {};
+  const themeEvents = themeConfig.events ?? {};
+  const themeDrawerConfig = themeConfig.drawer ?? {};
+  const outlineBrightnessConfig = themeConfig.outlineBrightness ?? {};
+  const surfaceBlurConfig = themeConfig.surfaceBlur ?? {};
+  const surfaceTintConfig = themeConfig.surfaceTint ?? {};
+  const themeTransferConfig = themeConfig.transfer ?? {};
+  const backgroundMediaConfig = themeConfig.backgroundMedia ?? {};
+  const backgroundTintConfig = themeConfig.backgroundTint ?? {};
+  const kawaiiMobileTintConfig = themeConfig.kawaiiMobileTint ?? {};
+
+  const THEME_STORAGE_KEY = storageKeys.theme ?? "voxlis-theme";
+  const CUSTOM_THEME_STORAGE_KEY = storageKeys.customTheme ?? "voxlis-custom-theme-hex";
+  const CUSTOM_THEME_CSS_STORAGE_KEY = storageKeys.customThemeCss ?? "voxlis-custom-theme-css";
+  const OUTLINE_BRIGHTNESS_STORAGE_KEY = storageKeys.outlineBrightness ?? "voxlis-outline-brightness";
+  const THEME_DRAWER_WIDTH_STORAGE_KEY = storageKeys.drawerWidth ?? "voxlis-theme-drawer-width";
+  const BACKGROUND_MEDIA_STORAGE_KEY = storageKeys.backgroundMedia ?? "voxlis-background-media";
+  const BACKGROUND_TINT_HEX_STORAGE_KEY = storageKeys.backgroundTintHex ?? "voxlis-background-tint-hex";
+  const BACKGROUND_TINT_POWER_STORAGE_KEY = storageKeys.backgroundTintPower ?? "voxlis-background-tint-power";
+  const SURFACE_BLUR_ENABLED_STORAGE_KEY = storageKeys.surfaceBlurEnabled ?? "voxlis-surface-blur-enabled";
+  const SURFACE_BLUR_STRENGTH_STORAGE_KEY = storageKeys.surfaceBlurStrength ?? "voxlis-surface-blur-strength";
+  const SURFACE_TINT_HEX_STORAGE_KEY = storageKeys.surfaceTintHex ?? "voxlis-surface-tint-hex";
+  const SURFACE_TINT_POWER_STORAGE_KEY = storageKeys.surfaceTintPower ?? "voxlis-surface-tint-power";
+  const CARD_OUTLINE_HEX_STORAGE_KEY = storageKeys.cardOutlineHex ?? "voxlis-card-outline-hex";
+  const HIDE_FEATURED_ADS_STORAGE_KEY = storageKeys.hideFeaturedAds ?? "voxlis-hide-featured-ads";
+  const HIDE_PROMO_STORAGE_KEY = storageKeys.hidePromo ?? "voxlis-hide-promo";
+  const HIDE_TOAST_POPUPS_STORAGE_KEY = storageKeys.hideToastPopups ?? "voxlis-hide-toast-popups";
+  const HIDE_NAVBAR_WARNING_STORAGE_KEY = storageKeys.hideNavbarWarning ?? "voxlis-hide-navbar-warning";
+  const CUSTOM_THEME_ID = themeIds.custom ?? "custom";
+  const DEFAULT_THEME_ID = themeIds.default ?? "blue";
+  const THEME_CHANGE_EVENT = themeEvents.change ?? "site-theme-change";
+  const THEME_DRAWER_EXIT_FALLBACK_MS = themeDrawerConfig.exitFallbackMs ?? 260;
+  const THEME_DRAWER_DEFAULT_TAB = themeDrawerConfig.defaultTab ?? "presets";
+  const THEME_DRAWER_DEFAULT_EDITOR_TAB = themeDrawerConfig.defaultEditorTab ?? "global";
+  const THEME_DRAWER_DEFAULT_WIDTH = themeDrawerConfig.defaultWidth ?? 384;
+  const THEME_DRAWER_MIN_WIDTH = themeDrawerConfig.minWidth ?? 320;
+  const THEME_DRAWER_MAX_WIDTH = themeDrawerConfig.maxWidth ?? 720;
+  const THEME_DRAWER_DESKTOP_MEDIA_QUERY = window.matchMedia(
+    themeDrawerConfig.desktopMediaQuery ?? "(min-width: 769px)"
+  );
+  const OUTLINE_BRIGHTNESS_MIN = outlineBrightnessConfig.min ?? 0;
+  const OUTLINE_BRIGHTNESS_MAX = outlineBrightnessConfig.max ?? 64;
+  const OUTLINE_BRIGHTNESS_DEFAULT = outlineBrightnessConfig.default ?? 7;
+  const SURFACE_BLUR_MIN = surfaceBlurConfig.min ?? 0;
+  const SURFACE_BLUR_MAX = surfaceBlurConfig.max ?? 24;
+  const SURFACE_BLUR_DEFAULT = surfaceBlurConfig.default ?? 12;
+  const SURFACE_TINT_POWER_MIN = surfaceTintConfig.min ?? 0;
+  const SURFACE_TINT_POWER_MAX = surfaceTintConfig.max ?? 100;
+  const SURFACE_TINT_POWER_DEFAULT = surfaceTintConfig.default ?? 82;
+  const SURFACE_TINT_HEX_DEFAULT = surfaceTintConfig.defaultHex ?? "#000000";
+  const BACKGROUND_TINT_POWER_MIN = backgroundTintConfig.min ?? 0;
+  const BACKGROUND_TINT_POWER_MAX = backgroundTintConfig.max ?? 100;
+  const BACKGROUND_TINT_POWER_DEFAULT = backgroundTintConfig.default ?? 72;
+  const BACKGROUND_TINT_HEX_DEFAULT = backgroundTintConfig.defaultHex ?? "#000000";
+  const SURFACE_BLUR_TINT_SCALE = surfaceBlurConfig.tintScale ?? 18 / 82;
+  const FOOTER_BLUR_TINT_SCALE = surfaceBlurConfig.footerTintScale ?? 16 / 82;
+  const THEME_TRANSFER_TYPE = themeTransferConfig.type ?? "voxlis-theme";
+  const THEME_TRANSFER_VERSION = themeTransferConfig.version ?? 1;
+  const BACKGROUND_MEDIA_DEFAULT_STATUS =
+    backgroundMediaConfig.defaultStatus ??
+    "Paste an image or video link to use as the site background.";
+  const KAWAII_MOBILE_TINT_CLASS = kawaiiMobileTintConfig.className ?? "theme-kawaii-mobile-tint";
+  const KAWAII_MOBILE_TINT_MEDIA_QUERY = window.matchMedia(
+    kawaiiMobileTintConfig.mediaQuery ?? "(max-width: 980px)"
+  );
+  const THEME_GROUPS = Array.isArray(themeConfig.groups) && themeConfig.groups.length
+    ? themeConfig.groups
+    : [
+        { id: "full", label: "Full Themes" },
+        { id: "accent", label: "Color Variants" },
+      ];
+  const THEME_OPTIONS = (
+    Array.isArray(themeConfig.options) && themeConfig.options.length
+      ? themeConfig.options
+      : [
+          { id: "kawaii", label: "Kawaii", swatch: "#FF9AD5", group: "full", surfaceBlurEnabled: true, surfaceBlurStrength: 10, hideFeaturedAds: true },
+          { id: "blue", label: "Legacy", swatch: "#3B82F6", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
+          { id: "legacy", label: "Supremacy", swatch: "#EF4444", group: "full", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
+          { id: "weao", label: "weao", swatch: "#1A1A1A", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
+          {
+            id: "status",
+            label: "Kawaii",
+            swatch: "#FF9AD5",
+            swatchImage:
+              "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2194790/60472c275e62f3f4ff4d5aa98bc501accd86099f.gif",
+            group: "full",
+            surfaceBlurEnabled: true,
+            surfaceBlurStrength: 10,
+            hideFeaturedAds: true,
+          },
+        ]
+  ).map((option) => ({
+    ...option,
+    surfaceBlurEnabled: option.surfaceBlurEnabled === true,
+    surfaceBlurStrength:
+      Number.isFinite(option.surfaceBlurStrength) ? option.surfaceBlurStrength : SURFACE_BLUR_DEFAULT,
+    hideFeaturedAds: option.hideFeaturedAds === true,
+  }));
   const VALID_THEMES = new Set(THEME_OPTIONS.map(({ id }) => id));
   const THEME_OPTION_MAP = new Map(THEME_OPTIONS.map((option) => [option.id, option]));
 
@@ -102,6 +167,42 @@
     }
 
     return clamp(parsed, SURFACE_BLUR_MIN, SURFACE_BLUR_MAX);
+  };
+
+  const normalizeSurfaceTintPower = (value) => {
+    const parsed = Number.parseInt(`${value ?? ""}`.trim(), 10);
+    if (!Number.isFinite(parsed)) {
+      return SURFACE_TINT_POWER_DEFAULT;
+    }
+
+    return clamp(parsed, SURFACE_TINT_POWER_MIN, SURFACE_TINT_POWER_MAX);
+  };
+
+  const normalizeBackgroundTintPower = (value) => {
+    const parsed = Number.parseInt(`${value ?? ""}`.trim(), 10);
+    if (!Number.isFinite(parsed)) {
+      return BACKGROUND_TINT_POWER_DEFAULT;
+    }
+
+    return clamp(parsed, BACKGROUND_TINT_POWER_MIN, BACKGROUND_TINT_POWER_MAX);
+  };
+
+  const getThemeDrawerViewportMaxWidth = () =>
+    Math.max(
+      THEME_DRAWER_MIN_WIDTH,
+      Math.min(THEME_DRAWER_MAX_WIDTH, Math.max(THEME_DRAWER_MIN_WIDTH, window.innerWidth - 72))
+    );
+
+  const normalizeThemeDrawerWidth = (value) => {
+    const parsed = Number.parseInt(`${value ?? ""}`.trim(), 10);
+    const maxWidth = getThemeDrawerViewportMaxWidth();
+    const fallback = clamp(THEME_DRAWER_DEFAULT_WIDTH, THEME_DRAWER_MIN_WIDTH, maxWidth);
+
+    if (!Number.isFinite(parsed)) {
+      return fallback;
+    }
+
+    return clamp(parsed, THEME_DRAWER_MIN_WIDTH, maxWidth);
   };
 
   const normalizeBooleanPreference = (value) =>
@@ -237,39 +338,63 @@
     let root = document.getElementById("siteBackgroundMedia");
     let image = document.getElementById("siteBackgroundMediaImage");
     let video = document.getElementById("siteBackgroundMediaVideo");
+    let shade = document.getElementById("siteBackgroundMediaShade");
+    let overlay = document.getElementById("siteBackgroundMediaOverlay");
 
-    if (root && image && video) {
-      return { root, image, video };
+    if (root && image && video && shade && overlay) {
+      return { root, image, video, shade, overlay };
     }
 
-    root = document.createElement("div");
-    root.id = "siteBackgroundMedia";
-    root.className = "site-background-media";
-    root.setAttribute("aria-hidden", "true");
-    root.hidden = true;
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "siteBackgroundMedia";
+      root.className = "site-background-media";
+      root.setAttribute("aria-hidden", "true");
+      root.hidden = true;
+      document.body.prepend(root);
+    }
 
-    image = document.createElement("img");
-    image.id = "siteBackgroundMediaImage";
-    image.className = "site-background-media-image";
-    image.alt = "";
-    image.decoding = "async";
-    image.loading = "eager";
-    image.hidden = true;
+    if (!image) {
+      image = document.createElement("img");
+      image.id = "siteBackgroundMediaImage";
+      image.className = "site-background-media-image";
+      image.alt = "";
+      image.decoding = "async";
+      image.loading = "eager";
+      image.hidden = true;
+      root.append(image);
+    }
 
-    video = document.createElement("video");
-    video.id = "siteBackgroundMediaVideo";
-    video.className = "site-background-media-video";
-    video.hidden = true;
-    video.autoplay = true;
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.preload = "auto";
+    if (!video) {
+      video = document.createElement("video");
+      video.id = "siteBackgroundMediaVideo";
+      video.className = "site-background-media-video";
+      video.hidden = true;
+      video.autoplay = true;
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "auto";
+      root.append(video);
+    }
 
-    root.append(image, video);
-    document.body.prepend(root);
+    if (!shade) {
+      shade = document.createElement("div");
+      shade.id = "siteBackgroundMediaShade";
+      shade.className = "site-background-media-shade";
+      shade.setAttribute("aria-hidden", "true");
+      root.append(shade);
+    }
 
-    return { root, image, video };
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "siteBackgroundMediaOverlay";
+      overlay.className = "site-background-media-overlay";
+      overlay.setAttribute("aria-hidden", "true");
+      root.append(overlay);
+    }
+
+    return { root, image, video, shade, overlay };
   };
 
   const syncThemeFontImport = () => {
@@ -349,6 +474,7 @@
     "--font-family-ui",
     "--font-family-system",
     "--font-family-mono",
+    "--card-font-family",
     "--theme-font-import-url",
     "--theme-background-media-url",
     "--bg",
@@ -372,6 +498,14 @@
     "--footer-border",
     "--footer-text",
     "--footer-muted",
+    "--footer-follow-global-surface",
+    "--footer-surface-tint-color",
+    "--footer-surface-tint-power",
+    "--footer-surface-outline-color",
+    "--footer-surface-blur-enabled",
+    "--footer-surface-blur-strength",
+    "--footer-backdrop-blur",
+    "--footer-glow-color",
     "--footer-max-width",
     "--footer-horizontal-padding",
     "--footer-padding-block",
@@ -405,6 +539,16 @@
     "--exploit-card-chrome",
     "--card-surface-background",
     "--card-surface-backdrop-blur",
+    "--card-action-button-tint-color",
+    "--card-action-button-tint-power",
+    "--card-action-button-background",
+    "--card-action-button-background-hover",
+    "--card-action-button-text",
+    "--card-sponsor-button-tint-color",
+    "--card-sponsor-button-tint-power",
+    "--card-sponsor-button-background",
+    "--card-sponsor-button-background-hover",
+    "--card-sponsor-button-text",
     "--kawaii-mobile-surface-tint",
     "--kawaii-mobile-footer-tint",
     "--kawaii-mobile-navbar-tint",
@@ -495,7 +639,24 @@
     "--surface-control-bg",
     "--surface-control-bg-hover",
     "--surface-overlay-bg",
+    "--info-modal-follow-global-surface",
+    "--info-modal-surface-tint-color",
+    "--info-modal-surface-tint-power",
+    "--info-modal-surface-outline-color",
+    "--info-modal-surface-blur-enabled",
+    "--info-modal-surface-blur-strength",
+    "--info-modal-background",
+    "--info-modal-backdrop-blur",
+    "--info-modal-header-accent-color",
     "--info-modal-header-background",
+    "--featured-follow-global-surface",
+    "--featured-surface-tint-color",
+    "--featured-surface-tint-power",
+    "--featured-surface-outline-color",
+    "--featured-surface-blur-enabled",
+    "--featured-surface-blur-strength",
+    "--featured-surface-background",
+    "--featured-surface-backdrop-blur",
     "--prim-glow-shadow",
     "--featured-section-spacing",
     "--featured-hide-duration",
@@ -636,11 +797,18 @@
     sourceTheme: getStoredTheme(),
     cssText: buildCustomThemeCssTextFromVars(collectThemeEditorVars()),
     backgroundMediaUrl: getStoredBackgroundMediaUrl(),
+    backgroundTintColor: getStoredBackgroundTintHex(),
+    backgroundTintPower: getStoredBackgroundTintPower(),
     surfaceBlurEnabled: getStoredSurfaceBlurEnabled(),
     surfaceBlurStrength: getStoredSurfaceBlurStrength(),
+    surfaceTintColor: getStoredSurfaceTintHex(),
+    surfaceTintPower: getStoredSurfaceTintPower(),
+    cardOutlineColor: getStoredCardOutlineHex(),
     outlineBrightness: getStoredOutlineBrightness(),
     hideFeaturedAds: getStoredHideFeaturedAds(),
     hidePromo: getStoredHidePromo(),
+    hideToastPopups: getStoredHideToastPopups(),
+    hideNavbarWarning: getStoredHideNavbarWarning(),
   });
 
   const buildThemeTransferText = () =>
@@ -705,6 +873,12 @@
   const getStoredBackgroundMediaUrl = () =>
     normalizeBackgroundMediaUrl(window.localStorage.getItem(BACKGROUND_MEDIA_STORAGE_KEY) || "");
 
+  const getStoredBackgroundTintHex = () =>
+    normalizeHex(window.localStorage.getItem(BACKGROUND_TINT_HEX_STORAGE_KEY) || "") || BACKGROUND_TINT_HEX_DEFAULT;
+
+  const getStoredBackgroundTintPower = () =>
+    normalizeBackgroundTintPower(window.localStorage.getItem(BACKGROUND_TINT_POWER_STORAGE_KEY));
+
   const getThemeBackgroundMediaUrl = () =>
     normalizeBackgroundMediaUrl(
       window.getComputedStyle(getThemeRoot()).getPropertyValue("--theme-background-media-url")
@@ -719,11 +893,34 @@
   const getStoredSurfaceBlurStrength = () =>
     normalizeSurfaceBlurStrength(window.localStorage.getItem(SURFACE_BLUR_STRENGTH_STORAGE_KEY));
 
+  const getStoredSurfaceTintHex = () =>
+    normalizeHex(window.localStorage.getItem(SURFACE_TINT_HEX_STORAGE_KEY) || "") || SURFACE_TINT_HEX_DEFAULT;
+
+  const getStoredSurfaceTintPower = () =>
+    normalizeSurfaceTintPower(window.localStorage.getItem(SURFACE_TINT_POWER_STORAGE_KEY));
+
+  const getResolvedCardOutlineHex = () =>
+    normalizeHex(window.getComputedStyle(getThemeRoot()).getPropertyValue("--exploit-card-chrome")) ||
+    normalizeHex(window.getComputedStyle(getThemeRoot()).getPropertyValue("--site-border-color")) ||
+    "#070707";
+
+  const getStoredCardOutlineHex = () =>
+    normalizeHex(window.localStorage.getItem(CARD_OUTLINE_HEX_STORAGE_KEY) || "");
+
+  const getStoredThemeDrawerWidth = () =>
+    normalizeThemeDrawerWidth(window.localStorage.getItem(THEME_DRAWER_WIDTH_STORAGE_KEY));
+
   const getStoredHideFeaturedAds = () =>
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_FEATURED_ADS_STORAGE_KEY));
 
   const getStoredHidePromo = () =>
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_PROMO_STORAGE_KEY));
+
+  const getStoredHideToastPopups = () =>
+    normalizeBooleanPreference(window.localStorage.getItem(HIDE_TOAST_POPUPS_STORAGE_KEY));
+
+  const getStoredHideNavbarWarning = () =>
+    normalizeBooleanPreference(window.localStorage.getItem(HIDE_NAVBAR_WARNING_STORAGE_KEY));
 
   const applyThemeTransferText = (source = "") => {
     const trimmed = String(source).trim();
@@ -777,11 +974,23 @@
         applyBackgroundMedia(parsed.backgroundMediaUrl);
       }
 
+      if ("backgroundTintColor" in parsed || "backgroundTintPower" in parsed) {
+        applyBackgroundTintSettings(parsed.backgroundTintColor, parsed.backgroundTintPower);
+      }
+
       if ("surfaceBlurEnabled" in parsed || "surfaceBlurStrength" in parsed) {
         applySurfaceBlur(
           normalizeBooleanPreference(parsed.surfaceBlurEnabled),
           normalizeSurfaceBlurStrength(parsed.surfaceBlurStrength)
         );
+      }
+
+      if ("surfaceTintColor" in parsed || "surfaceTintPower" in parsed) {
+        applySurfaceTintSettings(parsed.surfaceTintColor, parsed.surfaceTintPower);
+      }
+
+      if ("cardOutlineColor" in parsed) {
+        applyCardOutlineColor(parsed.cardOutlineColor);
       }
 
       if ("hideFeaturedAds" in parsed) {
@@ -790,6 +999,14 @@
 
       if ("hidePromo" in parsed) {
         applyPromoVisibility(parsed.hidePromo);
+      }
+
+      if ("hideToastPopups" in parsed) {
+        applyToastPopupVisibility(parsed.hideToastPopups);
+      }
+
+      if ("hideNavbarWarning" in parsed) {
+        applyNavbarWarningVisibility(parsed.hideNavbarWarning);
       }
 
       syncEffectiveBackgroundMedia();
@@ -836,6 +1053,11 @@
     const normalized = normalizeBackgroundMediaUrl(value);
     const { root, image, video } = ensureBackgroundMediaLayer();
     const isInitialReveal = root.dataset.backgroundInitialized !== "true";
+    const setBackgroundMediaType = (type) => {
+      root.dataset.mediaType = type || "";
+      document.body.classList.toggle("has-video-background", type === "video");
+      document.body.classList.toggle("has-image-background", type === "image");
+    };
 
     const setBackgroundVisibility = (visible, { skipTransition = false } = {}) => {
       root.classList.toggle("is-no-transition", skipTransition);
@@ -859,6 +1081,7 @@
     };
 
     if (!normalized) {
+      setBackgroundMediaType("");
       image.onload = null;
       image.onerror = null;
       video.onloadeddata = null;
@@ -890,6 +1113,7 @@
     }
 
     if (mediaType === "video") {
+      setBackgroundMediaType("video");
       image.hidden = true;
       image.removeAttribute("src");
       video.hidden = false;
@@ -916,6 +1140,7 @@
         playPromise.catch(() => {});
       }
     } else {
+      setBackgroundMediaType("image");
       video.hidden = true;
       video.pause();
       video.removeAttribute("src");
@@ -950,26 +1175,71 @@
     return effectiveValue;
   };
 
+  const backgroundTintPowerToOpacity = (power) => {
+    const normalizedPower = normalizeBackgroundTintPower(power);
+    return Number(((normalizedPower / 100) * 0.45).toFixed(3));
+  };
+
+  const buildBackgroundMediaOverlay = (hex) =>
+    normalizeHex(hex) || BACKGROUND_TINT_HEX_DEFAULT;
+
+  const applyBackgroundTintSettings = (hex, power, { persist = true } = {}) => {
+    const normalizedHex = normalizeHex(hex) || BACKGROUND_TINT_HEX_DEFAULT;
+    const normalizedPower = normalizeBackgroundTintPower(power);
+    const root = getThemeRoot();
+
+    root.style.setProperty("--background-media-overlay-color", normalizedHex);
+    root.style.setProperty("--background-media-overlay-strength", String(normalizedPower));
+    root.style.setProperty(
+      "--background-media-overlay-opacity",
+      String(backgroundTintPowerToOpacity(normalizedPower))
+    );
+    root.style.setProperty(
+      "--background-media-overlay",
+      buildBackgroundMediaOverlay(normalizedHex)
+    );
+
+    if (persist) {
+      window.localStorage.setItem(BACKGROUND_TINT_HEX_STORAGE_KEY, normalizedHex);
+      window.localStorage.setItem(BACKGROUND_TINT_POWER_STORAGE_KEY, String(normalizedPower));
+    }
+
+    return {
+      hex: normalizedHex,
+      power: normalizedPower,
+    };
+  };
+
   const applySurfaceBlur = (
     enabled,
     strength = getStoredSurfaceBlurStrength(),
-    { persist = true } = {}
+    {
+      persist = true,
+      tintHex = getStoredSurfaceTintHex(),
+      tintPower = getStoredSurfaceTintPower(),
+    } = {}
   ) => {
     const nextEnabled = Boolean(enabled);
     const nextStrength = normalizeSurfaceBlurStrength(strength);
+    const normalizedTintHex = normalizeHex(tintHex) || SURFACE_TINT_HEX_DEFAULT;
+    const normalizedTintPower = normalizeSurfaceTintPower(tintPower);
+    const solidTintAlpha = normalizedTintPower / 100;
+    const blurTintAlpha = solidTintAlpha * SURFACE_BLUR_TINT_SCALE;
+    const blurFooterAlpha = solidTintAlpha * FOOTER_BLUR_TINT_SCALE;
+    const solidFooterAlpha = Math.max(0, solidTintAlpha - 0.02);
     const root = getThemeRoot();
     const useKawaiiMobileTintMode = nextEnabled && syncKawaiiMobileTintModeClass();
     const blurValue = useKawaiiMobileTintMode ? "0px" : nextEnabled ? `${nextStrength}px` : "0px";
     const surfaceTint = useKawaiiMobileTintMode
       ? getThemeTokenValue("--kawaii-mobile-surface-tint", "rgba(28, 12, 34, 0.78)")
       : nextEnabled
-        ? "rgba(0, 0, 0, 0.18)"
-        : "rgba(0, 0, 0, 0.82)";
+        ? rgba(normalizedTintHex, blurTintAlpha)
+        : rgba(normalizedTintHex, solidTintAlpha);
     const footerTint = useKawaiiMobileTintMode
       ? getThemeTokenValue("--kawaii-mobile-footer-tint", "rgba(24, 10, 28, 0.84)")
       : nextEnabled
-        ? "rgba(0, 0, 0, 0.16)"
-        : "rgba(0, 0, 0, 0.8)";
+        ? rgba(normalizedTintHex, blurFooterAlpha)
+        : rgba(normalizedTintHex, solidFooterAlpha);
     const navbarTint = useKawaiiMobileTintMode
       ? getThemeTokenValue("--kawaii-mobile-navbar-tint", "#14081C")
       : nextEnabled
@@ -992,6 +1262,52 @@
       enabled: nextEnabled,
       strength: nextStrength,
     };
+  };
+
+  const applySurfaceTintSettings = (hex, power, { persist = true } = {}) => {
+    const normalizedHex = normalizeHex(hex) || SURFACE_TINT_HEX_DEFAULT;
+    const normalizedPower = normalizeSurfaceTintPower(power);
+
+    if (persist) {
+      window.localStorage.setItem(SURFACE_TINT_HEX_STORAGE_KEY, normalizedHex);
+      window.localStorage.setItem(SURFACE_TINT_POWER_STORAGE_KEY, String(normalizedPower));
+    }
+
+    applySurfaceBlur(
+      getStoredSurfaceBlurEnabled(),
+      getStoredSurfaceBlurStrength(),
+      {
+        persist: false,
+        tintHex: normalizedHex,
+        tintPower: normalizedPower,
+      }
+    );
+
+    return {
+      hex: normalizedHex,
+      power: normalizedPower,
+    };
+  };
+
+  const clearCardOutlineColor = () => {
+    window.localStorage.removeItem(CARD_OUTLINE_HEX_STORAGE_KEY);
+    getThemeRoot().style.removeProperty("--exploit-card-chrome");
+  };
+
+  const applyCardOutlineColor = (hex, { persist = true } = {}) => {
+    const normalizedHex = normalizeHex(hex);
+    if (!normalizedHex) {
+      clearCardOutlineColor();
+      return getResolvedCardOutlineHex();
+    }
+
+    getThemeRoot().style.setProperty("--exploit-card-chrome", normalizedHex);
+
+    if (persist) {
+      window.localStorage.setItem(CARD_OUTLINE_HEX_STORAGE_KEY, normalizedHex);
+    }
+
+    return normalizedHex;
   };
 
   const syncResponsiveThemeSurfaceMode = () => {
@@ -1021,13 +1337,43 @@
     return nextHidden;
   };
 
+  const applyToastPopupVisibility = (hidden, { persist = true } = {}) => {
+    const nextHidden = Boolean(hidden);
+
+    if (typeof window.setSiteToastsBlocked === "function") {
+      window.setSiteToastsBlocked(nextHidden, { persist });
+    } else if (persist) {
+      window.localStorage.setItem(HIDE_TOAST_POPUPS_STORAGE_KEY, nextHidden ? "1" : "0");
+    }
+
+    return nextHidden;
+  };
+
+  const applyNavbarWarningVisibility = (hidden, { persist = true } = {}) => {
+    const nextHidden = Boolean(hidden);
+
+    if (typeof window.setNavbarWarningHidden === "function") {
+      window.setNavbarWarningHidden(nextHidden, { persist });
+    } else if (persist) {
+      window.localStorage.setItem(HIDE_NAVBAR_WARNING_STORAGE_KEY, nextHidden ? "1" : "0");
+    }
+
+    return nextHidden;
+  };
+
   const getCustomThemeHexFromVars = (vars) =>
     normalizeHex(vars?.["--theme-color"]) ||
     normalizeHex(vars?.["--prim"]) ||
     getStoredCustomHex() ||
     "#3B82F6";
 
-  const applyPresetTheme = (theme) => {
+  const applyPresetTheme = (
+    theme,
+    {
+      persistTheme = true,
+      persistPresetPreferences = true,
+    } = {}
+  ) => {
     const nextTheme = VALID_THEMES.has(theme) ? theme : DEFAULT_THEME_ID;
     const preset = THEME_OPTION_MAP.get(nextTheme);
     const root = getThemeRoot();
@@ -1037,11 +1383,14 @@
     applyOutlineBrightness(getStoredOutlineBrightness(), { persist: false });
     applySurfaceBlur(
       Boolean(preset?.surfaceBlurEnabled),
-      preset?.surfaceBlurStrength ?? SURFACE_BLUR_DEFAULT
+      preset?.surfaceBlurStrength ?? SURFACE_BLUR_DEFAULT,
+      { persist: persistPresetPreferences }
     );
-    applyFeaturedAdsVisibility(Boolean(preset?.hideFeaturedAds));
+    applyFeaturedAdsVisibility(Boolean(preset?.hideFeaturedAds), { persist: persistPresetPreferences });
     syncEffectiveBackgroundMedia();
-    window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    if (persistTheme) {
+      window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    }
     emitThemeChange(nextTheme, null);
     return nextTheme;
   };
@@ -1074,7 +1423,7 @@
     return applyCustomThemeCssText(buildCustomThemeCssText(normalized));
   };
 
-  const applyTheme = (theme) => {
+  const applyTheme = (theme, options = {}) => {
     const nextTheme = normalizeTheme(theme);
     if (nextTheme === CUSTOM_THEME_ID) {
       const storedCssText = getStoredCustomCssText();
@@ -1084,7 +1433,7 @@
       const storedHex = getStoredCustomHex();
       return storedHex ? applyCustomTheme(storedHex) : applyPresetTheme(DEFAULT_THEME_ID);
     }
-    return applyPresetTheme(nextTheme);
+    return applyPresetTheme(nextTheme, options);
   };
 
   const restoreThemeDefaults = (scope = document) => {
@@ -1092,23 +1441,74 @@
     const restoredTheme = applyPresetTheme(DEFAULT_THEME_ID);
     applyOutlineBrightness(OUTLINE_BRIGHTNESS_DEFAULT);
     applyBackgroundMedia("");
+    applyBackgroundTintSettings(BACKGROUND_TINT_HEX_DEFAULT, BACKGROUND_TINT_POWER_DEFAULT);
+    applySurfaceTintSettings(SURFACE_TINT_HEX_DEFAULT, SURFACE_TINT_POWER_DEFAULT);
+    clearCardOutlineColor();
     applySurfaceBlur(false, SURFACE_BLUR_DEFAULT);
     applyFeaturedAdsVisibility(false);
     applyPromoVisibility(false);
+    applyToastPopupVisibility(false);
+    applyNavbarWarningVisibility(false);
     syncThemeSwitcherUI(scope);
     syncOutlineBrightnessUI(scope);
     syncBackgroundMediaUI(scope);
+    syncBackgroundTintUI(scope);
     syncSurfaceBlurUI(scope);
+    syncSurfaceTintUI(scope);
+    syncCardOutlineUI(scope);
     syncVisibilityPreferencesUI(scope);
     return restoredTheme;
   };
 
-  const buildThemeOptionMarkup = ({ id, label, swatch }) => `
-    <div class="footer-theme-option" data-theme="${id}">
-      <div class="footer-theme-swatch" aria-hidden="true" style="background-color: ${swatch};"></div>
-      <span>${label}</span>
-    </div>
-  `;
+  const escapeHtml = (value = "") =>
+    `${value}`
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  const buildThemeOptionMarkup = ({
+    id,
+    label,
+    credit,
+    previewGradient,
+    swatch,
+    swatchImage,
+    swatchImageScale,
+    previewFontFamily,
+  }) => {
+    const normalizedSwatch = normalizeHex(swatch) || "";
+    const swatchRgb = normalizedSwatch ? hexToRgb(normalizedSwatch) : null;
+    const wrapperStyle = [
+      normalizedSwatch ? ` --theme-option-accent-color: ${normalizedSwatch};` : "",
+      swatchRgb ? ` --theme-option-accent-rgb: ${swatchRgb.r}, ${swatchRgb.g}, ${swatchRgb.b};` : "",
+      previewFontFamily ? ` --theme-option-preview-font: ${previewFontFamily};` : "",
+      previewGradient ? ` --theme-option-preview-gradient: ${previewGradient};` : "",
+    ].join("");
+    const swatchStyle = `${swatch ? `background-color: ${swatch};` : ""}${
+      swatchImageScale ? ` --theme-swatch-media-scale: ${swatchImageScale};` : ""
+    }`;
+
+    return `
+      <div
+        class="footer-theme-option${swatchImage ? " has-media-swatch" : ""}${previewFontFamily ? " has-preview-font" : ""}${previewGradient ? " has-preview-gradient" : ""}"
+        data-theme="${escapeHtml(id)}"
+        style="${escapeHtml(wrapperStyle)}"
+      >
+        <div
+          class="footer-theme-swatch${swatchImage ? " has-media" : ""}"
+          aria-hidden="true"
+          style="${escapeHtml(swatchStyle)}"
+        >
+          ${swatchImage ? `<img class="footer-theme-swatch-media" src="${escapeHtml(swatchImage)}" alt="">` : ""}
+        </div>
+        <span class="footer-theme-option-label">
+          <span class="footer-theme-option-title">${escapeHtml(label)}</span>
+          ${credit ? `<span class="footer-theme-option-credit">${escapeHtml(credit)}</span>` : ""}
+        </span>
+      </div>
+    `;
+  };
 
   const buildThemeGroupMarkup = ({ id, label }) => {
     const options = THEME_OPTIONS.filter((option) => option.group === id);
@@ -1185,6 +1585,31 @@
     });
   };
 
+  const setActiveThemeEditorTab = (scope = document, nextTab = THEME_DRAWER_DEFAULT_EDITOR_TAB) => {
+    const tabButtons = [...scope.querySelectorAll("[data-editor-tab]")];
+    const tabPanels = [...scope.querySelectorAll("[data-editor-panel]")];
+    if (!tabButtons.length || !tabPanels.length) {
+      return;
+    }
+
+    const resolvedTab = tabButtons.some((button) => button.dataset.editorTab === nextTab)
+      ? nextTab
+      : THEME_DRAWER_DEFAULT_EDITOR_TAB;
+
+    tabButtons.forEach((button) => {
+      const isActive = button.dataset.editorTab === resolvedTab;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-selected", String(isActive));
+      button.tabIndex = isActive ? 0 : -1;
+    });
+
+    tabPanels.forEach((panel) => {
+      const isActive = panel.dataset.editorPanel === resolvedTab;
+      panel.classList.toggle("is-active", isActive);
+      panel.hidden = !isActive;
+    });
+  };
+
   const syncOutlineBrightnessUI = (scope = document) => {
     const slider = scope.getElementById("siteOutlineSlider");
     if (!slider) return;
@@ -1235,6 +1660,21 @@
     );
   };
 
+  const syncBackgroundTintUI = (scope = document) => {
+    const tintColorInput = scope.getElementById("siteBackgroundTintColorInput");
+    const tintColorValue = scope.getElementById("siteBackgroundTintColorValue");
+    const tintPowerSlider = scope.getElementById("siteBackgroundTintPowerSlider");
+    const tintPowerValue = scope.getElementById("siteBackgroundTintPowerValue");
+    if (!tintColorInput || !tintColorValue || !tintPowerSlider || !tintPowerValue) return;
+
+    const tintHex = getStoredBackgroundTintHex();
+    const tintPower = getStoredBackgroundTintPower();
+    tintColorInput.value = tintHex;
+    tintColorValue.textContent = tintHex;
+    tintPowerSlider.value = String(tintPower);
+    tintPowerValue.textContent = `${tintPower}%`;
+  };
+
   const syncSurfaceBlurUI = (scope = document) => {
     const blurToggle = scope.getElementById("siteSurfaceBlurEnabled");
     const blurSlider = scope.getElementById("siteSurfaceBlurSlider");
@@ -1251,9 +1691,36 @@
     blurValue.textContent = `${strength}px`;
   };
 
+  const syncSurfaceTintUI = (scope = document) => {
+    const tintColorInput = scope.getElementById("siteSurfaceTintColorInput");
+    const tintColorValue = scope.getElementById("siteSurfaceTintColorValue");
+    const tintPowerSlider = scope.getElementById("siteSurfaceTintPowerSlider");
+    const tintPowerValue = scope.getElementById("siteSurfaceTintPowerValue");
+    if (!tintColorInput || !tintColorValue || !tintPowerSlider || !tintPowerValue) return;
+
+    const tintHex = getStoredSurfaceTintHex();
+    const tintPower = getStoredSurfaceTintPower();
+    tintColorInput.value = tintHex;
+    tintColorValue.textContent = tintHex;
+    tintPowerSlider.value = String(tintPower);
+    tintPowerValue.textContent = `${tintPower}%`;
+  };
+
+  const syncCardOutlineUI = (scope = document) => {
+    const outlineColorInput = scope.getElementById("siteCardOutlineColorInput");
+    const outlineColorValue = scope.getElementById("siteCardOutlineColorValue");
+    if (!outlineColorInput || !outlineColorValue) return;
+
+    const outlineHex = getStoredCardOutlineHex() || getResolvedCardOutlineHex();
+    outlineColorInput.value = outlineHex;
+    outlineColorValue.textContent = outlineHex;
+  };
+
   const syncVisibilityPreferencesUI = (scope = document) => {
     const hideFeaturedAdsInput = scope.getElementById("siteHideFeaturedAds");
     const hidePromoInput = scope.getElementById("siteHidePromo");
+    const hideToastPopupsInput = scope.getElementById("siteHideToastPopups");
+    const hideNavbarWarningInput = scope.getElementById("siteHideNavbarWarning");
 
     if (hideFeaturedAdsInput) {
       hideFeaturedAdsInput.checked = getStoredHideFeaturedAds();
@@ -1261,6 +1728,14 @@
 
     if (hidePromoInput) {
       hidePromoInput.checked = getStoredHidePromo();
+    }
+
+    if (hideToastPopupsInput) {
+      hideToastPopupsInput.checked = getStoredHideToastPopups();
+    }
+
+    if (hideNavbarWarningInput) {
+      hideNavbarWarningInput.checked = getStoredHideNavbarWarning();
     }
   };
 
@@ -1298,10 +1773,15 @@
     const footerRoot = scope.querySelector(".site-themes");
     const drawer = scope.getElementById("siteThemeDrawer");
     const closeButton = scope.getElementById("closeThemeDrawer");
+    const drawerResizeHandle = scope.getElementById("siteThemeDrawerResizer");
     const restoreDefaultsButton = scope.getElementById("siteThemeRestoreDefaults");
     const backgroundMediaInput = scope.getElementById("siteBackgroundUrl");
     const backgroundMediaApplyButton = scope.getElementById("siteBackgroundApply");
     const backgroundMediaClearButton = scope.getElementById("siteBackgroundClear");
+    const backgroundTintColorInput = scope.getElementById("siteBackgroundTintColorInput");
+    const backgroundTintColorValue = scope.getElementById("siteBackgroundTintColorValue");
+    const backgroundTintPowerSlider = scope.getElementById("siteBackgroundTintPowerSlider");
+    const backgroundTintPowerValue = scope.getElementById("siteBackgroundTintPowerValue");
     const themeTransferTextarea = scope.getElementById("siteThemeTransferData");
     const themeTransferExportButton = scope.getElementById("siteThemeExportButton");
     const themeTransferImportButton = scope.getElementById("siteThemeImportButton");
@@ -1309,30 +1789,63 @@
     const surfaceBlurEnabledInput = scope.getElementById("siteSurfaceBlurEnabled");
     const surfaceBlurSlider = scope.getElementById("siteSurfaceBlurSlider");
     const surfaceBlurValue = scope.getElementById("siteSurfaceBlurValue");
+    const surfaceTintColorInput = scope.getElementById("siteSurfaceTintColorInput");
+    const surfaceTintColorValue = scope.getElementById("siteSurfaceTintColorValue");
+    const surfaceTintPowerSlider = scope.getElementById("siteSurfaceTintPowerSlider");
+    const surfaceTintPowerValue = scope.getElementById("siteSurfaceTintPowerValue");
+    const cardOutlineColorInput = scope.getElementById("siteCardOutlineColorInput");
+    const cardOutlineColorValue = scope.getElementById("siteCardOutlineColorValue");
     const hideFeaturedAdsInput = scope.getElementById("siteHideFeaturedAds");
     const hidePromoInput = scope.getElementById("siteHidePromo");
+    const hideToastPopupsInput = scope.getElementById("siteHideToastPopups");
+    const hideNavbarWarningInput = scope.getElementById("siteHideNavbarWarning");
     const optionsRoot = scope.getElementById("siteThemeOptions");
     const tabButtons = [...scope.querySelectorAll("[data-theme-tab]")];
+    const editorTabButtons = [...scope.querySelectorAll("[data-editor-tab]")];
     if (!drawer || !closeButton || !optionsRoot || !tabButtons.length) return;
 
     if (drawer.dataset.themeBound === "true") {
+      const existingDrawerPanel = drawer.querySelector(".footer-theme-drawer-panel");
+      if (existingDrawerPanel) {
+        const shouldEnableResize = THEME_DRAWER_DESKTOP_MEDIA_QUERY.matches;
+        drawer.classList.toggle("is-resizable-desktop", shouldEnableResize);
+        if (shouldEnableResize) {
+          existingDrawerPanel.style.width = `${getStoredThemeDrawerWidth()}px`;
+        } else {
+          existingDrawerPanel.style.removeProperty("width");
+        }
+      }
       syncThemeSwitcherUI(scope);
       syncBackgroundMediaUI(scope);
+      syncBackgroundTintUI(scope);
       syncSurfaceBlurUI(scope);
+      syncSurfaceTintUI(scope);
+      syncCardOutlineUI(scope);
       syncVisibilityPreferencesUI(scope);
+      setActiveThemeEditorTab(scope, THEME_DRAWER_DEFAULT_EDITOR_TAB);
       return;
     }
 
-    const activeTheme = applyTheme(getStoredTheme());
+    const activeTheme = applyTheme(getStoredTheme(), {
+      persistTheme: false,
+      persistPresetPreferences: false,
+    });
     syncEffectiveBackgroundMedia();
+    applyBackgroundTintSettings(getStoredBackgroundTintHex(), getStoredBackgroundTintPower(), { persist: false });
     applySurfaceBlur(getStoredSurfaceBlurEnabled(), getStoredSurfaceBlurStrength(), { persist: false });
     applyFeaturedAdsVisibility(getStoredHideFeaturedAds(), { persist: false });
     applyPromoVisibility(getStoredHidePromo(), { persist: false });
+    applyToastPopupVisibility(getStoredHideToastPopups(), { persist: false });
+    applyNavbarWarningVisibility(getStoredHideNavbarWarning(), { persist: false });
     syncSelectedOption(scope, activeTheme, getStoredCustomHex());
     syncBackgroundMediaUI(scope);
+    syncBackgroundTintUI(scope);
     syncSurfaceBlurUI(scope);
+    syncSurfaceTintUI(scope);
+    syncCardOutlineUI(scope);
     syncVisibilityPreferencesUI(scope);
     setActiveThemeDrawerTab(scope, THEME_DRAWER_DEFAULT_TAB);
+    setActiveThemeEditorTab(scope, THEME_DRAWER_DEFAULT_EDITOR_TAB);
 
     let previousBodyOverflow = "";
     let closeDrawerTimerId = 0;
@@ -1347,6 +1860,65 @@
     };
 
     const drawerPanel = drawer.querySelector(".footer-theme-drawer-panel");
+    let isResizingThemeDrawer = false;
+    let previousBodyUserSelect = "";
+
+    const applyThemeDrawerWidth = (value, { persist = true } = {}) => {
+      if (!drawerPanel) return THEME_DRAWER_DEFAULT_WIDTH;
+
+      const normalizedWidth = normalizeThemeDrawerWidth(value);
+      const isDesktop = THEME_DRAWER_DESKTOP_MEDIA_QUERY.matches;
+
+      drawer.classList.toggle("is-resizable-desktop", isDesktop);
+
+      if (isDesktop) {
+        drawerPanel.style.width = `${normalizedWidth}px`;
+        if (persist) {
+          window.localStorage.setItem(THEME_DRAWER_WIDTH_STORAGE_KEY, String(normalizedWidth));
+        }
+      } else {
+        drawerPanel.style.removeProperty("width");
+      }
+
+      return normalizedWidth;
+    };
+
+    const syncThemeDrawerWidth = ({ persist = false } = {}) =>
+      applyThemeDrawerWidth(getStoredThemeDrawerWidth(), { persist });
+
+    const stopThemeDrawerResize = ({ persist = true } = {}) => {
+      if (!isResizingThemeDrawer) return;
+
+      isResizingThemeDrawer = false;
+      drawer.classList.remove("is-resizing");
+      document.body.style.userSelect = previousBodyUserSelect;
+      previousBodyUserSelect = "";
+      window.removeEventListener("pointermove", handleThemeDrawerResizeMove);
+      window.removeEventListener("pointerup", handleThemeDrawerResizeEnd);
+      window.removeEventListener("pointercancel", handleThemeDrawerResizeCancel);
+
+      if (persist && drawerPanel && THEME_DRAWER_DESKTOP_MEDIA_QUERY.matches) {
+        applyThemeDrawerWidth(drawerPanel.getBoundingClientRect().width, { persist: true });
+      }
+    };
+
+    const handleThemeDrawerResizeMove = (event) => {
+      if (!isResizingThemeDrawer || !drawerPanel) return;
+
+      const nextWidth = normalizeThemeDrawerWidth(event.clientX - drawerPanel.getBoundingClientRect().left);
+      applyThemeDrawerWidth(nextWidth, { persist: false });
+    };
+
+    const handleThemeDrawerResizeEnd = () => {
+      stopThemeDrawerResize({ persist: true });
+    };
+
+    const handleThemeDrawerResizeCancel = () => {
+      stopThemeDrawerResize({ persist: false });
+      syncThemeDrawerWidth({ persist: false });
+    };
+
+    syncThemeDrawerWidth({ persist: false });
 
     const finishClosingThemeDrawer = ({ restoreFocus = false } = {}) => {
       drawer.classList.remove("is-closing");
@@ -1365,6 +1937,7 @@
         return;
       }
 
+      stopThemeDrawerResize({ persist: true });
       window.clearTimeout(closeDrawerTimerId);
       closeDrawerTimerId = 0;
       drawer.classList.remove("is-open");
@@ -1414,12 +1987,42 @@
       });
     });
 
+    editorTabButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        setActiveThemeEditorTab(scope, button.dataset.editorTab || THEME_DRAWER_DEFAULT_EDITOR_TAB);
+      });
+    });
+
+    drawerResizeHandle?.addEventListener("pointerdown", (event) => {
+      if (event.button !== 0 || !THEME_DRAWER_DESKTOP_MEDIA_QUERY.matches) {
+        return;
+      }
+
+      event.preventDefault();
+      isResizingThemeDrawer = true;
+      previousBodyUserSelect = document.body.style.userSelect;
+      document.body.style.userSelect = "none";
+      drawer.classList.add("is-resizing");
+      window.addEventListener("pointermove", handleThemeDrawerResizeMove);
+      window.addEventListener("pointerup", handleThemeDrawerResizeEnd);
+      window.addEventListener("pointercancel", handleThemeDrawerResizeCancel);
+    });
+
     hideFeaturedAdsInput?.addEventListener("change", () => {
       applyFeaturedAdsVisibility(hideFeaturedAdsInput.checked);
     });
 
     hidePromoInput?.addEventListener("change", () => {
       applyPromoVisibility(hidePromoInput.checked);
+    });
+
+    hideToastPopupsInput?.addEventListener("change", () => {
+      applyToastPopupVisibility(hideToastPopupsInput.checked);
+    });
+
+    hideNavbarWarningInput?.addEventListener("change", () => {
+      applyNavbarWarningVisibility(hideNavbarWarningInput.checked);
     });
 
     const syncSurfaceBlurFromInputs = ({ persist = true } = {}) => {
@@ -1437,12 +2040,95 @@
       }
     };
 
+    const syncSurfaceTintFromInputs = ({ persist = true } = {}) => {
+      const nextState = applySurfaceTintSettings(
+        surfaceTintColorInput?.value || SURFACE_TINT_HEX_DEFAULT,
+        surfaceTintPowerSlider?.value ?? SURFACE_TINT_POWER_DEFAULT,
+        { persist }
+      );
+
+      if (surfaceTintColorInput) {
+        surfaceTintColorInput.value = nextState.hex;
+      }
+
+      if (surfaceTintColorValue) {
+        surfaceTintColorValue.textContent = nextState.hex;
+      }
+
+      if (surfaceTintPowerSlider) {
+        surfaceTintPowerSlider.value = String(nextState.power);
+      }
+
+      if (surfaceTintPowerValue) {
+        surfaceTintPowerValue.textContent = `${nextState.power}%`;
+      }
+    };
+
+    const syncBackgroundTintFromInputs = ({ persist = true } = {}) => {
+      const nextState = applyBackgroundTintSettings(
+        backgroundTintColorInput?.value || BACKGROUND_TINT_HEX_DEFAULT,
+        backgroundTintPowerSlider?.value ?? BACKGROUND_TINT_POWER_DEFAULT,
+        { persist }
+      );
+
+      if (backgroundTintColorInput) {
+        backgroundTintColorInput.value = nextState.hex;
+      }
+
+      if (backgroundTintColorValue) {
+        backgroundTintColorValue.textContent = nextState.hex;
+      }
+
+      if (backgroundTintPowerSlider) {
+        backgroundTintPowerSlider.value = String(nextState.power);
+      }
+
+      if (backgroundTintPowerValue) {
+        backgroundTintPowerValue.textContent = `${nextState.power}%`;
+      }
+    };
+
+    const syncCardOutlineFromInput = ({ persist = true } = {}) => {
+      const nextHex = applyCardOutlineColor(
+        cardOutlineColorInput?.value || getResolvedCardOutlineHex(),
+        { persist }
+      );
+
+      if (cardOutlineColorInput) {
+        cardOutlineColorInput.value = nextHex;
+      }
+
+      if (cardOutlineColorValue) {
+        cardOutlineColorValue.textContent = nextHex;
+      }
+    };
+
     surfaceBlurEnabledInput?.addEventListener("change", () => {
       syncSurfaceBlurFromInputs();
     });
 
     surfaceBlurSlider?.addEventListener("input", () => {
       syncSurfaceBlurFromInputs();
+    });
+
+    surfaceTintColorInput?.addEventListener("input", () => {
+      syncSurfaceTintFromInputs();
+    });
+
+    surfaceTintPowerSlider?.addEventListener("input", () => {
+      syncSurfaceTintFromInputs();
+    });
+
+    backgroundTintColorInput?.addEventListener("input", () => {
+      syncBackgroundTintFromInputs();
+    });
+
+    backgroundTintPowerSlider?.addEventListener("input", () => {
+      syncBackgroundTintFromInputs();
+    });
+
+    cardOutlineColorInput?.addEventListener("input", () => {
+      syncCardOutlineFromInput();
     });
 
     restoreDefaultsButton?.addEventListener("click", (event) => {
@@ -1511,7 +2197,10 @@
       syncThemeSwitcherUI(scope);
       syncOutlineBrightnessUI(scope);
       syncBackgroundMediaUI(scope);
+      syncBackgroundTintUI(scope);
       syncSurfaceBlurUI(scope);
+      syncSurfaceTintUI(scope);
+      syncCardOutlineUI(scope);
       syncVisibilityPreferencesUI(scope);
 
       setThemeTransferStatus(result.message, result.ok ? "success" : "error");
@@ -1547,8 +2236,15 @@
     window.addEventListener(THEME_CHANGE_EVENT, () => {
       syncSelectedOption(scope, getStoredTheme(), getStoredCustomHex());
       syncBackgroundMediaUI(scope);
+      syncBackgroundTintUI(scope);
       syncSurfaceBlurUI(scope);
+      syncSurfaceTintUI(scope);
+      syncCardOutlineUI(scope);
       syncVisibilityPreferencesUI(scope);
+    });
+
+    window.addEventListener("resize", () => {
+      syncThemeDrawerWidth({ persist: false });
     });
 
     drawer.addEventListener("click", (event) => {
@@ -1581,10 +2277,18 @@
     };
   };
 
-  applyTheme(getStoredTheme());
+  applyTheme(getStoredTheme(), {
+    persistTheme: false,
+    persistPresetPreferences: false,
+  });
+  const storedCardOutlineHex = getStoredCardOutlineHex();
+  if (storedCardOutlineHex) {
+    applyCardOutlineColor(storedCardOutlineHex, { persist: false });
+  }
   syncKawaiiMobileTintModeClass();
   applyOutlineBrightness(getStoredOutlineBrightness(), { persist: false });
   syncEffectiveBackgroundMedia();
+  applyBackgroundTintSettings(getStoredBackgroundTintHex(), getStoredBackgroundTintPower(), { persist: false });
   applySurfaceBlur(getStoredSurfaceBlurEnabled(), getStoredSurfaceBlurStrength(), { persist: false });
 
   window.addEventListener(THEME_CHANGE_EVENT, syncResponsiveThemeSurfaceMode);
@@ -1604,9 +2308,12 @@
   window.applyFeaturedAdsVisibilityPreference = applyFeaturedAdsVisibility;
   window.applyPromoVisibilityPreference = applyPromoVisibility;
   window.applySiteBackgroundMedia = applyBackgroundMedia;
+  window.applySiteBackgroundTintSettings = applyBackgroundTintSettings;
   window.applySiteSurfaceBlur = applySurfaceBlur;
+  window.applySiteSurfaceTintSettings = applySurfaceTintSettings;
   window.applyCustomSiteTheme = applyCustomTheme;
   window.applyCustomSiteThemeCssText = applyCustomThemeCssText;
+  window.buildCustomSiteThemeCssText = (hex) => buildCustomThemeCssText(hex);
   window.getStoredCustomSiteThemeHex = getStoredCustomHex;
   window.getStoredSiteBackgroundMediaUrl = getStoredBackgroundMediaUrl;
   window.getCustomSiteThemeCssText = () =>

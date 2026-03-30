@@ -1,12 +1,42 @@
 const byId = (id) => document.getElementById(id);
 const query = (selector) => document.querySelector(selector);
 const on = (node, eventName, handler, options) => node && node.addEventListener(eventName, handler, options);
+const NAVBAR_WARNING_STORAGE_KEY = "voxlis-hide-navbar-warning";
 const isVisible = (node) => {
   if (!node) return false;
   const style = window.getComputedStyle(node);
   if (style.display === "none" || style.visibility === "hidden") return false;
   const rect = node.getBoundingClientRect();
   return rect.width > 0 && rect.height > 0;
+};
+
+const readStoredNavbarWarningHidden = () => {
+  try {
+    const stored = window.localStorage.getItem(NAVBAR_WARNING_STORAGE_KEY);
+    return stored === "1" || stored === "true";
+  } catch {
+    return false;
+  }
+};
+
+const setNavbarWarningHidden = (nextHidden, { persist = true } = {}) => {
+  const warningBar = byId("topWarningBar");
+  const hidden = Boolean(nextHidden);
+
+  if (warningBar) {
+    warningBar.hidden = hidden;
+    warningBar.classList.toggle("hidden", hidden);
+  }
+
+  if (persist) {
+    try {
+      window.localStorage.setItem(NAVBAR_WARNING_STORAGE_KEY, hidden ? "1" : "0");
+    } catch {
+      // Ignore storage failures and still honor the current UI state.
+    }
+  }
+
+  return hidden;
 };
 
 const initNavbar = () => {
@@ -47,6 +77,7 @@ const initNavbar = () => {
   const setHidden = (node, shouldHide) => node && node.classList.toggle("hidden", shouldHide);
   const setExpanded = (node, value) => node && node.setAttribute("aria-expanded", String(Boolean(value)));
   const searchBindings = [];
+  let themesDrawerLoadPromise = null;
   window.__robloxCardsSearchQuery =
     typeof window.__robloxCardsSearchQuery === "string" ? window.__robloxCardsSearchQuery : "";
   window.getRobloxCardsSearchQuery = () => window.__robloxCardsSearchQuery || "";
@@ -148,17 +179,51 @@ const initNavbar = () => {
     }
   };
 
-  const openThemesDrawer = (trigger = null) => {
+  const ensureThemesDrawerReady = async () => {
+    if (typeof window.openSiteThemes === "function") {
+      return true;
+    }
+
+    if (themesDrawerLoadPromise) {
+      return themesDrawerLoadPromise;
+    }
+
+    themesDrawerLoadPromise = (async () => {
+      const loadHtmlPartial = window.VOXLIS_UTILS?.loadHtmlPartial;
+      const themesMount = byId("themesMount");
+
+      if (themesMount && !themesMount.querySelector(".site-themes") && loadHtmlPartial) {
+        await loadHtmlPartial(themesMount, "src/components/themes/themes.html");
+
+        const customThemeMount = byId("customThemeMount");
+        if (customThemeMount && !customThemeMount.firstElementChild) {
+          await loadHtmlPartial(customThemeMount, "src/components/custom-theme/custom-theme.html");
+        }
+      }
+
+      window.initSiteThemes?.(document);
+      window.initCustomThemePicker?.(document);
+
+      return typeof window.openSiteThemes === "function";
+    })().finally(() => {
+      themesDrawerLoadPromise = null;
+    });
+
+    return themesDrawerLoadPromise;
+  };
+
+  const openThemesDrawer = async (trigger = null) => {
     if (isMenuOpen()) closeMenu();
     if (isSearchPanelOpen()) closeMobileSearchPanel();
 
-    if (window.openSiteThemes) {
-      window.openSiteThemes({ trigger });
+    const isReady = await ensureThemesDrawerReady();
+    if (!isReady) {
       return;
     }
 
-    const scrollTarget = document.querySelector(".site-themes") || byId("themesMount") || byId("footerMount");
-    scrollTarget?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (window.openSiteThemes) {
+      window.openSiteThemes({ trigger });
+    }
   };
 
   const syncLayout = () => {
@@ -171,6 +236,7 @@ const initNavbar = () => {
     bindSearchField(query(".mobile-search-panel-field"), elements.mobilePanelSearchInput, byId("mobPanelClrSrch")),
     bindSearchField(query(".mobile-menu-search"), elements.mobileMenuSearchInput, byId("mobClrSrch")),
   );
+  setNavbarWarningHidden(readStoredNavbarWarningHidden(), { persist: false });
   syncSearchQuery(window.getRobloxCardsSearchQuery(), null);
 
   on(elements.mobileMenuToggle, "click", () => (isMenuOpen() ? closeMenu() : openMenu()));
@@ -186,7 +252,7 @@ const initNavbar = () => {
   [elements.themeNavTrigger, elements.mobileQuickThemeButton, elements.mobileThemeButton].forEach((trigger) => {
     on(trigger, "click", (event) => {
       event.preventDefault();
-      openThemesDrawer(event.currentTarget || trigger);
+      void openThemesDrawer(event.currentTarget || trigger);
     });
   });
 
@@ -248,3 +314,5 @@ const initNavbar = () => {
 
   onDomReady(loadNavbar);
 })();
+
+window.setNavbarWarningHidden = setNavbarWarningHidden;

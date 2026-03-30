@@ -1,7 +1,18 @@
 (() => {
   const TOAST_STACK_ID = "siteToastStack";
   const TOAST_EXIT_DURATION_MS = 320;
+  const TOAST_BLOCK_STORAGE_KEY = "voxlis-hide-toast-popups";
   const activeToasts = new Map();
+  let toastPopupsBlocked = false;
+
+  const readStoredToastBlockPreference = () => {
+    try {
+      const stored = window.localStorage.getItem(TOAST_BLOCK_STORAGE_KEY);
+      return stored === "1" || stored === "true";
+    } catch {
+      return false;
+    }
+  };
 
   const ensureToastStack = () => {
     let stack = document.getElementById(TOAST_STACK_ID);
@@ -56,6 +67,30 @@
     return true;
   };
 
+  const dismissAllToasts = (source = "default") => {
+    [...activeToasts.values()].forEach((toast) => {
+      dismissToast(toast, source);
+    });
+  };
+
+  const setSiteToastsBlocked = (nextBlocked, { persist = true } = {}) => {
+    toastPopupsBlocked = Boolean(nextBlocked);
+
+    if (persist) {
+      try {
+        window.localStorage.setItem(TOAST_BLOCK_STORAGE_KEY, toastPopupsBlocked ? "1" : "0");
+      } catch {
+        // Ignore storage failures and still honor the in-memory state.
+      }
+    }
+
+    if (toastPopupsBlocked) {
+      dismissAllToasts("blocked");
+    }
+
+    return toastPopupsBlocked;
+  };
+
   const showSiteToast = ({
     key = "",
     title = "Notice",
@@ -70,6 +105,10 @@
     clickToAction = false,
     showClose = true,
   } = {}) => {
+    if (toastPopupsBlocked) {
+      return null;
+    }
+
     const stack = ensureToastStack();
     const toastKey = getToastKey({ key, title, message, icon });
     const existingToast = activeToasts.get(toastKey);
@@ -242,7 +281,10 @@
     });
   };
 
+  setSiteToastsBlocked(readStoredToastBlockPreference(), { persist: false });
+
   window.showSiteToast = showSiteToast;
   window.dismissSiteToastByKey = dismissToastByKey;
+  window.setSiteToastsBlocked = setSiteToastsBlocked;
   window.initDisabledThemeNotice = initDisabledThemeNotice;
 })();

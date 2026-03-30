@@ -28,9 +28,9 @@
   z-index: 0;
   pointer-events: none;
   border-radius: inherit;
-  background: var(--card-surface-background, rgba(0, 0, 0, 0.82));
-  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
-  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  background: var(--featured-surface-background, var(--card-surface-background, rgba(0, 0, 0, 0.82)));
+  -webkit-backdrop-filter: blur(var(--featured-surface-backdrop-blur, var(--card-surface-backdrop-blur, 0px)));
+  backdrop-filter: blur(var(--featured-surface-backdrop-blur, var(--card-surface-backdrop-blur, 0px)));
   border: 1px solid var(--featured-card-border);
   opacity: 1;
 }
@@ -118,7 +118,7 @@
   position: relative;
   display: block;
   width: 100%;
-  background: transparent;
+  background: var(--featured-image-background, transparent);
   border-radius: var(--featured-image-radius);
   overflow: hidden;
 }

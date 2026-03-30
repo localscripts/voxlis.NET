@@ -1,5 +1,6 @@
 .cards-sec {
   margin: 1.25rem 0 2rem;
+  font-family: var(--card-font-family, var(--font-family-base, "Open Sans", sans-serif));
 }
 
 .cards-body {
@@ -728,14 +729,14 @@
 .exploit-card-placeholder.is-status-unknown .ph-sponsor-btn.is-keyempire,
 .exploit-card-placeholder.is-down .ph-sponsor-btn.is-keyempire {
   border-color: var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.34);
+  background: var(--card-sponsor-button-background, rgba(0, 0, 0, 0.34));
   box-shadow: none;
 }
 
 .exploit-card-placeholder.is-not-updated .ph-sponsor-stack,
 .exploit-card-placeholder.is-status-unknown .ph-sponsor-stack,
 .exploit-card-placeholder.is-down .ph-sponsor-stack {
-  color: rgba(203, 213, 225, 0.88);
+  color: var(--card-sponsor-button-text, rgba(203, 213, 225, 0.88));
 }
 
 .exploit-card-placeholder.is-not-updated .ph-sponsor-overlay-image,
@@ -957,19 +958,28 @@
 .ph-action-btn {
   height: 2.45rem;
   border: 1px solid var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.34);
-  color: rgba(203, 213, 225, 0.8);
+  background: var(--card-action-button-background, rgba(0, 0, 0, 0.34));
+  color: var(--card-action-button-text, rgba(203, 213, 225, 0.8));
 }
 
 .ph-action-btn.is-review {
   border-color: var(--exploit-card-chrome);
-  color: rgba(203, 213, 225, 0.8);
+  background: var(--card-action-button-background, rgba(0, 0, 0, 0.34));
+  color: var(--card-action-button-text, rgba(203, 213, 225, 0.8));
 }
 
 .ph-action-btn.is-more {
   border-color: var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.34);
-  color: rgba(203, 213, 225, 0.8);
+  background: var(--card-action-button-background, rgba(0, 0, 0, 0.34));
+  color: var(--card-action-button-text, rgba(203, 213, 225, 0.8));
+}
+
+.ph-action-btn:hover,
+.ph-action-btn:focus-visible {
+  border-color: var(--exploit-card-chrome);
+  background: var(--card-action-button-background-hover, rgba(0, 0, 0, 0.42));
+  color: var(--card-action-button-text, rgba(203, 213, 225, 0.8));
+  outline: none;
 }
 
 .ph-action-btn.is-review.is-disabled {
@@ -1009,21 +1019,22 @@
 
 .ph-sponsor-btn {
   position: relative;
+  --ph-sponsor-logo-color: var(--card-sponsor-button-text, rgba(248, 250, 252, 0.96));
   overflow: hidden;
   height: 2.45rem;
   border: 1px solid var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.34);
-  color: rgba(248, 250, 252, 0.96);
+  background: var(--card-sponsor-button-background, rgba(0, 0, 0, 0.34));
+  color: var(--card-sponsor-button-text, rgba(248, 250, 252, 0.96));
   gap: 0;
   padding: 0 0.85rem;
   justify-content: center;
 }
 
 .ph-sponsor-btn.is-keyempire {
-  --ph-sponsor-logo-color: rgba(248, 250, 252, 0.96);
+  --ph-sponsor-logo-color: var(--card-sponsor-button-text, rgba(248, 250, 252, 0.96));
   padding: 0 0.85rem;
   border-color: var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.34);
+  background: var(--card-sponsor-button-background, rgba(0, 0, 0, 0.34));
   box-shadow: none;
   transition:
     background var(--smooth-duration) var(--smooth-ease),
@@ -1033,7 +1044,8 @@
 .ph-sponsor-btn.is-keyempire:hover,
 .ph-sponsor-btn.is-keyempire:focus-visible {
   border-color: var(--exploit-card-chrome);
-  background: rgba(0, 0, 0, 0.42);
+  background: var(--card-sponsor-button-background-hover, rgba(0, 0, 0, 0.42));
+  color: var(--card-sponsor-button-text, rgba(248, 250, 252, 0.96));
   box-shadow: none;
   outline: none;
 }
@@ -1076,7 +1088,7 @@
   display: inline-flex;
   align-items: center;
   justify-self: end;
-  color: rgba(248, 250, 252, 0.96);
+  color: var(--card-sponsor-button-text, rgba(248, 250, 252, 0.96));
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -1088,7 +1100,7 @@
   align-items: center;
   justify-self: start;
   min-width: 0;
-  color: rgba(226, 232, 240, 0.94);
+  color: var(--card-sponsor-button-text, rgba(248, 250, 252, 0.96));
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.01em;

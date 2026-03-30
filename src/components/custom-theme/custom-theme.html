@@ -1,145 +1,73 @@
 <div class="custom-theme-editor" id="customThemeEditor">
   <div class="custom-theme-content custom-theme-content-inline">
+    <p class="custom-theme-intro">Colors update live while you edit. Fonts and status colors now live on their own editor pages.</p>
     <div class="custom-theme-meta">
-      <div class="custom-theme-color-grid">
-        <label class="custom-theme-color-field">
-          <span class="custom-theme-color-head">
-            <span class="custom-theme-color-title">Main</span>
-            <span class="custom-theme-color-note">Primary accents and active highlights</span>
-          </span>
-          <span class="custom-theme-color-control">
-            <input class="custom-theme-color-input" id="customThemeMainInput" type="color" value="#3B82F6">
-            <span class="custom-theme-color-value" id="customThemeMainValue">#3B82F6</span>
-          </span>
-        </label>
-        <label class="custom-theme-color-field">
-          <span class="custom-theme-color-head">
-            <span class="custom-theme-color-title">Hover</span>
-            <span class="custom-theme-color-note">Button hover tone and gradient end</span>
-          </span>
-          <span class="custom-theme-color-control">
-            <input class="custom-theme-color-input" id="customThemeHoverInput" type="color" value="#2563EB">
-            <span class="custom-theme-color-value" id="customThemeHoverValue">#2563EB</span>
-          </span>
-        </label>
-        <label class="custom-theme-color-field">
-          <span class="custom-theme-color-head">
-            <span class="custom-theme-color-title">Brand</span>
-            <span class="custom-theme-color-note">Logo, banner, and featured gradient start</span>
-          </span>
-          <span class="custom-theme-color-control">
-            <input class="custom-theme-color-input" id="customThemeLogoInput" type="color" value="#60A5FA">
-            <span class="custom-theme-color-value" id="customThemeLogoValue">#60A5FA</span>
-          </span>
-        </label>
-        <label class="custom-theme-color-field">
-          <span class="custom-theme-color-head">
-            <span class="custom-theme-color-title">Background</span>
-            <span class="custom-theme-color-note">Main site background color</span>
-          </span>
-          <span class="custom-theme-color-control">
-            <input class="custom-theme-color-input" id="customThemeBackgroundInput" type="color" value="#000000">
-            <span class="custom-theme-color-value" id="customThemeBackgroundValue">#000000</span>
-          </span>
-        </label>
-        <label class="custom-theme-color-field">
-          <span class="custom-theme-color-head">
-            <span class="custom-theme-color-title">Text</span>
-            <span class="custom-theme-color-note">Main foreground text color</span>
-          </span>
-          <span class="custom-theme-color-control">
-            <input class="custom-theme-color-input" id="customThemeTextInput" type="color" value="#FFFFFF">
-            <span class="custom-theme-color-value" id="customThemeTextValue">#FFFFFF</span>
-          </span>
-        </label>
-        <label class="custom-theme-color-field">
-          <span class="custom-theme-color-head">
-            <span class="custom-theme-color-title">Updated</span>
-            <span class="custom-theme-color-note">Updated and live status color</span>
-          </span>
-          <span class="custom-theme-color-control">
-            <input class="custom-theme-color-input" id="customThemeUpdatedInput" type="color" value="#3B82F6">
-            <span class="custom-theme-color-value" id="customThemeUpdatedValue">#3B82F6</span>
-          </span>
-        </label>
-        <label class="custom-theme-color-field">
-          <span class="custom-theme-color-head">
-            <span class="custom-theme-color-title">Not Updated</span>
-            <span class="custom-theme-color-note">Muted and not-updated status color</span>
-          </span>
-          <span class="custom-theme-color-control">
-            <input class="custom-theme-color-input" id="customThemeNotUpdatedInput" type="color" value="#9CA3AF">
-            <span class="custom-theme-color-value" id="customThemeNotUpdatedValue">#9CA3AF</span>
-          </span>
-        </label>
-      </div>
-      <div class="custom-theme-font-grid">
-        <label class="custom-theme-field">
-          <span class="custom-theme-field-label">Font CSS URL</span>
-          <input
-            class="custom-theme-name-input"
-            id="customThemeFontImportInput"
-            type="text"
-            placeholder="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap"
-            spellcheck="false"
-            autocomplete="off"
-          >
-        </label>
-        <label class="custom-theme-field">
-          <span class="custom-theme-field-label">Base Font</span>
-          <input
-            class="custom-theme-name-input"
-            id="customThemeFontBaseInput"
-            type="text"
-            placeholder="&quot;Open Sans&quot;, sans-serif"
-            spellcheck="false"
-            autocomplete="off"
-          >
-        </label>
-        <label class="custom-theme-field">
-          <span class="custom-theme-field-label">UI Font</span>
-          <input
-            class="custom-theme-name-input"
-            id="customThemeFontUiInput"
-            type="text"
-            placeholder="&quot;DynaPuff&quot;, &quot;Open Sans&quot;, sans-serif"
-            spellcheck="false"
-            autocomplete="off"
-          >
-        </label>
-        <label class="custom-theme-field">
-          <span class="custom-theme-field-label">System Font</span>
-          <input
-            class="custom-theme-name-input"
-            id="customThemeFontSystemInput"
-            type="text"
-            placeholder="system-ui, -apple-system, &quot;Segoe UI&quot;, Arial, sans-serif"
-            spellcheck="false"
-            autocomplete="off"
-          >
-        </label>
-        <label class="custom-theme-field">
-          <span class="custom-theme-field-label">Mono Font</span>
-          <input
-            class="custom-theme-name-input"
-            id="customThemeFontMonoInput"
-            type="text"
-            placeholder="&quot;Fira Code&quot;, &quot;Consolas&quot;, monospace"
-            spellcheck="false"
-            autocomplete="off"
-          >
-        </label>
-        <p class="custom-theme-hint">Use a stylesheet URL if the font is not already loaded by the site.</p>
-      </div>
-    </div>
-    <p class="custom-theme-error" id="customThemeError" hidden></p>
-    <div class="custom-theme-actions">
-      <button class="custom-theme-btn is-primary" id="customThemeApply" type="button">
-        <span class="custom-theme-btn-icon" aria-hidden="true">
-          <i class="fas fa-palette"></i>
-        </span>
-        <span class="custom-theme-btn-label">Apply</span>
-      </button>
+      <section class="custom-theme-group" aria-labelledby="customThemeGlobalTitle">
+        <div class="custom-theme-group-head">
+          <h3 class="custom-theme-group-title" id="customThemeGlobalTitle">Basics</h3>
+          <p class="custom-theme-group-note">These change the overall site look.</p>
+        </div>
+        <div class="custom-theme-color-grid">
+          <label class="custom-theme-color-field">
+            <span class="custom-theme-color-head">
+              <span class="custom-theme-color-title">Background</span>
+              <span class="custom-theme-color-note">Main background color for the site</span>
+            </span>
+            <span class="custom-theme-color-control">
+              <input class="custom-theme-color-input" id="customThemeBackgroundInput" type="color" value="#000000">
+              <span class="custom-theme-color-value" id="customThemeBackgroundValue">#000000</span>
+            </span>
+          </label>
+          <label class="custom-theme-color-field">
+            <span class="custom-theme-color-head">
+              <span class="custom-theme-color-title">Text</span>
+              <span class="custom-theme-color-note">Default text color across the site</span>
+            </span>
+            <span class="custom-theme-color-control">
+              <input class="custom-theme-color-input" id="customThemeTextInput" type="color" value="#FFFFFF">
+              <span class="custom-theme-color-value" id="customThemeTextValue">#FFFFFF</span>
+            </span>
+          </label>
+        </div>
+      </section>
+      <section class="custom-theme-group" aria-labelledby="customThemeBrandTitle">
+        <div class="custom-theme-group-head">
+          <h3 class="custom-theme-group-title" id="customThemeBrandTitle">Theme Colors</h3>
+          <p class="custom-theme-group-note">These drive accents, buttons, and branding gradients.</p>
+        </div>
+        <div class="custom-theme-color-grid">
+          <label class="custom-theme-color-field">
+            <span class="custom-theme-color-head">
+              <span class="custom-theme-color-title">Main Accent</span>
+              <span class="custom-theme-color-note">Primary highlights, active states, and key accents</span>
+            </span>
+            <span class="custom-theme-color-control">
+              <input class="custom-theme-color-input" id="customThemeMainInput" type="color" value="#3B82F6">
+              <span class="custom-theme-color-value" id="customThemeMainValue">#3B82F6</span>
+            </span>
+          </label>
+          <label class="custom-theme-color-field">
+            <span class="custom-theme-color-head">
+              <span class="custom-theme-color-title">Hover Accent</span>
+              <span class="custom-theme-color-note">Used for hover states and the end of gradients</span>
+            </span>
+            <span class="custom-theme-color-control">
+              <input class="custom-theme-color-input" id="customThemeHoverInput" type="color" value="#2563EB">
+              <span class="custom-theme-color-value" id="customThemeHoverValue">#2563EB</span>
+            </span>
+          </label>
+          <label class="custom-theme-color-field">
+            <span class="custom-theme-color-head">
+              <span class="custom-theme-color-title">Gradient Start</span>
+              <span class="custom-theme-color-note">Logo, banner, and featured gradient starting color</span>
+            </span>
+            <span class="custom-theme-color-control">
+              <input class="custom-theme-color-input" id="customThemeLogoInput" type="color" value="#60A5FA">
+              <span class="custom-theme-color-value" id="customThemeLogoValue">#60A5FA</span>
+            </span>
+          </label>
+        </div>
+      </section>
     </div>
   </div>
 </div>

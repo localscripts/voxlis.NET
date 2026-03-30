@@ -21,11 +21,13 @@
 
 .info-modal {
   position: relative;
-  --info-modal-outline: var(--site-outline-color, var(--site-border-color, var(--crd-bdr)));
+  --info-modal-outline: var(--info-modal-surface-outline-color, var(--site-outline-color, var(--site-border-color, var(--crd-bdr))));
   width: 90%;
   max-width: 900px;
   max-height: 90vh;
-  background-color: rgba(0, 0, 0, 0.88);
+  background-color: var(--info-modal-background, rgba(0, 0, 0, 0.88));
+  backdrop-filter: blur(var(--info-modal-backdrop-blur, 0px));
+  -webkit-backdrop-filter: blur(var(--info-modal-backdrop-blur, 0px));
   border-radius: 0.75rem;
   border: 1px solid var(--info-modal-outline);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
@@ -33,10 +35,14 @@
   flex-direction: column;
   overflow: hidden;
   opacity: 0;
-  transform: scale(0.95);
   transition:
-    transform 300ms var(--smooth-ease),
     opacity 300ms var(--smooth-ease);
+  will-change: opacity;
+}
+
+body.has-video-background .info-modal {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .info-modal-container.is-open .info-modal-overlay {
@@ -45,7 +51,6 @@
 
 .info-modal-container.is-open .info-modal {
   opacity: 1;
-  transform: scale(1);
 }
 
 .info-modal-container.is-closing .info-modal-overlay {
@@ -54,7 +59,6 @@
 
 .info-modal-container.is-closing .info-modal {
   opacity: 0;
-  transform: scale(0.97);
 }
 
 .info-modal-header {
