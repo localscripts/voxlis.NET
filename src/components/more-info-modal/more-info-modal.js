@@ -39,6 +39,27 @@
     '"': "&quot;",
     "'": "&#39;",
   };
+  const MARKDOWN_CALLOUT_PATTERN =
+    /^\s*\[!(TIP|NOTE|WARN|WARNING)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\]/i;
+  const MARKDOWN_CALLOUT_PREFIX_PATTERN =
+    /^\s*\[!(TIP|NOTE|WARN|WARNING)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\](?:\s|<br\s*\/?>)*/i;
+  const MARKDOWN_CALLOUTS = {
+    tip: {
+      label: "Tip",
+      iconClass: "fa-lightbulb",
+      color: "#22C55E",
+    },
+    note: {
+      label: "Note",
+      iconClass: "fa-circle-info",
+      color: "#3B82F6",
+    },
+    warning: {
+      label: "Warning",
+      iconClass: "fa-triangle-exclamation",
+      color: "#F59E0B",
+    },
+  };
 
   const reviewSourceCache = new Map();
   const modalState = {
@@ -53,6 +74,55 @@
 
   const escapeHtml = (value = "") =>
     String(value).replace(/[&<>"']/g, (character) => HTML_ESCAPE_MAP[character]);
+
+  const normalizeHexColor = (value = "") => {
+    const normalizedValue = String(value).trim();
+    if (!/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(normalizedValue)) {
+      return "";
+    }
+
+    if (normalizedValue.length === 4) {
+      const [hash, r, g, b] = normalizedValue;
+      return `${hash}${r}${r}${g}${g}${b}${b}`.toUpperCase();
+    }
+
+    return normalizedValue.toUpperCase();
+  };
+
+  const hexToRgbString = (value = "") => {
+    const normalizedColor = normalizeHexColor(value);
+    if (!normalizedColor) {
+      return "";
+    }
+
+    const red = Number.parseInt(normalizedColor.slice(1, 3), 16);
+    const green = Number.parseInt(normalizedColor.slice(3, 5), 16);
+    const blue = Number.parseInt(normalizedColor.slice(5, 7), 16);
+    return `${red}, ${green}, ${blue}`;
+  };
+
+  const getMarkdownCallout = (value = "") => {
+    const match = String(value).trim().match(MARKDOWN_CALLOUT_PATTERN);
+    if (!match) {
+      return null;
+    }
+
+    const rawType = String(match[1] || "").toLowerCase();
+    const calloutType = rawType === "warn" ? "warning" : rawType;
+    const config = MARKDOWN_CALLOUTS[calloutType];
+    if (!config) {
+      return null;
+    }
+
+    return {
+      type: calloutType,
+      label: config.label,
+      iconClass: config.iconClass,
+      color: normalizeHexColor(match[2]) || config.color,
+      colorRgb: hexToRgbString(match[2]) || hexToRgbString(config.color),
+      hasBorder: Boolean(match[3]),
+    };
+  };
 
   const normalizePath = (path = "/") => {
     const trimmed = `${path}`.replace(/\/+$/, "");
@@ -168,6 +238,75 @@
     root.querySelectorAll("pre code").forEach((block) => {
       window.hljs.highlightElement(block);
     });
+  };
+
+  const prepareMarkdownLinks = (root) => {
+    if (!root) {
+      return;
+    }
+
+    root.querySelectorAll("a[href]").forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      if (!href || href.startsWith("#")) {
+        return;
+      }
+
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+    });
+  };
+
+  const enhanceMarkdownCallouts = (root) => {
+    if (!root) {
+      return;
+    }
+
+    root.querySelectorAll("blockquote").forEach((blockquote) => {
+      const firstParagraph = blockquote.querySelector(":scope > p");
+      const callout = getMarkdownCallout(firstParagraph?.textContent?.trim() || "");
+      if (!firstParagraph || !callout) {
+        return;
+      }
+
+      blockquote.classList.add("info-modal-callout", `is-${callout.type}`);
+      blockquote.classList.toggle("has-border", callout.hasBorder);
+      blockquote.style.setProperty("--info-modal-callout-accent", callout.color);
+      blockquote.style.setProperty("--info-modal-callout-accent-rgb", callout.colorRgb);
+      firstParagraph.innerHTML = firstParagraph.innerHTML.replace(MARKDOWN_CALLOUT_PREFIX_PATTERN, "");
+      if (!firstParagraph.textContent.trim() && !firstParagraph.children.length) {
+        firstParagraph.remove();
+      }
+
+      if (blockquote.querySelector(":scope > .info-modal-callout-title")) {
+        return;
+      }
+
+      const titleNode = document.createElement("p");
+      titleNode.className = "info-modal-callout-title";
+      titleNode.innerHTML =
+        `<i class="fas ${escapeHtml(callout.iconClass)}" aria-hidden="true"></i>${escapeHtml(callout.label)}`;
+      blockquote.insertBefore(titleNode, blockquote.firstChild);
+    });
+  };
+
+  const enhanceMarkdownContent = (root) => {
+    if (!root) {
+      return;
+    }
+
+    enhanceMarkdownCallouts(root);
+  };
+
+  const finalizeMarkdownContent = (markdownNode, contentNode, highlightContentKey = "") => {
+    if (!markdownNode) {
+      return;
+    }
+
+    enhanceMarkdownContent(markdownNode);
+    prepareMarkdownLinks(markdownNode);
+    highlightCodeBlocks(markdownNode);
+    contentNode.scrollTop = 0;
+    highlightContentEntry(markdownNode, contentNode, highlightContentKey);
   };
 
   const highlightContentEntry = (root, scrollRoot, contentKey = "") => {
@@ -492,9 +631,7 @@
 
     if (modalContentHtml) {
       markdownNode.innerHTML = modalContentHtml;
-      highlightCodeBlocks(markdownNode);
-      contentNode.scrollTop = 0;
-      highlightContentEntry(markdownNode, contentNode, highlightContentKey);
+      finalizeMarkdownContent(markdownNode, contentNode, highlightContentKey);
       return true;
     }
 
@@ -505,9 +642,7 @@
         }
 
         markdownNode.innerHTML = renderReviewMarkdown(reviewDocument.body);
-        highlightCodeBlocks(markdownNode);
-        contentNode.scrollTop = 0;
-        highlightContentEntry(markdownNode, contentNode, highlightContentKey);
+        finalizeMarkdownContent(markdownNode, contentNode, highlightContentKey);
       })
       .catch((error) => {
         if (requestToken !== modalState.requestToken) {

@@ -88,7 +88,8 @@ body.has-video-background .info-modal {
   flex-direction: column;
   gap: 1.5rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(var(--prim-rgb), 0.82) transparent;
+  scrollbar-color: rgba(var(--prim-rgb), 0.74) #000000;
+  scrollbar-gutter: stable;
 }
 
 .info-modal-exploit-info {
@@ -368,7 +369,8 @@ body.has-video-background .info-modal {
   overflow-x: auto;
   margin-bottom: 1rem;
   scrollbar-width: thin;
-  scrollbar-color: rgba(var(--prim-rgb), 0.9) rgba(255, 255, 255, 0.06);
+  scrollbar-color: rgba(var(--prim-rgb), 0.74) #000000;
+  scrollbar-gutter: stable;
 }
 
 .info-modal-markdown pre code,
@@ -403,6 +405,117 @@ body.has-video-background .info-modal {
   margin-right: 0;
   font-style: italic;
   color: rgba(156, 163, 175, 1);
+}
+
+.info-modal-markdown blockquote.info-modal-callout {
+  --info-modal-callout-accent: #22c55e;
+  --info-modal-callout-accent-rgb: 34, 197, 94;
+  border-left-width: 0.25em;
+  border-left-color: var(--info-modal-callout-accent);
+  border-radius: 0;
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 0 0 1rem;
+  background: transparent;
+  font-style: normal;
+  color: inherit;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.info-modal-markdown blockquote.info-modal-callout::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(var(--info-modal-callout-accent-rgb), 0.14),
+    rgba(var(--info-modal-callout-accent-rgb), 0.08) 18%,
+    rgba(var(--info-modal-callout-accent-rgb), 0.03) 38%,
+    transparent 72%
+  );
+  opacity: 0;
+  transform: translateX(-0.45rem);
+  animation: info-modal-callout-fade 560ms var(--smooth-ease) forwards;
+  pointer-events: none;
+}
+
+.info-modal-markdown blockquote.info-modal-callout > * {
+  position: relative;
+  z-index: 1;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-note {
+  --info-modal-callout-accent: #4493f8;
+  --info-modal-callout-accent-rgb: 68, 147, 248;
+  font-size: 0.94rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-warning {
+  --info-modal-callout-accent: #d29922;
+  --info-modal-callout-accent-rgb: 210, 153, 34;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.has-border {
+  border: 1px solid rgba(var(--info-modal-callout-accent-rgb), 0.26);
+  border-left-width: 0.25em;
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.85rem 0.55rem 1rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.has-border::before {
+  background: linear-gradient(
+    to right,
+    rgba(var(--info-modal-callout-accent-rgb), 0.1),
+    rgba(var(--info-modal-callout-accent-rgb), 0.05) 22%,
+    transparent 68%
+  );
+}
+
+.info-modal-markdown .info-modal-callout-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.5rem;
+  color: var(--info-modal-callout-accent);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1;
+}
+
+.info-modal-markdown .info-modal-callout-title i {
+  font-size: 1rem;
+  color: var(--info-modal-callout-accent);
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title {
+  font-size: 0.9rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title i {
+  font-size: 0.9rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout > p {
+  margin: 0;
+}
+
+.info-modal-markdown blockquote.info-modal-callout > p + p {
+  margin-top: 0.75rem;
+}
+
+@keyframes info-modal-callout-fade {
+  0% {
+    opacity: 0;
+    transform: translateX(-0.45rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .info-modal-markdown table {
@@ -509,29 +622,37 @@ body.has-video-background .info-modal {
   border-radius: 0.5rem;
 }
 
-.info-modal-content::-webkit-scrollbar {
-  width: 0.34rem;
+.info-modal-content::-webkit-scrollbar,
+.info-modal-markdown pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: #000000;
 }
 
 .info-modal-content::-webkit-scrollbar-track,
 .info-modal-markdown pre::-webkit-scrollbar-track {
-  background: transparent;
+  background: #000000;
   border-radius: 0;
+  border: 0;
 }
 
 .info-modal-content::-webkit-scrollbar-thumb,
 .info-modal-markdown pre::-webkit-scrollbar-thumb {
-  background: rgba(var(--prim-rgb), 0.82);
+  background: rgba(var(--prim-rgb), 0.74);
   border-radius: 0;
+  border: 0;
+  box-shadow: none;
 }
 
 .info-modal-content::-webkit-scrollbar-thumb:hover,
 .info-modal-markdown pre::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--prim-rgb), 0.96);
+  background: rgba(var(--prim-rgb), 0.9);
 }
 
-.info-modal-markdown pre::-webkit-scrollbar {
-  height: 0.34rem;
+.info-modal-content::-webkit-scrollbar-corner,
+.info-modal-markdown pre::-webkit-scrollbar-corner {
+  background: #000000;
+  border-radius: 0;
 }
 
 @media (max-width: 640px) {
@@ -582,6 +703,30 @@ body.has-video-background .info-modal {
 
   .info-modal-markdown code {
     font-size: 0.8rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-note {
+    padding: 0.35rem 0 0.35rem 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-note.has-border {
+    padding: 0.38rem 0.65rem 0.38rem 0.75rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title {
+    gap: 0.35rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.72rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title i {
+    font-size: 0.72rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-note > p + p {
+    margin-top: 0.5rem;
   }
 
   .info-modal-footer {

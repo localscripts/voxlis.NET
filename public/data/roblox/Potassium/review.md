@@ -1,5 +1,7 @@
-## Exploit Performance
+> [!NOTE BORDER]
+> *Potassium is only supported on Windows 11. Systems running Windows 10 are not compatible with Potassium. Upgrade to Windows 11: [microsoft.com/en-us/software-download/windows11](https://www.microsoft.com/en-us/software-download/windows11)*
 
+## Exploit Performance
 - **Potassium** can be inconsistent—sometimes it runs smoothly, while other times it may cause **BSODs (Blue Screen of Death)** due to its kernel-level nature. User feedback is mixed: some find it reliable, while others report frequent issues. Overall, performance varies significantly on the device, but if you’re not concerned about the developers’ completely unknown background, it offers decent value.
 
 ## Background Information
