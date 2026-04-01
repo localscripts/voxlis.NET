@@ -7,6 +7,7 @@
     suncApiUrl: SUNC_API_URL = "https://api.voxlis.net/api/sunc",
     warningModalEnabled: WARNING_MODAL_ENABLED = false,
     cardNameOverrides: CARD_NAME_OVERRIDES = {},
+    cardFolderOverrides: CARD_FOLDER_OVERRIDES = {},
     platformOrder: PLATFORM_ORDER = ["windows", "macos", "android", "ios"],
     platformLabels: PLATFORM_LABELS = {},
     platformIcons: PLATFORM_ICONS = {},
@@ -124,7 +125,43 @@
       : [];
   };
 
-  const getFolderName = (slug) => CARD_NAME_OVERRIDES[slug] ?? titleCase(slug);
+  const getCardDisplayName = (slug) => CARD_NAME_OVERRIDES[slug] ?? titleCase(slug);
+  const getFolderNameCandidates = (slug) => {
+    const folderOverride = CARD_FOLDER_OVERRIDES[slug];
+    const overrideCandidates = Array.isArray(folderOverride)
+      ? folderOverride
+      : folderOverride
+        ? [folderOverride]
+        : [];
+
+    return [
+      ...new Set(
+        [...overrideCandidates, getCardDisplayName(slug), titleCase(slug)]
+          .map((value) => String(value || "").trim())
+          .filter(Boolean),
+      ),
+    ];
+  };
+  const resolveCardFolder = async (slug) => {
+    const folderCandidates = getFolderNameCandidates(slug);
+
+    for (const folderName of folderCandidates) {
+      const info = await fetchJson(`${DATA_ROOT}/${encodeURIComponent(folderName)}/info.json`, {
+        optional: true,
+      });
+
+      if (info) {
+        return {
+          folderName,
+          info,
+        };
+      }
+    }
+
+    throw new Error(
+      `Failed to load info.json for slug "${slug}" using candidates: ${folderCandidates.join(", ")}`,
+    );
+  };
   const resolveSitePath =
     window.VOXLIS_UTILS?.resolveSitePath ??
     ((path = "") => {
@@ -2068,15 +2105,13 @@
 
     const infoEntries = await Promise.all(
       slugs.map(async (slug, catalogIndex) => {
-        const folderName = getFolderName(slug);
-
         try {
-          const info = await fetchJson(`${DATA_ROOT}/${encodeURIComponent(folderName)}/info.json`);
+          const { folderName, info } = await resolveCardFolder(slug);
           if (info.hidden) return null;
 
           return {
             slug,
-            title: folderName,
+            title: getCardDisplayName(slug),
             folderName,
             catalogIndex,
             pricing: prices[slug] ?? {},

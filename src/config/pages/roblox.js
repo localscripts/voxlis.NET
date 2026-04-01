@@ -24,6 +24,9 @@
       vegax: "Vega X",
       "yub-x": "YuB-X",
     },
+    cardFolderOverrides: {
+      "yub-x": ["YuB-X", "YuB-x"],
+    },
     platformOrder: ["windows", "macos", "android", "ios"],
     platformLabels: {
       windows: "Windows",
