@@ -296,20 +296,20 @@
   --featured-image-radius: 0.5rem;
   --featured-overlay-fill: linear-gradient(90deg, var(--theme-gradient-start-color) 0%, var(--theme-main-color) 46%, #ffffff 100%);
   --featured-overlay-opacity: 0.98;
-  --featured-overlay-mask: url("/public/assets/featured/overlay-voxlis.png");
+  --featured-overlay-mask: url("/public/assets/overlay/promo-3.png");
 
   /* Shared logo/banner overlay art */
   --banner-overlay-fill: linear-gradient(90deg, var(--theme-gradient-start-color) 0%, var(--theme-main-color) 70%, var(--theme-gradient-end-color) 100%);
   --banner-overlay-opacity: 0.98;
-  --banner-overlay-mask: url("/public/assets/banner/voxlis-banner.png");
+  --banner-overlay-mask: url("/public/assets/overlay/voxlis-2.png");
   --header-overlay-fill: linear-gradient(90deg, var(--theme-gradient-start-color) 0%, var(--theme-main-color) 70%, var(--theme-gradient-end-color) 100%);
   --header-overlay-opacity: 0.98;
-  --header-overlay-mask: url("/public/assets/header/voxlis-banner.png");
+  --header-overlay-mask: url("/public/assets/overlay/voxlis-2.png");
   --brand-gradient-enabled: 1;
   --brand-gradient-color: #60a5fa;
   --brand-gradient-offset: 70%;
-  --sponsor-overlay-mask: url("/public/assets/logo/keyempire-logo.png");
-  --footer-heart-mask: url("/public/assets/ads/heart.svg");
+  --sponsor-overlay-mask: url("/public/assets/icons/images/keyempire-logo.png");
+  --footer-heart-mask: url("/public/assets/icons/vectors/heart.svg");
 
   /* Generic shadows + promo section */
   --shd: 0 10px 25px rgba(0, 0, 0, 0.2);

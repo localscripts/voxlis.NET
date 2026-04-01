@@ -11,5 +11,5 @@
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
 	"website": "https://cosmic.best",
-	"keyed": true
+	"keyed": false
 }

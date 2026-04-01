@@ -1,12 +1,32 @@
 (() => {
   const onReady = window.VOXLIS_UTILS?.onDomReady ?? ((fn) => fn?.());
   const PROMPT_DELAY_MS = 10000;
+  const resolveSitePath =
+    window.VOXLIS_UTILS?.resolveSitePath ??
+    ((path = "") => {
+      const normalizedPath = String(path || "").trim();
+      if (!normalizedPath) {
+        return "";
+      }
+
+      if (
+        normalizedPath.startsWith("/") ||
+        normalizedPath.startsWith("#") ||
+        /^(?:[a-z]+:)?\/\//i.test(normalizedPath) ||
+        /^(?:data|blob):/i.test(normalizedPath)
+      ) {
+        return normalizedPath;
+      }
+
+      return `/${normalizedPath.replace(/^\/+/, "")}`;
+    });
   const loadInto =
     window.VOXLIS_UTILS?.loadHtmlPartial ??
     (async (mount, path) => {
-      const response = await fetch(path, { cache: "no-cache" });
+      const resolvedPath = resolveSitePath(path);
+      const response = await fetch(resolvedPath, { cache: "no-cache" });
       if (!response.ok) {
-        throw new Error(`Failed to load partial (${path}): ${response.status}`);
+        throw new Error(`Failed to load partial (${resolvedPath}): ${response.status}`);
       }
       mount.innerHTML = await response.text();
       return mount;
@@ -106,6 +126,12 @@
 
   const queueFiltersPrompt = (root = document) => {
     if (root.dataset.filtersPromptState === "scheduled" || root.dataset.filtersPromptState === "shown") return;
+    const filterPrompt =
+      window.VOXLIS_PAGE?.catalog?.prompts?.filters ??
+      {
+        title: "Try filters?",
+        message: "Want to narrow the list a bit faster?",
+      };
 
     root.dataset.filtersPromptState = "scheduled";
 
@@ -127,8 +153,8 @@
       root.dataset.filtersPromptState = "shown";
       window.showSiteToast?.({
         key: "filters-prompt",
-        title: "Try filters?",
-        message: "Want to narrow the list a bit faster?",
+        title: filterPrompt.title || "Try filters?",
+        message: filterPrompt.message || "Want to narrow the list a bit faster?",
         duration: 0,
         icon: "fa-sliders",
         actionLabel: "Open filters",
@@ -152,6 +178,10 @@
 
   onReady(async () => {
     try {
+      const activeCatalog = window.VOXLIS_PAGE?.catalog ?? window.VOXLIS_CONFIG?.activeCatalogPage ?? {};
+      const pageTitle = activeCatalog.pageTitle ? `voxlis - ${activeCatalog.pageTitle}` : "voxlis - BETA";
+      document.title = pageTitle;
+
       const promoMount = document.getElementById("promoMount");
       if (promoMount) {
         promoMount.innerHTML = window.getPromoMarkup?.() || "";
@@ -166,25 +196,26 @@
 
       if (featuredMounts.length) {
         const html = window.getFeaturedCardMarkup?.() || "";
-        featuredMounts.forEach((mount) => {
+        featuredMounts.forEach((mount, index) => {
           mount.innerHTML = html;
+          mount.hidden = !html;
         });
       }
 
       const cardsMount = document.getElementById("cardsMount");
       if (cardsMount) {
-        await loadInto(cardsMount, "src/components/cards/cards.html");
-        await window.initRobloxCardsCatalog?.(cardsMount);
+        await loadInto(cardsMount, "src/components/objects/cards/cards.html");
+        await window.initActiveCatalog?.(cardsMount);
         initCardChipOverflow(cardsMount);
         queueFiltersPrompt(cardsMount);
       }
 
       const themesMount = document.getElementById("themesMount");
       if (themesMount) {
-        await loadInto(themesMount, "src/components/themes/themes.html");
+        await loadInto(themesMount, "src/components/modals/themes/themes.html");
         const customThemeMount = document.getElementById("customThemeMount");
         if (customThemeMount) {
-          await loadInto(customThemeMount, "src/components/custom-theme/custom-theme.html");
+          await loadInto(customThemeMount, "src/components/modals/custom-theme/custom-theme.html");
         }
         window.initSiteThemes?.(document);
         window.initCustomThemePicker?.(document);
@@ -192,7 +223,7 @@
 
       const footerMount = document.getElementById("footerMount");
       if (footerMount) {
-        await loadInto(footerMount, "src/components/footer/footer.html");
+        await loadInto(footerMount, "src/components/global/footer/footer.html");
         window.initSiteFooter?.(document);
       }
     } catch (error) {
