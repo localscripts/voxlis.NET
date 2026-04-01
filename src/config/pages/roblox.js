@@ -25,7 +25,7 @@
       "yub-x": "YuB-X",
     },
     cardFolderOverrides: {
-      "yub-x": ["YuB-X", "YuB-x"],
+      "yub-x": ["YuB-x", "YuB-X"],
     },
     platformOrder: ["windows", "macos", "android", "ios"],
     platformLabels: {
