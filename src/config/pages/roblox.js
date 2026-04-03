@@ -15,8 +15,8 @@
     pageTitle: "Roblox",
     searchPlaceholder: "Search Roblox cards...",
     dataRoot: "/public/data/roblox",
-    statusApiUrl: "https://api.voxlis.net/api/endpoints",
-    suncApiUrl: "https://api.voxlis.net/api/sunc",
+    statusApiUrl: "https://connect.voxlis.net/endpoints",
+    suncApiUrl: "https://connect.voxlis.net/sunc",
     warningModalEnabled: false,
     cardNameOverrides: {
       arceusx: "Arceus X",
@@ -26,6 +26,9 @@
     },
     cardFolderOverrides: {
       "yub-x": ["YuB-x", "YuB-X"],
+    },
+    forceissues: {
+      macos: true,
     },
     platformOrder: ["windows", "macos", "android", "ios"],
     platformLabels: {

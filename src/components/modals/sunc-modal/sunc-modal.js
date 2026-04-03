@@ -6,6 +6,13 @@
   const MODAL_EXIT_MS = 300;
   const RING_RADIUS = 78;
   const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+  const getSharedSuncRequestCache = () => {
+    if (!(window.__voxlisSuncBatchRequestCache instanceof Map)) {
+      window.__voxlisSuncBatchRequestCache = new Map();
+    }
+
+    return window.__voxlisSuncBatchRequestCache;
+  };
   const SUNC_API_URL =
     String(
       window.VOXLIS_PAGE?.catalog?.suncApiUrl ??
@@ -18,7 +25,7 @@
     previousBodyOverflow: "",
     requestSequence: 0,
     pendingPayload: null,
-    responseCache: new Map(),
+    responseCache: getSharedSuncRequestCache(),
     currentResult: null,
     searchQuery: "",
   };
@@ -38,6 +45,46 @@
     if (key) search.set("key", key);
     const query = search.toString();
     return query ? `${OFFICIAL_RESULT_URL}?${query}` : OFFICIAL_RESULT_URL;
+  };
+  const normalizeSuncSource = (source = {}) => {
+    const scrapId = String(source?.scrapId || source?.scrap || "").trim();
+    const key = String(source?.key || source?.accessKey || "").trim();
+    return scrapId && key ? { scrapId, key } : null;
+  };
+  const buildSuncPairsParam = (sources = []) =>
+    [
+      ...new Set(
+        sources
+          .map((source) => normalizeSuncSource(source))
+          .filter(Boolean)
+          .map(({ scrapId, key }) => `${scrapId}:${key}`),
+      ),
+    ]
+      .sort()
+      .join(",");
+  const buildSuncPayloadKey = ({ scrapId = "", key = "" } = {}) => {
+    const search = new URLSearchParams();
+    if (scrapId) search.set("scrap", scrapId);
+    if (key) search.set("key", key);
+    return search.toString();
+  };
+  const buildSuncApiUrl = ({ forceRefresh = false, sources = [] } = {}) => {
+    const params = new URLSearchParams();
+    const pairs = buildSuncPairsParam(sources);
+    if (pairs) {
+      params.set("pairs", pairs);
+    }
+    if (forceRefresh) {
+      params.set("refresh", "1");
+    }
+
+    const query = params.toString();
+    if (!query) {
+      return SUNC_API_URL;
+    }
+
+    const separator = SUNC_API_URL.includes("?") ? "&" : "?";
+    return `${SUNC_API_URL}${separator}${query}`;
   };
 
   const formatSeconds = (value) => {
@@ -162,25 +209,45 @@
     ...result.passedEntries.map((entry) => ({ ...entry, status: "passed" })),
   ];
 
-  const fetchSuncResult = ({ scrapId = "", key = "" } = {}) => {
-    const cacheKey = `${scrapId}:${key}`;
-    if (!suncModalState.responseCache.has(cacheKey)) {
-      const request = fetch(
-        `${SUNC_API_URL}?scrap=${encodeURIComponent(scrapId)}&key=${encodeURIComponent(key)}`,
-        { cache: "no-cache" },
-      ).then(async (response) => {
+  const fetchSuncPayloadMap = ({ forceRefresh = false, sources = [] } = {}) => {
+    const requestUrl = buildSuncApiUrl({ forceRefresh, sources });
+    const stableUrl = buildSuncApiUrl({ sources });
+
+    if (forceRefresh) {
+      suncModalState.responseCache.delete(stableUrl);
+    }
+
+    if (!suncModalState.responseCache.has(requestUrl)) {
+      const request = fetch(requestUrl, { cache: "no-cache" }).then(async (response) => {
         if (!response.ok) {
           throw new Error(`sUNC API request failed (${response.status})`);
         }
 
-        return response.json();
+        const payload = await response.json();
+        return payload && typeof payload === "object" ? payload : {};
       });
 
-      suncModalState.responseCache.set(cacheKey, request);
+      suncModalState.responseCache.set(requestUrl, request);
+      if (forceRefresh) {
+        suncModalState.responseCache.set(stableUrl, request);
+      }
     }
 
-    return suncModalState.responseCache.get(cacheKey);
+    return suncModalState.responseCache.get(requestUrl);
   };
+
+  const fetchSuncResult = ({ scrapId = "", key = "" } = {}, { forceRefresh = false } = {}) =>
+    fetchSuncPayloadMap({
+      forceRefresh,
+      sources: [{ scrapId, key }],
+    }).then((payloadMap) => {
+      const payload = payloadMap?.[buildSuncPayloadKey({ scrapId, key })] ?? null;
+      if (!payload) {
+        throw new Error("sUNC payload not found.");
+      }
+
+      return payload;
+    });
 
   const ensureSuncModal = () => {
     let modal = document.getElementById("suncModal");
@@ -487,11 +554,7 @@
       }
     });
 
-    if (forceRefresh) {
-      suncModalState.responseCache.delete(`${nextPayload.scrapId}:${nextPayload.key}`);
-    }
-
-    fetchSuncResult(nextPayload)
+    fetchSuncResult(nextPayload, { forceRefresh })
       .then((responsePayload) => {
         if (requestSequence !== suncModalState.requestSequence) {
           return;

@@ -296,18 +296,27 @@
 }
 
 .exploit-card-placeholder.is-not-updated,
+.exploit-card-placeholder.is-issue,
 .exploit-card-placeholder.is-down {
   border-color: var(--exploit-card-chrome);
+  order: 3;
+}
+
+.exploit-card-placeholder.is-issue {
   order: 2;
 }
 
 .exploit-card-placeholder.is-status-unknown {
   border-color: var(--exploit-card-chrome);
-  order: 3;
+  order: 4;
 }
 
 .exploit-card-placeholder.is-trending {
-  order: 0;
+  box-shadow: var(--shd);
+}
+
+.exploit-card-placeholder.is-insecure {
+  order: 5;
 }
 
 .exploit-card-placeholder.is-not-updated::before,
@@ -316,6 +325,14 @@
     to right,
     rgba(var(--status-not-updated-rgb), 0.95),
     rgba(var(--status-not-updated-rgb), 0.68)
+  );
+}
+
+.exploit-card-placeholder.is-issue::before {
+  background: linear-gradient(
+    to right,
+    rgba(245, 158, 11, 0.96),
+    rgba(249, 115, 22, 0.72)
   );
 }
 
@@ -575,6 +592,11 @@
   opacity: 1;
 }
 
+.ph-title-meta-ico.is-issue {
+  color: rgba(245, 158, 11, 0.92);
+  opacity: 1;
+}
+
 .ph-title-meta-ico.is-not-updated,
 .ph-title-meta-ico.is-status-unknown {
   color: rgba(156, 163, 175, 0.82);
@@ -603,6 +625,8 @@
 }
 
 .ph-rating {
+  --sunc-accent-rgb: 96, 165, 250;
+  --sunc-accent-strong-rgb: 59, 130, 246;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-end;
@@ -665,7 +689,7 @@
 }
 
 .ph-rating-logo-s {
-  background: rgba(var(--status-updated-rgb), 0.96);
+  background: rgba(var(--sunc-accent-rgb), 0.98);
   -webkit-mask: url("/public/assets/icons/vectors/sunc_badge_s.svg") center / contain no-repeat;
   mask: url("/public/assets/icons/vectors/sunc_badge_s.svg") center / contain no-repeat;
   -webkit-mask-position: right center;
@@ -674,7 +698,7 @@
 
 .ph-rating-val {
   width: 100%;
-  color: rgba(var(--status-updated-rgb), 0.96);
+  color: rgba(var(--sunc-accent-rgb), 0.98);
   font-size: 0.76rem;
   font-weight: 700;
   text-align: right;
@@ -707,7 +731,7 @@
 }
 
 .ph-rating-external-sub {
-  color: rgba(var(--status-updated-rgb), 0.96);
+  color: rgba(var(--sunc-accent-rgb), 0.98);
 }
 
 .ph-rating.is-none .ph-rating-logo-main,
@@ -745,6 +769,36 @@
 
 .exploit-card-placeholder.is-status-unknown .ph-rating-logo-main {
   background: rgba(156, 163, 175, 0.78);
+}
+
+.exploit-card-placeholder.is-issue .ph-rating-logo-main {
+  background: rgba(255, 237, 213, 0.98);
+}
+
+.exploit-card-placeholder.is-issue .ph-rating {
+  --sunc-accent-rgb: 245, 158, 11;
+  --sunc-accent-strong-rgb: 249, 115, 22;
+}
+
+.exploit-card-placeholder.is-issue .ph-rating-logo-s {
+  background: rgba(var(--sunc-accent-strong-rgb), 0.98);
+  opacity: 1;
+}
+
+.exploit-card-placeholder.is-issue .ph-rating-val,
+.exploit-card-placeholder.is-issue .ph-rating-external-sub {
+  color: rgba(var(--sunc-accent-rgb), 0.98);
+  opacity: 1;
+}
+
+.exploit-card-placeholder.is-issue .ph-rating-external-main {
+  color: rgba(255, 237, 213, 0.98);
+  opacity: 1;
+}
+
+.exploit-card-placeholder.is-issue .ph-sponsor-btn.is-keyempire .ph-sponsor-base-image.is-keyempire-logo {
+  filter: brightness(0) saturate(100%) invert(74%) sepia(55%) saturate(2579%) hue-rotate(352deg) brightness(100%) contrast(95%);
+  opacity: 1;
 }
 
 .exploit-card-placeholder.is-not-updated .ph-rating-logo-main,

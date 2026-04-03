@@ -26,9 +26,11 @@
   --sunc-surface-strong: rgba(255, 255, 255, 0.02);
   --sunc-surface-card: var(--filter-option-background, rgba(0, 0, 0, 0.3));
   --sunc-border: var(--site-outline-color, var(--site-border-color, var(--sec-bdr)));
-  --sunc-accent-bg: var(--filter-option-background-active, rgba(var(--prim-rgb), 0.1));
+  --sunc-accent-rgb: 96, 165, 250;
+  --sunc-accent-strong-rgb: 59, 130, 246;
+  --sunc-accent-bg: rgba(var(--sunc-accent-rgb), 0.12);
   --sunc-accent-border: var(--site-outline-color, var(--site-border-color, var(--sec-bdr)));
-  --sunc-accent-text: var(--filter-option-text-active, var(--prim));
+  --sunc-accent-text: rgb(var(--sunc-accent-rgb));
   --sunc-muted: var(--filter-section-title-color, rgba(209, 213, 219, 1));
   width: min(calc(100vw - 2.5rem), 60rem);
   height: auto;

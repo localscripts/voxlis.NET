@@ -34,6 +34,12 @@
       showInsecure: false,
     },
   } = ACTIVE_CATALOG;
+  const FORCE_ISSUES =
+    ACTIVE_CATALOG.forceissues && typeof ACTIVE_CATALOG.forceissues === "object"
+      ? ACTIVE_CATALOG.forceissues
+      : ACTIVE_CATALOG.forceIssues && typeof ACTIVE_CATALOG.forceIssues === "object"
+        ? ACTIVE_CATALOG.forceIssues
+        : {};
   const BADGE_METADATA = window.VOXLIS_CONFIG?.badges ?? {};
   const ITEM_LABEL_SINGULAR = PAGE_LABELS.itemSingular || "entry";
   const ITEM_LABEL_PLURAL = PAGE_LABELS.itemPlural || "entries";
@@ -71,13 +77,21 @@
     '"': "&quot;",
     "'": "&#39;",
   };
-  const suncRequestCache = new Map();
+  const getSharedSuncRequestCache = () => {
+    if (!(window.__voxlisSuncBatchRequestCache instanceof Map)) {
+      window.__voxlisSuncBatchRequestCache = new Map();
+    }
+
+    return window.__voxlisSuncBatchRequestCache;
+  };
+  const suncRequestCache = getSharedSuncRequestCache();
   const catalogState = {
     mount: null,
     grid: null,
     cards: [],
     statusMap: {},
     filters: { ...DEFAULT_FILTERS },
+    statusRequestToken: 0,
   };
   const dispatchSearchQuerySync = (value = "") => {
     document.dispatchEvent(
@@ -490,6 +504,74 @@
   };
 
   const hasSuncTracking = (info) => Boolean(getPrimarySuncSource(info));
+  const normalizeSuncSource = (source = {}) => {
+    const scrapId = String(source?.scrapId || source?.scrap || "").trim();
+    const key = String(source?.key || source?.accessKey || "").trim();
+    return scrapId && key ? { scrapId, key } : null;
+  };
+  const buildSuncPairsParam = (sources = []) =>
+    [
+      ...new Set(
+        sources
+          .map((source) => normalizeSuncSource(source))
+          .filter(Boolean)
+          .map(({ scrapId, key }) => `${scrapId}:${key}`),
+      ),
+    ]
+      .sort()
+      .join(",");
+  const buildSuncPayloadKey = ({ scrapId = "", key = "" } = {}) => {
+    const search = new URLSearchParams();
+    if (scrapId) search.set("scrap", scrapId);
+    if (key) search.set("key", key);
+    return search.toString();
+  };
+  const buildSuncApiUrl = ({ forceRefresh = false, sources = [] } = {}) => {
+    const params = new URLSearchParams();
+    const pairs = buildSuncPairsParam(sources);
+    if (pairs) {
+      params.set("pairs", pairs);
+    }
+    if (forceRefresh) {
+      params.set("refresh", "1");
+    }
+
+    const query = params.toString();
+    if (!query) {
+      return SUNC_API_URL;
+    }
+
+    const separator = SUNC_API_URL.includes("?") ? "&" : "?";
+    return `${SUNC_API_URL}${separator}${query}`;
+  };
+  const loadSuncPayloadMap = ({ forceRefresh = false, sources = [] } = {}) => {
+    if (!SUNC_API_URL) {
+      return Promise.resolve({});
+    }
+
+    const requestUrl = buildSuncApiUrl({ forceRefresh, sources });
+    const stableUrl = buildSuncApiUrl({ sources });
+
+    if (forceRefresh) {
+      suncRequestCache.delete(stableUrl);
+    }
+
+    if (!suncRequestCache.has(requestUrl)) {
+      const request = fetchJson(requestUrl)
+        .then((payload) => (payload && typeof payload === "object" ? payload : {}))
+        .catch((error) => {
+          console.warn("Failed to load sUNC batch payload.", error);
+          return {};
+        });
+
+      suncRequestCache.set(requestUrl, request);
+      if (forceRefresh) {
+        suncRequestCache.set(stableUrl, request);
+      }
+    }
+
+    return suncRequestCache.get(requestUrl);
+  };
 
   const normalizeSuncSummary = (payload) => {
     if (!payload || typeof payload !== "object") {
@@ -521,7 +603,7 @@
     };
   };
 
-  const loadSuncSummary = async (info) => {
+  const loadSuncSummary = async (info, payloadMapPromise = null) => {
     if (!SUNC_API_URL) {
       return null;
     }
@@ -531,21 +613,11 @@
       return null;
     }
 
-    const cacheKey = `${source.scrapId}:${source.key}`;
-    if (!suncRequestCache.has(cacheKey)) {
-      const request = fetchJson(
-        `${SUNC_API_URL}?scrap=${encodeURIComponent(source.scrapId)}&key=${encodeURIComponent(source.key)}`,
-      )
-        .then((payload) => normalizeSuncSummary(payload))
-        .catch((error) => {
-          console.warn("Failed to load sUNC summary.", error);
-          return null;
-        });
-
-      suncRequestCache.set(cacheKey, request);
-    }
-
-    return suncRequestCache.get(cacheKey);
+    const payloadMap = payloadMapPromise
+      ? await payloadMapPromise
+      : await loadSuncPayloadMap({ sources: [source] });
+    const payload = payloadMap?.[buildSuncPayloadKey(source)] ?? null;
+    return normalizeSuncSummary(payload);
   };
 
   const normalizeLineText = (value = "") => String(value).replace(/\s+/g, " ").trim();
@@ -1083,13 +1155,43 @@
     `;
   };
 
-  const getPlatformStateClass = (card, statusMap, platform) => {
+  const getPlatformStatusEntry = (card, statusMap, platform) => {
     const platformState = statusMap[card.slug]?.[platform];
-    if (platformState === true) {
+    if (typeof platformState === "boolean") {
+      return {
+        updated: platformState,
+        issues: false,
+      };
+    }
+
+    if (!platformState || typeof platformState !== "object") {
+      return null;
+    }
+
+    return {
+      updated: typeof platformState.updated === "boolean" ? platformState.updated : null,
+      issues: platformState.issues === true,
+    };
+  };
+
+  const isForcedIssueState = (platform, platformState) =>
+    Boolean(FORCE_ISSUES?.[platform]) && platformState?.updated === false;
+
+  const isWarningIssueState = (platform, platformState) =>
+    isForcedIssueState(platform, platformState) ||
+    (platformState?.updated === true && platformState?.issues === true);
+
+  const getPlatformStateClass = (card, statusMap, platform) => {
+    const platformState = getPlatformStatusEntry(card, statusMap, platform);
+    if (isWarningIssueState(platform, platformState)) {
+      return "is-issue";
+    }
+
+    if (platformState?.updated === true) {
       return "is-updated";
     }
 
-    if (platformState === false) {
+    if (platformState?.updated === false) {
       return "is-not-updated";
     }
 
@@ -1106,12 +1208,24 @@
       `;
     }
 
+    const hasAndroid = platforms.includes("android");
+    const hasIos = platforms.includes("ios");
+    const unifiedMobileIssue =
+      hasAndroid &&
+      hasIos &&
+      ["android", "ios"].some((platform) =>
+        isWarningIssueState(platform, getPlatformStatusEntry(card, statusMap, platform)),
+      );
+
     return `
       <span class="ph-platform-icons" aria-hidden="true">
         ${platforms
           .map((platform) => {
             const iconClass = PLATFORM_ICONS[platform] ?? "fas fa-microchip";
-            const statusClass = getPlatformStateClass(card, statusMap, platform);
+            const statusClass =
+              unifiedMobileIssue && (platform === "android" || platform === "ios")
+                ? "is-issue"
+                : getPlatformStateClass(card, statusMap, platform);
             const label = PLATFORM_LABELS[platform] ?? titleCase(platform);
             return `<i class="${escapeHtml(iconClass)} ph-title-meta-ico ${statusClass}" title="${escapeHtml(label)}"></i>`;
           })
@@ -1247,8 +1361,8 @@
           <span class="ph-sponsor-inline">
             <span class="ph-sponsor-copy">Buy on</span>
             <span class="ph-sponsor-stack" aria-hidden="true">
+              <img class="ph-sponsor-base-image is-keyempire-logo" src="/public/assets/icons/images/keyempire-logo.png" alt="">
               <img class="ph-sponsor-base-image" src="/public/assets/icons/images/keyempire-text.png" alt="">
-              <span class="ph-sponsor-overlay-image"></span>
             </span>
             ${sponsorPriceSummary ? `<span class="ph-sponsor-price">${escapeHtml(sponsorPriceSummary)}</span>` : ""}
           </span>
@@ -1477,6 +1591,35 @@
       return {};
     }
 
+    const normalizePlatformStatus = (platform, value) => {
+      let updated = null;
+      let issues = false;
+
+      if (typeof value === "boolean") {
+        updated = value;
+      } else if (value && typeof value === "object") {
+        if (typeof value.updated === "boolean") {
+          updated = value.updated;
+        }
+
+        issues = value.issues === true;
+        if (
+          (platform === "ios" || platform === "android") &&
+          String(value.UpgradeAction || "")
+            .trim()
+            .toLowerCase() === "required"
+        ) {
+          issues = true;
+        }
+      }
+
+      if (typeof updated !== "boolean" && !issues) {
+        return null;
+      }
+
+      return { updated, issues };
+    };
+
     const hasPlatformBuckets = PLATFORM_ORDER.some(
       (platform) => payload[platform] && typeof payload[platform] === "object",
     );
@@ -1491,19 +1634,13 @@
         }
 
         Object.entries(platformEntries).forEach(([slug, value]) => {
-          const updated =
-            typeof value === "boolean"
-              ? value
-              : value && typeof value === "object" && typeof value.updated === "boolean"
-                ? value.updated
-                : null;
-
-          if (typeof updated !== "boolean") {
+          const platformStatus = normalizePlatformStatus(platform, value);
+          if (!platformStatus) {
             return;
           }
 
           normalized[slug] ??= {};
-          normalized[slug][platform] = updated;
+          normalized[slug][platform] = platformStatus;
         });
       });
 
@@ -1516,28 +1653,52 @@
         .map(([slug, value]) => [
           slug,
           Object.fromEntries(
-            Object.entries(value).filter(
-              ([platform, state]) =>
-                PLATFORM_ORDER.includes(platform) && typeof state === "boolean",
-            ),
+            Object.entries(value)
+              .map(([platform, state]) => [platform, normalizePlatformStatus(platform, state)])
+              .filter(
+                ([platform, state]) =>
+                  PLATFORM_ORDER.includes(platform) && state && typeof state === "object",
+              ),
           ),
         ])
         .filter(([, platforms]) => Object.keys(platforms).length > 0),
     );
   };
 
-  const loadUptimeStatus = async () => {
+  const buildStatusApiUrl = ({ forceRefresh = false } = {}) => {
+    if (!forceRefresh) {
+      return STATUS_API_URL;
+    }
+
+    const separator = STATUS_API_URL.includes("?") ? "&" : "?";
+    return `${STATUS_API_URL}${separator}refresh=1`;
+  };
+  const loadUptimeStatus = async ({ forceRefresh = false } = {}) => {
     if (!STATUS_API_URL) {
       return {};
     }
 
     try {
-      const payload = await fetchJson(STATUS_API_URL);
-      return normalizeStatusPayload(payload);
+      const response = await fetch(buildStatusApiUrl({ forceRefresh }), { cache: "no-cache" });
+      if (!response.ok) {
+        throw new Error(`Status API request failed (${response.status})`);
+      }
+
+      return normalizeStatusPayload(await response.json());
     } catch (error) {
       console.warn("Failed to load catalog status feed.", error);
       return {};
     }
+  };
+  const hydrateCatalogStatus = async () => {
+    const requestToken = ++catalogState.statusRequestToken;
+    const statusMap = await loadUptimeStatus();
+    if (requestToken !== catalogState.statusRequestToken || !catalogState.mount) {
+      return;
+    }
+
+    catalogState.statusMap = statusMap;
+    renderCatalogView();
   };
 
   const hasBadge = (card, badge) => Array.isArray(card.info.badges) && card.info.badges.includes(badge);
@@ -1547,18 +1708,49 @@
 
   const getCardStatusClass = (card, statusMap) => {
     const platformStates = card.info.platforms
-      ?.map((platform) => statusMap[card.slug]?.[platform])
-      .filter((value) => typeof value === "boolean");
+      ?.map((platform) => ({
+        platform,
+        state: getPlatformStatusEntry(card, statusMap, platform),
+      }))
+      .filter(
+        ({ state }) => state && (typeof state.updated === "boolean" || state.issues === true),
+      );
 
     if (!platformStates?.length) {
       return "is-status-unknown";
     }
 
-    if (platformStates.some(Boolean)) {
+    if (platformStates.some(({ platform, state }) => isWarningIssueState(platform, state))) {
+      return "is-issue";
+    }
+
+    if (platformStates.some(({ state }) => state.updated === true)) {
       return "is-updated";
     }
 
-    return "is-not-updated";
+    if (platformStates.some(({ state }) => state.updated === false)) {
+      return "is-not-updated";
+    }
+
+    return "is-status-unknown";
+  };
+
+  const getCardPriorityRank = (card, statusMap) => {
+    if (isInsecureCard(card)) {
+      return 4;
+    }
+
+    switch (getCardStatusClass(card, statusMap)) {
+      case "is-updated":
+        return 0;
+      case "is-issue":
+        return 1;
+      case "is-not-updated":
+        return 2;
+      case "is-status-unknown":
+      default:
+        return 3;
+    }
   };
 
   const compareRandom = (left, right) => {
@@ -1768,6 +1960,9 @@
 
   const sortCards = (cards, statusMap, sort = DEFAULT_FILTERS.sort) =>
     [...cards].sort((left, right) => {
+      const priorityRank = getCardPriorityRank(left, statusMap) - getCardPriorityRank(right, statusMap);
+      if (priorityRank !== 0) return priorityRank;
+
       const trendingRank = Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left));
       if (trendingRank !== 0) return trendingRank;
 
@@ -1784,6 +1979,7 @@
             hasTrendingBadge,
             hasVerifiedBadge,
             hasWarningBadge,
+            getCardPriorityRank: (card) => getCardPriorityRank(card, statusMap),
             getCardStatusClass: (card) => getCardStatusClass(card, statusMap),
           }),
         );
@@ -1848,7 +2044,7 @@
 
     return `
       <article
-        class="exploit-card-placeholder ${statusClass}${hasTrendingBadge(card) ? " is-trending" : ""}"
+        class="exploit-card-placeholder ${statusClass}${hasTrendingBadge(card) ? " is-trending" : ""}${isInsecureCard(card) ? " is-insecure" : ""}"
         data-slug="${escapeHtml(card.slug)}"
         data-title="${escapeHtml(card.title)}"
         data-platforms="${escapeHtml((card.info.platforms ?? []).join(","))}"
@@ -2070,7 +2266,9 @@
       0,
     );
     const notUpdatedCount = sortedCards.reduce(
-      (count, card) => count + (getCardStatusClass(card, statusMap) === "is-not-updated" ? 1 : 0),
+      (count, card) =>
+        count +
+        (["is-not-updated", "is-issue"].includes(getCardStatusClass(card, statusMap)) ? 1 : 0),
       0,
     );
 
@@ -2126,6 +2324,12 @@
     );
 
     const visibleEntries = infoEntries.filter(Boolean);
+    const suncSources = visibleEntries
+      .map((entry) => getPrimarySuncSource(entry.info))
+      .filter(Boolean);
+    const suncPayloadMapPromise = suncSources.length
+      ? loadSuncPayloadMap({ sources: suncSources })
+      : Promise.resolve({});
 
     const cards = await Promise.all(
       visibleEntries.map(async (entry) => {
@@ -2141,7 +2345,9 @@
                 })
               : Promise.resolve(null),
             loadReviewDocument(reviewUrl, { optional: true }),
-            entry.info.type === "external" ? Promise.resolve(null) : loadSuncSummary(entry.info),
+            entry.info.type === "external"
+              ? Promise.resolve(null)
+              : loadSuncSummary(entry.info, suncPayloadMapPromise),
           ]);
 
           const fallbackOffers = entry.isListedFree ? buildFreeLifetimeOffers(entry.info.platforms) : [];
@@ -2215,7 +2421,7 @@
 
     try {
       const assetIconAvailabilityPromise = primeAssetIconAvailability(collectCatalogAssetIcons());
-      const [cards, statusMap] = await Promise.all([loadCatalog(), loadUptimeStatus()]);
+      const cards = await loadCatalog();
       await assetIconAvailabilityPromise;
       if (!cards.length) {
         catalogState.cards = [];
@@ -2228,7 +2434,7 @@
       catalogState.mount = mount;
       catalogState.grid = grid;
       catalogState.cards = cards;
-      catalogState.statusMap = statusMap;
+      catalogState.statusMap = {};
       catalogState.filters = normalizeFilters({
         ...window.getActiveCatalogFilterState?.(),
         search: window.getActiveCatalogSearchQuery?.(),
@@ -2243,6 +2449,7 @@
         return targetCard ? buildCardMoreInfoOptions(targetCard) : null;
       });
       renderCatalogView();
+      void hydrateCatalogStatus();
     } catch (error) {
       console.error(error);
       catalogState.cards = [];
