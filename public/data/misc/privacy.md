@@ -1,6 +1,6 @@
 # Privacy
 
-This is placeholder privacy text for the site.
+This site keeps privacy handling intentionally simple.
 
 ## Browser Storage
 
@@ -11,6 +11,18 @@ This is placeholder privacy text for the site.
 
 - The site may request catalog, pricing, version, or status information from Voxlis services and linked APIs.
 - This data is used so cards, badges, and status widgets can render correctly.
+
+## Anonymous Click Analytics
+
+- The site may store anonymous aggregate click counts for certain buttons and interface actions.
+- These click counts are used only for internal site statistics and feature decisions.
+- We do not attach click counts to names, accounts, emails, or public profiles.
+- We do not store raw IP addresses as part of click statistics.
+
+## Abuse Prevention
+
+- Limited request metadata may be processed temporarily to help rate-limit spam or abuse against the click API.
+- This abuse-prevention handling is separate from the anonymous aggregate click totals.
 
 ## Third-Party Services
 
