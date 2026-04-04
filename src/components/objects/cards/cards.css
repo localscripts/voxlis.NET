@@ -258,6 +258,16 @@
   line-height: 1.45;
 }
 
+.cards-loading-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.cards-loading-action {
+  min-width: min(100%, 10rem);
+}
+
 .exploit-card-placeholder {
   --ph-side-rail-width: min(48%, 11rem);
   --ph-meta-price-width: var(--ph-side-rail-width);

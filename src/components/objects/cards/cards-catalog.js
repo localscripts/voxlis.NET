@@ -48,6 +48,7 @@
   const EMPTY_LOAD_MESSAGE = PAGE_LABELS.emptyLoadMessage || "The catalog data could not be loaded right now.";
   const EMPTY_FILTERED_MESSAGE = PAGE_LABELS.emptyFilteredMessage || "No entries match the current filters.";
   const LOADING_MESSAGE = PAGE_LABELS.loadingMessage || "Loading catalog...";
+  const LOADING_RETRY_LABEL = PAGE_LABELS.loadingRetryLabel || "Retry";
   const STATS_SHOWING_PREFIX = PAGE_LABELS.statsShowingPrefix || "Showing";
   const STATUS_LABELS = PAGE_LABELS.statusLabels || {};
   const SORT_OPTIONS_BY_VALUE = new Map(
@@ -91,6 +92,7 @@
     cards: [],
     statusMap: {},
     filters: { ...DEFAULT_FILTERS },
+    catalogRequestToken: 0,
     statusRequestToken: 0,
   };
   const dispatchSearchQuerySync = (value = "") => {
@@ -1582,6 +1584,17 @@
   };
 
   const handleCardActionClick = (event) => {
+    const loadingStateAction = event.target.closest("button[data-loading-action]");
+    if (loadingStateAction) {
+      event.preventDefault();
+
+      if (loadingStateAction.dataset.loadingAction === "retry-fetching-api" && catalogState.mount) {
+        void initActiveCatalog(catalogState.mount, { forceRefresh: true });
+      }
+
+      return;
+    }
+
     const emptyStateAction = event.target.closest("button[data-empty-action]");
     if (emptyStateAction) {
       event.preventDefault();
@@ -1727,9 +1740,9 @@
       return {};
     }
   };
-  const hydrateCatalogStatus = async () => {
+  const hydrateCatalogStatus = async ({ forceRefresh = false } = {}) => {
     const requestToken = ++catalogState.statusRequestToken;
-    const statusMap = await loadUptimeStatus();
+    const statusMap = await loadUptimeStatus({ forceRefresh });
     if (requestToken !== catalogState.statusRequestToken || !catalogState.mount) {
       return;
     }
@@ -2287,6 +2300,12 @@
       <div class="cards-loading-state" role="status" aria-live="polite">
         <img class="cards-loading-gif" src="/public/assets/misc/loading.gif" alt="" />
         <p class="cards-loading-copy">${escapeHtml(message)}</p>
+        <div class="cards-loading-actions">
+          <button class="cards-empty-action cards-loading-action" type="button" data-loading-action="retry-fetching-api">
+            <i class="fas fa-rotate-right" aria-hidden="true"></i>
+            <span>${escapeHtml(LOADING_RETRY_LABEL)}</span>
+          </button>
+        </div>
       </div>
     `;
   };
@@ -2325,7 +2344,7 @@
     window.VOXLIS_CLICK_TRACKER?.syncTrackingSummaries?.(grid);
   };
 
-  const loadCatalog = async () => {
+  const loadCatalog = async ({ forceRefresh = false } = {}) => {
     const [prices, optionalFileManifestSource] = await Promise.all([
       fetchJson(`${DATA_ROOT}/prices.json`),
       fetchJson(`${DATA_ROOT}/optional-files.json`, { optional: true }),
@@ -2366,7 +2385,7 @@
       .map((entry) => getPrimarySuncSource(entry.info))
       .filter(Boolean);
     const suncPayloadMapPromise = suncSources.length
-      ? loadSuncPayloadMap({ sources: suncSources })
+      ? loadSuncPayloadMap({ forceRefresh, sources: suncSources })
       : Promise.resolve({});
 
     const cards = await Promise.all(
@@ -2440,7 +2459,7 @@
     return cards.filter(Boolean);
   };
 
-  const initActiveCatalog = async (mount) => {
+  const initActiveCatalog = async (mount, { forceRefresh = false } = {}) => {
     if (!mount) return;
 
     const grid = mount.querySelector(".cards-grid");
@@ -2451,6 +2470,12 @@
       mount.dataset.cardActionBound = "true";
     }
 
+    const requestToken = ++catalogState.catalogRequestToken;
+    catalogState.mount = mount;
+    catalogState.grid = grid;
+    catalogState.cards = [];
+    catalogState.statusMap = {};
+    catalogState.statusRequestToken += 1;
     configureCatalogMount(mount);
     bindSummaryTextFit(mount);
     updateSummary(mount, 0, 0);
@@ -2459,8 +2484,16 @@
 
     try {
       const assetIconAvailabilityPromise = primeAssetIconAvailability(collectCatalogAssetIcons());
-      const cards = await loadCatalog();
+      const cards = await loadCatalog({ forceRefresh });
       await assetIconAvailabilityPromise;
+      if (
+        requestToken !== catalogState.catalogRequestToken ||
+        catalogState.mount !== mount ||
+        catalogState.grid !== grid
+      ) {
+        return;
+      }
+
       if (!cards.length) {
         catalogState.cards = [];
         publishCatalogStats();
@@ -2469,8 +2502,6 @@
         return;
       }
 
-      catalogState.mount = mount;
-      catalogState.grid = grid;
       catalogState.cards = cards;
       catalogState.statusMap = {};
       catalogState.filters = normalizeFilters({
@@ -2487,8 +2518,16 @@
         return targetCard ? buildCardMoreInfoOptions(targetCard) : null;
       });
       renderCatalogView();
-      void hydrateCatalogStatus();
+      void hydrateCatalogStatus({ forceRefresh });
     } catch (error) {
+      if (
+        requestToken !== catalogState.catalogRequestToken ||
+        catalogState.mount !== mount ||
+        catalogState.grid !== grid
+      ) {
+        return;
+      }
+
       console.error(error);
       catalogState.cards = [];
       publishCatalogStats();
