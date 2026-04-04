@@ -941,6 +941,8 @@
     title,
     message,
     toastIcon = "fa-circle-info",
+    trackAction = "",
+    trackSlug = "",
   }) => {
     const renderedIconMarkup = renderInfoIconMarkup({ iconClass, iconMarkup, iconToneClass, assetIcon });
     if (!renderedIconMarkup) {
@@ -957,6 +959,8 @@
         data-card-icon-message="${escapeHtml(message)}"
         data-card-icon-toast-icon="${escapeHtml(toastIcon)}"
         ${key ? `data-card-icon-key="${escapeHtml(key)}"` : ""}
+        ${trackAction ? `data-click-track-action="${escapeHtml(trackAction)}"` : ""}
+        ${trackSlug ? `data-click-track-slug="${escapeHtml(trackSlug)}"` : ""}
       >
         ${renderedIconMarkup}
       </button>
@@ -1084,7 +1088,7 @@
     return fragments.join(" | ");
   };
 
-  const buildTagChipMarkup = (tags = []) => {
+  const buildTagChipMarkup = (tags = [], slug = "") => {
     const normalizedTags = Array.isArray(tags)
       ? tags.map((tag) => normalizeLineText(tag)).filter(Boolean)
       : [];
@@ -1117,6 +1121,8 @@
           title: tagEntry.title,
           message: tagEntry.message || `${tagEntry.title} is supported by this product.`,
           toastIcon: "fa-circle-info",
+          trackAction: "tag",
+          trackSlug: slug,
         });
       })
       .filter(Boolean);
@@ -1135,7 +1141,7 @@
   const buildCardMetaMarkup = (card, statusMap) => {
     const platformText = buildPlatformText(card.info);
     const typeText = buildTypeText(card.info);
-    const tagMarkup = buildTagChipMarkup(card.info.tags);
+    const tagMarkup = buildTagChipMarkup(card.info.tags, card.slug);
     const priceSummary = formatPriceSummary(card.offers);
     const textLabel =
       platformText && !tagMarkup && typeText
@@ -1269,6 +1275,7 @@
       title: card.title || "More info",
       description: buildReviewDescription(card, summaryLines),
       reviewUrl: getCardReviewUrl(card),
+      trackingSlug: card.slug || "",
       websiteUrl:
         card.info?.website ||
         card.pricing?.purchaseUrl ||
@@ -1319,6 +1326,8 @@
         class="ph-rating ph-rating-btn"
         type="button"
         data-card-sunc-open
+        data-click-track-action="sunc"
+        data-click-track-slug="${escapeHtml(card?.slug || "")}"
         aria-label="Open ${escapeHtml(card?.title || "this card")} sUNC widget"
         title="Open sUNC widget"
       >
@@ -1357,7 +1366,7 @@
     const sponsorPriceSummary = formatSponsorPriceSummary(offers);
     const sponsorMarkup = /key-empire\.com/i.test(purchaseUrl ?? "")
       ? `
-        <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
+        <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire" data-click-track-action="buy-keyempire" data-click-track-slug="${escapeHtml(slug)}"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
           <span class="ph-sponsor-inline">
             <span class="ph-sponsor-copy">Buy on</span>
             <span class="ph-sponsor-stack" aria-hidden="true">
@@ -1388,16 +1397,40 @@
     return `
       <div class="ph-actions">
         <div class="ph-primary-actions">
-          <a class="ph-action-btn is-review${hasYoutubeIndicator ? " has-youtube-indicator" : " is-disabled"}"${reviewButtonAttributes}>
+          <a class="ph-action-btn is-review${hasYoutubeIndicator ? " has-youtube-indicator" : " is-disabled"}" data-click-track-action="review" data-click-track-slug="${escapeHtml(slug)}"${reviewButtonAttributes}>
             <i class="fab fa-youtube" aria-hidden="true"></i> <span class="ph-action-label">Review</span>
           </a>
-          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}"${websiteDataAttributes}${websiteWarningDataAttributes}>
+          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-click-track-action="more" data-click-track-slug="${escapeHtml(slug)}" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}"${websiteDataAttributes}${websiteWarningDataAttributes}>
             <span class="ph-action-icon is-info" aria-hidden="true"></span> More
           </a>
         </div>
         ${sponsorMarkup}
       </div>
     `;
+  };
+
+  const handleTrackedActionClick = (event) => {
+    const trigger = event.target.closest("[data-click-track-action]");
+    if (!trigger) {
+      return;
+    }
+
+    if (trigger.getAttribute("aria-disabled") === "true" || trigger.classList.contains("is-disabled")) {
+      return;
+    }
+
+    const article = trigger.closest("article[data-slug]");
+    const slug = trigger.dataset.clickTrackSlug || article?.dataset.slug || "";
+    const action = trigger.dataset.clickTrackAction || "";
+    if (!slug || !action) {
+      return;
+    }
+
+    window.VOXLIS_CLICK_TRACKER?.trackAction?.({
+      pageKey: PAGE_KEY,
+      slug,
+      action,
+    });
   };
 
   const handleMoreInfoActionClick = (event) => {
@@ -1423,6 +1456,7 @@
               description: trigger.dataset.cardWebsiteWarningDescription || "",
             }
           : null,
+        trackingSlug: slug,
         modalPath: getCardMoreInfoPath(slug),
       };
     const opened =
@@ -1491,6 +1525,7 @@
         highlightContentKey,
         preserveTitle: true,
         hideWebsiteButton: true,
+        trackingSlug: slug,
       }) ??
         false);
 
@@ -1567,6 +1602,8 @@
         return;
       }
     }
+
+    handleTrackedActionClick(event);
 
     handleTitleIconClick(event);
     if (event.defaultPrevented) {
@@ -2285,6 +2322,7 @@
 
     grid.classList.remove("is-empty");
     grid.innerHTML = sortedCards.map((card) => renderCard(card, statusMap)).join("");
+    window.VOXLIS_CLICK_TRACKER?.syncTrackingSummaries?.(grid);
   };
 
   const loadCatalog = async () => {

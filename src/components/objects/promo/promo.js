@@ -14,18 +14,21 @@
         {
           href: "https://discord.gg/Ynxbp2YPus",
           label: "Discord",
+          trackingKey: "discord",
           buttonClassName: "promo-action-button-discord",
           iconClass: "fab fa-discord",
         },
         {
           href: "https://www.youtube.com/channel/UCRDj_epbbwvpLTCFDmeL7Zg",
           label: "YouTube",
+          trackingKey: "youtube",
           buttonClassName: "promo-action-button-youtube",
           iconClass: "fab fa-youtube",
         },
         {
           href: "https://www.trustpilot.com/review/voxlis.net",
           label: "Trustpilot",
+          trackingKey: "trustpilot",
           buttonClassName: "promo-action-button-trustpilot",
           iconClass: "fas fa-star",
         },
@@ -72,11 +75,20 @@
     });
   };
 
-  const buildPromoActionMarkup = ({ href, label, buttonClassName, iconClass }) => `
+  const normalizeTrackingKey = (value = "") =>
+    String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+  const buildPromoActionMarkup = ({ href, label, trackingKey = "", buttonClassName, iconClass }) => `
     <button
       class="promo-action-button ${escapeHtml(buttonClassName)}"
       type="button"
       data-promo-href="${escapeHtml(href)}"
+      data-click-track-ui-group="promo"
+      data-click-track-ui-key="${escapeHtml(normalizeTrackingKey(trackingKey || label))}"
     >
       <span class="promo-action-icon">
         <i class="${escapeHtml(iconClass)}"></i>
@@ -95,6 +107,8 @@
           class="promo-close-button"
           type="button"
           data-promo-close
+          data-click-track-ui-group="promo"
+          data-click-track-ui-key="close"
           aria-label="Close Discord community promo"
         >
           <i class="fas fa-xmark" aria-hidden="true"></i>

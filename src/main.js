@@ -31,6 +31,12 @@
       mount.innerHTML = await response.text();
       return mount;
     });
+  const trackToastEvent = (key = "") => {
+    window.VOXLIS_CLICK_TRACKER?.trackUiEvent?.({
+      group: "toasts",
+      key,
+    });
+  };
 
   const initCardChipOverflow = (root = document) => {
     const chipWraps = [...root.querySelectorAll(".ph-chips-wrap")];
@@ -104,6 +110,7 @@
       }
 
       root.dataset.themesPromptState = "shown";
+      trackToastEvent("themes-prompt-show");
       window.showSiteToast?.({
         key: "themes-prompt",
         title: "Try themes?",
@@ -112,8 +119,14 @@
         icon: "fa-palette",
         actionLabel: "Open themes",
         actionIcon: "fa-palette",
-        onAction: openThemes,
-        onDismiss: () => {
+        onAction: () => {
+          trackToastEvent("themes-prompt-open");
+          openThemes();
+        },
+        onDismiss: (_toast, source) => {
+          if (source !== "action") {
+            trackToastEvent("themes-prompt-close");
+          }
           document.removeEventListener("voxlis:themes-opened", handleThemesOpened);
           root.dataset.themesPromptState = "dismissed";
         },
@@ -151,6 +164,7 @@
       if (root.dataset.filtersPromptState !== "scheduled") return;
 
       root.dataset.filtersPromptState = "shown";
+      trackToastEvent("filters-prompt-show");
       window.showSiteToast?.({
         key: "filters-prompt",
         title: filterPrompt.title || "Try filters?",
@@ -159,13 +173,17 @@
         icon: "fa-sliders",
         actionLabel: "Open filters",
         actionIcon: "fa-sliders-h",
-        onAction: openFilters,
+        onAction: () => {
+          trackToastEvent("filters-prompt-open");
+          openFilters();
+        },
         onDismiss: (_toast, source) => {
           document.removeEventListener("voxlis:filter-opened", handleFilterOpened);
           if (source === "action") {
             return;
           }
 
+          trackToastEvent("filters-prompt-close");
           root.dataset.filtersPromptState = "dismissed";
           queueThemesPrompt(root);
         },

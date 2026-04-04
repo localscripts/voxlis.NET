@@ -27,7 +27,12 @@
       <div class="${getFeaturedCardClassName()}">
         <div class="featured-card-header">
           <h3 class="featured-card-title">${escapeHtml(cardConfig.title || "Featured")}</h3>
-          <button type="button" class="featured-hide-button">${escapeHtml(cardConfig.hideButtonLabel || "Hide ads")}</button>
+          <button
+            type="button"
+            class="featured-hide-button"
+            data-click-track-ui-group="featured"
+            data-click-track-ui-key="hide-ads"
+          >${escapeHtml(cardConfig.hideButtonLabel || "Hide ads")}</button>
         </div>
 
         <div class="featured-card-body">
@@ -36,6 +41,8 @@
             target="_blank"
             rel="noopener noreferrer"
             class="featured-media-link"
+            data-click-track-ui-group="featured"
+            data-click-track-ui-key="request"
           >
             <img src="${escapeHtml(cardConfig.backgroundImageSrc || "/public/assets/overlay/promo-1.png")}" alt="${escapeHtml(cardConfig.backgroundImageAlt || "Advertisement background")}" class="featured-background-image">
             <img src="${escapeHtml(cardConfig.logoImageSrc || "/public/assets/overlay/promo-2.png")}" alt="${escapeHtml(cardConfig.logoImageAlt || "")}" class="featured-logo-image" aria-hidden="true">

@@ -7,7 +7,7 @@
 <header id="hdr" class="navbar-header">
   <div class="cntr">
     <div class="navbar-layout">
-      <a href="/roblox.html" class="navbar-logo-link" id="navbarHomeLink">
+      <a href="/roblox.html" class="navbar-logo-link" id="navbarHomeLink" data-click-track-ui-group="navbar" data-click-track-ui-key="logo-home">
         <span class="navbar-logo-stack" aria-hidden="true">
           <img src="/public/assets/overlay/voxlis-1.png" alt="" class="navbar-logo-base-image">
           <span class="navbar-logo-overlay-image"></span>
@@ -24,7 +24,7 @@
       </div>
 
       <nav class="navbar-links">
-        <a href="/roblox.html" class="navbar-link" id="navbarDesktopHomeLink" aria-label="Home">
+        <a href="/roblox.html" class="navbar-link" id="navbarDesktopHomeLink" aria-label="Home" data-click-track-ui-group="navbar" data-click-track-ui-key="desktop-home">
           <span class="navbar-icon navbar-svg-icon navbar-home-icon" aria-hidden="true"></span>
           <span class="navbar-label">Home</span>
         </a>
@@ -33,49 +33,53 @@
            class="navbar-link"
            aria-label="GitHub"
            target="_blank"
-           rel="noopener noreferrer">
+           rel="noopener noreferrer"
+           data-click-track-ui-group="navbar"
+           data-click-track-ui-key="desktop-github">
           <span class="navbar-icon navbar-svg-icon navbar-github-icon" aria-hidden="true"></span>
           <span class="navbar-label">GitHub</span>
         </a>
 
-        <button id="themeNavTrigger" class="navbar-button is-accent" aria-label="Themes" type="button">
+        <button id="themeNavTrigger" class="navbar-button is-accent" aria-label="Themes" type="button" data-click-track-ui-group="navbar" data-click-track-ui-key="desktop-themes">
           <span class="navbar-icon navbar-svg-icon navbar-palette-icon" aria-hidden="true"></span>
           <span class="navbar-label">Themes</span>
         </button>
 
-        <button id="filterButton" class="navbar-button is-accent" aria-label="Filter">
+        <button id="filterButton" class="navbar-button is-accent" aria-label="Filter" data-click-track-ui-group="navbar" data-click-track-ui-key="desktop-filter">
           <span class="navbar-icon navbar-svg-icon navbar-filter-icon" aria-hidden="true"></span>
           <span class="navbar-label">Filter</span>
         </button>
       </nav>
 
       <nav class="mobile-quick-nav" aria-label="Quick links">
-        <button id="mobQuickSearchBtn" class="mobile-quick-button is-plain" aria-label="Search" type="button">
+        <button id="mobQuickSearchBtn" class="mobile-quick-button is-plain" aria-label="Search" type="button" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-quick-search">
           <span class="navbar-svg-icon navbar-search-glyph" aria-hidden="true"></span>
         </button>
         <a href="https://github.com/localscripts/voxlis.NET"
            class="mobile-quick-button is-plain"
            aria-label="GitHub"
            target="_blank"
-           rel="noopener noreferrer">
+           rel="noopener noreferrer"
+           data-click-track-ui-group="navbar"
+           data-click-track-ui-key="mobile-quick-github">
           <span class="navbar-svg-icon navbar-github-icon" aria-hidden="true"></span>
         </a>
-        <button id="mobQuickThemeBtn" class="mobile-quick-button is-accent" aria-label="Themes" type="button">
+        <button id="mobQuickThemeBtn" class="mobile-quick-button is-accent" aria-label="Themes" type="button" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-quick-themes">
           <span class="navbar-svg-icon navbar-palette-icon" aria-hidden="true"></span>
         </button>
-        <button id="mobileQuickFilterButton" class="mobile-quick-button is-accent" aria-label="Filter" type="button">
+        <button id="mobileQuickFilterButton" class="mobile-quick-button is-accent" aria-label="Filter" type="button" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-quick-filter">
           <span class="navbar-svg-icon navbar-filter-icon" aria-hidden="true"></span>
         </button>
       </nav>
 
       <div class="mobile-header-actions">
-        <button class="mobile-search-toggle" id="mobSearchTgl" aria-label="Open mobile search">
+        <button class="mobile-search-toggle" id="mobSearchTgl" aria-label="Open mobile search" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-top-search">
           <span class="navbar-svg-icon navbar-search-glyph" aria-hidden="true"></span>
         </button>
-        <button class="mobile-filter-toggle" id="mobileTopFilterButton" aria-label="Filter">
+        <button class="mobile-filter-toggle" id="mobileTopFilterButton" aria-label="Filter" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-top-filter">
           <span class="navbar-svg-icon navbar-filter-icon" aria-hidden="true"></span>
         </button>
-        <button class="mobile-menu-toggle" id="mobMenuTgl" aria-label="Toggle mobile menu">
+        <button class="mobile-menu-toggle" id="mobMenuTgl" aria-label="Toggle mobile menu" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-top-menu">
           <span class="navbar-svg-icon navbar-menu-icon" aria-hidden="true"></span>
         </button>
       </div>
@@ -107,21 +111,23 @@
       </div>
 
       <nav class="mobile-nav">
-        <a href="/roblox.html" class="mobile-nav-link has-icon" id="navbarMobileHomeLink"><span class="navbar-svg-icon navbar-home-icon" aria-hidden="true"></span> Home</a>
+        <a href="/roblox.html" class="mobile-nav-link has-icon" id="navbarMobileHomeLink" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-menu-home"><span class="navbar-svg-icon navbar-home-icon" aria-hidden="true"></span> Home</a>
 
         <a href="https://github.com/localscripts/voxlis.NET"
            class="mobile-nav-link has-icon"
            target="_blank"
-           rel="noopener noreferrer">
+           rel="noopener noreferrer"
+           data-click-track-ui-group="navbar"
+           data-click-track-ui-key="mobile-menu-github">
           <span class="navbar-svg-icon navbar-github-icon" aria-hidden="true"></span>
           GitHub
         </a>
 
-        <button id="mobThemeBtn" class="mobile-nav-link is-accent has-icon" type="button">
+        <button id="mobThemeBtn" class="mobile-nav-link is-accent has-icon" type="button" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-menu-themes">
           <span class="navbar-svg-icon navbar-palette-icon" aria-hidden="true"></span> Themes
         </button>
 
-        <button id="mobileMenuFilterButton" class="mobile-nav-link has-icon">
+        <button id="mobileMenuFilterButton" class="mobile-nav-link has-icon" data-click-track-ui-group="navbar" data-click-track-ui-key="mobile-menu-filter">
           <span class="navbar-svg-icon navbar-filter-icon" aria-hidden="true"></span> Filter
         </button>
       </nav>

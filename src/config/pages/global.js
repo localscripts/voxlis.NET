@@ -61,18 +61,21 @@
         {
           href: "https://discord.gg/Ynxbp2YPus",
           label: "Discord",
+          trackingKey: "discord",
           buttonClassName: "promo-action-button-discord",
           iconClass: "fab fa-discord",
         },
         {
           href: "https://www.youtube.com/channel/UCRDj_epbbwvpLTCFDmeL7Zg",
           label: "YouTube",
+          trackingKey: "youtube",
           buttonClassName: "promo-action-button-youtube",
           iconClass: "fab fa-youtube",
         },
         {
           href: "https://www.trustpilot.com/review/voxlis.net",
           label: "Trustpilot",
+          trackingKey: "trustpilot",
           buttonClassName: "promo-action-button-trustpilot",
           iconClass: "fas fa-star",
         },

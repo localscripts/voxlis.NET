@@ -68,6 +68,7 @@
     previousBodyOverflow: "",
     requestToken: 0,
     activePath: "",
+    trackingSlug: "",
   };
 
   let markedConfigured = false;
@@ -393,6 +394,19 @@
     window.location.assign(href);
   };
 
+  const trackModalCardAction = (action = "") => {
+    const trackingSlug = String(modalState.trackingSlug || "").trim();
+    const trackingAction = String(action || "").trim().toLowerCase();
+    if (!trackingSlug || !trackingAction) {
+      return;
+    }
+
+    window.VOXLIS_CLICK_TRACKER?.trackAction?.({
+      slug: trackingSlug,
+      action: trackingAction,
+    });
+  };
+
   const ensureMoreInfoModal = () => {
     let modal = document.getElementById("moreInfoModal");
     if (modal) {
@@ -444,6 +458,9 @@
 
     modal.addEventListener("click", (event) => {
       if (event.target.closest("[data-more-info-close]")) {
+        if (event.target.closest(".info-modal-close-btn")) {
+          trackModalCardAction("close");
+        }
         requestCloseMoreInfoModal();
       }
     });
@@ -462,6 +479,7 @@
         return;
       }
 
+      trackModalCardAction("website");
       const warningType = websiteButton.dataset.warningType || "";
       if (!warningType || typeof window.openCardWarningModal !== "function") {
         return;
@@ -503,6 +521,7 @@
     modalState.previousBodyOverflow = "";
     modalState.closeTimerId = 0;
     modalState.activePath = "";
+    modalState.trackingSlug = "";
   };
 
   function closeMoreInfoModal() {
@@ -560,6 +579,7 @@
     highlightContentKey = "",
     preserveTitle = false,
     hideWebsiteButton = false,
+    trackingSlug = "",
     modalPath = "",
     pushHistory = true,
   } = {}) => {
@@ -593,6 +613,7 @@
 
     modalState.requestToken = requestToken;
     modalState.activePath = normalizedModalPath;
+    modalState.trackingSlug = String(trackingSlug).trim();
     titleNode.textContent = modalTitle;
     nameNode.textContent = "";
     nameNode.hidden = true;

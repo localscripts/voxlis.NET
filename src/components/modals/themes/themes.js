@@ -1937,6 +1937,7 @@
         return;
       }
 
+      trackThemeEvent("drawer-close");
       stopThemeDrawerResize({ persist: true });
       window.clearTimeout(closeDrawerTimerId);
       closeDrawerTimerId = 0;
@@ -1976,21 +1977,33 @@
       setActiveThemeDrawerTab(scope, tab);
 
       if (!wasOpen) {
+        trackThemeEvent("drawer-open");
         document.dispatchEvent(new CustomEvent("voxlis:themes-opened"));
       }
+    };
+
+    const trackThemeEvent = (key = "") => {
+      window.VOXLIS_CLICK_TRACKER?.trackUiEvent?.({
+        group: "themes",
+        key,
+      });
     };
 
     tabButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
-        setActiveThemeDrawerTab(scope, button.dataset.themeTab || THEME_DRAWER_DEFAULT_TAB);
+        const nextTab = button.dataset.themeTab || THEME_DRAWER_DEFAULT_TAB;
+        trackThemeEvent(`tab-${nextTab}`);
+        setActiveThemeDrawerTab(scope, nextTab);
       });
     });
 
     editorTabButtons.forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
-        setActiveThemeEditorTab(scope, button.dataset.editorTab || THEME_DRAWER_DEFAULT_EDITOR_TAB);
+        const nextTab = button.dataset.editorTab || THEME_DRAWER_DEFAULT_EDITOR_TAB;
+        trackThemeEvent(`editor-${nextTab}`);
+        setActiveThemeEditorTab(scope, nextTab);
       });
     });
 
@@ -2010,10 +2023,12 @@
     });
 
     hideFeaturedAdsInput?.addEventListener("change", () => {
+      trackThemeEvent("hide-featured-ads");
       applyFeaturedAdsVisibility(hideFeaturedAdsInput.checked);
     });
 
     hidePromoInput?.addEventListener("change", () => {
+      trackThemeEvent("hide-promo");
       applyPromoVisibility(hidePromoInput.checked);
     });
 
@@ -2133,6 +2148,7 @@
 
     restoreDefaultsButton?.addEventListener("click", (event) => {
       event.preventDefault();
+      trackThemeEvent("restore-defaults");
       restoreThemeDefaults(scope);
       setActiveThemeDrawerTab(scope, THEME_DRAWER_DEFAULT_TAB);
     });
@@ -2148,6 +2164,8 @@
 
       const appliedValue = applyBackgroundMedia(normalized);
       syncBackgroundMediaUI(scope, { value: appliedValue, effectiveValue: appliedValue });
+      trackThemeEvent("background-apply");
+      return true;
     };
 
     backgroundMediaApplyButton?.addEventListener("click", (event) => {
@@ -2160,6 +2178,7 @@
       applyBackgroundMedia("");
       const effectiveValue = syncEffectiveBackgroundMedia();
       syncBackgroundMediaUI(scope, { value: "", effectiveValue });
+      trackThemeEvent("background-clear");
     });
 
     backgroundMediaInput?.addEventListener("keydown", (event) => {
@@ -2174,6 +2193,7 @@
 
     themeTransferExportButton?.addEventListener("click", async (event) => {
       event.preventDefault();
+      trackThemeEvent("export");
 
       const nextValue = buildThemeTransferText();
       if (themeTransferTextarea) {
@@ -2192,6 +2212,7 @@
 
     themeTransferImportButton?.addEventListener("click", (event) => {
       event.preventDefault();
+      trackThemeEvent("import");
 
       const result = applyThemeTransferText(themeTransferTextarea?.value || "");
       syncThemeSwitcherUI(scope);
@@ -2218,6 +2239,7 @@
         event.preventDefault();
         event.stopPropagation();
 
+        trackThemeEvent("preset-select");
         const nextTheme = applyTheme(option.dataset.theme || "blue");
         syncSelectedOption(scope, nextTheme, getStoredCustomHex());
       });
@@ -2228,6 +2250,7 @@
         }
 
         event.preventDefault();
+        trackThemeEvent("preset-select");
         const nextTheme = applyTheme(option.dataset.theme || "blue");
         syncSelectedOption(scope, nextTheme, getStoredCustomHex());
       });

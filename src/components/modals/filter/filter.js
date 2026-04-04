@@ -464,6 +464,10 @@
     closeMobileNavbarPanels();
     syncInsecureButtonState();
     setDrawerOpen(true);
+    window.VOXLIS_CLICK_TRACKER?.trackUiEvent?.({
+      group: "filters",
+      key: "drawer-open",
+    });
     document.dispatchEvent(new CustomEvent("voxlis:filter-opened"));
   };
 
