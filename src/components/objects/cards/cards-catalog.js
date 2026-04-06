@@ -5,6 +5,7 @@
     dataRoot: DATA_ROOT = "/public/data/roblox",
     statusApiUrl: STATUS_API_URL = "https://api.voxlis.net/api/endpoints",
     suncApiUrl: SUNC_API_URL = "https://api.voxlis.net/api/sunc",
+    pricingFallbackUrl: PRICING_FALLBACK_URL = "",
     warningModalEnabled: WARNING_MODAL_ENABLED = false,
     cardNameOverrides: CARD_NAME_OVERRIDES = {},
     cardFolderOverrides: CARD_FOLDER_OVERRIDES = {},
@@ -82,6 +83,13 @@
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;",
+  };
+  const KEY_EMPIRE_HOSTNAME_PATTERN = /(^|\.)key-empire\.com$/i;
+  const KEY_EMPIRE_PRODUCT_SLUG_ALIASES = {
+    "matrix-hub": "matrix",
+  };
+  const KEY_EMPIRE_PRODUCT_PLATFORM_OVERRIDES = {
+    macsploit: "macos",
   };
   const getSharedSuncRequestCache = () => {
     if (!(window.__voxlisSuncBatchRequestCache instanceof Map)) {
@@ -282,6 +290,193 @@
     }
 
     throw new Error(`Failed to load JSON (${path}): ${response.status}`);
+  };
+  const normalizeKeyEmpireSlug = (value = "") =>
+    KEY_EMPIRE_PRODUCT_SLUG_ALIASES[normalizeSlugKey(value)] ?? normalizeSlugKey(value);
+  const buildKeyEmpireProductUrl = (slug = "") => {
+    const normalizedSlug = normalizeSlugKey(slug);
+    return normalizedSlug ? `https://key-empire.com/product/${encodeURIComponent(normalizedSlug)}` : "";
+  };
+  const isKeyEmpirePurchaseUrl = (value = "") => {
+    const normalizedValue = String(value || "").trim();
+    if (!normalizedValue) {
+      return false;
+    }
+
+    try {
+      const parsedUrl = new URL(normalizedValue, window.location.origin);
+      return KEY_EMPIRE_HOSTNAME_PATTERN.test(parsedUrl.hostname);
+    } catch {
+      return false;
+    }
+  };
+  const getPricingPlatforms = (pricing = null) => {
+    if (!pricing || typeof pricing !== "object") {
+      return [];
+    }
+
+    const directPlatforms = Array.isArray(pricing.offers)
+      ? pricing.offers.map((offer) => String(offer?.platform || "").trim().toLowerCase())
+      : [];
+    const groupedPlatforms =
+      pricing.platforms && typeof pricing.platforms === "object"
+        ? Object.keys(pricing.platforms).map((platform) => String(platform || "").trim().toLowerCase())
+        : [];
+
+    return [...new Set([...directPlatforms, ...groupedPlatforms].filter(Boolean))];
+  };
+  const normalizeKeyEmpireDuration = (value) => {
+    if (typeof value === "string" && value.toLowerCase() === "lifetime") {
+      return -1;
+    }
+
+    const duration = Number(value);
+    return Number.isFinite(duration) && duration > 0 ? duration : null;
+  };
+  const normalizeKeyEmpireProductMap = (payload = {}) => {
+    const sourceProducts =
+      payload?.products && typeof payload.products === "object" ? payload.products : {};
+
+    return Object.fromEntries(
+      Object.entries(sourceProducts)
+        .map(([sourceSlug, product]) => [
+          normalizeKeyEmpireSlug(sourceSlug),
+          {
+            sourceSlug: normalizeSlugKey(sourceSlug),
+            durations: Array.isArray(product?.durations) ? product.durations : [],
+          },
+        ])
+        .filter(([slug]) => Boolean(slug)),
+    );
+  };
+  const buildKeyEmpirePricingEntry = (product = {}, currentPricing = null) => {
+    const platforms = getPricingPlatforms(currentPricing);
+    if (platforms.length > 1) {
+      return null;
+    }
+
+    const normalizedProductSlug = normalizeKeyEmpireSlug(product?.sourceSlug);
+    const platform =
+      platforms[0] || KEY_EMPIRE_PRODUCT_PLATFORM_OVERRIDES[normalizedProductSlug] || "windows";
+    const offers = (Array.isArray(product?.durations) ? product.durations : [])
+      .map((durationEntry) => {
+        const days = normalizeKeyEmpireDuration(durationEntry?.duration);
+        const price = Number(durationEntry?.price);
+
+        if (days === null || !Number.isFinite(price)) {
+          return null;
+        }
+
+        return {
+          platform,
+          days,
+          price,
+        };
+      })
+      .filter(Boolean);
+
+    if (!offers.length) {
+      return null;
+    }
+
+    return {
+      purchaseUrl: buildKeyEmpireProductUrl(product?.sourceSlug),
+      offers,
+    };
+  };
+  // Keep the local manifest as the full catalog source, and only replace Key-Empire offer data when the live feed is available.
+  const mergeKeyEmpirePricing = (localPrices = {}, remoteProducts = {}) => {
+    const sourcePrices =
+      localPrices && typeof localPrices === "object" ? localPrices : {};
+    const mergedPrices = { ...sourcePrices };
+
+    Object.entries(sourcePrices).forEach(([slug, localEntry]) => {
+      if (slug === "freeProducts" || slug.startsWith("$")) {
+        return;
+      }
+
+      if (!localEntry || typeof localEntry !== "object") {
+        return;
+      }
+
+      const localPurchaseUrl = String(localEntry.purchaseUrl || localEntry.purchase_url || "").trim();
+      if (localPurchaseUrl && !isKeyEmpirePurchaseUrl(localPurchaseUrl)) {
+        return;
+      }
+
+      const remoteProduct = remoteProducts[normalizeSlugKey(slug)];
+      if (!remoteProduct) {
+        return;
+      }
+
+      const remoteEntry = buildKeyEmpirePricingEntry(remoteProduct, localEntry);
+      if (!remoteEntry) {
+        return;
+      }
+
+      mergedPrices[slug] = {
+        ...localEntry,
+        ...remoteEntry,
+        purchaseUrl: localPurchaseUrl || remoteEntry.purchaseUrl,
+      };
+    });
+
+    return mergedPrices;
+  };
+  const buildPricingCatalogFromKeyEmpire = (remoteProducts = {}) =>
+    Object.fromEntries(
+      Object.entries(remoteProducts)
+        .map(([slug, product]) => [slug, buildKeyEmpirePricingEntry(product)])
+        .filter(([, entry]) => Boolean(entry)),
+    );
+  const loadPricingCatalog = async () => {
+    const remotePricingRequest = PRICING_FALLBACK_URL
+      ? fetchJson(PRICING_FALLBACK_URL).then((payload) => normalizeKeyEmpireProductMap(payload))
+      : Promise.resolve({});
+    const [localPricingResult, remotePricingResult] = await Promise.allSettled([
+      fetchJson(`${DATA_ROOT}/prices.json`),
+      remotePricingRequest,
+    ]);
+
+    const localPrices =
+      localPricingResult.status === "fulfilled" &&
+      localPricingResult.value &&
+      typeof localPricingResult.value === "object"
+        ? localPricingResult.value
+        : null;
+    const remoteProducts =
+      remotePricingResult.status === "fulfilled" &&
+      remotePricingResult.value &&
+      typeof remotePricingResult.value === "object"
+        ? remotePricingResult.value
+        : {};
+
+    if (remotePricingResult.status === "rejected" && PRICING_FALLBACK_URL) {
+      console.warn("Failed to load Key-Empire pricing feed.", remotePricingResult.reason);
+    }
+
+    if (localPrices) {
+      return mergeKeyEmpirePricing(localPrices, remoteProducts);
+    }
+
+    if (localPricingResult.status === "rejected") {
+      console.warn("Failed to load local pricing manifest.", localPricingResult.reason);
+    }
+
+    const remoteOnlyPrices = buildPricingCatalogFromKeyEmpire(remoteProducts);
+    if (Object.keys(remoteOnlyPrices).length) {
+      return remoteOnlyPrices;
+    }
+
+    if (localPricingResult.status === "rejected") {
+      throw localPricingResult.reason;
+    }
+
+    if (remotePricingResult.status === "rejected") {
+      throw remotePricingResult.reason;
+    }
+
+    throw new Error("Failed to load pricing feeds.");
   };
 
   const buildPopularityRequestUrl = () => {
@@ -2469,7 +2664,7 @@
 
   const loadCatalog = async ({ forceRefresh = false } = {}) => {
     const [prices, optionalFileManifestSource] = await Promise.all([
-      fetchJson(`${DATA_ROOT}/prices.json`),
+      loadPricingCatalog(),
       fetchJson(`${DATA_ROOT}/optional-files.json`, { optional: true }),
     ]);
     const optionalFileManifest = normalizeOptionalFileManifest(optionalFileManifestSource);
