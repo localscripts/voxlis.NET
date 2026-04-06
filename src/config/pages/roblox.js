@@ -172,7 +172,7 @@
     },
     clickTracking: {
       enabled: true,
-      endpointUrl: "http://localhost:8000/data",
+      endpointUrl: "https://connect.voxlis.net/data",
       trackedActions: ["review", "more", "buy-keyempire", "sunc", "tag", "website", "close"],
       trackedUiEvents: {
         navbar: [
