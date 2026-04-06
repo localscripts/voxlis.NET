@@ -40,6 +40,11 @@
       : ACTIVE_CATALOG.forceIssues && typeof ACTIVE_CATALOG.forceIssues === "object"
         ? ACTIVE_CATALOG.forceIssues
         : {};
+  const CLICK_TRACKING_CONFIG =
+    ACTIVE_CATALOG.clickTracking && typeof ACTIVE_CATALOG.clickTracking === "object"
+      ? ACTIVE_CATALOG.clickTracking
+      : {};
+  const POPULARITY_ENDPOINT_URL = String(CLICK_TRACKING_CONFIG.endpointUrl || "").trim();
   const BADGE_METADATA = window.VOXLIS_CONFIG?.badges ?? {};
   const ITEM_LABEL_SINGULAR = PAGE_LABELS.itemSingular || "entry";
   const ITEM_LABEL_PLURAL = PAGE_LABELS.itemPlural || "entries";
@@ -91,8 +96,10 @@
     grid: null,
     cards: [],
     statusMap: {},
+    popularityRanks: new Map(),
     filters: { ...DEFAULT_FILTERS },
     catalogRequestToken: 0,
+    popularityRequestToken: 0,
     statusRequestToken: 0,
   };
   const dispatchSearchQuerySync = (value = "") => {
@@ -126,6 +133,7 @@
     value
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, (character) => character.toUpperCase());
+  const normalizeSlugKey = (value = "") => String(value || "").trim().toLowerCase();
 
   const normalizePath = (path = "/") => {
     const trimmed = `${path}`.replace(/\/+$/, "");
@@ -274,6 +282,121 @@
     }
 
     throw new Error(`Failed to load JSON (${path}): ${response.status}`);
+  };
+
+  const buildPopularityRequestUrl = () => {
+    if (!POPULARITY_ENDPOINT_URL) {
+      return "";
+    }
+
+    const requestUrl = new URL(POPULARITY_ENDPOINT_URL, window.location.origin);
+    requestUrl.searchParams.set("page", PAGE_KEY);
+    return requestUrl.toString();
+  };
+
+  const buildPopularitySlugsFromCounts = (counts = {}) =>
+    Object.entries(counts && typeof counts === "object" ? counts : {})
+      .map(([slug, actionCounts]) => {
+        const total = Object.values(actionCounts && typeof actionCounts === "object" ? actionCounts : {}).reduce(
+          (sum, count) => sum + (Number.isFinite(Number(count)) ? Math.max(0, Math.floor(Number(count))) : 0),
+          0,
+        );
+
+        return {
+          slug: normalizeSlugKey(slug),
+          total,
+        };
+      })
+      .filter((entry) => entry.slug && entry.total > 0)
+      .sort((left, right) => right.total - left.total || left.slug.localeCompare(right.slug))
+      .map((entry) => entry.slug);
+
+  const extractPopularityLeaderboard = (payload) => {
+    if (Array.isArray(payload)) {
+      return [...new Set(payload.map((slug) => normalizeSlugKey(slug)).filter(Boolean))];
+    }
+
+    if (!payload || typeof payload !== "object") {
+      return [];
+    }
+
+    const countsPayload =
+      payload.counts && typeof payload.counts === "object"
+        ? payload.counts
+        : payload;
+
+    const cardActionCounts =
+      countsPayload.card_actions && typeof countsPayload.card_actions === "object"
+        ? countsPayload.card_actions
+        : {};
+
+    return buildPopularitySlugsFromCounts(cardActionCounts);
+  };
+
+  const buildPopularityRankMap = (slugs = []) =>
+    new Map(
+      slugs.map((slug, index) => [normalizeSlugKey(slug), index]).filter(([slug]) => Boolean(slug)),
+    );
+
+  const getCardPopularityRank = (card) => {
+    const slug = normalizeSlugKey(card?.slug);
+    return catalogState.popularityRanks.get(slug) ?? Number.POSITIVE_INFINITY;
+  };
+
+  const comparePopularityRanks = (left, right, { reverse = false } = {}) => {
+    const leftRank = getCardPopularityRank(left);
+    const rightRank = getCardPopularityRank(right);
+    const leftIsRanked = Number.isFinite(leftRank);
+    const rightIsRanked = Number.isFinite(rightRank);
+
+    if (leftIsRanked && rightIsRanked) {
+      return reverse ? rightRank - leftRank : leftRank - rightRank;
+    }
+
+    if (leftIsRanked) {
+      return reverse ? 1 : -1;
+    }
+
+    if (rightIsRanked) {
+      return reverse ? -1 : 1;
+    }
+
+    return 0;
+  };
+
+  const hydratePopularityLeaderboard = async ({ forceRefresh = false } = {}) => {
+    const requestUrl = buildPopularityRequestUrl();
+    const requestToken = ++catalogState.popularityRequestToken;
+
+    if (!requestUrl) {
+      catalogState.popularityRanks = new Map();
+      return;
+    }
+
+    try {
+      const response = await fetch(requestUrl, {
+        cache: forceRefresh ? "reload" : "no-cache",
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to load popularity leaderboard (${response.status})`);
+      }
+
+      const payload = await response.json();
+      if (requestToken !== catalogState.popularityRequestToken) {
+        return;
+      }
+
+      catalogState.popularityRanks = buildPopularityRankMap(extractPopularityLeaderboard(payload));
+      renderCatalogView();
+    } catch (error) {
+      if (requestToken !== catalogState.popularityRequestToken) {
+        return;
+      }
+
+      catalogState.popularityRanks = new Map();
+      console.warn("Failed to load popularity leaderboard.", error);
+      renderCatalogView();
+    }
   };
 
   const normalizeMetadataValue = (value = "") => {
@@ -2010,11 +2133,25 @@
 
   const sortCards = (cards, statusMap, sort = DEFAULT_FILTERS.sort) =>
     [...cards].sort((left, right) => {
-      const priorityRank = getCardPriorityRank(left, statusMap) - getCardPriorityRank(right, statusMap);
-      if (priorityRank !== 0) return priorityRank;
-
       const trendingRank = Number(hasTrendingBadge(right)) - Number(hasTrendingBadge(left));
       if (trendingRank !== 0) return trendingRank;
+
+      if (sort === "most-popular") {
+        const popularityRank = comparePopularityRanks(left, right);
+        if (popularityRank !== 0) {
+          return popularityRank;
+        }
+      }
+
+      if (sort === "least-popular") {
+        const popularityRank = comparePopularityRanks(left, right, { reverse: true });
+        if (popularityRank !== 0) {
+          return popularityRank;
+        }
+      }
+
+      const priorityRank = getCardPriorityRank(left, statusMap) - getCardPriorityRank(right, statusMap);
+      if (priorityRank !== 0) return priorityRank;
 
       const activeSortOption = SORT_OPTIONS_BY_VALUE.get(String(sort));
       if (typeof activeSortOption?.compare === "function") {
@@ -2036,20 +2173,6 @@
         if (Number.isFinite(customRank) && customRank !== 0) {
           return customRank;
         }
-      }
-
-      if (sort === "most-popular") {
-        const popularityRank =
-          Number(hasVerifiedBadge(right)) - Number(hasVerifiedBadge(left));
-        if (popularityRank !== 0) return popularityRank;
-        return compareRandom(left, right);
-      }
-
-      if (sort === "least-popular") {
-        const popularityRank =
-          Number(hasVerifiedBadge(left)) - Number(hasVerifiedBadge(right));
-        if (popularityRank !== 0) return popularityRank;
-        return compareRandom(left, right);
       }
 
       if (sort === "price-asc") {
@@ -2475,6 +2598,8 @@
     catalogState.grid = grid;
     catalogState.cards = [];
     catalogState.statusMap = {};
+    catalogState.popularityRanks = new Map();
+    catalogState.popularityRequestToken += 1;
     catalogState.statusRequestToken += 1;
     configureCatalogMount(mount);
     bindSummaryTextFit(mount);
@@ -2509,6 +2634,7 @@
         search: window.getActiveCatalogSearchQuery?.(),
       });
       publishCatalogStats();
+      void hydratePopularityLeaderboard({ forceRefresh });
       window.registerMoreInfoModalPathResolver?.((path) => {
         const normalizedTargetPath = normalizePath(path).toLowerCase();
         const targetCard = catalogState.cards.find(

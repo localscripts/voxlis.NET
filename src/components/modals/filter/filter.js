@@ -459,15 +459,17 @@
     setDrawerOpen(false);
   };
 
-  const openDrawer = () => {
+  const openDrawer = ({ trackOpen = false } = {}) => {
     if (!getDrawer()) return;
     closeMobileNavbarPanels();
     syncInsecureButtonState();
     setDrawerOpen(true);
-    window.VOXLIS_CLICK_TRACKER?.trackUiEvent?.({
-      group: "filters",
-      key: "drawer-open",
-    });
+    if (trackOpen) {
+      window.VOXLIS_CLICK_TRACKER?.trackUiEvent?.({
+        group: "filters",
+        key: "drawer-open",
+      });
+    }
     document.dispatchEvent(new CustomEvent("voxlis:filter-opened"));
   };
 
@@ -691,7 +693,7 @@
 
     document.addEventListener("voxlis:open-filter", () => {
       syncDrawerControlsFromFilters(window.getAppliedActiveCatalogFilters?.() || getCurrentFilters());
-      openDrawer();
+      openDrawer({ trackOpen: true });
     });
   };
 

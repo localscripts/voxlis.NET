@@ -136,9 +136,13 @@
       internal: "Executor",
       external: "Cheat Menu",
     },
+    sortOptions: [
+      { value: "random", label: "Random" },
+      { value: "most-popular", label: "Most Popular" },
+    ],
     defaultFilters: {
       search: "",
-      sort: "random",
+      sort: "most-popular",
       platforms: [],
       price: "all",
       key: "all",
@@ -168,7 +172,7 @@
     },
     clickTracking: {
       enabled: true,
-      endpointUrl: "https://connect.voxlis.net/data.php",
+      endpointUrl: "http://localhost:8000/data",
       trackedActions: ["review", "more", "buy-keyempire", "sunc", "tag", "website", "close"],
       trackedUiEvents: {
         navbar: [

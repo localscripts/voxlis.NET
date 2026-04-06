@@ -11,6 +11,7 @@
       : {};
   const TRACKING_ENABLED = trackingConfig.enabled === true;
   const ENDPOINT_URL = String(trackingConfig.endpointUrl || "/data.php").trim() || "/data.php";
+  const TARGET_COOLDOWN_MS = Math.max(0, Number(trackingConfig.targetCooldownMs ?? 8000) || 8000);
   const ACTION_LABELS =
     trackingConfig.actionLabels && typeof trackingConfig.actionLabels === "object"
       ? trackingConfig.actionLabels
@@ -192,6 +193,70 @@
     uiEvents: {},
     loaded: false,
     loadPromise: null,
+    targetCooldowns: new Map(),
+  };
+
+  const buildTrackingTargetKey = ({ type = "", slug = "", action = "", group = "", key = "" } = {}) => {
+    const normalizedType = String(type || "").trim().toLowerCase();
+    if (normalizedType === "card") {
+      return `card:${normalizeSlug(slug)}:${normalizeAction(action)}`;
+    }
+
+    if (normalizedType === "ui") {
+      return `ui:${normalizeUiGroup(group)}:${normalizeUiKey(key)}`;
+    }
+
+    return "";
+  };
+
+  const clearTrackingCooldown = (targetKey = "") => {
+    if (!targetKey) {
+      return;
+    }
+
+    state.targetCooldowns.delete(targetKey);
+  };
+
+  const setTrackingCooldown = (targetKey = "", cooldownMs = TARGET_COOLDOWN_MS) => {
+    if (!targetKey || !Number.isFinite(cooldownMs) || cooldownMs <= 0) {
+      return;
+    }
+
+    state.targetCooldowns.set(targetKey, Date.now() + cooldownMs);
+  };
+
+  const isTrackingCooldownActive = (targetKey = "") => {
+    if (!targetKey) {
+      return false;
+    }
+
+    const cooldownDeadline = Number(state.targetCooldowns.get(targetKey) || 0);
+    if (!Number.isFinite(cooldownDeadline) || cooldownDeadline <= 0) {
+      return false;
+    }
+
+    if (cooldownDeadline <= Date.now()) {
+      state.targetCooldowns.delete(targetKey);
+      return false;
+    }
+
+    return true;
+  };
+
+  const extractCountsPayload = (payload) => {
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      return null;
+    }
+
+    if (payload.counts && typeof payload.counts === "object" && !Array.isArray(payload.counts)) {
+      return payload.counts;
+    }
+
+    const hasDirectCountMaps =
+      (payload.card_actions && typeof payload.card_actions === "object" && !Array.isArray(payload.card_actions)) ||
+      (payload.ui_events && typeof payload.ui_events === "object" && !Array.isArray(payload.ui_events));
+
+    return hasDirectCountMaps ? payload : null;
   };
 
   const applyCounts = (counts = {}) => {
@@ -221,7 +286,16 @@
         }
 
         const payload = await response.json();
-        return applyCounts(payload?.counts ?? payload);
+        const countsPayload = extractCountsPayload(payload);
+        if (countsPayload) {
+          return applyCounts(countsPayload);
+        }
+
+        state.loaded = true;
+        return {
+          cardActions: state.cardActions,
+          uiEvents: state.uiEvents,
+        };
       })
       .catch((error) => {
         console.warn("Failed to load PHP click counts.", error);
@@ -262,7 +336,7 @@
     void loadCounts();
   };
 
-  const postTrackingPayload = (payload = {}) =>
+  const postTrackingPayload = (payload = {}, { targetKey = "", onRejected = null } = {}) =>
     fetch(buildEndpointUrl(), {
       method: "POST",
       keepalive: true,
@@ -272,15 +346,43 @@
       body: JSON.stringify(payload),
     })
       .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to increment click count (${response.status})`);
+        let responsePayload = null;
+        try {
+          responsePayload = await response.json();
+        } catch {
+          responsePayload = null;
         }
 
-        const responsePayload = await response.json();
-        applyCounts(responsePayload?.counts ?? {});
+        if (!response.ok) {
+          const error = new Error(`Failed to increment click count (${response.status})`);
+          error.status = response.status;
+          error.payload = responsePayload;
+          throw error;
+        }
+
+        const countsPayload = extractCountsPayload(responsePayload);
+        if (countsPayload) {
+          applyCounts(countsPayload);
+        }
         return responsePayload;
       })
       .catch((error) => {
+        if (typeof onRejected === "function") {
+          onRejected();
+        }
+
+        if (error?.status === 429) {
+          const retryAfterSeconds = Number(error?.payload?.retry_after);
+          setTrackingCooldown(
+            targetKey,
+            Number.isFinite(retryAfterSeconds) && retryAfterSeconds > 0
+              ? retryAfterSeconds * 1000
+              : TARGET_COOLDOWN_MS,
+          );
+          return error?.payload ?? null;
+        }
+
+        clearTrackingCooldown(targetKey);
         console.warn("Failed to increment PHP click count.", error);
         recoverFromFailedPost();
         return null;
@@ -297,21 +399,40 @@
       return 0;
     }
 
-    if (!state.cardActions[normalizedSlug] || typeof state.cardActions[normalizedSlug] !== "object") {
-      state.cardActions[normalizedSlug] = {};
-    }
-
-    state.cardActions[normalizedSlug][normalizedAction] =
-      Number(state.cardActions[normalizedSlug][normalizedAction] || 0) + 1;
-    state.loaded = true;
-    const optimisticCount = Number(state.cardActions[normalizedSlug][normalizedAction] || 0);
-
-    void postTrackingPayload({
-      page: PAGE_KEY,
+    const targetKey = buildTrackingTargetKey({
       type: "card",
       slug: normalizedSlug,
       action: normalizedAction,
     });
+    if (isTrackingCooldownActive(targetKey)) {
+      return Number(state.cardActions[normalizedSlug]?.[normalizedAction] || 0);
+    }
+
+    if (!state.cardActions[normalizedSlug] || typeof state.cardActions[normalizedSlug] !== "object") {
+      state.cardActions[normalizedSlug] = {};
+    }
+
+    const previousCount = Number(state.cardActions[normalizedSlug][normalizedAction] || 0);
+    state.cardActions[normalizedSlug][normalizedAction] =
+      previousCount + 1;
+    state.loaded = true;
+    const optimisticCount = Number(state.cardActions[normalizedSlug][normalizedAction] || 0);
+    setTrackingCooldown(targetKey);
+
+    void postTrackingPayload(
+      {
+        page: PAGE_KEY,
+        type: "card",
+        slug: normalizedSlug,
+        action: normalizedAction,
+      },
+      {
+        targetKey,
+        onRejected: () => {
+          state.cardActions[normalizedSlug][normalizedAction] = previousCount;
+        },
+      },
+    );
 
     return optimisticCount;
   };
@@ -327,21 +448,40 @@
       return 0;
     }
 
-    if (!state.uiEvents[normalizedGroup] || typeof state.uiEvents[normalizedGroup] !== "object") {
-      state.uiEvents[normalizedGroup] = {};
-    }
-
-    state.uiEvents[normalizedGroup][normalizedKey] =
-      Number(state.uiEvents[normalizedGroup][normalizedKey] || 0) + 1;
-    state.loaded = true;
-    const optimisticCount = Number(state.uiEvents[normalizedGroup][normalizedKey] || 0);
-
-    void postTrackingPayload({
-      page: PAGE_KEY,
+    const targetKey = buildTrackingTargetKey({
       type: "ui",
       group: normalizedGroup,
       key: normalizedKey,
     });
+    if (isTrackingCooldownActive(targetKey)) {
+      return Number(state.uiEvents[normalizedGroup]?.[normalizedKey] || 0);
+    }
+
+    if (!state.uiEvents[normalizedGroup] || typeof state.uiEvents[normalizedGroup] !== "object") {
+      state.uiEvents[normalizedGroup] = {};
+    }
+
+    const previousCount = Number(state.uiEvents[normalizedGroup][normalizedKey] || 0);
+    state.uiEvents[normalizedGroup][normalizedKey] =
+      previousCount + 1;
+    state.loaded = true;
+    const optimisticCount = Number(state.uiEvents[normalizedGroup][normalizedKey] || 0);
+    setTrackingCooldown(targetKey);
+
+    void postTrackingPayload(
+      {
+        page: PAGE_KEY,
+        type: "ui",
+        group: normalizedGroup,
+        key: normalizedKey,
+      },
+      {
+        targetKey,
+        onRejected: () => {
+          state.uiEvents[normalizedGroup][normalizedKey] = previousCount;
+        },
+      },
+    );
 
     return optimisticCount;
   };
