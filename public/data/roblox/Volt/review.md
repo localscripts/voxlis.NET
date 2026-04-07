@@ -1,3 +1,5 @@
+> [!NOTE BORDER]
+> *Volt emulates Hyperion, but this also puts it on the Hyperion team’s radar. As a result, it is likely to be targeted in upcoming detection waves.*
 ## Exploit Performance  
 - **Volt** runs smoothly as of **March 2026**, with normal gameplay mostly unaffected. Lua decompilers exist, but most reliable ones are paid (e.g., **Oracle**); free options like **Medal** are available. In most cases, you won’t need a decompiler unless you’re a developer—these tools simply convert compiled scripts into readable (but not identical) code.
 
