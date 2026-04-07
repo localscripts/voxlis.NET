@@ -1,0 +1,91 @@
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--bg, #000);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: opacity 0.5s var(--smooth-ease, ease), visibility 0.5s;
+}
+
+#loading-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-gif {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+/* ── status tags ── */
+.loading-status-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 0;
+}
+
+.loading-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #f97316;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-family: var(--font-family-base, sans-serif);
+  font-size: 0.72rem;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: tag-in 0.25s ease forwards;
+}
+
+@keyframes tag-in {
+  to { opacity: 1; transform: none; }
+}
+
+.loading-status-tag i {
+  font-size: 0.72rem;
+}
+
+/* ── buttons ── */
+.loading-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  margin-top: 0.15rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.loading-actions.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.loading-skip-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(156, 163, 175, 0.9);
+  border-radius: var(--rad, 0.5rem);
+  padding: 0.38rem 1rem;
+  font-size: 0.76rem;
+  font-family: var(--font-family-base, sans-serif);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.loading-skip-btn:hover {
+  color: var(--fg, #fff);
+}

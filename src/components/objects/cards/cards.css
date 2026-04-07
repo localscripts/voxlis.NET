@@ -630,6 +630,10 @@
   color: #facc15 !important;
 }
 
+.ph-issue-ico {
+  color: rgba(245, 158, 11, 0.95) !important;
+}
+
 .ph-warn-red-ico {
   color: #ef4444 !important;
 }
@@ -781,13 +785,14 @@
   background: rgba(156, 163, 175, 0.78);
 }
 
-.exploit-card-placeholder.is-issue .ph-rating-logo-main {
-  background: rgba(255, 237, 213, 0.98);
-}
-
 .exploit-card-placeholder.is-issue .ph-rating {
   --sunc-accent-rgb: 245, 158, 11;
   --sunc-accent-strong-rgb: 249, 115, 22;
+}
+
+.exploit-card-placeholder.is-issue .ph-rating-logo-main {
+  background: #f8fafc;
+  opacity: 1;
 }
 
 .exploit-card-placeholder.is-issue .ph-rating-logo-s {
@@ -802,7 +807,7 @@
 }
 
 .exploit-card-placeholder.is-issue .ph-rating-external-main {
-  color: rgba(255, 237, 213, 0.98);
+  color: rgba(248, 250, 252, 0.96);
   opacity: 1;
 }
 

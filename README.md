@@ -43,6 +43,7 @@ Because of that, use a local web server while developing.
 ## Project layout
 
 - `index.html`: main page shell
+- `ENDPOINTS_API.md`: public and admin `endpoints.php` API notes
 - `DATA_API.md`: public and admin `/data` API notes for bots/tools
 - `docs/`: MkDocs-style documentation source for future docs.voxlis.net pages
 - `global.css`: global theme variables and shared page styling

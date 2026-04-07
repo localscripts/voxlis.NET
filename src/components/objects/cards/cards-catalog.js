@@ -41,6 +41,7 @@
       : ACTIVE_CATALOG.forceIssues && typeof ACTIVE_CATALOG.forceIssues === "object"
         ? ACTIVE_CATALOG.forceIssues
         : {};
+  const ISSUE_STATUS_ASSET_ICON = "icons/vectors/cards-unplug.svg";
   const CLICK_TRACKING_CONFIG =
     ACTIVE_CATALOG.clickTracking && typeof ACTIVE_CATALOG.clickTracking === "object"
       ? ACTIVE_CATALOG.clickTracking
@@ -260,6 +261,7 @@
     ...Object.values(TAG_METADATA)
       .map((tagMeta) => tagMeta?.assetIcon || "")
       .filter(Boolean),
+    ISSUE_STATUS_ASSET_ICON,
     ...SHOW_ONLY_FILTER_DEFINITIONS.map((definition) => definition?.assetIcon || "").filter(Boolean),
   ];
   const normalizeOptionalFileManifest = (manifest = null) => ({
@@ -1230,6 +1232,25 @@
     return availableEntries.filter((entry) => activeKeys.has(entry.key));
   };
 
+  const hasUpdatedIssueStatus = (card, statusMap) => {
+    const platforms = Array.isArray(card?.info?.platforms) ? card.info.platforms.filter(Boolean) : [];
+    return platforms.some((platform) => {
+      const platformState = getPlatformStatusEntry(card, statusMap, platform);
+      return platformState?.updated === true && platformState?.issues === true;
+    });
+  };
+
+  const getStatusIssueIconEntry = (card, statusMap) =>
+    hasUpdatedIssueStatus(card, statusMap)
+      ? buildBadgeEntry("status-issue", {
+          title: "Status Issue",
+          message: "This product is updated, but it currently has reported issues.",
+          assetIcon: ISSUE_STATUS_ASSET_ICON,
+          iconToneClass: "ph-issue-ico",
+          toastIcon: "fa-triangle-exclamation",
+        })
+      : null;
+
   const renderInfoIconMarkup = ({ iconClass, iconMarkup = "", iconToneClass = "", assetIcon = "" }) => {
     if (iconMarkup) {
       return iconMarkup;
@@ -1287,8 +1308,12 @@
     `;
   };
 
-  const buildTitleIcons = (info, modals) => {
-    const icons = getTitleIconEntries(info, modals)
+  const buildTitleIcons = (card, statusMap) => {
+    const icons = [
+      ...getTitleIconEntries(card?.info, card?.modals),
+      getStatusIssueIconEntry(card, statusMap),
+    ]
+      .filter(Boolean)
       .map((entry) => buildInfoIconButton(entry))
       .filter(Boolean);
     return icons.length ? ` ${icons.join(" ")}` : "";
@@ -1327,11 +1352,12 @@
       .map((tag) => getTagEntry(tag))
       .filter(Boolean);
 
-  const buildTitleIconModalContent = (card) => {
+  const buildTitleIconModalContent = (card, statusMap = {}) => {
     const activeEntries = [
       ...getTitleIconEntries(card?.info, card?.modals),
+      getStatusIssueIconEntry(card, statusMap),
       ...getActiveTagEntries(card?.info),
-    ];
+    ].filter(Boolean);
     if (!activeEntries.length) {
       return "";
     }
@@ -1503,9 +1529,12 @@
   const isForcedIssueState = (platform, platformState) =>
     Boolean(FORCE_ISSUES?.[platform]) && platformState?.updated === false;
 
+  const isUpdatedIssueState = (platformState) =>
+    platformState?.updated === true && platformState?.issues === true;
+
   const isWarningIssueState = (platform, platformState) =>
     isForcedIssueState(platform, platformState) ||
-    (platformState?.updated === true && platformState?.issues === true);
+    isUpdatedIssueState(platformState);
 
   const getPlatformStateClass = (card, statusMap, platform) => {
     const platformState = getPlatformStatusEntry(card, statusMap, platform);
@@ -1540,7 +1569,7 @@
       hasAndroid &&
       hasIos &&
       ["android", "ios"].some((platform) =>
-        isWarningIssueState(platform, getPlatformStatusEntry(card, statusMap, platform)),
+        isForcedIssueState(platform, getPlatformStatusEntry(card, statusMap, platform)),
       );
 
     return `
@@ -1834,7 +1863,7 @@
     const article = trigger.closest("article[data-slug]");
     const slug = article?.dataset.slug || "";
     const card = catalogState.cards.find((entry) => entry.slug === slug);
-    const contentHtml = buildTitleIconModalContent(card);
+    const contentHtml = buildTitleIconModalContent(card, catalogState.statusMap);
     const highlightContentKey = trigger.dataset.cardIconKey || "";
     const opened =
       contentHtml &&
@@ -2420,7 +2449,7 @@
       >
         <div class="ph-head">
           <div class="ph-head-main">
-            <h3 class="ph-title">${escapeHtml(card.title)}${buildTitleIcons(card.info, card.modals)}</h3>
+            <h3 class="ph-title">${escapeHtml(card.title)}${buildTitleIcons(card, statusMap)}</h3>
           </div>
           ${buildRatingMarkup(card)}
         </div>

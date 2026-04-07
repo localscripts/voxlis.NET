@@ -194,17 +194,26 @@
     }, PROMPT_DELAY_MS);
   };
 
+  const logStep = (msg, type = "info") => {
+    window.dispatchEvent(new CustomEvent("voxlis:loading-step", { detail: { msg, type } }));
+  };
+
   onReady(async () => {
     try {
+      logStep("initializing page config...");
       const activeCatalog = window.VOXLIS_PAGE?.catalog ?? window.VOXLIS_CONFIG?.activeCatalogPage ?? {};
       const pageTitle = activeCatalog.pageTitle ? `voxlis - ${activeCatalog.pageTitle}` : "voxlis - BETA";
       document.title = pageTitle;
+      logStep(`page: ${pageTitle}`, "ok");
 
+      logStep("mounting promo...");
       const promoMount = document.getElementById("promoMount");
       if (promoMount) {
         promoMount.innerHTML = window.getPromoMarkup?.() || "";
+        logStep("promo mounted", "ok");
       }
 
+      logStep("mounting featured cards...");
       const featuredMounts = [
         document.getElementById("featuredMountLeft"),
         document.getElementById("featuredMountLeftSecondary"),
@@ -218,34 +227,51 @@
           mount.innerHTML = html;
           mount.hidden = !html;
         });
+        logStep(`featured slots ready (${featuredMounts.length})`, "ok");
       }
 
+      logStep("fetching catalog data...");
       const cardsMount = document.getElementById("cardsMount");
       if (cardsMount) {
         await loadInto(cardsMount, "src/components/objects/cards/cards.html");
+        logStep("cards.html loaded", "ok");
+        logStep("initializing catalog...");
         await window.initActiveCatalog?.(cardsMount);
+        logStep("catalog ready", "ok");
         initCardChipOverflow(cardsMount);
         queueFiltersPrompt(cardsMount);
       }
 
+      logStep("loading themes...");
       const themesMount = document.getElementById("themesMount");
       if (themesMount) {
         await loadInto(themesMount, "src/components/modals/themes/themes.html");
+        logStep("themes.html loaded", "ok");
         const customThemeMount = document.getElementById("customThemeMount");
         if (customThemeMount) {
           await loadInto(customThemeMount, "src/components/modals/custom-theme/custom-theme.html");
+          logStep("custom-theme.html loaded", "ok");
         }
         window.initSiteThemes?.(document);
         window.initCustomThemePicker?.(document);
+        logStep("themes initialized", "ok");
       }
 
+      logStep("loading footer...");
       const footerMount = document.getElementById("footerMount");
       if (footerMount) {
         await loadInto(footerMount, "src/components/global/footer/footer.html");
         window.initSiteFooter?.(document);
+        logStep("footer ready", "ok");
       }
+
+      logStep("all systems go", "ok");
     } catch (error) {
+      logStep(`error: ${error.message}`, "err");
       console.error(error);
+    } finally {
+      document.dispatchEvent(new CustomEvent("voxlis:app-ready"));
+      window.dispatchEvent(new CustomEvent("voxlis:app-ready"));
     }
   });
 })();

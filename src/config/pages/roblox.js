@@ -29,7 +29,7 @@
       "yub-x": ["YuB-x", "YuB-X"],
     },
     forceissues: {
-      macos: true,
+      macos: false,
     },
     platformOrder: ["windows", "macos", "android", "ios"],
     platformLabels: {
