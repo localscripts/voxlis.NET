@@ -25,6 +25,258 @@
 
     return `/${normalizedPath.replace(/^\/+/, "")}`;
   };
+  const API_TIMEOUT_MS = 5000;
+  const API_RETRY_INTERVAL_MS = 10000;
+  const API_OUTAGE_MESSAGE =
+    "We are experiencing a DDOS attack, some information may not be aviable";
+  const getRequestUrl = (input) => {
+    if (typeof input === "string") {
+      return input;
+    }
+
+    if (input?.url) {
+      return input.url;
+    }
+
+    return String(input || "");
+  };
+  const getParsedRequestUrl = (input) => {
+    try {
+      return new URL(getRequestUrl(input), window.location.origin);
+    } catch {
+      return null;
+    }
+  };
+  const getActiveCatalogConfig = () =>
+    window.VOXLIS_PAGE?.catalog ?? window.VOXLIS_CONFIG?.activeCatalogPage ?? {};
+  const getConfiguredApiUrls = () => {
+    const activeCatalog = getActiveCatalogConfig();
+    return [
+      activeCatalog.statusApiUrl,
+      activeCatalog.suncApiUrl,
+      activeCatalog.pricingFallbackUrl,
+      activeCatalog.clickTracking?.endpointUrl,
+    ].filter((url) => String(url || "").trim());
+  };
+  const isSameApiEndpoint = (left, right) => {
+    const leftUrl = getParsedRequestUrl(left);
+    const rightUrl = getParsedRequestUrl(right);
+    return Boolean(
+      leftUrl &&
+        rightUrl &&
+        leftUrl.origin === rightUrl.origin &&
+        leftUrl.pathname === rightUrl.pathname,
+    );
+  };
+  const isConfiguredApiUrl = (input) =>
+    getConfiguredApiUrls().some((configuredUrl) => isSameApiEndpoint(input, configuredUrl));
+  const isMonitoredApiUrl = (input) => {
+    const parsedUrl = getParsedRequestUrl(input);
+    if (!parsedUrl || parsedUrl.origin === window.location.origin) {
+      return false;
+    }
+
+    return /(^|\.)voxlis\.net$/i.test(parsedUrl.hostname) || isConfiguredApiUrl(input);
+  };
+  const getPrimaryStatusApiUrl = () => {
+    const activeCatalog = getActiveCatalogConfig();
+    return String(activeCatalog.statusApiUrl || "").trim();
+  };
+  const isPrimaryStatusApiUrl = (input) => {
+    if (!String(getRequestUrl(input) || "").trim()) {
+      return false;
+    }
+
+    const primaryStatusApiUrl = getPrimaryStatusApiUrl();
+    if (!primaryStatusApiUrl) {
+      return false;
+    }
+
+    return isSameApiEndpoint(input, primaryStatusApiUrl);
+  };
+  const createApiTimeoutError = (timeoutMs = API_TIMEOUT_MS) => {
+    const error = new Error(`API request timed out after ${timeoutMs}ms`);
+    error.name = "TimeoutError";
+    return error;
+  };
+  const apiHealthState =
+    window.__voxlisApiHealthState && typeof window.__voxlisApiHealthState === "object"
+      ? window.__voxlisApiHealthState
+      : {
+          isDown: false,
+          message: API_OUTAGE_MESSAGE,
+          lastFailedUrl: "",
+          lastRecoveredUrl: "",
+          lastError: "",
+          probeUrl: "",
+          retryTimerId: 0,
+          retryInFlight: false,
+        };
+  window.__voxlisApiHealthState = apiHealthState;
+  const getApiHealthState = () => ({
+    isDown: Boolean(apiHealthState.isDown),
+    message: apiHealthState.message || API_OUTAGE_MESSAGE,
+    lastFailedUrl: apiHealthState.lastFailedUrl || "",
+    lastRecoveredUrl: apiHealthState.lastRecoveredUrl || "",
+    lastError: apiHealthState.lastError || "",
+    probeUrl: apiHealthState.probeUrl || "",
+    timeoutMs: API_TIMEOUT_MS,
+    retryIntervalMs: API_RETRY_INTERVAL_MS,
+  });
+  const dispatchApiHealthChange = () => {
+    const detail = getApiHealthState();
+    window.dispatchEvent(new CustomEvent("voxlis:api-health-change", { detail }));
+    document.dispatchEvent(new CustomEvent("voxlis:api-health-change", { detail }));
+  };
+  const getApiProbeUrl = (fallbackUrl = "") => {
+    const primaryStatusApiUrl = getPrimaryStatusApiUrl();
+    return isMonitoredApiUrl(primaryStatusApiUrl)
+      ? primaryStatusApiUrl
+      : isPrimaryStatusApiUrl(fallbackUrl)
+        ? fallbackUrl
+        : "";
+  };
+  const stopApiProbeLoop = () => {
+    if (!apiHealthState.retryTimerId) {
+      return;
+    }
+
+    window.clearInterval(apiHealthState.retryTimerId);
+    apiHealthState.retryTimerId = 0;
+  };
+  const markApiUp = (detail = {}) => {
+    const url = typeof detail === "string" ? detail : detail.url || "";
+    if (!isPrimaryStatusApiUrl(url)) {
+      return;
+    }
+
+    if (!apiHealthState.isDown) {
+      return;
+    }
+
+    apiHealthState.isDown = false;
+    apiHealthState.lastRecoveredUrl = url;
+    apiHealthState.lastError = "";
+    apiHealthState.probeUrl = "";
+    stopApiProbeLoop();
+    dispatchApiHealthChange();
+  };
+  let probeApiHealth = async () => false;
+  const startApiProbeLoop = () => {
+    if (apiHealthState.retryTimerId) {
+      return;
+    }
+
+    apiHealthState.retryTimerId = window.setInterval(() => {
+      void probeApiHealth();
+    }, API_RETRY_INTERVAL_MS);
+  };
+  const markApiDown = (detail = {}) => {
+    const url = typeof detail === "string" ? detail : detail.url || "";
+    if (!isPrimaryStatusApiUrl(url || detail.probeUrl || "")) {
+      return;
+    }
+
+    const error = typeof detail === "object" ? detail.error : null;
+    apiHealthState.isDown = true;
+    apiHealthState.message = API_OUTAGE_MESSAGE;
+    apiHealthState.lastFailedUrl = url;
+    apiHealthState.lastError = error?.message || String(error || "");
+    apiHealthState.probeUrl = getApiProbeUrl(detail.probeUrl || url);
+    startApiProbeLoop();
+    dispatchApiHealthChange();
+  };
+  const fetchWithTimeout = async (input, init = {}, options = {}) => {
+    const requestUrl = getRequestUrl(input);
+    const timeoutMs = Math.max(0, Number(options.timeoutMs ?? API_TIMEOUT_MS) || API_TIMEOUT_MS);
+    const monitor =
+      options.monitor === true || (options.monitor !== false && isMonitoredApiUrl(requestUrl));
+    const fetchInit = { ...init };
+    const externalSignal = init?.signal;
+    let controller = null;
+    let abortListener = null;
+    let timeoutId = 0;
+    let timedOut = false;
+
+    if (timeoutMs > 0 && typeof AbortController === "function") {
+      controller = new AbortController();
+      fetchInit.signal = controller.signal;
+
+      if (externalSignal) {
+        abortListener = () => controller.abort();
+        if (externalSignal.aborted) {
+          controller.abort();
+        } else {
+          externalSignal.addEventListener("abort", abortListener, { once: true });
+        }
+      }
+
+      timeoutId = window.setTimeout(() => {
+        timedOut = true;
+        controller.abort();
+      }, timeoutMs);
+    }
+
+    try {
+      const fetchPromise = fetch(input, fetchInit);
+      const response =
+        timeoutMs > 0 && !controller
+          ? await Promise.race([
+              fetchPromise,
+              new Promise((_, reject) => {
+                timeoutId = window.setTimeout(() => {
+                  timedOut = true;
+                  reject(createApiTimeoutError(timeoutMs));
+                }, timeoutMs);
+              }),
+            ])
+          : await fetchPromise;
+
+      if (monitor && response.ok) {
+        markApiUp({ url: requestUrl });
+      }
+
+      return response;
+    } catch (error) {
+      const requestError = timedOut ? createApiTimeoutError(timeoutMs) : error;
+      if (monitor) {
+        markApiDown({ url: requestUrl, error: requestError, probeUrl: options.probeUrl });
+      }
+      throw requestError;
+    } finally {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+      if (externalSignal && abortListener) {
+        externalSignal.removeEventListener("abort", abortListener);
+      }
+    }
+  };
+  probeApiHealth = async () => {
+    if (!apiHealthState.isDown || apiHealthState.retryInFlight) {
+      return false;
+    }
+
+    const probeUrl = getApiProbeUrl(apiHealthState.probeUrl || apiHealthState.lastFailedUrl);
+    if (!probeUrl) {
+      return false;
+    }
+
+    apiHealthState.retryInFlight = true;
+    try {
+      const response = await fetchWithTimeout(probeUrl, { cache: "no-cache" }, { monitor: false });
+      if (!response.ok) {
+        return false;
+      }
+
+      markApiUp({ url: probeUrl, recovered: true });
+      return true;
+    } catch {
+      return false;
+    } finally {
+      apiHealthState.retryInFlight = false;
+    }
+  };
   const assetAvailabilityCache = new Map();
 
   const checkAssetExists = async (path = "") => {
@@ -319,8 +571,22 @@
     loadHtmlPartial,
     resolveSitePath,
     checkAssetExists,
+    fetchWithTimeout,
+    isMonitoredApiUrl,
     getActiveCatalogPageKey: () => frozenPage.key,
     getActiveCatalogPage: () => frozenPage.catalog,
+  });
+  window.VOXLIS_API_HEALTH = Object.freeze({
+    timeoutMs: API_TIMEOUT_MS,
+    retryIntervalMs: API_RETRY_INTERVAL_MS,
+    outageMessage: API_OUTAGE_MESSAGE,
+    fetchWithTimeout,
+    isMonitoredApiUrl,
+    isPrimaryStatusApiUrl,
+    markDown: markApiDown,
+    markUp: markApiUp,
+    getState: getApiHealthState,
+    probeNow: probeApiHealth,
   });
   window.VOXLIS_PAGE = frozenPage;
   window.VOXLIS_CONFIG = frozenConfig;

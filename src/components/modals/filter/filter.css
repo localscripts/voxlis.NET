@@ -609,6 +609,44 @@
   }
 }
 
+.filter-insecure-button.is-invite-only {
+  border-color: rgba(148, 163, 184, 0.3);
+  background: rgba(51, 65, 85, 0.18);
+  color: #e2e8f0;
+}
+
+.filter-insecure-button.is-invite-only::before {
+  background: rgba(148, 163, 184, 0.04);
+}
+
+.filter-insecure-button.is-invite-only:hover,
+.filter-insecure-button.is-invite-only:focus-visible {
+  border-color: rgba(148, 163, 184, 0.5);
+  color: #ffffff;
+}
+
+.filter-insecure-button.is-invite-only .filter-insecure-icon {
+  color: #94a3b8;
+}
+
+.filter-insecure-button.is-invite-only .filter-insecure-button-subtitle {
+  color: rgba(226, 232, 240, 0.75);
+}
+
+.filter-insecure-button.is-invite-only.is-unlocked {
+  background: rgba(51, 65, 85, 0.28);
+}
+
+.filter-insecure-button.is-invite-only .filter-insecure-toggle {
+  border-color: rgba(148, 163, 184, 0.22);
+  background: rgba(51, 65, 85, 0.3);
+}
+
+.filter-insecure-button.is-invite-only.is-unlocked .filter-insecure-toggle {
+  border-color: rgba(148, 163, 184, 0.44);
+  background: rgba(100, 116, 139, 0.35);
+}
+
 .filter-dropdown {
   position: relative;
   width: 100%;

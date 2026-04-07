@@ -71,6 +71,10 @@
     PAGE_CONFIG.insecureToggle && typeof PAGE_CONFIG.insecureToggle === "object"
       ? PAGE_CONFIG.insecureToggle
       : { enabled: false };
+  const INVITE_ONLY_CONFIG =
+    PAGE_CONFIG.inviteOnlyToggle && typeof PAGE_CONFIG.inviteOnlyToggle === "object"
+      ? PAGE_CONFIG.inviteOnlyToggle
+      : { enabled: false };
   const FILTER_TRIGGER_SELECTOR =
     "#filterButton, #mobileMenuFilterButton, #mobileTopFilterButton, #mobileQuickFilterButton";
   const DOM_IDS = {
@@ -85,8 +89,11 @@
     resetFilters: "resetFilters",
     insecureButton: "revealInsecureHold",
     insecureLabel: "revealInsecureLabel",
+    inviteOnlyButton: "revealInviteOnlyHold",
+    inviteOnlyLabel: "revealInviteOnlyLabel",
   };
   const INSECURE_REVEAL_STORAGE_KEY = `voxlis.filter.${PAGE_KEY}.showInsecure`;
+  const INVITE_ONLY_REVEAL_STORAGE_KEY = `voxlis.filter.${PAGE_KEY}.showInviteOnly`;
   const assetIconAvailability = new Map();
 
   const byId = (id) => document.getElementById(id);
@@ -137,6 +144,8 @@
   const getSortDropdown = () => byId(DOM_IDS.sortDropdown);
   const getInsecureHoldButton = () => byId(DOM_IDS.insecureButton);
   const getInsecureHoldLabel = () => byId(DOM_IDS.insecureLabel);
+  const getInviteOnlyHoldButton = () => byId(DOM_IDS.inviteOnlyButton);
+  const getInviteOnlyHoldLabel = () => byId(DOM_IDS.inviteOnlyLabel);
 
   const readStoredInsecureReveal = () => {
     try {
@@ -162,6 +171,30 @@
     } catch {}
   };
 
+  const readStoredInviteOnlyReveal = () => {
+    try {
+      const storedValue = window.localStorage.getItem(INVITE_ONLY_REVEAL_STORAGE_KEY);
+      if (storedValue == null) {
+        return Boolean(DEFAULT_FILTERS.showInviteOnly);
+      }
+
+      return storedValue === "1" || storedValue === "true";
+    } catch {
+      return Boolean(DEFAULT_FILTERS.showInviteOnly);
+    }
+  };
+
+  const persistInviteOnlyReveal = (value) => {
+    try {
+      if (value) {
+        window.localStorage.setItem(INVITE_ONLY_REVEAL_STORAGE_KEY, "1");
+        return;
+      }
+
+      window.localStorage.removeItem(INVITE_ONLY_REVEAL_STORAGE_KEY);
+    } catch {}
+  };
+
   const getCatalogSearchQuery = () =>
     typeof window.getActiveCatalogSearchQuery === "function"
       ? window.getActiveCatalogSearchQuery()
@@ -170,6 +203,7 @@
         : DEFAULT_FILTERS.search || "";
 
   let insecureUnlocked = readStoredInsecureReveal();
+  let inviteOnlyUnlocked = readStoredInviteOnlyReveal();
 
   const buildCheckboxIconMarkup = ({ assetIcon = "", iconClass = "", iconToneClass = "", toneClass = "" }) => {
     if (assetIcon) {
@@ -387,6 +421,47 @@
     `;
   };
 
+  const buildInviteOnlySection = () => {
+    if (!INVITE_ONLY_CONFIG.enabled) {
+      return "";
+    }
+
+    return `
+      <section class="filter-section filter-insecure-section">
+        <button
+          id="${DOM_IDS.inviteOnlyButton}"
+          class="filter-insecure-button is-invite-only"
+          type="button"
+          aria-pressed="false"
+        >
+          <span class="filter-insecure-button-copy">
+            <span class="filter-insecure-header">
+              <span class="filter-insecure-button-topline">
+                <span class="filter-insecure-icon" aria-hidden="true">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <span id="${DOM_IDS.inviteOnlyLabel}" class="filter-insecure-button-title">${escapeHtml(
+                  INVITE_ONLY_CONFIG.buttonLabelOff || "Show invite-only results",
+                )}</span>
+              </span>
+            </span>
+            <span class="filter-insecure-button-subtitle">${escapeHtml(
+              INVITE_ONLY_CONFIG.subtitle ||
+                "Include invite-only executors in the catalog results. These stay hidden by default.",
+            )}</span>
+            <img
+              class="filter-insecure-image"
+              src="/public/assets/misc/lock.png"
+              alt=""
+              loading="lazy"
+            />
+          </span>
+          <span class="filter-insecure-toggle" aria-hidden="true"></span>
+        </button>
+      </section>
+    `;
+  };
+
   const renderDrawerBody = () => {
     const body = getDrawerBody();
     if (!body) return;
@@ -398,6 +473,7 @@
       buildTagSection(),
       buildShowOnlySection(),
       buildInsecureSection(),
+      buildInviteOnlySection(),
     ]
       .filter(Boolean)
       .join("");
@@ -426,6 +502,22 @@
       label.textContent = insecureUnlocked
         ? INSECURE_CONFIG.buttonLabelOn || "Showing warning results"
         : INSECURE_CONFIG.buttonLabelOff || "Show warning results";
+    }
+  };
+
+  const syncInviteOnlyButtonState = () => {
+    const button = getInviteOnlyHoldButton();
+    if (!button) return;
+
+    button.classList.toggle("is-unlocked", inviteOnlyUnlocked);
+    button.setAttribute("aria-pressed", String(inviteOnlyUnlocked));
+    button.setAttribute("aria-expanded", String(inviteOnlyUnlocked));
+
+    const label = getInviteOnlyHoldLabel();
+    if (label) {
+      label.textContent = inviteOnlyUnlocked
+        ? INVITE_ONLY_CONFIG.buttonLabelOn || "Showing invite-only results"
+        : INVITE_ONLY_CONFIG.buttonLabelOff || "Show invite-only results";
     }
   };
 
@@ -498,6 +590,7 @@
       return {
         ...filters,
         showInsecure: INSECURE_CONFIG.enabled ? insecureUnlocked : Boolean(DEFAULT_FILTERS.showInsecure),
+        showInviteOnly: INVITE_ONLY_CONFIG.enabled ? inviteOnlyUnlocked : Boolean(DEFAULT_FILTERS.showInviteOnly),
       };
     }
 
@@ -533,6 +626,10 @@
 
     if (INSECURE_CONFIG.enabled) {
       filters.showInsecure = insecureUnlocked;
+    }
+
+    if (INVITE_ONLY_CONFIG.enabled) {
+      filters.showInviteOnly = inviteOnlyUnlocked;
     }
 
     return filters;
@@ -583,6 +680,12 @@
       persistInsecureReveal(insecureUnlocked);
       syncInsecureButtonState();
     }
+
+    if (INVITE_ONLY_CONFIG.enabled) {
+      inviteOnlyUnlocked = Boolean(nextFilters.showInviteOnly);
+      persistInviteOnlyReveal(inviteOnlyUnlocked);
+      syncInviteOnlyButtonState();
+    }
   };
 
   const resetDrawerControls = () => {
@@ -591,6 +694,12 @@
       insecureUnlocked = false;
       persistInsecureReveal(false);
       syncInsecureButtonState();
+    }
+
+    if (INVITE_ONLY_CONFIG.enabled) {
+      inviteOnlyUnlocked = false;
+      persistInviteOnlyReveal(false);
+      syncInviteOnlyButtonState();
     }
   };
 
@@ -602,6 +711,13 @@
     insecureUnlocked = Boolean(nextValue);
     persistInsecureReveal(insecureUnlocked);
     syncInsecureButtonState();
+    applyFilters();
+  };
+
+  const toggleInviteOnlyReveal = (nextValue = !inviteOnlyUnlocked) => {
+    inviteOnlyUnlocked = Boolean(nextValue);
+    persistInviteOnlyReveal(inviteOnlyUnlocked);
+    syncInviteOnlyButtonState();
     applyFilters();
   };
 
@@ -645,6 +761,11 @@
 
       if (target.closest(`#${DOM_IDS.insecureButton}`)) {
         toggleInsecureReveal();
+        return;
+      }
+
+      if (target.closest(`#${DOM_IDS.inviteOnlyButton}`)) {
+        toggleInviteOnlyReveal();
         return;
       }
 

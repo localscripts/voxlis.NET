@@ -33,6 +33,7 @@
       warning: false,
       updatedState: "all",
       showInsecure: false,
+      showInviteOnly: false,
     },
   } = ACTIVE_CATALOG;
   const FORCE_ISSUES =
@@ -100,6 +101,28 @@
     return window.__voxlisSuncBatchRequestCache;
   };
   const suncRequestCache = getSharedSuncRequestCache();
+  const API_HEALTH = window.VOXLIS_API_HEALTH;
+  const fetchWithApiTimeout = (path, init = {}, options = {}) => {
+    const shouldMonitor =
+      options.monitor === true ||
+      (options.monitor !== false && API_HEALTH?.isMonitoredApiUrl?.(path));
+
+    if (shouldMonitor && typeof API_HEALTH?.fetchWithTimeout === "function") {
+      return API_HEALTH.fetchWithTimeout(path, init, { ...options, monitor: true });
+    }
+
+    return fetch(path, init);
+  };
+  const markApiResponseDown = (path, response) => {
+    if (response?.status < 500 || !API_HEALTH?.isMonitoredApiUrl?.(path)) {
+      return;
+    }
+
+    API_HEALTH.markDown?.({
+      url: path,
+      error: new Error(`API request failed (${response.status})`),
+    });
+  };
   const catalogState = {
     mount: null,
     grid: null,
@@ -282,10 +305,12 @@
   };
 
   const fetchJson = async (path, { optional = false } = {}) => {
-    const response = await fetch(path, { cache: "no-cache" });
+    const response = await fetchWithApiTimeout(path, { cache: "no-cache" });
     if (response.ok) {
       return response.json();
     }
+
+    markApiResponseDown(path, response);
 
     if (optional && response.status === 404) {
       return null;
@@ -571,10 +596,11 @@
     }
 
     try {
-      const response = await fetch(requestUrl, {
+      const response = await fetchWithApiTimeout(requestUrl, {
         cache: forceRefresh ? "reload" : "no-cache",
       });
       if (!response.ok) {
+        markApiResponseDown(requestUrl, response);
         throw new Error(`Failed to load popularity leaderboard (${response.status})`);
       }
 
@@ -876,6 +902,7 @@
 
     if (forceRefresh) {
       suncRequestCache.delete(stableUrl);
+      suncRequestCache.delete(requestUrl);
     }
 
     if (!suncRequestCache.has(requestUrl)) {
@@ -925,21 +952,55 @@
     };
   };
 
-  const loadSuncSummary = async (info, payloadMapPromise = null) => {
-    if (!SUNC_API_URL) {
-      return null;
+  const getSuncSummaryScore = (summary) =>
+    Number.isFinite(summary?.score) ? summary.score : null;
+  const hydrateSuncSummaries = async ({ forceRefresh = false, requestToken = catalogState.catalogRequestToken } = {}) => {
+    if (!SUNC_API_URL || !catalogState.cards.length) {
+      return;
     }
 
-    const source = getPrimarySuncSource(info);
-    if (!source) {
-      return null;
+    const sources = catalogState.cards
+      .filter((card) => card?.info?.type !== "external")
+      .map((card) => getPrimarySuncSource(card.info))
+      .filter(Boolean);
+
+    if (!sources.length) {
+      return;
     }
 
-    const payloadMap = payloadMapPromise
-      ? await payloadMapPromise
-      : await loadSuncPayloadMap({ sources: [source] });
-    const payload = payloadMap?.[buildSuncPayloadKey(source)] ?? null;
-    return normalizeSuncSummary(payload);
+    const payloadMap = await loadSuncPayloadMap({ forceRefresh, sources });
+    if (requestToken !== catalogState.catalogRequestToken || !catalogState.mount) {
+      return;
+    }
+
+    let changed = false;
+    const cards = catalogState.cards.map((card) => {
+      if (card?.info?.type === "external") {
+        return card;
+      }
+
+      const source = getPrimarySuncSource(card.info);
+      const suncSummary = source
+        ? normalizeSuncSummary(payloadMap?.[buildSuncPayloadKey(source)] ?? null)
+        : null;
+
+      if (getSuncSummaryScore(card.suncSummary) === getSuncSummaryScore(suncSummary)) {
+        return card;
+      }
+
+      changed = true;
+      return {
+        ...card,
+        suncSummary,
+      };
+    });
+
+    if (!changed) {
+      return;
+    }
+
+    catalogState.cards = cards;
+    renderCatalogView();
   };
 
   const normalizeLineText = (value = "") => String(value).replace(/\s+/g, " ").trim();
@@ -1084,6 +1145,7 @@
     Array.isArray(info.tags) && info.tags.includes(tag);
 
   const isInsecureCard = (card) => hasInfoTag(card?.info, "insecure");
+  const isInviteOnlyCard = (card) => hasInfoTag(card?.info, "inviteonly");
   const getCatalogStats = () => ({
     insecureCount: catalogState.cards.filter((card) => isInsecureCard(card)).length,
   });
@@ -1652,7 +1714,7 @@
       tracked && Number.isFinite(card?.suncSummary?.score)
         ? `${card.suncSummary.score}%`
         : tracked
-          ? "sUNC"
+          ? "ERR"
           : "None";
     const ratingMarkup = `
       <span class="ph-rating-logo" aria-hidden="true">
@@ -2076,8 +2138,10 @@
     }
 
     try {
-      const response = await fetch(buildStatusApiUrl({ forceRefresh }), { cache: "no-cache" });
+      const requestUrl = buildStatusApiUrl({ forceRefresh });
+      const response = await fetchWithApiTimeout(requestUrl, { cache: "no-cache" });
       if (!response.ok) {
+        markApiResponseDown(requestUrl, response);
         throw new Error(`Status API request failed (${response.status})`);
       }
 
@@ -2284,6 +2348,7 @@
         ),
       ],
       showInsecure: Boolean(filters.showInsecure),
+      showInviteOnly: Boolean(filters.showInviteOnly),
     };
 
     SEGMENT_FILTER_DEFINITIONS.forEach((definition) => {
@@ -2311,6 +2376,10 @@
 
   const matchesFilters = (card, statusMap, filters) => {
     if (!filters.showInsecure && isInsecureCard(card)) {
+      return false;
+    }
+
+    if (!filters.showInviteOnly && isInviteOnlyCard(card)) {
       return false;
     }
 
@@ -2661,7 +2730,11 @@
     const { mount, grid, cards, statusMap, filters } = catalogState;
     if (!mount || !grid) return;
 
-    const discoverableCards = cards.filter((card) => filters.showInsecure || !isInsecureCard(card));
+    const discoverableCards = cards.filter(
+      (card) =>
+        (filters.showInsecure || !isInsecureCard(card)) &&
+        (filters.showInviteOnly || !isInviteOnlyCard(card)),
+    );
     const filteredCards = discoverableCards.filter((card) => matchesFilters(card, statusMap, filters));
     const sortedCards = sortCards(filteredCards, statusMap, filters.sort);
     const updatedCount = sortedCards.reduce(
@@ -2728,18 +2801,12 @@
     );
 
     const visibleEntries = infoEntries.filter(Boolean);
-    const suncSources = visibleEntries
-      .map((entry) => getPrimarySuncSource(entry.info))
-      .filter(Boolean);
-    const suncPayloadMapPromise = suncSources.length
-      ? loadSuncPayloadMap({ forceRefresh, sources: suncSources })
-      : Promise.resolve({});
 
     const cards = await Promise.all(
       visibleEntries.map(async (entry) => {
         try {
           const reviewUrl = `${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/review.md`;
-          const [points, modals, reviewDocument, suncSummary] = await Promise.all([
+          const [points, modals, reviewDocument] = await Promise.all([
             fetchJson(`${DATA_ROOT}/${encodeURIComponent(entry.folderName)}/points.json`, {
               optional: true,
             }),
@@ -2749,9 +2816,6 @@
                 })
               : Promise.resolve(null),
             loadReviewDocument(reviewUrl, { optional: true }),
-            entry.info.type === "external"
-              ? Promise.resolve(null)
-              : loadSuncSummary(entry.info, suncPayloadMapPromise),
           ]);
 
           const fallbackOffers = entry.isListedFree ? buildFreeLifetimeOffers(entry.info.platforms) : [];
@@ -2794,7 +2858,7 @@
               points?.neutral_summary,
               points?.con_summary,
             ]),
-            suncSummary,
+            suncSummary: null,
           };
         } catch (error) {
           console.error(error);
@@ -2806,7 +2870,7 @@
     return cards.filter(Boolean);
   };
 
-  const initActiveCatalog = async (mount, { forceRefresh = false } = {}) => {
+  const initActiveCatalog = async (mount, { forceRefresh = false, background = false } = {}) => {
     if (!mount) return;
 
     const grid = mount.querySelector(".cards-grid");
@@ -2818,22 +2882,46 @@
     }
 
     const requestToken = ++catalogState.catalogRequestToken;
+    const preserveCurrentCatalog = Boolean(
+      background &&
+        catalogState.mount === mount &&
+        catalogState.grid === grid &&
+        catalogState.cards.length,
+    );
+    const previousCardsBySlug = preserveCurrentCatalog
+      ? new Map(catalogState.cards.map((card) => [normalizeSlugKey(card.slug), card]))
+      : new Map();
     catalogState.mount = mount;
     catalogState.grid = grid;
-    catalogState.cards = [];
-    catalogState.statusMap = {};
-    catalogState.popularityRanks = new Map();
     catalogState.popularityRequestToken += 1;
     catalogState.statusRequestToken += 1;
     configureCatalogMount(mount);
     bindSummaryTextFit(mount);
-    updateSummary(mount, 0, 0);
-    renderLoadingState(grid);
+
+    if (!preserveCurrentCatalog) {
+      catalogState.cards = [];
+      catalogState.statusMap = {};
+      catalogState.popularityRanks = new Map();
+      updateSummary(mount, 0, 0);
+      renderLoadingState(grid);
+    }
+
     window.getActiveCatalogStats = getCatalogStats;
 
     try {
       const assetIconAvailabilityPromise = primeAssetIconAvailability(collectCatalogAssetIcons());
-      const cards = await loadCatalog({ forceRefresh });
+      const cards = (await loadCatalog({ forceRefresh })).map((card) => {
+        const previousCard = previousCardsBySlug.get(normalizeSlugKey(card.slug));
+        if (!previousCard) {
+          return card;
+        }
+
+        return {
+          ...card,
+          randomSortKey: previousCard.randomSortKey ?? card.randomSortKey,
+          suncSummary: previousCard.suncSummary ?? card.suncSummary,
+        };
+      });
       await assetIconAvailabilityPromise;
       if (
         requestToken !== catalogState.catalogRequestToken ||
@@ -2844,6 +2932,10 @@
       }
 
       if (!cards.length) {
+        if (preserveCurrentCatalog) {
+          return;
+        }
+
         catalogState.cards = [];
         publishCatalogStats();
         updateSummary(mount, 0, 0);
@@ -2852,8 +2944,9 @@
       }
 
       catalogState.cards = cards;
-      catalogState.statusMap = {};
+      catalogState.statusMap = preserveCurrentCatalog ? catalogState.statusMap : {};
       catalogState.filters = normalizeFilters({
+        ...(preserveCurrentCatalog ? catalogState.filters : {}),
         ...window.getActiveCatalogFilterState?.(),
         search: window.getActiveCatalogSearchQuery?.(),
       });
@@ -2868,6 +2961,7 @@
         return targetCard ? buildCardMoreInfoOptions(targetCard) : null;
       });
       renderCatalogView();
+      void hydrateSuncSummaries({ forceRefresh, requestToken });
       void hydrateCatalogStatus({ forceRefresh });
     } catch (error) {
       if (
@@ -2879,12 +2973,36 @@
       }
 
       console.error(error);
+      if (preserveCurrentCatalog) {
+        return;
+      }
+
       catalogState.cards = [];
       publishCatalogStats();
       updateSummary(mount, 0, 0);
       renderEmptyState(grid, { message: EMPTY_LOAD_MESSAGE });
     }
   };
+  let apiRecoveryRefreshQueued = false;
+  const refreshCatalogAfterApiRecovery = () => {
+    if (!catalogState.mount || !catalogState.grid || apiRecoveryRefreshQueued) {
+      return;
+    }
+
+    apiRecoveryRefreshQueued = true;
+    window.setTimeout(() => {
+      apiRecoveryRefreshQueued = false;
+      void initActiveCatalog(catalogState.mount, { forceRefresh: true, background: true });
+    }, 0);
+  };
+
+  window.addEventListener("voxlis:api-health-change", (event) => {
+    if (event.detail?.isDown) {
+      return;
+    }
+
+    refreshCatalogAfterApiRecovery();
+  });
 
   window.getAppliedActiveCatalogFilters = () => ({ ...catalogState.filters });
   window.applyActiveCatalogFilters = (filters = {}) => {

@@ -2,6 +2,9 @@ const byId = (id) => document.getElementById(id);
 const query = (selector) => document.querySelector(selector);
 const on = (node, eventName, handler, options) => node && node.addEventListener(eventName, handler, options);
 const NAVBAR_WARNING_STORAGE_KEY = "voxlis-hide-navbar-warning";
+const API_OUTAGE_MESSAGE =
+  window.VOXLIS_API_HEALTH?.outageMessage ||
+  "We are experiencing a DDOS attack, some information may not be aviable";
 const isVisible = (node) => {
   if (!node) return false;
   const style = window.getComputedStyle(node);
@@ -19,16 +22,24 @@ const readStoredNavbarWarningHidden = () => {
   }
 };
 
+const getApiOutageState = () =>
+  window.VOXLIS_API_HEALTH?.getState?.() ?? {
+    isDown: false,
+    message: API_OUTAGE_MESSAGE,
+  };
+const isApiOutageActive = () => Boolean(getApiOutageState().isDown);
+
 const setNavbarWarningHidden = (nextHidden, { persist = true } = {}) => {
   const warningBar = byId("topWarningBar");
-  const hidden = Boolean(nextHidden);
+  const forceVisible = isApiOutageActive();
+  const hidden = forceVisible ? false : Boolean(nextHidden);
 
   if (warningBar) {
     warningBar.hidden = hidden;
     warningBar.classList.toggle("hidden", hidden);
   }
 
-  if (persist) {
+  if (persist && !forceVisible) {
     try {
       window.localStorage.setItem(NAVBAR_WARNING_STORAGE_KEY, hidden ? "1" : "0");
     } catch {
@@ -37,6 +48,35 @@ const setNavbarWarningHidden = (nextHidden, { persist = true } = {}) => {
   }
 
   return hidden;
+};
+
+const syncNavbarApiOutageWarning = (state = getApiOutageState()) => {
+  const warningBar = byId("topWarningBar");
+  const warningText = query(".navbar-warning-text");
+  if (!warningBar) {
+    return;
+  }
+
+  if (warningText && !warningText.dataset.defaultText) {
+    warningText.dataset.defaultText = warningText.textContent || "";
+  }
+
+  if (state?.isDown) {
+    if (warningText) {
+      warningText.textContent = state.message || API_OUTAGE_MESSAGE;
+    }
+
+    warningBar.dataset.apiOutage = "true";
+    warningBar.hidden = false;
+    warningBar.classList.remove("hidden");
+    return;
+  }
+
+  delete warningBar.dataset.apiOutage;
+  if (warningText) {
+    warningText.textContent = warningText.dataset.defaultText || "";
+  }
+  setNavbarWarningHidden(readStoredNavbarWarningHidden(), { persist: false });
 };
 
 const getActiveCatalogPageKey = () => window.VOXLIS_PAGE?.key || "roblox";
@@ -286,6 +326,7 @@ const initNavbar = () => {
     bindSearchField(query(".mobile-menu-search"), elements.mobileMenuSearchInput, byId("mobClrSrch")),
   );
   setNavbarWarningHidden(readStoredNavbarWarningHidden(), { persist: false });
+  syncNavbarApiOutageWarning(getApiOutageState());
   syncSearchQuery(window.getActiveCatalogSearchQuery(), null);
 
   on(elements.mobileMenuToggle, "click", () => (isMenuOpen() ? closeMenu() : openMenu()));
@@ -303,6 +344,9 @@ const initNavbar = () => {
     }
 
     syncSearchInputsFromExternalState(String(event.detail?.value || ""));
+  });
+  on(window, "voxlis:api-health-change", (event) => {
+    syncNavbarApiOutageWarning(event.detail);
   });
 
   [elements.themeNavTrigger, elements.mobileQuickThemeButton, elements.mobileThemeButton].forEach((trigger) => {

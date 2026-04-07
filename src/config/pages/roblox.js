@@ -248,6 +248,14 @@
       hintOff: "High-risk or not-yet-verified entries stay hidden by default.",
       hintOn: "Warning entries stay visible until you turn this off or reset filters.",
     },
+    inviteOnlyToggle: {
+      enabled: true,
+      buttonLabelOff: "Show invite-only results",
+      buttonLabelOn: "Showing invite-only results",
+      subtitle: "Include invite-only executors in the catalog results. These stay hidden by default.",
+      hintOff: "Invite-only entries stay hidden by default.",
+      hintOn: "Invite-only entries stay visible until you turn this off or reset filters.",
+    },
   };
 
   window.VOXLIS_CONFIG_SOURCES = configSources;

@@ -29,6 +29,28 @@
     String(value)
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, (character) => character.toUpperCase());
+  const fetchWithApiTimeout = (path, init = {}, options = {}) => {
+    const apiHealth = window.VOXLIS_API_HEALTH;
+    const shouldMonitor =
+      options.monitor === true ||
+      (options.monitor !== false && apiHealth?.isMonitoredApiUrl?.(path));
+
+    if (shouldMonitor && typeof apiHealth?.fetchWithTimeout === "function") {
+      return apiHealth.fetchWithTimeout(path, init, { ...options, monitor: true });
+    }
+
+    return fetch(path, init);
+  };
+  const markApiResponseDown = (path, response) => {
+    if (response?.status < 500 || !window.VOXLIS_API_HEALTH?.isMonitoredApiUrl?.(path)) {
+      return;
+    }
+
+    window.VOXLIS_API_HEALTH.markDown?.({
+      url: path,
+      error: new Error(`API request failed (${response.status})`),
+    });
+  };
 
   const TRACKED_CARD_ACTIONS = Array.isArray(trackingConfig.trackedActions)
     ? [...new Set(trackingConfig.trackedActions.map((action) => normalizeAction(action)).filter(Boolean))]
@@ -279,9 +301,11 @@
       return state.loadPromise;
     }
 
-    state.loadPromise = fetch(buildRequestUrl(), { cache: "no-store" })
+    const requestUrl = buildRequestUrl();
+    state.loadPromise = fetchWithApiTimeout(requestUrl, { cache: "no-store" })
       .then(async (response) => {
         if (!response.ok) {
+          markApiResponseDown(requestUrl, response);
           throw new Error(`Failed to load click counts (${response.status})`);
         }
 
@@ -337,7 +361,7 @@
   };
 
   const postTrackingPayload = (payload = {}, { targetKey = "", onRejected = null } = {}) =>
-    fetch(buildEndpointUrl(), {
+    fetchWithApiTimeout(buildEndpointUrl(), {
       method: "POST",
       keepalive: true,
       headers: {
@@ -354,6 +378,7 @@
         }
 
         if (!response.ok) {
+          markApiResponseDown(buildEndpointUrl(), response);
           const error = new Error(`Failed to increment click count (${response.status})`);
           error.status = response.status;
           error.payload = responsePayload;

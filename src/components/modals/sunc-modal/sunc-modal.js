@@ -29,6 +29,28 @@
     currentResult: null,
     searchQuery: "",
   };
+  const fetchWithApiTimeout = (path, init = {}, options = {}) => {
+    const apiHealth = window.VOXLIS_API_HEALTH;
+    const shouldMonitor =
+      options.monitor === true ||
+      (options.monitor !== false && apiHealth?.isMonitoredApiUrl?.(path));
+
+    if (shouldMonitor && typeof apiHealth?.fetchWithTimeout === "function") {
+      return apiHealth.fetchWithTimeout(path, init, { ...options, monitor: true });
+    }
+
+    return fetch(path, init);
+  };
+  const markApiResponseDown = (path, response) => {
+    if (response?.status < 500 || !window.VOXLIS_API_HEALTH?.isMonitoredApiUrl?.(path)) {
+      return;
+    }
+
+    window.VOXLIS_API_HEALTH.markDown?.({
+      url: path,
+      error: new Error(`API request failed (${response.status})`),
+    });
+  };
 
   const escapeHtml = (value = "") =>
     String(value).replace(/[&<>"']/g, (character) => ({
@@ -215,17 +237,25 @@
 
     if (forceRefresh) {
       suncModalState.responseCache.delete(stableUrl);
+      suncModalState.responseCache.delete(requestUrl);
     }
 
     if (!suncModalState.responseCache.has(requestUrl)) {
-      const request = fetch(requestUrl, { cache: "no-cache" }).then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`sUNC API request failed (${response.status})`);
-        }
+      const request = fetchWithApiTimeout(requestUrl, { cache: "no-cache" })
+        .then(async (response) => {
+          if (!response.ok) {
+            markApiResponseDown(requestUrl, response);
+            throw new Error(`sUNC API request failed (${response.status})`);
+          }
 
-        const payload = await response.json();
-        return payload && typeof payload === "object" ? payload : {};
-      });
+          const payload = await response.json();
+          return payload && typeof payload === "object" ? payload : {};
+        })
+        .catch((error) => {
+          suncModalState.responseCache.delete(requestUrl);
+          suncModalState.responseCache.delete(stableUrl);
+          throw error;
+        });
 
       suncModalState.responseCache.set(requestUrl, request);
       if (forceRefresh) {
