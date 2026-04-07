@@ -7,7 +7,7 @@
 	},
 	"badges": ["verified", "kernel"],
 	"hidden": false,
-	"type": "external",
+	"type": "internal",
 	"tags": ["multi-instance", "decompiler", "kernel", "inviteonly"],
 	"platforms": ["windows"],
 	"website": "https://milkers.best"
