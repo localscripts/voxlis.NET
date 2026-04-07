@@ -8,7 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["multi-instance", "decompiler"],
+	"tags": ["multi-instance", "decompiler", "raknet"],
 	"platforms": ["macos"],
 	"website": "https://www.raptor.fun/",
 	"keyed": false

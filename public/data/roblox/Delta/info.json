@@ -8,7 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["decompiler"],
+	"tags": ["decompiler", "raknet"],
 	"platforms": ["ios", "android"],
 	"website": "https://deltaexploits.gg"
 }

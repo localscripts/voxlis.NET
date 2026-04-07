@@ -77,8 +77,14 @@
         label: "Insecure",
         info: "This product is only shown in insecure mode because it is not recommended or not yet verified.",
       },
+      raknet: {
+        icon: "fas fa-network-wired",
+        assetIcon: "icons/vectors/tag-raknet.svg",
+        label: "RakNet",
+        info: "This product supports RakNet lib.",
+      },
     },
-    filterableTags: ["multi-instance", "decompiler", "kernel"],
+    filterableTags: ["multi-instance", "decompiler", "kernel", "raknet"],
     showOnlyFilters: ["verified", "trending", "warning"],
     segmentFilters: [
       {

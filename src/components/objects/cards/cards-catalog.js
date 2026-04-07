@@ -1515,6 +1515,7 @@
           tag === "kernel" ? "is-kernel-tag" : "",
           tag === "usermode" ? "is-usermode-tag" : "",
           tag === "insecure" ? "is-insecure-tag" : "",
+          tag === "freemium" ? "is-freemium-tag" : "",
         ]
           .filter(Boolean)
           .join(" ");
@@ -1913,6 +1914,14 @@
     }
   };
 
+  const flashNoteHighlight = (trigger) => {
+    if (!trigger) return;
+    trigger.classList.remove("is-tag-flash");
+    void trigger.offsetWidth;
+    trigger.classList.add("is-tag-flash");
+    trigger.addEventListener("animationend", () => trigger.classList.remove("is-tag-flash"), { once: true });
+  };
+
   const handleTitleIconClick = (event) => {
     const trigger = event.target.closest("button[data-card-icon-message]");
     if (!trigger) {
@@ -1921,6 +1930,7 @@
 
     event.preventDefault();
     event.stopPropagation();
+    flashNoteHighlight(trigger);
 
     const article = trigger.closest("article[data-slug]");
     const slug = article?.dataset.slug || "";

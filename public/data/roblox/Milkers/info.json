@@ -8,7 +8,7 @@
 	"badges": ["verified", "kernel"],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["multi-instance", "decompiler", "kernel", "inviteonly"],
+	"tags": ["multi-instance", "decompiler", "raknet", "kernel", "inviteonly"],
 	"platforms": ["windows"],
 	"website": "https://milkers.best"
 }
