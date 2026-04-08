@@ -43,9 +43,9 @@
     "'": "&#39;",
   };
   const MARKDOWN_CALLOUT_PATTERN =
-    /^\s*\[!(TIP|NOTE|WARN|WARNING)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\]/i;
+    /^\s*\[!(TIP|NOTE|WARN|WARNING|INSECURE)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\]/i;
   const MARKDOWN_CALLOUT_PREFIX_PATTERN =
-    /^\s*\[!(TIP|NOTE|WARN|WARNING)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\](?:\s|<br\s*\/?>)*/i;
+    /^\s*\[!(TIP|NOTE|WARN|WARNING|INSECURE)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\](?:\s|<br\s*\/?>)*/i;
   const MARKDOWN_BUTTON_GROUP_PATTERN = /^\s*\[!(BUTTONS|LINKS)\]/i;
   const MARKDOWN_BUTTON_GROUP_PREFIX_PATTERN = /^\s*\[!(BUTTONS|LINKS)\](?:\s|<br\s*\/?>)*/i;
   const MARKDOWN_CALLOUTS = {
@@ -62,8 +62,15 @@
     },
     warning: {
       label: "Warning",
-      iconClass: "fa-triangle-exclamation",
+      iconClass: "",
+      iconMarkup: '<span class="info-modal-callout-title-icon is-warning" aria-hidden="true"></span>',
       color: "#F59E0B",
+    },
+    insecure: {
+      label: "Insecure",
+      iconClass: "",
+      iconMarkup: '<span class="info-modal-callout-title-icon is-insecure" aria-hidden="true"></span>',
+      color: "#F87171",
     },
   };
   const ACTIVE_CATALOG = window.VOXLIS_PAGE?.catalog ?? window.VOXLIS_CONFIG?.activeCatalogPage ?? {};
@@ -637,7 +644,12 @@
             rel="noopener noreferrer"
             hidden
           >
-            <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Website
+            <i
+              class="fas fa-arrow-up-right-from-square"
+              id="moreInfoModalWebsiteIcon"
+              aria-hidden="true"
+            ></i>
+            <span id="moreInfoModalWebsiteLabel">Website</span>
           </a>
           <button class="info-modal-close-btn" type="button" data-more-info-close>
             <i class="fas fa-times" aria-hidden="true"></i> <span id="moreInfoModalCloseLabel">Close</span>
@@ -736,8 +748,18 @@
     }
 
     const closeLabelNode = modal.querySelector("#moreInfoModalCloseLabel");
+    const websiteButton = modal.querySelector("#moreInfoModalWebsiteBtn");
+    const websiteButtonLabelNode = modal.querySelector("#moreInfoModalWebsiteLabel");
+    const websiteButtonIconNode = modal.querySelector("#moreInfoModalWebsiteIcon");
     modal.hidden = true;
-    modal.classList.remove("is-open", "is-closing", "is-tag-guide", "is-mirror-picker");
+    modal.classList.remove(
+      "is-open",
+      "is-closing",
+      "is-tag-guide",
+      "is-mirror-picker",
+      "is-warning-prompt",
+      "is-insecure-prompt",
+    );
     document.body.style.overflow = modalState.previousBodyOverflow;
     modalState.previousBodyOverflow = "";
     modalState.closeTimerId = 0;
@@ -749,6 +771,17 @@
     modalState.choiceTarget = "_blank";
     if (closeLabelNode) {
       closeLabelNode.textContent = "Close";
+    }
+    if (websiteButton) {
+      websiteButton.setAttribute("target", "_blank");
+      websiteButton.setAttribute("title", "Open website");
+    }
+    if (websiteButtonLabelNode) {
+      websiteButtonLabelNode.textContent = "Website";
+    }
+    if (websiteButtonIconNode) {
+      websiteButtonIconNode.className = "fas fa-arrow-up-right-from-square";
+      websiteButtonIconNode.hidden = false;
     }
   };
 
@@ -818,10 +851,14 @@
     description = "",
     reviewUrl,
     websiteUrl = "",
+    websiteTarget = "_blank",
     websiteWarningConfig = null,
+    websiteLabel = "Website",
+    websiteIconClass = "fas fa-arrow-up-right-from-square",
     choiceWarningConfig = null,
     choiceTarget = "_blank",
     contentHtml = "",
+    contentMarkdown = "",
     highlightContentKey = "",
     preserveTitle = false,
     hideWebsiteButton = false,
@@ -832,9 +869,13 @@
     modalVariant = "",
   } = {}) => {
     const modalContentHtml = String(contentHtml).trim();
+    const modalContentMarkdown = String(contentMarkdown).trim();
     const isMirrorPicker = modalVariant === "mirror-picker";
-    const isTagGuide = hideWebsiteButton && Boolean(modalContentHtml) && !isMirrorPicker;
-    if (!reviewUrl && !modalContentHtml) {
+    const isWarningPrompt = modalVariant === "warning-prompt";
+    const isInsecurePrompt = modalVariant === "insecure-prompt";
+    const hasInlineContent = Boolean(modalContentHtml || modalContentMarkdown);
+    const isTagGuide = hideWebsiteButton && hasInlineContent && !isMirrorPicker;
+    if (!reviewUrl && !hasInlineContent) {
       return false;
     }
 
@@ -846,6 +887,8 @@
     const markdownNode = modal.querySelector("#moreInfoModalMarkdown");
     const contentNode = modal.querySelector("#moreInfoModalContent");
     const websiteButton = modal.querySelector("#moreInfoModalWebsiteBtn");
+    const websiteButtonLabelNode = modal.querySelector("#moreInfoModalWebsiteLabel");
+    const websiteButtonIconNode = modal.querySelector("#moreInfoModalWebsiteIcon");
     const closeLabelNode = modal.querySelector("#moreInfoModalCloseLabel");
     const exploitName = String(title).trim() || getDefaultEntryLabel();
     const modalTitle = preserveTitle || exploitName.endsWith(" Information")
@@ -854,6 +897,9 @@
     const modalDescription = String(description).trim();
     const modalWebsiteTargets = normalizeWebsiteTargetList(websiteUrl);
     const primaryWebsiteUrl = modalWebsiteTargets[0] || "";
+    const resolvedWebsiteTarget = websiteTarget == null ? "_blank" : String(websiteTarget).trim();
+    const resolvedWebsiteLabel = String(websiteLabel || "Website").trim() || "Website";
+    const resolvedWebsiteIconClass = String(websiteIconClass || "").trim();
     const normalizedModalPath = modalPath ? normalizePath(modalPath) : "";
     const normalizedChoiceWarningConfig = normalizeWarningConfig(choiceWarningConfig);
     const resolvedChoiceTarget = String(choiceTarget || "_blank").trim() || "_blank";
@@ -886,10 +932,22 @@
       const shouldHideWebsiteButton = hideWebsiteButton || !modalWebsiteTargets.length;
       websiteButton.hidden = shouldHideWebsiteButton;
       websiteButton.setAttribute("href", shouldHideWebsiteButton ? "#" : primaryWebsiteUrl);
+      websiteButton.setAttribute("target", shouldHideWebsiteButton ? "_blank" : resolvedWebsiteTarget);
       websiteButton.setAttribute(
         "title",
-        modalWebsiteTargets.length > 1 ? "Choose a mirror site" : "Open website",
+        shouldHideWebsiteButton
+          ? ""
+          : modalWebsiteTargets.length > 1
+            ? "Choose a mirror site"
+            : resolvedWebsiteLabel,
       );
+      if (websiteButtonLabelNode) {
+        websiteButtonLabelNode.textContent = resolvedWebsiteLabel;
+      }
+      if (websiteButtonIconNode) {
+        websiteButtonIconNode.className = resolvedWebsiteIconClass;
+        websiteButtonIconNode.hidden = !resolvedWebsiteIconClass;
+      }
       delete websiteButton.dataset.warningVariant;
       delete websiteButton.dataset.warningTitle;
       delete websiteButton.dataset.warningDescription;
@@ -906,12 +964,25 @@
 
     document.body.style.overflow = "hidden";
     modal.hidden = false;
-    modal.classList.remove("is-closing", "is-open", "is-tag-guide", "is-mirror-picker");
+    modal.classList.remove(
+      "is-closing",
+      "is-open",
+      "is-tag-guide",
+      "is-mirror-picker",
+      "is-warning-prompt",
+      "is-insecure-prompt",
+    );
     if (isTagGuide) {
       modal.classList.add("is-tag-guide");
     }
     if (isMirrorPicker) {
       modal.classList.add("is-mirror-picker");
+    }
+    if (isWarningPrompt) {
+      modal.classList.add("is-warning-prompt");
+    }
+    if (isInsecurePrompt) {
+      modal.classList.add("is-insecure-prompt");
     }
     window.requestAnimationFrame(() => {
       if (!modal.hidden) {
@@ -929,6 +1000,12 @@
 
     if (modalContentHtml) {
       markdownNode.innerHTML = modalContentHtml;
+      finalizeMarkdownContent(markdownNode, contentNode, highlightContentKey);
+      return true;
+    }
+
+    if (modalContentMarkdown) {
+      markdownNode.innerHTML = renderReviewMarkdown(modalContentMarkdown);
       finalizeMarkdownContent(markdownNode, contentNode, highlightContentKey);
       return true;
     }

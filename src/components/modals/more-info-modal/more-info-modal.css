@@ -629,6 +629,7 @@ body.has-video-background .info-modal {
 .info-modal-markdown blockquote.info-modal-callout.is-warning {
   --info-modal-callout-accent: #d29922;
   --info-modal-callout-accent-rgb: 210, 153, 34;
+  font-size: 0.94rem;
 }
 
 .info-modal-markdown blockquote.info-modal-callout.has-border {
@@ -679,12 +680,46 @@ body.has-video-background .info-modal {
   mask: url("/public/assets/icons/vectors/cards-info.svg") center / contain no-repeat;
 }
 
+.info-modal-markdown .info-modal-callout-title .info-modal-callout-title-icon.is-warning {
+  background-image: linear-gradient(to top, #d97706, #facc15);
+  -webkit-mask: url("/public/assets/icons/vectors/filter-warning.svg") center / contain no-repeat;
+  mask: url("/public/assets/icons/vectors/filter-warning.svg") center / contain no-repeat;
+}
+
+.info-modal-markdown .info-modal-callout-title .info-modal-callout-title-icon.is-insecure {
+  background-image: linear-gradient(to top, #dc2626, #f87171);
+  -webkit-mask: url("/public/assets/icons/vectors/tag-insecure.svg") center / contain no-repeat;
+  mask: url("/public/assets/icons/vectors/tag-insecure.svg") center / contain no-repeat;
+}
+
 .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title {
+  font-size: 0.9rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-warning .info-modal-callout-title {
+  font-size: 0.9rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-insecure .info-modal-callout-title {
   font-size: 0.9rem;
 }
 
 .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title i,
 .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title .info-modal-callout-title-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  font-size: 0.9rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-warning .info-modal-callout-title i,
+.info-modal-markdown blockquote.info-modal-callout.is-warning .info-modal-callout-title .info-modal-callout-title-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  font-size: 0.9rem;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-insecure .info-modal-callout-title i,
+.info-modal-markdown blockquote.info-modal-callout.is-insecure .info-modal-callout-title .info-modal-callout-title-icon {
   width: 0.9rem;
   height: 0.9rem;
   font-size: 0.9rem;
@@ -854,6 +889,54 @@ body.has-video-background .info-modal {
 
 .info-modal-container.is-mirror-picker .info-modal {
   max-width: 30rem;
+}
+
+.info-modal-container.is-warning-prompt .info-modal,
+.info-modal-container.is-insecure-prompt .info-modal {
+  max-width: 30rem;
+}
+
+.info-modal-container.is-warning-prompt .info-modal-content,
+.info-modal-container.is-insecure-prompt .info-modal-content {
+  gap: 0;
+  padding: 1rem 1.5rem 0.55rem;
+}
+
+.info-modal-container.is-warning-prompt .info-modal-markdown,
+.info-modal-container.is-insecure-prompt .info-modal-markdown {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.info-modal-markdown blockquote.info-modal-callout.is-insecure {
+  --info-modal-callout-accent: #f87171;
+  --info-modal-callout-accent-rgb: 248, 113, 113;
+  font-size: 0.94rem;
+}
+
+.info-modal-container.is-warning-prompt .info-modal-markdown blockquote.info-modal-callout.is-warning,
+.info-modal-container.is-insecure-prompt .info-modal-markdown blockquote.info-modal-callout.is-insecure {
+  margin-bottom: 0;
+}
+
+.info-modal-container.is-warning-prompt .info-modal-footer,
+.info-modal-container.is-insecure-prompt .info-modal-footer {
+  justify-content: flex-start;
+  border-top: 0;
+  background: transparent;
+  padding: 0.55rem 1.5rem 1rem;
+}
+
+.info-modal-container.is-warning-prompt .info-modal-website-btn,
+.info-modal-container.is-insecure-prompt .info-modal-website-btn {
+  flex: 1 1 auto;
+}
+
+.info-modal-container.is-warning-prompt .info-modal-close-btn,
+.info-modal-container.is-insecure-prompt .info-modal-close-btn {
+  flex: 0 0 auto;
+  padding-inline: 1rem;
 }
 
 .info-modal-container.is-mirror-picker .info-modal-header {
@@ -1038,11 +1121,43 @@ body.has-video-background .info-modal {
     font-size: 0.72rem;
   }
 
+  .info-modal-markdown blockquote.info-modal-callout.is-warning {
+    padding: 0.35rem 0 0.35rem 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.72rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-insecure {
+    padding: 0.35rem 0 0.35rem 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.72rem;
+  }
+
   .info-modal-markdown blockquote.info-modal-callout.is-note.has-border {
     padding: 0.38rem 0.65rem 0.38rem 0.75rem;
   }
 
+  .info-modal-markdown blockquote.info-modal-callout.is-warning.has-border {
+    padding: 0.38rem 0.65rem 0.38rem 0.75rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-insecure.has-border {
+    padding: 0.38rem 0.65rem 0.38rem 0.75rem;
+  }
+
   .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title {
+    gap: 0.35rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.72rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-warning .info-modal-callout-title {
+    gap: 0.35rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.72rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-insecure .info-modal-callout-title {
     gap: 0.35rem;
     margin-bottom: 0.3rem;
     font-size: 0.72rem;
@@ -1055,7 +1170,29 @@ body.has-video-background .info-modal {
     font-size: 0.72rem;
   }
 
+  .info-modal-markdown blockquote.info-modal-callout.is-warning .info-modal-callout-title i,
+  .info-modal-markdown blockquote.info-modal-callout.is-warning .info-modal-callout-title .info-modal-callout-title-icon {
+    width: 0.72rem;
+    height: 0.72rem;
+    font-size: 0.72rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-insecure .info-modal-callout-title i,
+  .info-modal-markdown blockquote.info-modal-callout.is-insecure .info-modal-callout-title .info-modal-callout-title-icon {
+    width: 0.72rem;
+    height: 0.72rem;
+    font-size: 0.72rem;
+  }
+
   .info-modal-markdown blockquote.info-modal-callout.is-note > p + p {
+    margin-top: 0.5rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-warning > p + p {
+    margin-top: 0.5rem;
+  }
+
+  .info-modal-markdown blockquote.info-modal-callout.is-insecure > p + p {
     margin-top: 0.5rem;
   }
 
