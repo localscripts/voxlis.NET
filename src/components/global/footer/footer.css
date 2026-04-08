@@ -94,11 +94,6 @@
   font-family: var(--font-family-ui, var(--font-family-base, "Open Sans", sans-serif));
 }
 
-.footer-modal-mount {
-  position: relative;
-  z-index: 1;
-}
-
 .footer-bottom-row {
   display: flex;
   justify-content: space-between;

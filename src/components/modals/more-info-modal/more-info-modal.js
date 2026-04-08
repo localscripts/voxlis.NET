@@ -56,7 +56,8 @@
     },
     note: {
       label: "Note",
-      iconClass: "fa-circle-info",
+      iconClass: "",
+      iconMarkup: '<span class="info-modal-callout-title-icon is-note" aria-hidden="true"></span>',
       color: "#3B82F6",
     },
     warning: {
@@ -137,6 +138,7 @@
       type: calloutType,
       label: config.label,
       iconClass: config.iconClass,
+      iconMarkup: config.iconMarkup || "",
       color: normalizeHexColor(match[2]) || config.color,
       colorRgb: hexToRgbString(match[2]) || hexToRgbString(config.color),
       hasBorder: Boolean(match[3]),
@@ -443,8 +445,10 @@
 
       const titleNode = document.createElement("p");
       titleNode.className = "info-modal-callout-title";
-      titleNode.innerHTML =
-        `<i class="fas ${escapeHtml(callout.iconClass)}" aria-hidden="true"></i>${escapeHtml(callout.label)}`;
+      const titleIconMarkup = callout.iconMarkup
+        ? callout.iconMarkup
+        : `<i class="fas ${escapeHtml(callout.iconClass)}" aria-hidden="true"></i>`;
+      titleNode.innerHTML = `${titleIconMarkup}${escapeHtml(callout.label)}`;
       blockquote.insertBefore(titleNode, blockquote.firstChild);
     });
   };

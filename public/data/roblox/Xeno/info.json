@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://www.xeno.now/",
+	"website": [
+		"https://www.xeno.now/",
+		"https://www.xeno.onl/"
+	],
 	"keyed": false
 }

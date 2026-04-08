@@ -32,6 +32,12 @@
   const KAWAII_MOBILE_TINT_MEDIA_QUERY = window.matchMedia(
     kawaiiMobileTintConfig.mediaQuery ?? "(max-width: 980px)",
   );
+  const KAWAII_MOBILE_SURFACE_TINT =
+    kawaiiMobileTintConfig.surfaceTint ?? "rgba(0, 0, 0, 0.82)";
+  const KAWAII_MOBILE_FOOTER_TINT =
+    kawaiiMobileTintConfig.footerTint ?? "rgba(0, 0, 0, 0.84)";
+  const KAWAII_MOBILE_NAVBAR_TINT =
+    kawaiiMobileTintConfig.navbarTint ?? "rgba(0, 0, 0, 0.94)";
   const THEME_GROUPS =
     Array.isArray(themeConfig.groups) && themeConfig.groups.length
       ? themeConfig.groups
@@ -222,21 +228,20 @@
     const blurFooterAlpha = solidTintAlpha * FOOTER_BLUR_TINT_SCALE;
     const solidFooterAlpha = Math.max(0, solidTintAlpha - 0.02);
     const root = getThemeRoot();
-    const computedStyles = window.getComputedStyle(root);
     const useKawaiiMobileTintMode = nextEnabled && syncKawaiiMobileTintModeClass();
     const blurValue = useKawaiiMobileTintMode ? "0px" : nextEnabled ? `${nextStrength}px` : "0px";
     const surfaceTint = useKawaiiMobileTintMode
-      ? computedStyles.getPropertyValue("--kawaii-mobile-surface-tint").trim() || "rgba(28, 12, 34, 0.78)"
+      ? KAWAII_MOBILE_SURFACE_TINT
       : nextEnabled
         ? rgba(SURFACE_TINT_HEX_DEFAULT, blurTintAlpha)
         : rgba(SURFACE_TINT_HEX_DEFAULT, solidTintAlpha);
     const footerTint = useKawaiiMobileTintMode
-      ? computedStyles.getPropertyValue("--kawaii-mobile-footer-tint").trim() || "rgba(24, 10, 28, 0.84)"
+      ? KAWAII_MOBILE_FOOTER_TINT
       : nextEnabled
         ? rgba(SURFACE_TINT_HEX_DEFAULT, blurFooterAlpha)
         : rgba(SURFACE_TINT_HEX_DEFAULT, solidFooterAlpha);
     const navbarTint = useKawaiiMobileTintMode
-      ? computedStyles.getPropertyValue("--kawaii-mobile-navbar-tint").trim() || "#14081C"
+      ? KAWAII_MOBILE_NAVBAR_TINT
       : nextEnabled
         ? surfaceTint
         : "#000000";
@@ -303,7 +308,9 @@
     const root = getThemeRoot();
 
     clearRemovedEditorArtifacts();
-    root.dataset.theme = nextTheme;
+    if (root.dataset.theme !== nextTheme) {
+      root.dataset.theme = nextTheme;
+    }
     applyPresetSurfaceStyle(nextTheme);
 
     if (persistPresetPreferences) {
@@ -369,7 +376,11 @@
           aria-hidden="true"
           style="${escapeHtml(swatchStyle)}"
         >
-          ${swatchImage ? `<img class="footer-theme-swatch-media" src="${escapeHtml(swatchImage)}" alt="">` : ""}
+          ${
+            swatchImage
+              ? `<img class="footer-theme-swatch-media" src="${escapeHtml(swatchImage)}" alt="" loading="lazy" decoding="async" fetchpriority="low">`
+              : ""
+          }
         </div>
         <span class="footer-theme-option-label">
           <span class="footer-theme-option-title">${escapeHtml(label)}</span>
@@ -627,8 +638,7 @@
         event.preventDefault();
         event.stopPropagation();
         trackThemeEvent("preset-select");
-        const nextTheme = applyTheme(option.dataset.theme || DEFAULT_THEME_ID);
-        syncSelectedOption(scope, nextTheme);
+        applyTheme(option.dataset.theme || DEFAULT_THEME_ID);
       });
 
       option.addEventListener("keydown", (event) => {
@@ -638,8 +648,7 @@
 
         event.preventDefault();
         trackThemeEvent("preset-select");
-        const nextTheme = applyTheme(option.dataset.theme || DEFAULT_THEME_ID);
-        syncSelectedOption(scope, nextTheme);
+        applyTheme(option.dataset.theme || DEFAULT_THEME_ID);
       });
     });
 
@@ -699,8 +708,8 @@
       closeThemeDrawer({ restoreFocus: true });
     });
 
-    window.addEventListener(THEME_CHANGE_EVENT, () => {
-      syncSelectedOption(scope, getStoredTheme());
+    window.addEventListener(THEME_CHANGE_EVENT, (event) => {
+      syncSelectedOption(scope, normalizeTheme(event.detail?.theme || getStoredTheme()));
       syncVisibilityPreferencesUI(scope);
     });
 
@@ -729,7 +738,6 @@
   applyNavbarWarningVisibility(getStoredHideNavbarWarning(), { persist: false });
   syncKawaiiMobileTintModeClass();
 
-  window.addEventListener(THEME_CHANGE_EVENT, syncResponsiveThemeSurfaceMode);
   if (typeof KAWAII_MOBILE_TINT_MEDIA_QUERY.addEventListener === "function") {
     KAWAII_MOBILE_TINT_MEDIA_QUERY.addEventListener("change", syncResponsiveThemeSurfaceMode);
   } else if (typeof KAWAII_MOBILE_TINT_MEDIA_QUERY.addListener === "function") {

@@ -270,6 +270,57 @@ body.has-video-background .info-modal {
   height: 1.14rem;
 }
 
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key^="tag:"] .info-modal-notice-icon .ph-asset-icon:not(.ph-insecure-ico) {
+  background-image: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
+}
+
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key="tag:kernel"] .info-modal-notice-icon .ph-asset-icon,
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key="tag:keysystem"] .info-modal-notice-icon .ph-asset-icon,
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key="tag:freemium"] .info-modal-notice-icon .ph-asset-icon {
+  background-image: linear-gradient(to top, #ca8a04, #fde047);
+}
+
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key="verified"] .info-modal-notice-icon i,
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key="trending"] .info-modal-notice-icon i {
+  display: inline-block;
+  background: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key="warning"] .info-modal-notice-icon i {
+  display: inline-block;
+  background: linear-gradient(to top, #d97706, #facc15);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.info-modal-markdown .info-modal-notice-icon .ph-good-ico {
+  display: inline-block;
+  background: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.info-modal-markdown .info-modal-notice-icon .ph-warn-ico {
+  display: inline-block;
+  background: linear-gradient(to top, #d97706, #facc15);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.info-modal-markdown .info-modal-notice-icon .ph-issue-ico {
+  color: rgba(245, 158, 11, 0.95);
+}
+
+.info-modal-markdown .info-modal-notice-icon .ph-warn-red-ico {
+  color: #ef4444;
+}
+
 .info-modal-markdown .info-modal-notice-icon .ph-kernel-ico {
   color: #facc15;
 }
@@ -614,11 +665,28 @@ body.has-video-background .info-modal {
   color: var(--info-modal-callout-accent);
 }
 
+.info-modal-markdown .info-modal-callout-title .info-modal-callout-title-icon {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+.info-modal-markdown .info-modal-callout-title .info-modal-callout-title-icon.is-note {
+  background-image: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
+  -webkit-mask: url("/public/assets/icons/vectors/cards-info.svg") center / contain no-repeat;
+  mask: url("/public/assets/icons/vectors/cards-info.svg") center / contain no-repeat;
+}
+
 .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title {
   font-size: 0.9rem;
 }
 
-.info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title i {
+.info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title i,
+.info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title .info-modal-callout-title-icon {
+  width: 0.9rem;
+  height: 0.9rem;
   font-size: 0.9rem;
 }
 
@@ -785,11 +853,17 @@ body.has-video-background .info-modal {
 }
 
 .info-modal-container.is-mirror-picker .info-modal {
-  max-width: 34rem;
+  max-width: 30rem;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-header {
+  border-bottom: 0;
+  padding: 1.25rem 1.5rem 0.75rem;
 }
 
 .info-modal-container.is-mirror-picker .info-modal-content {
   gap: 0;
+  padding: 0.3rem 1.5rem 0.4rem;
 }
 
 .info-modal-container.is-mirror-picker .info-modal-markdown {
@@ -799,15 +873,86 @@ body.has-video-background .info-modal {
 }
 
 .info-modal-container.is-mirror-picker .info-modal-choice-note {
-  margin: 0 0 1rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.78rem;
+  color: rgba(148, 163, 184, 0.6);
+  line-height: 1.45;
 }
 
 .info-modal-container.is-mirror-picker .info-modal-choice-group {
+  gap: 0.4rem;
   margin-bottom: 0;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-btn {
+  padding: 0.75rem 0.95rem;
+  border-color: rgba(255, 255, 255, 0.06);
+  background-color: rgba(255, 255, 255, 0.025);
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-btn::before {
+  opacity: 0;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-btn:hover {
+  transform: none;
+  border-color: rgba(var(--prim-rgb), 0.35);
+  background-color: rgba(var(--prim-rgb), 0.06);
+  box-shadow: none;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-btn:hover::before {
+  opacity: 0.6;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-action {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 0.8rem;
+  transition: color var(--smooth-duration) var(--smooth-ease);
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-action span {
+  display: none;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-action i {
+  font-size: 0.8rem;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-btn:hover .info-modal-choice-action {
+  color: rgba(var(--prim-rgb), 0.7);
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-label {
+  font-size: 0.88rem;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-choice-url {
+  font-size: 0.72rem;
+  opacity: 0.55;
+}
+
+.info-modal-container.is-mirror-picker .info-modal-footer {
+  border-top: 0;
+  background: transparent;
+  padding: 0.55rem 1.5rem 1rem;
 }
 
 .info-modal-container.is-mirror-picker .info-modal-close-btn {
   flex: 1 1 auto;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.info-modal-container.is-mirror-picker .info-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 @media (max-width: 640px) {
@@ -903,7 +1048,10 @@ body.has-video-background .info-modal {
     font-size: 0.72rem;
   }
 
-  .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title i {
+  .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title i,
+  .info-modal-markdown blockquote.info-modal-callout.is-note .info-modal-callout-title .info-modal-callout-title-icon {
+    width: 0.72rem;
+    height: 0.72rem;
     font-size: 0.72rem;
   }
 

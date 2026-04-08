@@ -353,10 +353,11 @@
       iconClass: platformIcons[platform] || "fas fa-desktop",
     }));
 
-  const buildTagOptions = (filterableTags = []) =>
+  const buildTagOptions = (filterableTags = [], tagMetadata = {}) =>
     filterableTags.map((tag) => ({
       id: `filterTag${tag.replace(/[^a-z0-9]+/gi, "-")}`,
       tag,
+      toneClass: tagMetadata[String(tag)]?.toneClass || "",
     }));
 
   const normalizeInfoText = (value = "", fallback = "") => {
@@ -480,7 +481,7 @@
       platformOptions: buildPlatformOptions(platformOrder, platformLabels, platformIcons),
       tagMetadata,
       filterableTags,
-      tagOptions: buildTagOptions(filterableTags),
+      tagOptions: buildTagOptions(filterableTags, tagMetadata),
       showOnlyFilters: showOnlyFilterKeys,
       showOnlyFilterOptions: buildShowOnlyFilterOptions(showOnlyFilterKeys, badges),
       sortOptions: buildSortOptions(catalogConfig.sortOptions || sortOptions),

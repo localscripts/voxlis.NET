@@ -634,6 +634,24 @@
 
     return filters;
   };
+  const getDrawerSyncFilters = () => {
+    const appliedFilters =
+      window.getAppliedActiveCatalogFilters && typeof window.getAppliedActiveCatalogFilters === "function"
+        ? window.getAppliedActiveCatalogFilters()
+        : null;
+    const baseFilters =
+      appliedFilters && typeof appliedFilters === "object" ? { ...appliedFilters } : getCurrentFilters();
+
+    if (INSECURE_CONFIG.enabled) {
+      baseFilters.showInsecure = insecureUnlocked;
+    }
+
+    if (INVITE_ONLY_CONFIG.enabled) {
+      baseFilters.showInviteOnly = inviteOnlyUnlocked;
+    }
+
+    return baseFilters;
+  };
 
   const syncDrawerControlsFromFilters = (filters = {}) => {
     const drawer = getDrawer();
@@ -729,7 +747,7 @@
       const trigger = target.closest(FILTER_TRIGGER_SELECTOR);
       if (trigger) {
         event.preventDefault();
-        syncDrawerControlsFromFilters(window.getAppliedActiveCatalogFilters?.() || getCurrentFilters());
+        syncDrawerControlsFromFilters(getDrawerSyncFilters());
         openDrawer();
         return;
       }
@@ -813,7 +831,7 @@
     });
 
     document.addEventListener("voxlis:open-filter", () => {
-      syncDrawerControlsFromFilters(window.getAppliedActiveCatalogFilters?.() || getCurrentFilters());
+      syncDrawerControlsFromFilters(getDrawerSyncFilters());
       openDrawer({ trackOpen: true });
     });
   };
@@ -824,7 +842,7 @@
       await primeAssetIconAvailability(collectFilterAssetIcons());
       byId(DOM_IDS.drawerTitle).textContent = "Filters";
       renderDrawerBody();
-      syncDrawerControlsFromFilters(window.getAppliedActiveCatalogFilters?.() || DEFAULT_FILTERS);
+      syncDrawerControlsFromFilters(getDrawerSyncFilters());
     } catch (error) {
       console.error(error);
     }

@@ -77,6 +77,11 @@
 
     const featuredSections = [...mainLayout.querySelectorAll(FEATURED_SECTION_SELECTOR)];
     const nextHidden = Boolean(hidden);
+    const isCurrentlyHidden = mainLayout.classList.contains(LAYOUT_HIDDEN_CLASS);
+
+    if (isCurrentlyHidden === nextHidden) {
+      return;
+    }
 
     const centerColumn = mainLayout.querySelector(".layout-center");
     const centerWidth = centerColumn?.getBoundingClientRect().width || 0;

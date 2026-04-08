@@ -126,11 +126,11 @@
     },
     insecureToggle: {
       enabled: true,
-      buttonLabelOff: "Show warning results",
-      buttonLabelOn: "Showing warning results",
-      subtitle: "Include risky or experimental CS2 tools in the catalog results. These stay hidden by default for safety.",
-      hintOff: "High-risk or not-yet-verified entries stay hidden by default.",
-      hintOn: "Warning entries stay visible until you turn this off or reset filters.",
+      buttonLabelOff: "Enable insecure mode",
+      buttonLabelOn: "Insecure mode enabled",
+      subtitle: "Insecure mode includes risky or experimental CS2 tools in the catalog results. These stay hidden by default for safety.",
+      hintOff: "Insecure mode stays off by default for safety.",
+      hintOn: "Insecure mode stays enabled until you turn this off or reset filters.",
     },
   };
 

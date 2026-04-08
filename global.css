@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=DynaPuff:wght@500;600;700&family=Open+Sans:wght@600;700&display=swap");
-
 /* ==========================================================================
    Global Theme Tokens
    This file is the shared token source for the whole site:
@@ -412,9 +410,6 @@
   --theme-border-tint-alpha: 0.52;
   --theme-background-media-url: "https://shared.akamai.steamstatic.com/community_assets/images/items/1213300/760e5e0f00ff23f1464ed4c20f78a69f26b2b1f1.webm";
 }
-
-/* Goop */
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=DynaPuff:wght@600;700&family=Open+Sans:wght@600;700&display=swap");
 
 :root[data-theme="nebula"] {
 --theme-background-media-url: "https://shared.fastly.steamstatic.com/community_assets/images/items/1213300/dfd17d1932ff8d815d46c6fcea23247cde565a21.webm";

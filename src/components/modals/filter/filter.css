@@ -304,6 +304,15 @@
   pointer-events: none;
 }
 
+.filter-tag-list .filter-checkbox-icon .filter-asset-icon {
+  background-image: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
+}
+
+.filter-tag-list .filter-checkbox:hover .filter-checkbox-icon .filter-asset-icon,
+.filter-tag-list .filter-checkbox:focus-within .filter-checkbox-icon .filter-asset-icon {
+  filter: brightness(1.15);
+}
+
 .filter-asset-icon {
   width: 0.94rem;
   height: 0.94rem;
@@ -337,6 +346,15 @@
   color: #facc15;
 }
 
+.filter-checkbox-icon.is-keysystem {
+  color: #facc15;
+}
+
+.filter-checkbox-icon.is-kernel .filter-asset-icon,
+.filter-checkbox-icon.is-keysystem .filter-asset-icon {
+  background-image: linear-gradient(to top, #ca8a04, #fde047);
+}
+
 .filter-checkbox-icon.is-usermode {
   color: #4ade80;
 }
@@ -346,7 +364,7 @@
 }
 
 .filter-checkbox-icon.is-trending {
-  color: rgba(226, 232, 240, 0.9);
+  color: var(--prim);
 }
 
 .filter-checkbox-icon.is-warning {

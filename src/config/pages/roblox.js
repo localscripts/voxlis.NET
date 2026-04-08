@@ -54,9 +54,9 @@
       kernel: {
         icon: "fas fa-microchip",
         assetIcon: "icons/vectors/tag-kernel.svg",
-        iconToneClass: "ph-kernel-ico",
+        toneClass: "is-kernel",
         label: "Kernel",
-        info: "This product runs on kernel-level (Expect BSOD)",
+        info: "Due to this tool using a kernel-level driver, beware that there may be unexpected behaviour such as BSODs.",
       },
       "multi-instance": {
         icon: "fas fa-layer-group",
@@ -68,6 +68,13 @@
         icon: "fas fa-key",
         assetIcon: "icons/vectors/tag-freemium.svg",
         label: "Freemium",
+        info: "This product is free to use, but it relies on a key system.",
+      },
+      keysystem: {
+        icon: "fas fa-key",
+        assetIcon: "icons/vectors/tag-freemium.svg",
+        toneClass: "is-keysystem",
+        label: "Key-System",
         info: "This product is free to use, but it relies on a key system.",
       },
       insecure: {
@@ -84,7 +91,7 @@
         info: "This product supports RakNet lib.",
       },
     },
-    filterableTags: ["multi-instance", "decompiler", "kernel", "raknet"],
+    filterableTags: ["multi-instance", "decompiler", "raknet", "kernel", "keysystem"],
     showOnlyFilters: ["verified", "trending", "warning"],
     segmentFilters: [
       {
@@ -119,16 +126,6 @@
         ],
       },
       {
-        field: "key",
-        label: "Key-System (tasks for free key)",
-        defaultValue: "all",
-        options: [
-          { value: "all", label: "All" },
-          { value: "keysystem", label: "Yes" },
-          { value: "keyless", label: "No" },
-        ],
-      },
-      {
         field: "updatedState",
         label: "Updated",
         defaultValue: "all",
@@ -152,7 +149,6 @@
       sort: "most-popular",
       platforms: [],
       price: "all",
-      key: "all",
       type: "all",
       tags: [],
       verified: false,
@@ -233,11 +229,11 @@
     },
     insecureToggle: {
       enabled: true,
-      buttonLabelOff: "Show warning results",
-      buttonLabelOn: "Showing warning results",
-      subtitle: "Include risky or not-yet-verified executors in the catalog results. These stay hidden by default for safety.",
-      hintOff: "High-risk or not-yet-verified entries stay hidden by default.",
-      hintOn: "Warning entries stay visible until you turn this off or reset filters.",
+      buttonLabelOff: "Enable insecure mode",
+      buttonLabelOn: "Insecure mode enabled",
+      subtitle: "Insecure mode includes risky or not-yet-verified executors in the catalog results. These stay hidden by default for safety.",
+      hintOff: "Insecure mode stays off by default for safety.",
+      hintOn: "Insecure mode stays enabled until you turn this off or reset filters.",
     },
     inviteOnlyToggle: {
       enabled: true,

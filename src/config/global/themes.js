@@ -69,6 +69,9 @@
     kawaiiMobileTint: {
       className: "theme-kawaii-mobile-tint",
       mediaQuery: "(max-width: 980px)",
+      surfaceTint: "rgba(0, 0, 0, 0.82)",
+      footerTint: "rgba(0, 0, 0, 0.84)",
+      navbarTint: "rgba(0, 0, 0, 0.94)",
     },
     groups: [
       { id: "full", label: "Full Themes" },

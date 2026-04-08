@@ -133,6 +133,7 @@
     catalogRequestToken: 0,
     popularityRequestToken: 0,
     statusRequestToken: 0,
+    renderFrameId: 0,
   };
   const dispatchSearchQuerySync = (value = "") => {
     document.dispatchEvent(
@@ -647,7 +648,7 @@
       }
 
       catalogState.popularityRanks = buildPopularityRankMap(extractPopularityLeaderboard(payload));
-      renderCatalogView();
+      queueCatalogRender();
     } catch (error) {
       if (requestToken !== catalogState.popularityRequestToken) {
         return;
@@ -655,7 +656,7 @@
 
       catalogState.popularityRanks = new Map();
       console.warn("Failed to load popularity leaderboard.", error);
-      renderCatalogView();
+      queueCatalogRender();
     }
   };
 
@@ -1037,7 +1038,7 @@
     }
 
     catalogState.cards = cards;
-    renderCatalogView();
+    queueCatalogRender();
   };
 
   const normalizeLineText = (value = "") => String(value).replace(/\s+/g, " ").trim();
@@ -1440,6 +1441,26 @@
       toastIcon: "fa-circle-info",
     };
   };
+  const TAG_DISPLAY_ORDER = new Map(
+    FILTERABLE_TAGS.map((tag, index) => [normalizeLineText(tag).toLowerCase(), index]),
+  );
+  const sortTagsForDisplay = (tags = []) =>
+    (Array.isArray(tags) ? tags : [])
+      .map((tag, index) => ({
+        tag: normalizeLineText(tag),
+        index,
+      }))
+      .filter(({ tag }) => Boolean(tag))
+      .sort((left, right) => {
+        const leftOrder = TAG_DISPLAY_ORDER.get(left.tag.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
+        const rightOrder = TAG_DISPLAY_ORDER.get(right.tag.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
+        if (leftOrder !== rightOrder) {
+          return leftOrder - rightOrder;
+        }
+
+        return left.index - right.index;
+      })
+      .map(({ tag }) => tag);
 
   const getAvailableTagEntries = () =>
     Object.keys(TAG_METADATA)
@@ -1447,7 +1468,7 @@
       .filter(Boolean);
 
   const getActiveTagEntries = (info = {}) =>
-    (Array.isArray(info.tags) ? info.tags : [])
+    sortTagsForDisplay(info.tags)
       .map((tag) => getTagEntry(tag))
       .filter(Boolean);
 
@@ -1534,9 +1555,7 @@
   };
 
   const buildTagChipMarkup = (tags = [], slug = "") => {
-    const normalizedTags = Array.isArray(tags)
-      ? tags.map((tag) => normalizeLineText(tag)).filter(Boolean)
-      : [];
+    const normalizedTags = sortTagsForDisplay(tags);
 
     if (!normalizedTags.length) {
       return "";
@@ -1550,6 +1569,7 @@
         }
         const extraButtonClasses = [
           tag === "kernel" ? "is-kernel-tag" : "",
+          tag === "keysystem" ? "is-keysystem-tag" : "",
           tag === "usermode" ? "is-usermode-tag" : "",
           tag === "insecure" ? "is-insecure-tag" : "",
           tag === "freemium" ? "is-freemium-tag" : "",
@@ -2056,7 +2076,7 @@
         });
         setStoredCatalogSearchQuery("");
         dispatchSearchQuerySync("");
-        renderCatalogView();
+        queueCatalogRender();
         return;
       }
 
@@ -2200,7 +2220,7 @@
     }
 
     catalogState.statusMap = statusMap;
-    renderCatalogView();
+    queueCatalogRender();
   };
 
   const hasBadge = (card, badge) => Array.isArray(card.info.badges) && card.info.badges.includes(badge);
@@ -2414,6 +2434,23 @@
 
     return nextFilters;
   };
+  const areStringArraysEqual = (left = [], right = []) =>
+    left.length === right.length && left.every((value, index) => value === right[index]);
+  const areFiltersEqual = (left = {}, right = {}) =>
+    left.search === right.search &&
+    left.sort === right.sort &&
+    left.showInsecure === right.showInsecure &&
+    left.showInviteOnly === right.showInviteOnly &&
+    areStringArraysEqual(left.platforms ?? [], right.platforms ?? []) &&
+    areStringArraysEqual(left.tags ?? [], right.tags ?? []) &&
+    SEGMENT_FILTER_DEFINITIONS.every((definition) => {
+      const field = String(definition?.field || "");
+      return !field || left[field] === right[field];
+    }) &&
+    SHOW_ONLY_FILTER_DEFINITIONS.every((definition) => {
+      const field = String(definition?.field || "");
+      return !field || Boolean(left[field]) === Boolean(right[field]);
+    });
 
   const matchesFilters = (card, statusMap, filters) => {
     if (!filters.showInsecure && isInsecureCard(card)) {
@@ -2436,7 +2473,17 @@
       return false;
     }
 
-    if (filters.tags.length && !filters.tags.every((tag) => hasInfoTag(card.info, tag))) {
+    if (
+      filters.tags.length &&
+      !filters.tags.every((tag) => {
+        const normalizedTag = normalizeLineText(tag).toLowerCase();
+        if (normalizedTag === "keysystem") {
+          return card.isKeyed;
+        }
+
+        return hasInfoTag(card.info, tag);
+      })
+    ) {
       return false;
     }
 
@@ -2768,6 +2815,7 @@
   };
 
   const renderCatalogView = () => {
+    catalogState.renderFrameId = 0;
     const { mount, grid, cards, statusMap, filters } = catalogState;
     if (!mount || !grid) return;
 
@@ -2803,6 +2851,34 @@
     grid.classList.remove("is-empty");
     grid.innerHTML = sortedCards.map((card) => renderCard(card, statusMap)).join("");
     window.VOXLIS_CLICK_TRACKER?.syncTrackingSummaries?.(grid);
+  };
+  const queueCatalogRender = () => {
+    if (catalogState.renderFrameId) {
+      return;
+    }
+
+    catalogState.renderFrameId = window.requestAnimationFrame(() => {
+      renderCatalogView();
+    });
+  };
+  const applyCatalogFiltersState = (filters = {}) => {
+    const nextFilters = normalizeFilters({ ...catalogState.filters, ...filters });
+    const previousFilters = catalogState.filters;
+    const searchChanged = previousFilters.search !== nextFilters.search;
+
+    if (areFiltersEqual(previousFilters, nextFilters)) {
+      return false;
+    }
+
+    catalogState.filters = nextFilters;
+
+    if (searchChanged) {
+      setStoredCatalogSearchQuery(nextFilters.search);
+      dispatchSearchQuerySync(nextFilters.search);
+    }
+
+    queueCatalogRender();
+    return true;
   };
 
   const loadCatalog = async ({ forceRefresh = false } = {}) => {
@@ -3047,16 +3123,10 @@
 
   window.getAppliedActiveCatalogFilters = () => ({ ...catalogState.filters });
   window.applyActiveCatalogFilters = (filters = {}) => {
-    catalogState.filters = normalizeFilters({ ...catalogState.filters, ...filters });
-    setStoredCatalogSearchQuery(catalogState.filters.search);
-    dispatchSearchQuerySync(catalogState.filters.search);
-    renderCatalogView();
+    applyCatalogFiltersState(filters);
   };
   window.setActiveCatalogSearchQuery = (search = "") => {
-    catalogState.filters = normalizeFilters({ ...catalogState.filters, search });
-    setStoredCatalogSearchQuery(catalogState.filters.search);
-    dispatchSearchQuerySync(catalogState.filters.search);
-    renderCatalogView();
+    applyCatalogFiltersState({ search });
   };
   window.getActiveCatalogSearchQuery = () =>
     normalizeLineText(catalogState.filters.search || getStoredCatalogSearchQuery() || "");
