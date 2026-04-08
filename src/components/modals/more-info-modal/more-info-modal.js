@@ -32,6 +32,9 @@
       >
     </div>
   `;
+  const MIRROR_PICKER_TITLE = "Choose Your Mirror Site";
+  const MIRROR_PICKER_NOTE =
+    "All of the provided domains are official. Multiple domains are available because some may not function properly depending on your Internet Service Provider.";
   const HTML_ESCAPE_MAP = {
     "&": "&amp;",
     "<": "&lt;",
@@ -43,6 +46,8 @@
     /^\s*\[!(TIP|NOTE|WARN|WARNING)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\]/i;
   const MARKDOWN_CALLOUT_PREFIX_PATTERN =
     /^\s*\[!(TIP|NOTE|WARN|WARNING)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\](?:\s|<br\s*\/?>)*/i;
+  const MARKDOWN_BUTTON_GROUP_PATTERN = /^\s*\[!(BUTTONS|LINKS)\]/i;
+  const MARKDOWN_BUTTON_GROUP_PREFIX_PATTERN = /^\s*\[!(BUTTONS|LINKS)\](?:\s|<br\s*\/?>)*/i;
   const MARKDOWN_CALLOUTS = {
     tip: {
       label: "Tip",
@@ -69,6 +74,10 @@
     requestToken: 0,
     activePath: "",
     trackingSlug: "",
+    websiteTargets: [],
+    websiteTitle: "",
+    choiceWarningConfig: null,
+    choiceTarget: "_blank",
   };
 
   let markedConfigured = false;
@@ -133,6 +142,109 @@
       hasBorder: Boolean(match[3]),
     };
   };
+
+  const isMarkdownButtonGroup = (value = "") => MARKDOWN_BUTTON_GROUP_PATTERN.test(String(value).trim());
+
+  const normalizeWebsiteHref = (value = "") => {
+    const normalizedValue = String(value || "").trim();
+    if (!normalizedValue) {
+      return "";
+    }
+
+    if (/^#/.test(normalizedValue) || normalizedValue.startsWith("/")) {
+      return normalizedValue;
+    }
+
+    if (/^\/\//.test(normalizedValue)) {
+      return `https:${normalizedValue}`;
+    }
+
+    if (/^[a-z][a-z0-9+.-]*:/i.test(normalizedValue)) {
+      return normalizedValue;
+    }
+
+    return `https://${normalizedValue.replace(/^\/+/, "")}`;
+  };
+
+  const normalizeWebsiteTargetList = (value) => {
+    const values = Array.isArray(value) ? value : [value];
+    return [...new Set(values.map((entry) => normalizeWebsiteHref(entry)).filter(Boolean))];
+  };
+
+  const normalizeWarningConfig = (warningConfig = null) => {
+    if (!warningConfig || typeof warningConfig !== "object") {
+      return null;
+    }
+
+    const variant = String(warningConfig.variant || warningConfig.type || "").trim().toLowerCase();
+    const description = String(warningConfig.description || "").trim();
+    if (!variant || !description) {
+      return null;
+    }
+
+    return {
+      variant,
+      title: String(warningConfig.title || "Important warning").trim() || "Important warning",
+      description,
+    };
+  };
+
+  const buildWebsiteChoiceEntry = (href = "", index = 0, label = "") => {
+    const normalizedHref = normalizeWebsiteHref(href);
+    if (!normalizedHref || normalizedHref === "#") {
+      return null;
+    }
+
+    const normalizedLabel = String(label || "").trim();
+    try {
+      const parsedUrl = new URL(normalizedHref, window.location.origin);
+      const hostname = parsedUrl.hostname.replace(/^www\./i, "");
+      return {
+        href: parsedUrl.href,
+        label: normalizedLabel || hostname || `Link ${index + 1}`,
+        detail: parsedUrl.href,
+      };
+    } catch {
+      return {
+        href: normalizedHref,
+        label: normalizedLabel || `Link ${index + 1}`,
+        detail: normalizedHref,
+      };
+    }
+  };
+
+  const buildChoiceButtonMarkup = (entry, { interactive = false, target = "_blank" } = {}) => {
+    if (!entry?.href) {
+      return "";
+    }
+
+    const buttonTarget = String(target || "_blank").trim() || "_blank";
+    return `
+      <a
+        class="info-modal-choice-btn"
+        href="${escapeHtml(entry.href)}"
+        target="${escapeHtml(buttonTarget)}"
+        rel="noopener noreferrer"
+        ${interactive ? `data-info-modal-choice-url="${escapeHtml(entry.href)}" data-info-modal-choice-target="${escapeHtml(buttonTarget)}"` : ""}
+      >
+        <span class="info-modal-choice-head">
+          <span class="info-modal-choice-label">${escapeHtml(entry.label)}</span>
+          <span class="info-modal-choice-action" aria-hidden="true">
+            <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+            <span>Visit</span>
+          </span>
+        </span>
+        <span class="info-modal-choice-url">${escapeHtml(entry.detail)}</span>
+      </a>
+    `;
+  };
+
+  const buildMirrorPickerContentHtml = (entries = [], { target = "_blank" } = {}) => `
+    <p class="info-modal-choice-note">${escapeHtml(MIRROR_PICKER_NOTE)}</p>
+    <div class="info-modal-choice-group">
+      ${entries.map((entry) => buildChoiceButtonMarkup(entry, { interactive: true, target })).join("")}
+    </div>
+  `;
 
   const normalizePath = (path = "/") => {
     const trimmed = `${path}`.replace(/\/+$/, "");
@@ -266,6 +378,44 @@
     });
   };
 
+  const enhanceMarkdownButtonGroups = (root) => {
+    if (!root) {
+      return;
+    }
+
+    root.querySelectorAll("blockquote").forEach((blockquote) => {
+      const firstParagraph = blockquote.querySelector(":scope > p");
+      if (!firstParagraph || !isMarkdownButtonGroup(firstParagraph.textContent?.trim() || "")) {
+        return;
+      }
+
+      firstParagraph.innerHTML = firstParagraph.innerHTML.replace(MARKDOWN_BUTTON_GROUP_PREFIX_PATTERN, "");
+      if (!firstParagraph.textContent.trim() && !firstParagraph.children.length) {
+        firstParagraph.remove();
+      }
+
+      const seenHrefs = new Set();
+      const entries = [...blockquote.querySelectorAll("a[href]")]
+        .map((link, index) => buildWebsiteChoiceEntry(link.getAttribute("href"), index, link.textContent))
+        .filter((entry) => {
+          if (!entry || seenHrefs.has(entry.href)) {
+            return false;
+          }
+
+          seenHrefs.add(entry.href);
+          return true;
+        });
+      if (!entries.length) {
+        return;
+      }
+
+      const groupNode = document.createElement("div");
+      groupNode.className = "info-modal-choice-group";
+      groupNode.innerHTML = entries.map((entry) => buildChoiceButtonMarkup(entry)).join("");
+      blockquote.replaceWith(groupNode);
+    });
+  };
+
   const enhanceMarkdownCallouts = (root) => {
     if (!root) {
       return;
@@ -304,6 +454,7 @@
       return;
     }
 
+    enhanceMarkdownButtonGroups(root);
     enhanceMarkdownCallouts(root);
   };
 
@@ -383,15 +534,50 @@
 
   const runAction = ({ href = "", target = "" } = {}) => {
     if (!href) {
-      return;
+      return false;
     }
 
     if (target === "_blank") {
       window.open(href, "_blank", "noopener");
-      return;
+      return true;
     }
 
     window.location.assign(href);
+    return true;
+  };
+
+  const closeOpenSiteModals = () => {
+    window.closeCardWarningModal?.({ immediate: true });
+    window.requestCloseMoreInfoModal?.({ immediate: true });
+    window.closeSuncModal?.({ immediate: true });
+  };
+
+  const openWebsiteAction = (href = "", { target = "_blank", warningConfig = null } = {}) => {
+    const normalizedHref = normalizeWebsiteHref(href);
+    if (!normalizedHref || normalizedHref === "#") {
+      return false;
+    }
+
+    const normalizedWarningConfig = normalizeWarningConfig(warningConfig);
+    if (normalizedWarningConfig && typeof window.openCardWarningModal === "function") {
+      const opened =
+        window.openCardWarningModal(
+          normalizedWarningConfig,
+          {
+            href: normalizedHref,
+            target,
+          },
+        ) ?? false;
+
+      if (opened) {
+        return true;
+      }
+    }
+
+    return runAction({
+      href: normalizedHref,
+      target,
+    });
   };
 
   const trackModalCardAction = (action = "") => {
@@ -450,13 +636,33 @@
             <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i> Website
           </a>
           <button class="info-modal-close-btn" type="button" data-more-info-close>
-            <i class="fas fa-times" aria-hidden="true"></i> Close
+            <i class="fas fa-times" aria-hidden="true"></i> <span id="moreInfoModalCloseLabel">Close</span>
           </button>
         </div>
       </div>
     `;
 
     modal.addEventListener("click", (event) => {
+      const choiceButton = event.target.closest("[data-info-modal-choice-url]");
+      if (choiceButton) {
+        event.preventDefault();
+        const href = choiceButton.dataset.infoModalChoiceUrl || choiceButton.getAttribute("href") || "";
+        if (!href || href === "#") {
+          return;
+        }
+
+        requestCloseMoreInfoModal({ immediate: true });
+        openWebsiteAction(href, {
+          target:
+            choiceButton.dataset.infoModalChoiceTarget ||
+            modalState.choiceTarget ||
+            choiceButton.getAttribute("target") ||
+            "_blank",
+          warningConfig: modalState.choiceWarningConfig,
+        });
+        return;
+      }
+
       if (event.target.closest("[data-more-info-close]")) {
         if (event.target.closest(".info-modal-close-btn")) {
           trackModalCardAction("close");
@@ -473,36 +679,46 @@
 
     const websiteButton = modal.querySelector("#moreInfoModalWebsiteBtn");
     websiteButton?.addEventListener("click", (event) => {
-      const href = websiteButton.getAttribute("href") || "";
+      const websiteTargets = normalizeWebsiteTargetList(
+        modalState.websiteTargets.length ? modalState.websiteTargets : websiteButton.getAttribute("href"),
+      );
+      const href = websiteTargets[0] || websiteButton.getAttribute("href") || "";
       if (!href || href === "#") {
         event.preventDefault();
         return;
       }
 
       trackModalCardAction("website");
-      const warningType = websiteButton.dataset.warningType || "";
-      if (!warningType || typeof window.openCardWarningModal !== "function") {
-        return;
+      const warningVariant = websiteButton.dataset.warningVariant || "";
+      const warningConfig = warningVariant
+        ? {
+            variant: warningVariant,
+            title: websiteButton.dataset.warningTitle || "Important warning",
+            description: websiteButton.dataset.warningDescription || "",
+          }
+        : null;
+
+      if (typeof window.openWebsiteDestination === "function") {
+        event.preventDefault();
+        const opened =
+          window.openWebsiteDestination({
+            websites: websiteTargets,
+            warningConfig,
+            target: websiteButton.getAttribute("target") || "",
+            title: modalState.websiteTitle || "",
+            closeOpenModals: websiteTargets.length > 1,
+          }) ?? false;
+
+        if (opened) {
+          return;
+        }
       }
 
       event.preventDefault();
-      const action = {
-        href,
+      openWebsiteAction(href, {
         target: websiteButton.getAttribute("target") || "",
-      };
-      const opened =
-        window.openCardWarningModal(
-          {
-            type: warningType,
-            title: websiteButton.dataset.warningTitle || "Important warning",
-            description: websiteButton.dataset.warningDescription || "",
-          },
-          action,
-        ) ?? false;
-
-      if (!opened) {
-        runAction(action);
-      }
+        warningConfig,
+      });
     });
 
     document.body.appendChild(modal);
@@ -515,58 +731,82 @@
       return;
     }
 
+    const closeLabelNode = modal.querySelector("#moreInfoModalCloseLabel");
     modal.hidden = true;
-    modal.classList.remove("is-open", "is-closing", "is-tag-guide");
+    modal.classList.remove("is-open", "is-closing", "is-tag-guide", "is-mirror-picker");
     document.body.style.overflow = modalState.previousBodyOverflow;
     modalState.previousBodyOverflow = "";
     modalState.closeTimerId = 0;
     modalState.activePath = "";
     modalState.trackingSlug = "";
+    modalState.websiteTargets = [];
+    modalState.websiteTitle = "";
+    modalState.choiceWarningConfig = null;
+    modalState.choiceTarget = "_blank";
+    if (closeLabelNode) {
+      closeLabelNode.textContent = "Close";
+    }
   };
 
-  function closeMoreInfoModal() {
+  function closeMoreInfoModal({ immediate = false } = {}) {
     const modal = document.getElementById("moreInfoModal");
-    if (!modal || modal.hidden || modal.classList.contains("is-closing")) {
+    if (!modal || modal.hidden) {
+      return;
+    }
+
+    modalState.requestToken += 1;
+    window.clearTimeout(modalState.closeTimerId);
+    if (immediate) {
+      finishMoreInfoModalClose();
+      return;
+    }
+
+    if (modal.classList.contains("is-closing")) {
       return;
     }
 
     modal.classList.remove("is-open");
     modal.classList.add("is-closing");
-    modalState.requestToken += 1;
-    window.clearTimeout(modalState.closeTimerId);
     modalState.closeTimerId = window.setTimeout(
       finishMoreInfoModalClose,
       MODAL_EXIT_MS,
     );
   }
 
-  const requestCloseMoreInfoModal = () => {
+  const requestCloseMoreInfoModal = ({ immediate = false } = {}) => {
     const activePath = normalizePath(modalState.activePath);
     const currentPath = getCurrentLocationTarget();
+    let shouldRequestHistoryBack = false;
 
     if (activePath !== "/" && currentPath === activePath) {
       if (window.history.state?.moreInfoModal === activePath) {
-        window.history.back();
-        return;
+        shouldRequestHistoryBack = true;
+      } else {
+        const nextState =
+          window.history.state && typeof window.history.state === "object"
+            ? { ...window.history.state }
+            : null;
+
+        if (nextState) {
+          delete nextState.moreInfoModal;
+        }
+
+        window.history.replaceState(
+          nextState && Object.keys(nextState).length ? nextState : null,
+          "",
+          ACTIVE_CATALOG.homePath || "/",
+        );
       }
-
-      const nextState =
-        window.history.state && typeof window.history.state === "object"
-          ? { ...window.history.state }
-          : null;
-
-      if (nextState) {
-        delete nextState.moreInfoModal;
-      }
-
-      window.history.replaceState(
-        nextState && Object.keys(nextState).length ? nextState : null,
-        "",
-        ACTIVE_CATALOG.homePath || "/",
-      );
     }
 
-    closeMoreInfoModal();
+    if (shouldRequestHistoryBack) {
+      window.history.back();
+      if (!immediate) {
+        return;
+      }
+    }
+
+    closeMoreInfoModal({ immediate });
   };
 
   const openMoreInfoModal = ({
@@ -575,6 +815,8 @@
     reviewUrl,
     websiteUrl = "",
     websiteWarningConfig = null,
+    choiceWarningConfig = null,
+    choiceTarget = "_blank",
     contentHtml = "",
     highlightContentKey = "",
     preserveTitle = false,
@@ -582,9 +824,12 @@
     trackingSlug = "",
     modalPath = "",
     pushHistory = true,
+    closeLabel = "Close",
+    modalVariant = "",
   } = {}) => {
     const modalContentHtml = String(contentHtml).trim();
-    const isTagGuide = hideWebsiteButton && Boolean(modalContentHtml);
+    const isMirrorPicker = modalVariant === "mirror-picker";
+    const isTagGuide = hideWebsiteButton && Boolean(modalContentHtml) && !isMirrorPicker;
     if (!reviewUrl && !modalContentHtml) {
       return false;
     }
@@ -597,13 +842,17 @@
     const markdownNode = modal.querySelector("#moreInfoModalMarkdown");
     const contentNode = modal.querySelector("#moreInfoModalContent");
     const websiteButton = modal.querySelector("#moreInfoModalWebsiteBtn");
+    const closeLabelNode = modal.querySelector("#moreInfoModalCloseLabel");
     const exploitName = String(title).trim() || getDefaultEntryLabel();
     const modalTitle = preserveTitle || exploitName.endsWith(" Information")
       ? exploitName
       : `${exploitName} Information`;
     const modalDescription = String(description).trim();
-    const modalWebsiteUrl = String(websiteUrl).trim();
+    const modalWebsiteTargets = normalizeWebsiteTargetList(websiteUrl);
+    const primaryWebsiteUrl = modalWebsiteTargets[0] || "";
     const normalizedModalPath = modalPath ? normalizePath(modalPath) : "";
+    const normalizedChoiceWarningConfig = normalizeWarningConfig(choiceWarningConfig);
+    const resolvedChoiceTarget = String(choiceTarget || "_blank").trim() || "_blank";
     const requestToken = modalState.requestToken + 1;
 
     window.clearTimeout(modalState.closeTimerId);
@@ -614,24 +863,36 @@
     modalState.requestToken = requestToken;
     modalState.activePath = normalizedModalPath;
     modalState.trackingSlug = String(trackingSlug).trim();
+    modalState.websiteTargets = modalWebsiteTargets;
+    modalState.websiteTitle = exploitName;
+    modalState.choiceWarningConfig = normalizedChoiceWarningConfig;
+    modalState.choiceTarget = resolvedChoiceTarget;
     titleNode.textContent = modalTitle;
     nameNode.textContent = "";
     nameNode.hidden = true;
     descriptionNode.textContent = modalDescription;
     descriptionNode.hidden = !modalDescription;
+    if (closeLabelNode) {
+      closeLabelNode.textContent = String(closeLabel || "Close").trim() || "Close";
+    }
     if (infoNode) {
       infoNode.hidden = !modalDescription;
     }
     if (websiteButton) {
-      const shouldHideWebsiteButton = hideWebsiteButton || !modalWebsiteUrl;
+      const shouldHideWebsiteButton = hideWebsiteButton || !modalWebsiteTargets.length;
       websiteButton.hidden = shouldHideWebsiteButton;
-      websiteButton.setAttribute("href", shouldHideWebsiteButton ? "#" : modalWebsiteUrl);
-      delete websiteButton.dataset.warningType;
+      websiteButton.setAttribute("href", shouldHideWebsiteButton ? "#" : primaryWebsiteUrl);
+      websiteButton.setAttribute(
+        "title",
+        modalWebsiteTargets.length > 1 ? "Choose a mirror site" : "Open website",
+      );
+      delete websiteButton.dataset.warningVariant;
       delete websiteButton.dataset.warningTitle;
       delete websiteButton.dataset.warningDescription;
 
-      if (!shouldHideWebsiteButton && websiteWarningConfig?.type) {
-        websiteButton.dataset.warningType = websiteWarningConfig.type;
+      const warningVariant = websiteWarningConfig?.variant || websiteWarningConfig?.type || "";
+      if (!shouldHideWebsiteButton && warningVariant) {
+        websiteButton.dataset.warningVariant = warningVariant;
         websiteButton.dataset.warningTitle = websiteWarningConfig.title || "Important warning";
         websiteButton.dataset.warningDescription = websiteWarningConfig.description || "";
       }
@@ -641,9 +902,12 @@
 
     document.body.style.overflow = "hidden";
     modal.hidden = false;
-    modal.classList.remove("is-closing", "is-open", "is-tag-guide");
+    modal.classList.remove("is-closing", "is-open", "is-tag-guide", "is-mirror-picker");
     if (isTagGuide) {
       modal.classList.add("is-tag-guide");
+    }
+    if (isMirrorPicker) {
+      modal.classList.add("is-mirror-picker");
     }
     window.requestAnimationFrame(() => {
       if (!modal.hidden) {
@@ -687,6 +951,44 @@
     return true;
   };
 
+  const openWebsiteDestination = ({
+    websites = [],
+    title = "",
+    warningConfig = null,
+    target = "_blank",
+    closeOpenModals = false,
+  } = {}) => {
+    const entries = normalizeWebsiteTargetList(websites)
+      .map((href, index) => buildWebsiteChoiceEntry(href, index))
+      .filter(Boolean);
+    if (!entries.length) {
+      return false;
+    }
+
+    if (entries.length === 1) {
+      return openWebsiteAction(entries[0].href, {
+        target,
+        warningConfig,
+      });
+    }
+
+    if (closeOpenModals) {
+      closeOpenSiteModals();
+    }
+
+    return openMoreInfoModal({
+      title: MIRROR_PICKER_TITLE,
+      contentHtml: buildMirrorPickerContentHtml(entries, { target }),
+      preserveTitle: true,
+      hideWebsiteButton: true,
+      choiceWarningConfig: warningConfig,
+      choiceTarget: target,
+      closeLabel: "Close",
+      modalVariant: "mirror-picker",
+      pushHistory: false,
+    });
+  };
+
   const syncMoreInfoModalToPath = () => {
     const resolvedPath = getCurrentLocationTarget();
     const nextOptions = modalPathResolver?.(resolvedPath);
@@ -717,6 +1019,8 @@
 
   window.parseReviewDocument = parseReviewDocument;
   window.loadReviewDocument = loadReviewDocument;
+  window.normalizeWebsiteTargetList = normalizeWebsiteTargetList;
+  window.openWebsiteDestination = openWebsiteDestination;
   window.openMoreInfoModal = openMoreInfoModal;
   window.closeMoreInfoModal = closeMoreInfoModal;
   window.requestCloseMoreInfoModal = requestCloseMoreInfoModal;

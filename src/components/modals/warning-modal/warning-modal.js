@@ -9,6 +9,8 @@
     pendingAction: null,
     previousBodyOverflow: "",
   };
+  const getWarningVariant = (warningConfig = {}) =>
+    String(warningConfig?.variant || warningConfig?.type || "").trim().toLowerCase();
 
   const ensureWarningModal = () => {
     let modal = document.getElementById("cardWarningModal");
@@ -74,15 +76,24 @@
     warningModalState.closeTimerId = 0;
   };
 
-  function closeCardWarningModal() {
+  function closeCardWarningModal({ immediate = false } = {}) {
     const modal = document.getElementById("cardWarningModal");
-    if (!modal || modal.hidden || modal.classList.contains("is-closing")) {
+    if (!modal || modal.hidden) {
+      return;
+    }
+
+    window.clearTimeout(warningModalState.closeTimerId);
+    if (immediate) {
+      completeWarningModalClose();
+      return;
+    }
+
+    if (modal.classList.contains("is-closing")) {
       return;
     }
 
     modal.classList.remove("is-open");
     modal.classList.add("is-closing");
-    window.clearTimeout(warningModalState.closeTimerId);
     warningModalState.closeTimerId = window.setTimeout(
       completeWarningModalClose,
       WARNING_MODAL_EXIT_MS,
@@ -129,7 +140,7 @@
     modal.classList.remove("is-closing", "is-warning", "is-warningred");
     modal.classList.add(
       "is-open",
-      warningConfig.variant === "warningred" ? "is-warningred" : "is-warning",
+      getWarningVariant(warningConfig) === "warningred" ? "is-warningred" : "is-warning",
     );
 
     window.requestAnimationFrame(() => {

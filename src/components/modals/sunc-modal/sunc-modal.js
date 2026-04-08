@@ -533,15 +533,24 @@
     suncModalState.closeTimerId = 0;
   };
 
-  function closeSuncModal() {
+  function closeSuncModal({ immediate = false } = {}) {
     const modal = document.getElementById("suncModal");
-    if (!modal || modal.hidden || modal.classList.contains("is-closing")) {
+    if (!modal || modal.hidden) {
+      return;
+    }
+
+    window.clearTimeout(suncModalState.closeTimerId);
+    if (immediate) {
+      finishSuncModalClose();
+      return;
+    }
+
+    if (modal.classList.contains("is-closing")) {
       return;
     }
 
     modal.classList.remove("is-open");
     modal.classList.add("is-closing");
-    window.clearTimeout(suncModalState.closeTimerId);
     suncModalState.closeTimerId = window.setTimeout(finishSuncModalClose, MODAL_EXIT_MS);
   }
 

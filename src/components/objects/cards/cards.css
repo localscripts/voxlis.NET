@@ -610,35 +610,6 @@
   filter: brightness(1.15);
 }
 
-@keyframes ph-tag-note-flash {
-  0% {
-    opacity: 0;
-    transform: scaleX(0.75);
-    transform-origin: left;
-  }
-  20% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scaleX(1);
-  }
-}
-
-.ph-meta-tag-btn.is-tag-flash::before {
-  content: "";
-  position: absolute;
-  inset: -0.22rem -0.38rem;
-  border-radius: 0.4rem;
-  border: 1px solid rgba(var(--prim-rgb), 0.26);
-  border-left: 0.25em solid rgba(var(--prim-rgb), 0.85);
-  background: linear-gradient(to right, rgba(var(--prim-rgb), 0.1), rgba(var(--prim-rgb), 0.05) 22%, transparent 68%);
-  animation: ph-tag-note-flash 540ms var(--smooth-ease) forwards;
-  pointer-events: none;
-  z-index: 0;
-}
-
 .exploit-card-placeholder.is-not-updated .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag) .ph-asset-icon,
 .exploit-card-placeholder.is-down .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag) .ph-asset-icon {
   background-image: none;
@@ -916,6 +887,12 @@
 .exploit-card-placeholder.is-down .ph-title i,
 .exploit-card-placeholder.is-down .ph-action-btn i {
   color: rgba(156, 163, 175, 0.78) !important;
+}
+
+.exploit-card-placeholder.is-not-updated .ph-action-icon.is-info,
+.exploit-card-placeholder.is-status-unknown .ph-action-icon.is-info {
+  background-image: none;
+  background-color: rgba(156, 163, 175, 0.78);
 }
 
 .exploit-card-placeholder.is-not-updated .ph-sponsor-base-image,

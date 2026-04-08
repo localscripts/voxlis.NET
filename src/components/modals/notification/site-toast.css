@@ -255,7 +255,6 @@
 
 .site-toast[data-toast-key="filters-prompt"],
 .site-toast[data-toast-key="themes-prompt"],
-.site-toast[data-toast-key="custom-theme-locked"],
 .site-toast[data-toast-key^="card-icon-info:"] {
   width: min(21rem, calc(100vw - 1.6rem));
   padding: 0.95rem 0.95rem 0.9rem;
@@ -268,7 +267,6 @@
 
 .site-toast[data-toast-key="filters-prompt"]::before,
 .site-toast[data-toast-key="themes-prompt"]::before,
-.site-toast[data-toast-key="custom-theme-locked"]::before,
 .site-toast[data-toast-key^="card-icon-info:"]::before {
   width: 4px;
   opacity: 1;
@@ -276,14 +274,12 @@
 
 .site-toast[data-toast-key="filters-prompt"] .site-toast-head,
 .site-toast[data-toast-key="themes-prompt"] .site-toast-head,
-.site-toast[data-toast-key="custom-theme-locked"] .site-toast-head,
 .site-toast[data-toast-key^="card-icon-info:"] .site-toast-head {
   margin-bottom: 0.45rem;
 }
 
 .site-toast[data-toast-key="filters-prompt"] .site-toast-icon,
 .site-toast[data-toast-key="themes-prompt"] .site-toast-icon,
-.site-toast[data-toast-key="custom-theme-locked"] .site-toast-icon,
 .site-toast[data-toast-key^="card-icon-info:"] .site-toast-icon {
   width: 1.55rem;
   height: 1.55rem;
@@ -293,7 +289,6 @@
 
 .site-toast[data-toast-key="filters-prompt"] .site-toast-message,
 .site-toast[data-toast-key="themes-prompt"] .site-toast-message,
-.site-toast[data-toast-key="custom-theme-locked"] .site-toast-message,
 .site-toast[data-toast-key^="card-icon-info:"] .site-toast-message {
   color: rgba(209, 213, 219, 0.88);
 }

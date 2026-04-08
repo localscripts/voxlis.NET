@@ -19,25 +19,13 @@
   existingConfig.themes = {
     storageKeys: {
       theme: "voxlis-theme",
-      customTheme: "voxlis-custom-theme-hex",
-      customThemeCss: "voxlis-custom-theme-css",
-      outlineBrightness: "voxlis-outline-brightness",
       drawerWidth: "voxlis-theme-drawer-width",
-      backgroundMedia: "voxlis-background-media",
-      backgroundTintHex: "voxlis-background-tint-hex",
-      backgroundTintPower: "voxlis-background-tint-power",
-      surfaceBlurEnabled: "voxlis-surface-blur-enabled",
-      surfaceBlurStrength: "voxlis-surface-blur-strength",
-      surfaceTintHex: "voxlis-surface-tint-hex",
-      surfaceTintPower: "voxlis-surface-tint-power",
-      cardOutlineHex: "voxlis-card-outline-hex",
       hideFeaturedAds: "voxlis-hide-featured-ads",
       hidePromo: "voxlis-hide-promo",
       hideToastPopups: "voxlis-hide-toast-popups",
       hideNavbarWarning: "voxlis-hide-navbar-warning",
     },
     ids: {
-      custom: "custom",
       default: "blue",
     },
     events: {
@@ -68,10 +56,6 @@
       max: 100,
       default: 82,
       defaultHex: "#000000",
-    },
-    transfer: {
-      type: "voxlis-theme",
-      version: 1,
     },
     backgroundMedia: {
       defaultStatus: "Paste an image or video link to use as the site background.",

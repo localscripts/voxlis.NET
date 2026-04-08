@@ -352,6 +352,43 @@
 
     return [...new Set([...directPlatforms, ...groupedPlatforms].filter(Boolean))];
   };
+  const normalizeWebsiteTargetList =
+    window.normalizeWebsiteTargetList ??
+    ((value) => {
+      const values = Array.isArray(value) ? value : [value];
+      return [...new Set(
+        values
+          .map((entry) => {
+            const normalizedEntry = String(entry || "").trim();
+            if (!normalizedEntry) {
+              return "";
+            }
+
+            if (/^\/\//.test(normalizedEntry)) {
+              return `https:${normalizedEntry}`;
+            }
+
+            if (/^[a-z][a-z0-9+.-]*:/i.test(normalizedEntry)) {
+              return normalizedEntry;
+            }
+
+            return `https://${normalizedEntry.replace(/^\/+/, "")}`;
+          })
+          .filter(Boolean),
+      )];
+    });
+  const parseWebsiteTargetList = (value = "") => {
+    const normalizedValue = String(value || "").trim();
+    if (!normalizedValue) {
+      return [];
+    }
+
+    try {
+      return normalizeWebsiteTargetList(JSON.parse(normalizedValue));
+    } catch {
+      return normalizeWebsiteTargetList(normalizedValue);
+    }
+  };
   const normalizeKeyEmpireDuration = (value) => {
     if (typeof value === "string" && value.toLowerCase() === "lifetime") {
       return -1;
@@ -1682,17 +1719,16 @@
 
     const summaryLines = buildSummaryLines(card);
     const warningConfig = getModalWarningConfig(card.modals);
+    const websiteTargets = normalizeWebsiteTargetList(card.info?.website);
 
     return {
       title: card.title || "More info",
       description: buildReviewDescription(card, summaryLines),
       reviewUrl: getCardReviewUrl(card),
       trackingSlug: card.slug || "",
-      websiteUrl:
-        card.info?.website ||
-        card.pricing?.purchaseUrl ||
-        card.pricing?.purchase_url ||
-        "",
+      websiteUrl: websiteTargets.length
+        ? websiteTargets
+        : card.pricing?.purchaseUrl || card.pricing?.purchase_url || "",
       websiteWarningConfig: warningConfig,
       modalPath: getCardMoreInfoPath(card),
     };
@@ -1764,14 +1800,15 @@
     const reviewButtonAttributes = reviewHref
       ? ` href="${escapeHtml(reviewHref)}" target="_blank" rel="noopener noreferrer"`
       : ` aria-disabled="true" tabindex="-1"`;
-    const websiteHref = websiteUrl || purchaseUrl || "#";
+    const websiteTargets = normalizeWebsiteTargetList(websiteUrl);
+    const websiteHref = websiteTargets[0] || purchaseUrl || "#";
     const websiteDataAttributes =
       websiteHref !== "#"
-        ? ` data-card-website-url="${escapeHtml(websiteHref)}"`
+        ? ` data-card-website-url="${escapeHtml(websiteHref)}"${websiteTargets.length ? ` data-card-website-urls="${escapeHtml(JSON.stringify(websiteTargets))}"` : ""}`
         : "";
     const websiteWarningDataAttributes =
       WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
-        ? ` data-card-website-warning-type="${escapeHtml(warningConfig.type)}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
+        ? ` data-card-website-warning-variant="${escapeHtml(warningConfig.variant || "")}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
         : "";
     const hasFreeOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) === 0);
     const hasPaidOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) > 0);
@@ -1860,10 +1897,13 @@
         title: trigger.dataset.cardReviewTitle || "More info",
         description: trigger.dataset.cardReviewDescription || "",
         reviewUrl: trigger.dataset.cardReviewUrl || trigger.getAttribute("href") || "",
-        websiteUrl: trigger.dataset.cardWebsiteUrl || "",
-        websiteWarningConfig: trigger.dataset.cardWebsiteWarningType
+        websiteUrl: (() => {
+          const websiteTargets = parseWebsiteTargetList(trigger.dataset.cardWebsiteUrls || "");
+          return websiteTargets.length ? websiteTargets : trigger.dataset.cardWebsiteUrl || "";
+        })(),
+        websiteWarningConfig: trigger.dataset.cardWebsiteWarningVariant
           ? {
-              type: trigger.dataset.cardWebsiteWarningType,
+              variant: trigger.dataset.cardWebsiteWarningVariant,
               title: trigger.dataset.cardWebsiteWarningTitle || "Important warning",
               description: trigger.dataset.cardWebsiteWarningDescription || "",
             }
@@ -1914,14 +1954,6 @@
     }
   };
 
-  const flashNoteHighlight = (trigger) => {
-    if (!trigger) return;
-    trigger.classList.remove("is-tag-flash");
-    void trigger.offsetWidth;
-    trigger.classList.add("is-tag-flash");
-    trigger.addEventListener("animationend", () => trigger.classList.remove("is-tag-flash"), { once: true });
-  };
-
   const handleTitleIconClick = (event) => {
     const trigger = event.target.closest("button[data-card-icon-message]");
     if (!trigger) {
@@ -1930,7 +1962,6 @@
 
     event.preventDefault();
     event.stopPropagation();
-    flashNoteHighlight(trigger);
 
     const article = trigger.closest("article[data-slug]");
     const slug = article?.dataset.slug || "";

@@ -247,13 +247,7 @@
       if (themesMount) {
         await loadInto(themesMount, "src/components/modals/themes/themes.html");
         logStep("themes.html loaded", "ok");
-        const customThemeMount = document.getElementById("customThemeMount");
-        if (customThemeMount) {
-          await loadInto(customThemeMount, "src/components/modals/custom-theme/custom-theme.html");
-          logStep("custom-theme.html loaded", "ok");
-        }
         window.initSiteThemes?.(document);
-        window.initCustomThemePicker?.(document);
         logStep("themes initialized", "ok");
       }
 

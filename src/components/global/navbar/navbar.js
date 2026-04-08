@@ -283,15 +283,9 @@ const initNavbar = () => {
 
       if (themesMount && !themesMount.querySelector(".site-themes") && loadHtmlPartial) {
         await loadHtmlPartial(themesMount, "src/components/modals/themes/themes.html");
-
-        const customThemeMount = byId("customThemeMount");
-        if (customThemeMount && !customThemeMount.firstElementChild) {
-          await loadHtmlPartial(customThemeMount, "src/components/modals/custom-theme/custom-theme.html");
-        }
       }
 
       window.initSiteThemes?.(document);
-      window.initCustomThemePicker?.(document);
 
       return typeof window.openSiteThemes === "function";
     })().finally(() => {
