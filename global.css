@@ -135,9 +135,6 @@
   --card-sponsor-button-background: rgba(0, 0, 0, 0.34);
   --card-sponsor-button-background-hover: rgba(0, 0, 0, 0.42);
   --card-sponsor-button-text: rgba(248, 250, 252, 0.96);
-  --theme-mobile-surface-tint: rgba(0, 0, 0, 0.82);
-  --theme-mobile-footer-tint: rgba(0, 0, 0, 0.84);
-  --theme-mobile-navbar-tint: rgba(0, 0, 0, 0.94);
   --footer-status-live-color: rgba(var(--status-updated-rgb), 0.95);
   --footer-status-muted-color: rgba(var(--status-not-updated-rgb), 0.9);
 

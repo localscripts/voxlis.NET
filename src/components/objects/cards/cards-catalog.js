@@ -36,6 +36,8 @@
       showInviteOnly: false,
     },
   } = ACTIVE_CATALOG;
+  const STATUS_ENABLED = Boolean(String(STATUS_API_URL || "").trim());
+  const SUNC_ENABLED = Boolean(String(SUNC_API_URL || "").trim());
   const FORCE_ISSUES =
     ACTIVE_CATALOG.forceissues && typeof ACTIVE_CATALOG.forceissues === "object"
       ? ACTIVE_CATALOG.forceissues
@@ -82,6 +84,14 @@
   const TAG_SLUG_ALIASES = {
     servside: "serverside",
     serverside: "serverside",
+  };
+  const TAG_BUTTON_CLASS_MAP = {
+    kernel: "is-kernel-tag",
+    keysystem: "is-keysystem-tag",
+    serverside: "is-serverside-tag",
+    usermode: "is-usermode-tag",
+    insecure: "is-insecure-tag",
+    freemium: "is-freemium-tag",
   };
   const HTML_ESCAPE_MAP = {
     "&": "&amp;",
@@ -804,64 +814,44 @@
     return durationLabel ? `From ${priceLabel} ${durationLabel}` : `From ${priceLabel}`;
   };
 
-  const formatPriceSummary = (offers = []) => {
-    if (!Array.isArray(offers) || !offers.length) {
-      return "";
-    }
+  const summarizeOffers = (offers = []) => {
+    const validOffers = Array.isArray(offers)
+      ? offers
+          .filter((offer) => Number.isFinite(Number(offer?.price)))
+          .map((offer) => ({ ...offer, price: Number(offer.price) }))
+          .sort((left, right) => left.price - right.price || left.days - right.days)
+      : [];
 
-    const validOffers = offers
-      .filter((offer) => Number.isFinite(Number(offer.price)))
-      .map((offer) => ({ ...offer, price: Number(offer.price) }))
-      .sort((left, right) => left.price - right.price || left.days - right.days);
+    const freeOffer = validOffers.find((offer) => offer.price === 0) ?? null;
+    const paidOffer = validOffers.find((offer) => offer.price > 0) ?? null;
+    const hasFreeOffer = Boolean(freeOffer);
+    const hasPaidOffer = Boolean(paidOffer);
 
-    if (!validOffers.length) {
-      return "";
-    }
-
-    const freeOffer = validOffers.find((offer) => offer.price === 0);
-    if (freeOffer) {
-      const paidOffer = validOffers.find((offer) => offer.price > 0);
-      if (!paidOffer) {
-        return "FREE";
+    let priceSummary = "";
+    if (validOffers.length) {
+      if (hasFreeOffer) {
+        priceSummary = hasPaidOffer
+          ? formatFromOfferSummary(paidOffer).replace(/^From /, "FREE or from ")
+          : "FREE";
+      } else {
+        priceSummary =
+          validOffers.length > 1
+            ? formatFromOfferSummary(validOffers[0])
+            : formatOfferSummary(validOffers[0]);
       }
-
-      return formatFromOfferSummary(paidOffer).replace(/^From /, "FREE or from ");
     }
 
-    const lowestOffer = validOffers[0];
-    if (validOffers.length > 1) {
-      return formatFromOfferSummary(lowestOffer);
-    }
-
-    return formatOfferSummary(lowestOffer);
-  };
-
-  const formatSponsorPriceSummary = (offers = []) => {
-    if (!Array.isArray(offers) || !offers.length) {
-      return "";
-    }
-
-    const validOffers = offers
-      .filter((offer) => Number.isFinite(Number(offer.price)))
-      .map((offer) => ({ ...offer, price: Number(offer.price) }))
-      .sort((left, right) => left.price - right.price || left.days - right.days);
-
-    if (!validOffers.length) {
-      return "";
-    }
-
-    const freeOffer = validOffers.find((offer) => offer.price === 0);
-    const paidOffer = validOffers.find((offer) => offer.price > 0);
-
-    if (freeOffer && !paidOffer) {
-      return "FREE";
-    }
-
-    if (paidOffer) {
-      return `From ${formatCurrency(paidOffer.price, paidOffer.currency)}`;
-    }
-
-    return "";
+    return {
+      hasFreeOffer,
+      hasPaidOffer,
+      minPaidPrice: hasPaidOffer ? paidOffer.price : Number.POSITIVE_INFINITY,
+      priceSummary,
+      sponsorPriceSummary: hasFreeOffer && !hasPaidOffer
+        ? "FREE"
+        : hasPaidOffer
+          ? `From ${formatCurrency(paidOffer.price, paidOffer.currency)}`
+          : "",
+    };
   };
 
   const getPrimarySuncSource = (info = {}) => {
@@ -1219,7 +1209,7 @@
     return stats;
   };
 
-  const inferKeyedState = (info = {}, points = {}, offers = []) => {
+  const inferKeyedState = (info = {}, points = {}, offerSummary = {}) => {
     if (typeof info.keyed === "boolean") {
       return info.keyed;
     }
@@ -1237,9 +1227,7 @@
       return true;
     }
 
-    const hasFreeOffer = offers.some((offer) => Number(offer.price) === 0);
-    const hasPaidOffer = offers.some((offer) => Number(offer.price) > 0);
-    return hasFreeOffer && hasPaidOffer;
+    return offerSummary.hasFreeOffer === true && offerSummary.hasPaidOffer === true;
   };
 
   const buildSummaryLines = (card) => {
@@ -1589,20 +1577,11 @@
         if (!tagEntry) {
           return "";
         }
-        const extraButtonClasses = [
-          tag === "kernel" ? "is-kernel-tag" : "",
-          tag === "keysystem" ? "is-keysystem-tag" : "",
-          tag === "serverside" ? "is-serverside-tag" : "",
-          tag === "usermode" ? "is-usermode-tag" : "",
-          tag === "insecure" ? "is-insecure-tag" : "",
-          tag === "freemium" ? "is-freemium-tag" : "",
-        ]
-          .filter(Boolean)
-          .join(" ");
+        const extraButtonClass = TAG_BUTTON_CLASS_MAP[tag] ?? "";
 
         return buildInfoIconButton({
           key: tagEntry.key,
-          buttonClass: `ph-meta-tag-btn${extraButtonClasses ? ` ${extraButtonClasses}` : ""}`,
+          buttonClass: `ph-meta-tag-btn${extraButtonClass ? ` ${extraButtonClass}` : ""}`,
           iconClass: tagEntry.iconClass,
           iconMarkup: tagEntry.iconMarkup,
           iconToneClass: tagEntry.iconToneClass || "",
@@ -1631,7 +1610,6 @@
     const platformText = buildPlatformText(card.info);
     const typeText = buildTypeText(card.info);
     const tagMarkup = buildTagChipMarkup(card.info.tags, card.slug);
-    const priceSummary = formatPriceSummary(card.offers);
     const textLabel =
       platformText && !tagMarkup && typeText
         ? `${platformText} | ${typeText}`
@@ -1645,12 +1623,16 @@
           ${textLabel && tagMarkup ? '<span class="ph-title-meta-sep" aria-hidden="true">|</span>' : ""}
           ${tagMarkup}
         </span>
-        ${priceSummary ? `<span class="ph-title-price">${escapeHtml(priceSummary)}</span>` : ""}
+        ${card.priceSummary ? `<span class="ph-title-price">${escapeHtml(card.priceSummary)}</span>` : ""}
       </p>
     `;
   };
 
   const getPlatformStatusEntry = (card, statusMap, platform) => {
+    if (!STATUS_ENABLED) {
+      return null;
+    }
+
     const platformState = statusMap[card.slug]?.[platform];
     if (typeof platformState === "boolean") {
       return {
@@ -1701,7 +1683,7 @@
     if (!platforms.length) {
       return `
         <span class="ph-platform-icons" aria-hidden="true">
-          <i class="fas fa-microchip ph-title-meta-ico is-status-unknown"></i>
+          <i class="fas fa-microchip ph-title-meta-ico${STATUS_ENABLED ? " is-status-unknown" : ""}"></i>
         </span>
       `;
     }
@@ -1721,18 +1703,18 @@
           .map((platform) => {
             const iconClass = PLATFORM_ICONS[platform] ?? "fas fa-microchip";
             const statusClass =
-              unifiedMobileIssue && (platform === "android" || platform === "ios")
-                ? "is-issue"
-                : getPlatformStateClass(card, statusMap, platform);
+              STATUS_ENABLED
+                ? unifiedMobileIssue && (platform === "android" || platform === "ios")
+                  ? "is-issue"
+                  : getPlatformStateClass(card, statusMap, platform)
+                : "";
             const label = PLATFORM_LABELS[platform] ?? titleCase(platform);
-            return `<i class="${escapeHtml(iconClass)} ph-title-meta-ico ${statusClass}" title="${escapeHtml(label)}"></i>`;
+            return `<i class="${escapeHtml(iconClass)} ph-title-meta-ico${statusClass ? ` ${statusClass}` : ""}" title="${escapeHtml(label)}"></i>`;
           })
           .join("")}
       </span>
     `;
   };
-
-  const buildReviewDescription = () => "";
 
   const getCardReviewUrl = (card) =>
     card?.reviewUrl || `${DATA_ROOT}/${encodeURIComponent(card?.folderName || card?.title || ITEM_LABEL_SINGULAR)}/review.md`;
@@ -1760,13 +1742,12 @@
       return null;
     }
 
-    const summaryLines = buildSummaryLines(card);
     const warningConfig = getModalWarningConfig(card.modals);
     const websiteTargets = normalizeWebsiteTargetList(card.info?.website);
 
     return {
       title: card.title || "More info",
-      description: buildReviewDescription(card, summaryLines),
+      description: "",
       reviewUrl: getCardReviewUrl(card),
       trackingSlug: card.slug || "",
       websiteUrl: websiteTargets.length
@@ -1795,6 +1776,10 @@
           <span class="ph-rating-external-sub">Side</span>
         </div>
       `;
+    }
+
+    if (!SUNC_ENABLED) {
+      return "";
     }
 
     const suncSource = getPrimarySuncSource(info);
@@ -1840,12 +1825,13 @@
     slug,
     title,
     reviewUrl,
-    reviewDescription,
     youtubeUrl,
     hasYoutubeIndicator,
     websiteUrl,
     purchaseUrl,
-    offers,
+    hasFreeOffer,
+    hasPaidOffer,
+    sponsorPriceSummary,
     warningConfig,
   }) => {
     const reviewHref = String(youtubeUrl || "").trim();
@@ -1862,9 +1848,6 @@
       WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
         ? ` data-card-website-warning-variant="${escapeHtml(warningConfig.variant || "")}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
         : "";
-    const hasFreeOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) === 0);
-    const hasPaidOffer = Array.isArray(offers) && offers.some((offer) => Number(offer.price) > 0);
-    const sponsorPriceSummary = formatSponsorPriceSummary(offers);
     const sponsorMarkup = /key-empire\.com/i.test(purchaseUrl ?? "")
       ? `
         <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire" data-click-track-action="buy-keyempire" data-click-track-slug="${escapeHtml(slug)}"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
@@ -1901,7 +1884,7 @@
           <a class="ph-action-btn is-review${hasYoutubeIndicator ? " has-youtube-indicator" : " is-disabled"}" data-click-track-action="review" data-click-track-slug="${escapeHtml(slug)}"${reviewButtonAttributes}>
             <i class="fab fa-youtube" aria-hidden="true"></i> <span class="ph-action-label">Review</span>
           </a>
-          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-click-track-action="more" data-click-track-slug="${escapeHtml(slug)}" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}" data-card-review-description="${escapeHtml(reviewDescription || "")}"${websiteDataAttributes}${websiteWarningDataAttributes}>
+          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-click-track-action="more" data-click-track-slug="${escapeHtml(slug)}" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}"${websiteDataAttributes}${websiteWarningDataAttributes}>
             <span class="ph-action-icon is-info" aria-hidden="true"></span> More
           </a>
         </div>
@@ -1977,6 +1960,10 @@
   };
 
   const handleSuncActionClick = (event) => {
+    if (!SUNC_ENABLED) {
+      return;
+    }
+
     const trigger = event.target.closest("button[data-card-sunc-open]");
     if (!trigger) {
       return;
@@ -2261,6 +2248,10 @@
   const hasWarningBadge = (card) => Boolean(getModalWarningConfig(card?.modals));
 
   const getCardStatusClass = (card, statusMap) => {
+    if (!STATUS_ENABLED) {
+      return "";
+    }
+
     const platformStates = card.info.platforms
       ?.map((platform) => ({
         platform,
@@ -2614,7 +2605,6 @@
   const renderCard = (card, statusMap) => {
     const reviewUrl = getCardReviewUrl(card);
     const summaryLines = buildSummaryLines(card);
-    const reviewDescription = buildReviewDescription(card, summaryLines);
     const warningConfig = getModalWarningConfig(card.modals);
     const lineMarkup = summaryLines.length
       ? `
@@ -2650,12 +2640,13 @@
           slug: card.slug,
           title: card.title,
           reviewUrl,
-          reviewDescription,
           youtubeUrl: card.youtubeUrl,
           hasYoutubeIndicator: Boolean(card.youtubeUrl),
           websiteUrl: card.info.website,
           purchaseUrl: card.pricing.purchaseUrl || card.pricing.purchase_url,
-          offers: card.offers,
+          hasFreeOffer: card.hasFreeOffer,
+          hasPaidOffer: card.hasPaidOffer,
+          sponsorPriceSummary: card.sponsorPriceSummary,
           warningConfig,
         })}
       </article>
@@ -2743,6 +2734,7 @@
 
     if (section) {
       section.setAttribute("aria-label", SECTION_ARIA_LABEL);
+      section.classList.toggle("is-status-disabled", !STATUS_ENABLED);
     }
 
     if (summaryRow) {
@@ -2972,12 +2964,9 @@
           const pricing = entry.pricing ?? {};
           const fallbackOffers = entry.isListedFree ? buildFreeLifetimeOffers(entry.info.platforms) : [];
           const offers = flattenOffers(pricing, fallbackOffers);
-          const hasFreeOffer = offers.some((offer) => Number(offer.price) === 0);
-          const hasPaidOffer = offers.some((offer) => Number(offer.price) > 0);
+          const offerSummary = summarizeOffers(offers);
           const youtubeUrl = String(entry.info.youtube || reviewDocument?.metadata?.youtube || "").trim();
-          const paidPrices = offers
-            .map((offer) => Number(offer.price))
-            .filter((price) => Number.isFinite(price) && price > 0);
+          const metaText = buildMetaText(entry.info);
 
           return {
             ...entry,
@@ -2987,15 +2976,13 @@
             reviewUrl,
             youtubeUrl,
             randomSortKey: Math.random(),
-            hasFreeOffer,
-            hasPaidOffer,
-            minPaidPrice: paidPrices.length ? Math.min(...paidPrices) : Number.POSITIVE_INFINITY,
-            isKeyed: inferKeyedState(entry.info, points ?? {}, offers),
+            ...offerSummary,
+            isKeyed: inferKeyedState(entry.info, points ?? {}, offerSummary),
             cardType: normalizeLineText(entry.info.type || "").toLowerCase() || "internal",
             searchText: buildSearchText([
               entry.title,
               entry.slug,
-              buildMetaText(entry.info),
+              metaText,
               entry.info.tags,
               points?.pro_summary,
               points?.neutral_summary,
@@ -3004,7 +2991,7 @@
             searchTokens: buildSearchTokens([
               entry.title,
               entry.slug,
-              buildMetaText(entry.info),
+              metaText,
               entry.info.tags,
               points?.pro_summary,
               points?.neutral_summary,
@@ -3113,8 +3100,12 @@
         return targetCard ? buildCardMoreInfoOptions(targetCard) : null;
       });
       renderCatalogView();
-      void hydrateSuncSummaries({ forceRefresh, requestToken });
-      void hydrateCatalogStatus({ forceRefresh });
+      if (SUNC_ENABLED) {
+        void hydrateSuncSummaries({ forceRefresh, requestToken });
+      }
+      if (STATUS_ENABLED) {
+        void hydrateCatalogStatus({ forceRefresh });
+      }
     } catch (error) {
       if (
         requestToken !== catalogState.catalogRequestToken ||

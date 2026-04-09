@@ -4,8 +4,6 @@
   const themeIds = themeConfig.ids ?? {};
   const themeEvents = themeConfig.events ?? {};
   const themeDrawerConfig = themeConfig.drawer ?? {};
-  const surfaceBlurConfig = themeConfig.surfaceBlur ?? {};
-  const surfaceTintConfig = themeConfig.surfaceTint ?? {};
   const customAccentConfig = themeConfig.customAccent ?? {};
 
   const THEME_STORAGE_KEY = storageKeys.theme ?? "voxlis-theme";
@@ -26,10 +24,6 @@
   const THEME_DRAWER_DESKTOP_MEDIA_QUERY = window.matchMedia(
     themeDrawerConfig.desktopMediaQuery ?? "(min-width: 769px)",
   );
-  const SURFACE_BLUR_DEFAULT = surfaceBlurConfig.default ?? 12;
-  const SURFACE_BLUR_TINT_SCALE = surfaceBlurConfig.tintScale ?? 18 / 82;
-  const SURFACE_TINT_POWER_DEFAULT = surfaceTintConfig.default ?? 82;
-  const SURFACE_TINT_HEX_DEFAULT = surfaceTintConfig.defaultHex ?? "#000000";
   const CUSTOM_THEME_COLOR_DEFAULT = customAccentConfig.defaultHex ?? "#22c55e";
   const CUSTOM_THEME_STYLE_PROPERTIES = [
     "--theme-main-color",
@@ -45,17 +39,11 @@
   const THEME_OPTIONS = (
     Array.isArray(themeConfig.options) && themeConfig.options.length
       ? themeConfig.options
-        : [
-            { id: "blue", label: "Legacy", swatch: "#3B82F6", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
-            { id: CUSTOM_THEME_ID, label: "Custom", swatch: CUSTOM_THEME_COLOR_DEFAULT, group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false, supportsCustomColor: true },
-        ]
-  ).map((option) => ({
-    ...option,
-    surfaceBlurEnabled: option.surfaceBlurEnabled === true,
-    surfaceBlurStrength:
-      Number.isFinite(option.surfaceBlurStrength) ? option.surfaceBlurStrength : SURFACE_BLUR_DEFAULT,
-    hideFeaturedAds: option.hideFeaturedAds === true,
-  }));
+      : [
+          { id: "blue", label: "Legacy", swatch: "#3B82F6", group: "accent" },
+          { id: CUSTOM_THEME_ID, label: "Custom", swatch: CUSTOM_THEME_COLOR_DEFAULT, group: "accent", supportsCustomColor: true },
+      ]
+  );
   const VALID_THEMES = new Set(THEME_OPTIONS.map(({ id }) => id));
   const THEME_OPTION_MAP = new Map(THEME_OPTIONS.map((option) => [option.id, option]));
   const LEGACY_EDITOR_STORAGE_KEYS = [
@@ -64,15 +52,15 @@
   ];
   const REMOVED_EDITOR_STORAGE_KEYS = [
     ...LEGACY_EDITOR_STORAGE_KEYS,
-    storageKeys.outlineBrightness ?? "voxlis-outline-brightness",
-    storageKeys.backgroundMedia ?? "voxlis-background-media",
-    storageKeys.backgroundTintHex ?? "voxlis-background-tint-hex",
-    storageKeys.backgroundTintPower ?? "voxlis-background-tint-power",
-    storageKeys.surfaceBlurEnabled ?? "voxlis-surface-blur-enabled",
-    storageKeys.surfaceBlurStrength ?? "voxlis-surface-blur-strength",
-    storageKeys.surfaceTintHex ?? "voxlis-surface-tint-hex",
-    storageKeys.surfaceTintPower ?? "voxlis-surface-tint-power",
-    storageKeys.cardOutlineHex ?? "voxlis-card-outline-hex",
+    "voxlis-outline-brightness",
+    "voxlis-background-media",
+    "voxlis-background-tint-hex",
+    "voxlis-background-tint-power",
+    "voxlis-surface-blur-enabled",
+    "voxlis-surface-blur-strength",
+    "voxlis-surface-tint-hex",
+    "voxlis-surface-tint-power",
+    "voxlis-card-outline-hex",
   ].filter(Boolean);
   const REMOVED_EDITOR_STYLE_PROPERTIES = [
     "--theme-font-import-url",
@@ -253,23 +241,15 @@
   const emitThemeChange = (theme) => {
     window.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT, { detail: { theme } }));
   };
-  const applyPresetSurfaceStyle = (theme) => {
-    const preset = THEME_OPTION_MAP.get(normalizeTheme(theme)) || THEME_OPTION_MAP.get(DEFAULT_THEME_ID);
-    const nextEnabled = Boolean(preset?.surfaceBlurEnabled);
-    const solidTintAlpha = SURFACE_TINT_POWER_DEFAULT / 100;
-    const blurTintAlpha = solidTintAlpha * SURFACE_BLUR_TINT_SCALE;
+  const applyPresetSurfaceStyle = () => {
     const root = getThemeRoot();
-    const surfaceTint = nextEnabled
-      ? rgba(SURFACE_TINT_HEX_DEFAULT, blurTintAlpha)
-      : rgba(SURFACE_TINT_HEX_DEFAULT, solidTintAlpha);
-    const navbarTint = nextEnabled ? surfaceTint : "#000000";
 
     root.style.setProperty("--card-surface-background", "#000000");
     root.style.setProperty("--card-surface-tint", "#000000");
     root.style.setProperty("--promo-card-background", "#000000");
     root.style.setProperty("--footer-bg", "#000000");
-    root.style.setProperty("--navbar-background", navbarTint);
-    root.style.setProperty("--navbar-mobile-panel-background", navbarTint);
+    root.style.setProperty("--navbar-background", "#000000");
+    root.style.setProperty("--navbar-mobile-panel-background", "#000000");
     root.style.setProperty("--card-surface-backdrop-blur", "0px");
     root.style.setProperty("--footer-backdrop-blur", "0px");
   };
@@ -335,7 +315,6 @@
     } = {},
   ) => {
     const nextTheme = normalizeTheme(theme);
-    const preset = THEME_OPTION_MAP.get(nextTheme) || THEME_OPTION_MAP.get(DEFAULT_THEME_ID) || THEME_OPTIONS[0];
     const root = getThemeRoot();
 
     clearRemovedEditorArtifacts();
@@ -343,13 +322,13 @@
     if (root.dataset.theme !== nextTheme) {
       root.dataset.theme = nextTheme;
     }
-    applyPresetSurfaceStyle(nextTheme);
+    applyPresetSurfaceStyle();
     if (nextTheme === CUSTOM_THEME_ID) {
       applyCustomThemeStyleOverrides(customColor, { persist: persistCustomColor });
     }
 
     if (persistPresetPreferences) {
-      applyFeaturedAdsVisibility(Boolean(preset?.hideFeaturedAds));
+      applyFeaturedAdsVisibility(false);
     } else {
       applyFeaturedAdsVisibility(getStoredHideFeaturedAds(), { persist: false });
     }

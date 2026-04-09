@@ -80,16 +80,6 @@
           { value: "internal", label: "Internal" },
         ],
       },
-      {
-        field: "updatedState",
-        label: "Updated",
-        defaultValue: "all",
-        options: [
-          { value: "all", label: "All" },
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ],
-      },
     ],
     typeLabels: {
       internal: "Internal",
@@ -105,7 +95,6 @@
       verified: false,
       trending: false,
       warning: false,
-      updatedState: "all",
       showInsecure: false,
     },
     labels: {

@@ -114,6 +114,28 @@
   display: none;
 }
 
+.cards-sec.is-status-disabled .sts-legend-item.is-updated,
+.cards-sec.is-status-disabled .sts-legend-item.is-not-updated {
+  display: none;
+}
+
+.cards-sec.is-status-disabled .sts-legend-item.is-showing {
+  display: inline-flex;
+}
+
+.cards-sec.is-status-disabled .sts-legend-item.is-showing .sts-legend-count {
+  color: var(--txt-mut);
+}
+
+.cards-sec.is-status-disabled .sts-main {
+  display: none;
+}
+
+.cards-sec.is-status-disabled .sts-controls {
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .sts-legend-swatch {
   width: 0.95rem;
   height: 0.3rem;
