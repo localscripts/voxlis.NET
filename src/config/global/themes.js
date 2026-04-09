@@ -24,6 +24,7 @@
       hidePromo: "voxlis-hide-promo",
       hideToastPopups: "voxlis-hide-toast-popups",
       hideNavbarWarning: "voxlis-hide-navbar-warning",
+      hideBottomFade: "voxlis-hide-bottom-fade",
     },
     ids: {
       default: "blue",

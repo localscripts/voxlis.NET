@@ -658,6 +658,8 @@
       </div>
     `;
 
+    const isMirrorPickerModal = () => modal.classList.contains("is-mirror-picker");
+
     modal.addEventListener("click", (event) => {
       const choiceButton = event.target.closest("[data-info-modal-choice-url]");
       if (choiceButton) {
@@ -667,7 +669,6 @@
           return;
         }
 
-        requestCloseMoreInfoModal({ immediate: true });
         openWebsiteAction(href, {
           target:
             choiceButton.dataset.infoModalChoiceTarget ||
@@ -680,6 +681,10 @@
       }
 
       if (event.target.closest("[data-more-info-close]")) {
+        const clickedOverlay = event.target.classList?.contains("info-modal-overlay");
+        if (clickedOverlay && isMirrorPickerModal()) {
+          return;
+        }
         if (event.target.closest(".info-modal-close-btn")) {
           trackModalCardAction("close");
         }
@@ -688,7 +693,7 @@
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !modal.hidden) {
+      if (event.key === "Escape" && !modal.hidden && !isMirrorPickerModal()) {
         requestCloseMoreInfoModal();
       }
     });

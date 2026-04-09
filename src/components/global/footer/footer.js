@@ -1,4 +1,5 @@
 (() => {
+  const SITE_BOTTOM_FADE_OFFSET_VAR = "--site-bottom-fade-offset";
   const FOOTER_LEGAL_MODALS = {
     policy: {
       title: "Policy",
@@ -10,6 +11,54 @@
       path: "/privacy/",
       reviewUrl: "/public/data/misc/privacy.md",
     },
+  };
+
+  let siteBottomFadeFrameId = 0;
+
+  const syncSiteBottomFadeOffset = (scope = document) => {
+    const body = scope.body || document.body;
+    if (!body) {
+      return;
+    }
+
+    const footer = scope.querySelector(".site-footer");
+    if (!footer) {
+      body.style.setProperty(SITE_BOTTOM_FADE_OFFSET_VAR, "0px");
+      return;
+    }
+
+    const footerRect = footer.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+    const footerOverlap = Math.max(0, viewportHeight - footerRect.top);
+    body.style.setProperty(SITE_BOTTOM_FADE_OFFSET_VAR, `${Math.round(footerOverlap)}px`);
+  };
+
+  const queueSiteBottomFadeOffsetSync = (scope = document) => {
+    if (siteBottomFadeFrameId) {
+      return;
+    }
+
+    siteBottomFadeFrameId = window.requestAnimationFrame(() => {
+      siteBottomFadeFrameId = 0;
+      syncSiteBottomFadeOffset(scope);
+    });
+  };
+
+  const initSiteBottomFadeOffset = (scope = document) => {
+    const body = scope.body || document.body;
+    if (!body) {
+      return;
+    }
+
+    if (body.dataset.siteBottomFadeBound !== "true") {
+      const sync = () => queueSiteBottomFadeOffsetSync(scope);
+      window.addEventListener("scroll", sync, { passive: true });
+      window.addEventListener("resize", sync, { passive: true });
+      window.addEventListener("load", sync, { once: true });
+      body.dataset.siteBottomFadeBound = "true";
+    }
+
+    queueSiteBottomFadeOffsetSync(scope);
   };
 
   const normalizePath = (path = "/") => {
@@ -110,6 +159,7 @@
       node.textContent = currentYear;
     });
     initFooterLegalModals(scope);
+    initSiteBottomFadeOffset(scope);
   };
 
   window.initSiteFooter = initSiteFooter;

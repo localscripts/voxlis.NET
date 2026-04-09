@@ -177,6 +177,15 @@
   --mob-quick-icon-font: 1rem;
   --mob-quick-solid-size: 2.25rem;
   --mob-quick-solid-radius: 0.5rem;
+  --site-bottom-fade-height: clamp(4.75rem, 10vw, 8rem);
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.14) 22%,
+    rgba(0, 0, 0, 0.42) 52%,
+    rgba(0, 0, 0, 0.8) 82%,
+    #000000 100%
+  );
 
   /* Navbar */
   --navbar-height: var(--hdr-h);
@@ -460,6 +469,22 @@ body {
   font-family: var(--font-family-base);
   position: relative;
   isolation: isolate;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--site-bottom-fade-offset, 0px);
+  height: var(--site-bottom-fade-height);
+  pointer-events: none;
+  background: var(--site-bottom-fade-fill);
+  z-index: 40;
+}
+
+body.site-bottom-fade-hidden::after {
+  display: none;
 }
 
 body.has-custom-background {

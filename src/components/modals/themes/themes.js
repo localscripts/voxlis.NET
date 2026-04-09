@@ -14,6 +14,7 @@
   const HIDE_PROMO_STORAGE_KEY = storageKeys.hidePromo ?? "voxlis-hide-promo";
   const HIDE_TOAST_POPUPS_STORAGE_KEY = storageKeys.hideToastPopups ?? "voxlis-hide-toast-popups";
   const HIDE_NAVBAR_WARNING_STORAGE_KEY = storageKeys.hideNavbarWarning ?? "voxlis-hide-navbar-warning";
+  const HIDE_BOTTOM_FADE_STORAGE_KEY = storageKeys.hideBottomFade ?? "voxlis-hide-bottom-fade";
   const DEFAULT_THEME_ID = themeIds.default ?? "blue";
   const THEME_CHANGE_EVENT = themeEvents.change ?? "site-theme-change";
   const THEME_DRAWER_EXIT_FALLBACK_MS = themeDrawerConfig.exitFallbackMs ?? 260;
@@ -205,6 +206,8 @@
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_TOAST_POPUPS_STORAGE_KEY));
   const getStoredHideNavbarWarning = () =>
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_NAVBAR_WARNING_STORAGE_KEY));
+  const getStoredHideBottomFade = () =>
+    normalizeBooleanPreference(window.localStorage.getItem(HIDE_BOTTOM_FADE_STORAGE_KEY));
   const emitThemeChange = (theme) => {
     window.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT, { detail: { theme } }));
   };
@@ -277,6 +280,16 @@
 
     return nextHidden;
   };
+  const applyBottomFadeVisibility = (hidden, { persist = true } = {}) => {
+    const nextHidden = Boolean(hidden);
+    document.body?.classList.toggle("site-bottom-fade-hidden", nextHidden);
+
+    if (persist) {
+      window.localStorage.setItem(HIDE_BOTTOM_FADE_STORAGE_KEY, nextHidden ? "1" : "0");
+    }
+
+    return nextHidden;
+  };
   const applyPresetTheme = (
     theme,
     {
@@ -317,6 +330,7 @@
     applyPromoVisibility(false);
     applyToastPopupVisibility(false);
     applyNavbarWarningVisibility(false);
+    applyBottomFadeVisibility(false);
     syncThemeSwitcherUI(scope);
     syncVisibilityPreferencesUI(scope);
     return restoredTheme;
@@ -417,6 +431,7 @@
     const hidePromoInput = scope.getElementById("siteHidePromo");
     const hideToastPopupsInput = scope.getElementById("siteHideToastPopups");
     const hideNavbarWarningInput = scope.getElementById("siteHideNavbarWarning");
+    const hideBottomFadeInput = scope.getElementById("siteHideBottomFade");
 
     if (hideFeaturedAdsInput) {
       hideFeaturedAdsInput.checked = getStoredHideFeaturedAds();
@@ -432,6 +447,10 @@
 
     if (hideNavbarWarningInput) {
       hideNavbarWarningInput.checked = getStoredHideNavbarWarning();
+    }
+
+    if (hideBottomFadeInput) {
+      hideBottomFadeInput.checked = getStoredHideBottomFade();
     }
   };
   const syncResponsiveThemeSurfaceMode = () => {
@@ -450,6 +469,7 @@
     const hidePromoInput = scope.getElementById("siteHidePromo");
     const hideToastPopupsInput = scope.getElementById("siteHideToastPopups");
     const hideNavbarWarningInput = scope.getElementById("siteHideNavbarWarning");
+    const hideBottomFadeInput = scope.getElementById("siteHideBottomFade");
     const optionsRoot = scope.getElementById("siteThemeOptions");
     if (!drawer || !closeButton || !optionsRoot) {
       return;
@@ -484,6 +504,7 @@
     applyPromoVisibility(getStoredHidePromo(), { persist: false });
     applyToastPopupVisibility(getStoredHideToastPopups(), { persist: false });
     applyNavbarWarningVisibility(getStoredHideNavbarWarning(), { persist: false });
+    applyBottomFadeVisibility(getStoredHideBottomFade(), { persist: false });
     syncSelectedOption(scope, activeTheme);
     syncVisibilityPreferencesUI(scope);
     syncThemeDrawerWidth();
@@ -651,6 +672,11 @@
       applyNavbarWarningVisibility(hideNavbarWarningInput.checked);
     });
 
+    hideBottomFadeInput?.addEventListener("change", () => {
+      trackThemeEvent("hide-bottom-fade");
+      applyBottomFadeVisibility(hideBottomFadeInput.checked);
+    });
+
     restoreDefaultsButton?.addEventListener("click", (event) => {
       event.preventDefault();
       trackThemeEvent("restore-defaults");
@@ -717,6 +743,7 @@
   applyPromoVisibility(getStoredHidePromo(), { persist: false });
   applyToastPopupVisibility(getStoredHideToastPopups(), { persist: false });
   applyNavbarWarningVisibility(getStoredHideNavbarWarning(), { persist: false });
+  applyBottomFadeVisibility(getStoredHideBottomFade(), { persist: false });
   syncKawaiiMobileTintModeClass();
 
   if (typeof KAWAII_MOBILE_TINT_MEDIA_QUERY.addEventListener === "function") {
@@ -733,5 +760,6 @@
   window.restoreSiteThemeDefaults = (scope = document) => restoreThemeDefaults(scope);
   window.applyFeaturedAdsVisibilityPreference = applyFeaturedAdsVisibility;
   window.applyPromoVisibilityPreference = applyPromoVisibility;
+  window.applyBottomFadeVisibilityPreference = applyBottomFadeVisibility;
   window.getActiveSiteTheme = getStoredTheme;
 })();
