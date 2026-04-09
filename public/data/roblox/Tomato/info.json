@@ -1,0 +1,15 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "RFQg5HlX3kSU3Wwevdhc5c0MxKNmS2I8",
+			"scrapId": "6nCMEijWcsdOZ0Kv"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["insecure"],
+	"platforms": ["windows"],
+	"website": "get-tomato.lol",
+	"keyed": false
+}
