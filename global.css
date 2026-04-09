@@ -382,10 +382,11 @@ body::after {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: var(--site-bottom-fade-offset, 0px);
+  bottom: 0;
   height: var(--site-bottom-fade-height);
   pointer-events: none;
   background: var(--site-bottom-fade-fill);
+  clip-path: inset(0 0 var(--site-bottom-fade-offset, 0px) 0);
   z-index: 40;
 }
 

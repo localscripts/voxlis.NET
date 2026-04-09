@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["insecure"],
 	"platforms": ["windows"],
-	"website": "get-tomato.lol",
+	"urls": {
+		"website": "get-tomato.lol",
+		"discord": "https://discord.com/invite/eVWSgQ84SA"
+	},
 	"keyed": false
 }

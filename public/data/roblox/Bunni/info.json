@@ -10,5 +10,8 @@
 	"type": "internal",
 	"tags": ["decompiler"],
 	"platforms": ["windows"],
-	"website": "https://bunni.fun/"
+	"urls": {
+		"website": "https://bunni.fun/",
+		"discord": "https://discord.gg/bunni-fun"
+	}
 }

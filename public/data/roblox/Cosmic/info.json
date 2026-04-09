@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://cosmic.best",
+	"urls": {
+		"website": "https://cosmic.best",
+		"discord": "https://discord.gg/edEWA6zukn"
+	},
 	"keyed": false
 }

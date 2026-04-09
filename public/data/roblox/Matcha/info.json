@@ -5,6 +5,8 @@
 	"type": "external",
 	"tags": ["decompiler"],
 	"platforms": ["windows"],
-	"website": "https://matcha.pink/discord",
+	"urls": {
+		"discord": "https://discord.gg/matchalattewin"
+	},
 	"keyed": false
 }

@@ -84,6 +84,7 @@
     trackingSlug: "",
     websiteTargets: [],
     websiteTitle: "",
+    discordTargets: [],
     choiceWarningConfig: null,
     choiceTarget: "_blank",
   };
@@ -195,6 +196,18 @@
       variant,
       title: String(warningConfig.title || "Important warning").trim() || "Important warning",
       description,
+    };
+  };
+  const getButtonWarningConfig = (button) => {
+    const warningVariant = button?.dataset.warningVariant || "";
+    if (!warningVariant) {
+      return null;
+    }
+
+    return {
+      variant: warningVariant,
+      title: button.dataset.warningTitle || "Important warning",
+      description: button.dataset.warningDescription || "",
     };
   };
 
@@ -651,6 +664,21 @@
             ></i>
             <span id="moreInfoModalWebsiteLabel">Website</span>
           </a>
+          <a
+            class="info-modal-website-btn"
+            id="moreInfoModalDiscordBtn"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+          >
+            <i
+              class="fab fa-discord"
+              id="moreInfoModalDiscordIcon"
+              aria-hidden="true"
+            ></i>
+            <span id="moreInfoModalDiscordLabel">Discord</span>
+          </a>
           <button class="info-modal-close-btn" type="button" data-more-info-close>
             <i class="fas fa-times" aria-hidden="true"></i> <span id="moreInfoModalCloseLabel">Close</span>
           </button>
@@ -699,6 +727,7 @@
     });
 
     const websiteButton = modal.querySelector("#moreInfoModalWebsiteBtn");
+    const discordButton = modal.querySelector("#moreInfoModalDiscordBtn");
     websiteButton?.addEventListener("click", (event) => {
       const websiteTargets = normalizeWebsiteTargetList(
         modalState.websiteTargets.length ? modalState.websiteTargets : websiteButton.getAttribute("href"),
@@ -710,14 +739,7 @@
       }
 
       trackModalCardAction("website");
-      const warningVariant = websiteButton.dataset.warningVariant || "";
-      const warningConfig = warningVariant
-        ? {
-            variant: warningVariant,
-            title: websiteButton.dataset.warningTitle || "Important warning",
-            description: websiteButton.dataset.warningDescription || "",
-          }
-        : null;
+      const warningConfig = getButtonWarningConfig(websiteButton);
 
       if (typeof window.openWebsiteDestination === "function") {
         event.preventDefault();
@@ -741,6 +763,40 @@
         warningConfig,
       });
     });
+    discordButton?.addEventListener("click", (event) => {
+      const discordTargets = normalizeWebsiteTargetList(
+        modalState.discordTargets.length ? modalState.discordTargets : discordButton.getAttribute("href"),
+      );
+      const href = discordTargets[0] || discordButton.getAttribute("href") || "";
+      if (!href || href === "#") {
+        event.preventDefault();
+        return;
+      }
+
+      trackModalCardAction("discord");
+      const warningConfig = getButtonWarningConfig(discordButton);
+      if (typeof window.openWebsiteDestination === "function") {
+        event.preventDefault();
+        const opened =
+          window.openWebsiteDestination({
+            websites: discordTargets,
+            warningConfig,
+            target: discordButton.getAttribute("target") || "",
+            title: modalState.websiteTitle || "",
+            closeOpenModals: discordTargets.length > 1,
+          }) ?? false;
+
+        if (opened) {
+          return;
+        }
+      }
+
+      event.preventDefault();
+      openWebsiteAction(href, {
+        target: discordButton.getAttribute("target") || "",
+        warningConfig,
+      });
+    });
 
     document.body.appendChild(modal);
     return modal;
@@ -756,6 +812,9 @@
     const websiteButton = modal.querySelector("#moreInfoModalWebsiteBtn");
     const websiteButtonLabelNode = modal.querySelector("#moreInfoModalWebsiteLabel");
     const websiteButtonIconNode = modal.querySelector("#moreInfoModalWebsiteIcon");
+    const discordButton = modal.querySelector("#moreInfoModalDiscordBtn");
+    const discordButtonLabelNode = modal.querySelector("#moreInfoModalDiscordLabel");
+    const discordButtonIconNode = modal.querySelector("#moreInfoModalDiscordIcon");
     modal.hidden = true;
     modal.classList.remove(
       "is-open",
@@ -772,6 +831,7 @@
     modalState.trackingSlug = "";
     modalState.websiteTargets = [];
     modalState.websiteTitle = "";
+    modalState.discordTargets = [];
     modalState.choiceWarningConfig = null;
     modalState.choiceTarget = "_blank";
     if (closeLabelNode) {
@@ -787,6 +847,18 @@
     if (websiteButtonIconNode) {
       websiteButtonIconNode.className = "fas fa-arrow-up-right-from-square";
       websiteButtonIconNode.hidden = false;
+    }
+    if (discordButton) {
+      discordButton.setAttribute("href", "#");
+      discordButton.setAttribute("target", "_blank");
+      discordButton.setAttribute("title", "Open Discord");
+    }
+    if (discordButtonLabelNode) {
+      discordButtonLabelNode.textContent = "Discord";
+    }
+    if (discordButtonIconNode) {
+      discordButtonIconNode.className = "fab fa-discord";
+      discordButtonIconNode.hidden = false;
     }
   };
 
@@ -860,6 +932,10 @@
     websiteWarningConfig = null,
     websiteLabel = "Website",
     websiteIconClass = "fas fa-arrow-up-right-from-square",
+    discordUrl = "",
+    discordTarget = "_blank",
+    discordLabel = "Discord",
+    discordIconClass = "fab fa-discord",
     choiceWarningConfig = null,
     choiceTarget = "_blank",
     contentHtml = "",
@@ -894,6 +970,9 @@
     const websiteButton = modal.querySelector("#moreInfoModalWebsiteBtn");
     const websiteButtonLabelNode = modal.querySelector("#moreInfoModalWebsiteLabel");
     const websiteButtonIconNode = modal.querySelector("#moreInfoModalWebsiteIcon");
+    const discordButton = modal.querySelector("#moreInfoModalDiscordBtn");
+    const discordButtonLabelNode = modal.querySelector("#moreInfoModalDiscordLabel");
+    const discordButtonIconNode = modal.querySelector("#moreInfoModalDiscordIcon");
     const closeLabelNode = modal.querySelector("#moreInfoModalCloseLabel");
     const exploitName = String(title).trim() || getDefaultEntryLabel();
     const modalTitle = preserveTitle || exploitName.endsWith(" Information")
@@ -901,12 +980,18 @@
       : `${exploitName} Information`;
     const modalDescription = String(description).trim();
     const modalWebsiteTargets = normalizeWebsiteTargetList(websiteUrl);
+    const modalDiscordTargets = normalizeWebsiteTargetList(discordUrl);
     const primaryWebsiteUrl = modalWebsiteTargets[0] || "";
+    const primaryDiscordUrl = modalDiscordTargets[0] || "";
     const resolvedWebsiteTarget = websiteTarget == null ? "_blank" : String(websiteTarget).trim();
     const resolvedWebsiteLabel = String(websiteLabel || "Website").trim() || "Website";
     const resolvedWebsiteIconClass = String(websiteIconClass || "").trim();
+    const resolvedDiscordTarget = discordTarget == null ? "_blank" : String(discordTarget).trim();
+    const resolvedDiscordLabel = String(discordLabel || "Discord").trim() || "Discord";
+    const resolvedDiscordIconClass = String(discordIconClass || "").trim();
     const normalizedModalPath = modalPath ? normalizePath(modalPath) : "";
     const normalizedChoiceWarningConfig = normalizeWarningConfig(choiceWarningConfig);
+    const normalizedWebsiteWarningConfig = normalizeWarningConfig(websiteWarningConfig);
     const resolvedChoiceTarget = String(choiceTarget || "_blank").trim() || "_blank";
     const requestToken = modalState.requestToken + 1;
 
@@ -920,6 +1005,7 @@
     modalState.trackingSlug = String(trackingSlug).trim();
     modalState.websiteTargets = modalWebsiteTargets;
     modalState.websiteTitle = exploitName;
+    modalState.discordTargets = modalDiscordTargets;
     modalState.choiceWarningConfig = normalizedChoiceWarningConfig;
     modalState.choiceTarget = resolvedChoiceTarget;
     titleNode.textContent = modalTitle;
@@ -957,11 +1043,35 @@
       delete websiteButton.dataset.warningTitle;
       delete websiteButton.dataset.warningDescription;
 
-      const warningVariant = websiteWarningConfig?.variant || websiteWarningConfig?.type || "";
+      const warningVariant = normalizedWebsiteWarningConfig?.variant || "";
       if (!shouldHideWebsiteButton && warningVariant) {
         websiteButton.dataset.warningVariant = warningVariant;
-        websiteButton.dataset.warningTitle = websiteWarningConfig.title || "Important warning";
-        websiteButton.dataset.warningDescription = websiteWarningConfig.description || "";
+        websiteButton.dataset.warningTitle = normalizedWebsiteWarningConfig.title || "Important warning";
+        websiteButton.dataset.warningDescription = normalizedWebsiteWarningConfig.description || "";
+      }
+    }
+    if (discordButton) {
+      const shouldHideDiscordButton = !modalDiscordTargets.length;
+      discordButton.hidden = shouldHideDiscordButton;
+      discordButton.setAttribute("href", shouldHideDiscordButton ? "#" : primaryDiscordUrl);
+      discordButton.setAttribute("target", shouldHideDiscordButton ? "_blank" : resolvedDiscordTarget);
+      discordButton.setAttribute("title", shouldHideDiscordButton ? "" : resolvedDiscordLabel);
+      if (discordButtonLabelNode) {
+        discordButtonLabelNode.textContent = resolvedDiscordLabel;
+      }
+      if (discordButtonIconNode) {
+        discordButtonIconNode.className = resolvedDiscordIconClass;
+        discordButtonIconNode.hidden = !resolvedDiscordIconClass;
+      }
+      delete discordButton.dataset.warningVariant;
+      delete discordButton.dataset.warningTitle;
+      delete discordButton.dataset.warningDescription;
+
+      const warningVariant = normalizedWebsiteWarningConfig?.variant || "";
+      if (!shouldHideDiscordButton && warningVariant) {
+        discordButton.dataset.warningVariant = warningVariant;
+        discordButton.dataset.warningTitle = normalizedWebsiteWarningConfig.title || "Important warning";
+        discordButton.dataset.warningDescription = normalizedWebsiteWarningConfig.description || "";
       }
     }
     markdownNode.innerHTML = LOADING_MARKUP;

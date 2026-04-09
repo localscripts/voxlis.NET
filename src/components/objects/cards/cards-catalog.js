@@ -148,6 +148,7 @@
     popularityRequestToken: 0,
     statusRequestToken: 0,
     renderFrameId: 0,
+    isLoading: false,
   };
   const dispatchSearchQuerySync = (value = "") => {
     document.dispatchEvent(
@@ -403,6 +404,15 @@
     } catch {
       return normalizeWebsiteTargetList(normalizedValue);
     }
+  };
+  const getCardInfoUrlTargets = (info = {}, key = "") => {
+    const normalizedKey = String(key || "").trim().toLowerCase();
+    if (!normalizedKey) {
+      return [];
+    }
+
+    const scopedUrls = info?.urls && typeof info.urls === "object" ? info.urls : null;
+    return normalizeWebsiteTargetList(scopedUrls?.[normalizedKey] ?? info?.[normalizedKey]);
   };
   const normalizeKeyEmpireDuration = (value) => {
     if (typeof value === "string" && value.toLowerCase() === "lifetime") {
@@ -1743,16 +1753,20 @@
     }
 
     const warningConfig = getModalWarningConfig(card.modals);
-    const websiteTargets = normalizeWebsiteTargetList(card.info?.website);
+    const websiteTargets = getCardInfoUrlTargets(card.info, "website");
+    const discordTargets = getCardInfoUrlTargets(card.info, "discord");
+    const fallbackWebsiteUrl =
+      !websiteTargets.length && !discordTargets.length
+        ? card.pricing?.purchaseUrl || card.pricing?.purchase_url || ""
+        : "";
 
     return {
       title: card.title || "More info",
       description: "",
       reviewUrl: getCardReviewUrl(card),
       trackingSlug: card.slug || "",
-      websiteUrl: websiteTargets.length
-        ? websiteTargets
-        : card.pricing?.purchaseUrl || card.pricing?.purchase_url || "",
+      websiteUrl: websiteTargets.length ? websiteTargets : fallbackWebsiteUrl,
+      discordUrl: discordTargets,
       websiteWarningConfig: warningConfig,
       modalPath: getCardMoreInfoPath(card),
     };
@@ -1828,6 +1842,7 @@
     youtubeUrl,
     hasYoutubeIndicator,
     websiteUrl,
+    discordUrl,
     purchaseUrl,
     hasFreeOffer,
     hasPaidOffer,
@@ -1839,10 +1854,18 @@
       ? ` href="${escapeHtml(reviewHref)}" target="_blank" rel="noopener noreferrer"`
       : ` aria-disabled="true" tabindex="-1"`;
     const websiteTargets = normalizeWebsiteTargetList(websiteUrl);
-    const websiteHref = websiteTargets[0] || purchaseUrl || "#";
+    const discordTargets = normalizeWebsiteTargetList(discordUrl);
+    const fallbackWebsiteHref =
+      !websiteTargets.length && !discordTargets.length ? String(purchaseUrl || "").trim() : "";
+    const websiteHref = websiteTargets[0] || fallbackWebsiteHref || "#";
     const websiteDataAttributes =
       websiteHref !== "#"
         ? ` data-card-website-url="${escapeHtml(websiteHref)}"${websiteTargets.length ? ` data-card-website-urls="${escapeHtml(JSON.stringify(websiteTargets))}"` : ""}`
+        : "";
+    const discordHref = discordTargets[0] || "";
+    const discordDataAttributes =
+      discordHref
+        ? ` data-card-discord-url="${escapeHtml(discordHref)}"${discordTargets.length ? ` data-card-discord-urls="${escapeHtml(JSON.stringify(discordTargets))}"` : ""}`
         : "";
     const websiteWarningDataAttributes =
       WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
@@ -1884,7 +1907,7 @@
           <a class="ph-action-btn is-review${hasYoutubeIndicator ? " has-youtube-indicator" : " is-disabled"}" data-click-track-action="review" data-click-track-slug="${escapeHtml(slug)}"${reviewButtonAttributes}>
             <i class="fab fa-youtube" aria-hidden="true"></i> <span class="ph-action-label">Review</span>
           </a>
-          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-click-track-action="more" data-click-track-slug="${escapeHtml(slug)}" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}"${websiteDataAttributes}${websiteWarningDataAttributes}>
+          <a class="ph-action-btn is-more${hasYoutubeIndicator ? " has-youtube-indicator" : ""}" href="${escapeHtml(reviewUrl)}" target="_blank" rel="noopener noreferrer" data-click-track-action="more" data-click-track-slug="${escapeHtml(slug)}" data-card-review-url="${escapeHtml(reviewUrl)}" data-card-review-title="${escapeHtml(title)}"${websiteDataAttributes}${discordDataAttributes}${websiteWarningDataAttributes}>
             <span class="ph-action-icon is-info" aria-hidden="true"></span> More
           </a>
         </div>
@@ -1935,6 +1958,10 @@
         websiteUrl: (() => {
           const websiteTargets = parseWebsiteTargetList(trigger.dataset.cardWebsiteUrls || "");
           return websiteTargets.length ? websiteTargets : trigger.dataset.cardWebsiteUrl || "";
+        })(),
+        discordUrl: (() => {
+          const discordTargets = parseWebsiteTargetList(trigger.dataset.cardDiscordUrls || "");
+          return discordTargets.length ? discordTargets : trigger.dataset.cardDiscordUrl || "";
         })(),
         websiteWarningConfig: trigger.dataset.cardWebsiteWarningVariant
           ? {
@@ -2642,7 +2669,8 @@
           reviewUrl,
           youtubeUrl: card.youtubeUrl,
           hasYoutubeIndicator: Boolean(card.youtubeUrl),
-          websiteUrl: card.info.website,
+          websiteUrl: getCardInfoUrlTargets(card.info, "website"),
+          discordUrl: getCardInfoUrlTargets(card.info, "discord"),
           purchaseUrl: card.pricing.purchaseUrl || card.pricing.purchase_url,
           hasFreeOffer: card.hasFreeOffer,
           hasPaidOffer: card.hasPaidOffer,
@@ -2844,6 +2872,10 @@
     catalogState.renderFrameId = 0;
     const { mount, grid, cards, statusMap, filters } = catalogState;
     if (!mount || !grid) return;
+    if (catalogState.isLoading && !cards.length) {
+      renderLoadingState(grid);
+      return;
+    }
 
     const discoverableCards = cards.filter(
       (card) =>
@@ -3038,6 +3070,7 @@
     bindSummaryTextFit(mount);
 
     if (!preserveCurrentCatalog) {
+      catalogState.isLoading = true;
       catalogState.cards = [];
       catalogState.statusMap = {};
       catalogState.popularityRanks = new Map();
@@ -3071,6 +3104,7 @@
       }
 
       if (!cards.length) {
+        catalogState.isLoading = false;
         if (preserveCurrentCatalog) {
           return;
         }
@@ -3083,6 +3117,7 @@
       }
 
       catalogState.cards = cards;
+      catalogState.isLoading = false;
       catalogState.statusMap = preserveCurrentCatalog ? catalogState.statusMap : {};
       catalogState.filters = normalizeFilters({
         ...(preserveCurrentCatalog ? catalogState.filters : {}),
@@ -3116,6 +3151,7 @@
       }
 
       console.error(error);
+      catalogState.isLoading = false;
       if (preserveCurrentCatalog) {
         return;
       }

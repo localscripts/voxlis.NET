@@ -5,6 +5,9 @@
 	"type": "serverside",
 	"tags": ["serverside"],
 	"platforms": ["windows"],
-	"website": "https://volt.bz/",
+	"urls": {
+		"discord": "https://discord.gg/BqNSuEnu3V",
+		"website": "https://exoliner.wtf"
+	},
 	"keyed": false
 }

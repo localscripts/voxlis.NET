@@ -5,5 +5,8 @@
 	"type": "external",
 	"tags": [],
 	"platforms": ["windows"],
-	"website": "https://matrixhubs.shop/"
+	"urls": {
+		"website": "https://matrixhubs.shop/",
+		"discord": "https://discord.gg/VrpMYtDYUW"
+	}
 }

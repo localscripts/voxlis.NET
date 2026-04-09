@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler", "kernel", "raknet"],
 	"platforms": ["windows"],
-	"website": "https://potassium.pro/",
+	"urls": {
+		"discord": "https://discord.gg/potassium",
+		"website": "https://potassium.pro"
+	},
 	"keyed": false
 }

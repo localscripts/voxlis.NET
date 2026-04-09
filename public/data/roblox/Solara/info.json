@@ -10,11 +10,17 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": [
-		"getsolara.dev",
-		"getsolara.net",
-		"getsolara.gg",
-		"solara.gg"
-	],
+	"urls": {
+		"discord": "https://discord.com/invite/68RKjkFu2V",
+		"website": [
+		    "getsolara.dev",
+		    "getsolara.net",
+		    "getsolara.gg",
+		    "solara.gg"
+		]
+	},
 	"keyed": false
 }
+
+
+

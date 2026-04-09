@@ -10,7 +10,10 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler", "freemium", "insecure"],
 	"platforms": ["windows"],
-	"website": "https://yub-x.net/",
+	"urls": {
+		"website": "https://yub-x.net/",
+		"discord": "https://discord.com/invite/7pMQ9vuKJM"
+	},
 	"youtube": "https://youtu.be/HFvmAM3sMW0?si=6iHTyVqpY2eDvNZ1&t=81",
 	"keyed": true
 }

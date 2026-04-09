@@ -10,6 +10,8 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler", "insecure"],
 	"platforms": ["windows"],
-	"website": "https://discord.gg/Olemad",
+	"urls": {
+		"discord": "https://discord.gg/Olemad"
+	},
 	"keyed": false
 }

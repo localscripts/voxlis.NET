@@ -10,5 +10,8 @@
 	"type": "internal",
 	"tags": ["decompiler", "raknet"],
 	"platforms": ["ios", "android"],
-	"website": "https://deltaexploits.gg"
+	"urls": {
+		"discord": "https://discord.gg/deltax",
+		"website": "https://deltaexploits.gg"
+	}
 }

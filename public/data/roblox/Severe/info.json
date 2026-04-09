@@ -5,6 +5,6 @@
 	"type": "external",
 	"tags": ["decompiler"],
 	"platforms": ["windows"],
-	"website": "https://discord.gg/4QmWjQCgzV",
+	"discord": "https://discord.gg/4QmWjQCgzV",
 	"keyed": false
 }

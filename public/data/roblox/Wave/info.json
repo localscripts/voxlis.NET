@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["decompiler", "multi-instance"],
 	"platforms": ["windows"],
-	"website": "https://getwave.gg/",
+	"urls": {
+		"website": "https://getwave.gg/",
+		"discord": "https://discord.com/invite/6zSphHQXcF"
+	},
 	"keyed": false
 }

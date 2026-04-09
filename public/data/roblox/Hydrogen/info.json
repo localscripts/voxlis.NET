@@ -10,5 +10,8 @@
 	"type": "internal",
 	"tags": ["decompiler"],
 	"platforms": ["macos"],
-	"website": "https://hydrogen.lat"
+	"urls": {
+		"website": "https://hydrogen.lat",
+		"discord": "https://discord.com/invite/gethydrogen"
+	}
 }

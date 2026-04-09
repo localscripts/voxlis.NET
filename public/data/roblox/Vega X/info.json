@@ -5,6 +5,9 @@
 	"type": "internal",
 	"tags": [],
 	"platforms": ["android"],
-	"website": "https://vegax.gg",
+	"urls": {
+		"discord": "https://discord.gg/PWV96KmvQD",
+		"website": "https://vegax.gg"
+	},
 	"keyed": true
 }

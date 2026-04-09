@@ -770,25 +770,26 @@ body.has-video-background .info-modal {
 .info-modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  padding: 16px 24px;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.85rem 1.25rem;
   border-top: 1px solid var(--info-modal-outline);
   background-color: rgba(0, 0, 0, 0.2);
 }
 
 .info-modal-website-btn,
 .info-modal-close-btn {
-  flex: 1 1 0;
+  flex: 1 1 calc(50% - 0.3rem);
   min-width: 0;
   border-radius: var(--rad);
-  padding: 0.5rem 1rem;
-  font-size: 14px;
-  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.82rem;
+  font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.5rem;
   white-space: nowrap;
   position: relative;
   overflow: hidden;
@@ -813,9 +814,16 @@ body.has-video-background .info-modal {
 }
 
 .info-modal-close-btn {
+  width: 100%;
+  flex: 1 1 100%;
   background: #000000;
   color: #ffffff;
   border: 1px solid var(--info-modal-outline);
+}
+
+.info-modal-footer:has(#moreInfoModalDiscordBtn[hidden]) #moreInfoModalWebsiteBtn:not([hidden]),
+.info-modal-footer:has(#moreInfoModalWebsiteBtn[hidden]) #moreInfoModalDiscordBtn:not([hidden]) {
+  flex-basis: 100%;
 }
 
 .info-modal-website-btn:focus-visible,
@@ -928,6 +936,7 @@ body.has-video-background .info-modal {
 .info-modal-container.is-warning-prompt .info-modal-footer,
 .info-modal-container.is-insecure-prompt .info-modal-footer {
   justify-content: flex-start;
+  flex-wrap: nowrap;
   border-top: 0;
   background: transparent;
   padding: 0.55rem 1.5rem 1rem;
@@ -936,11 +945,13 @@ body.has-video-background .info-modal {
 .info-modal-container.is-warning-prompt .info-modal-website-btn,
 .info-modal-container.is-insecure-prompt .info-modal-website-btn {
   flex: 1 1 auto;
+  width: auto;
 }
 
 .info-modal-container.is-warning-prompt .info-modal-close-btn,
 .info-modal-container.is-insecure-prompt .info-modal-close-btn {
   flex: 0 0 auto;
+  width: auto;
   padding-inline: 1rem;
 }
 
@@ -1026,6 +1037,7 @@ body.has-video-background .info-modal {
 }
 
 .info-modal-container.is-mirror-picker .info-modal-footer {
+  flex-wrap: nowrap;
   border-top: 0;
   background: transparent;
   padding: 0.55rem 1.5rem 1rem;
@@ -1213,14 +1225,12 @@ body.has-video-background .info-modal {
     font-size: 0.9rem;
   }
 
-  .info-modal-footer {
-    flex-direction: column;
+  .info-modal-website-btn {
+    width: auto;
+    font-size: 0.82rem;
   }
 
-  .info-modal-website-btn,
   .info-modal-close-btn {
-    width: 100%;
-    flex: 1 1 auto;
     font-size: 0.82rem;
   }
 }

@@ -5,6 +5,9 @@
 	"type": "external",
 	"tags": ["ai"],
 	"platforms": ["windows"],
-	"website": "https://aimmy.dev",
+	"urls": {
+		"discord": "https://discord.com/invite/aimmy",
+		"website": "https://aimmy.dev/"
+	},
 	"keyed": false
 }

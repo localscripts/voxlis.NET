@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://getisaeva.xyz/login",
+	"urls": {
+		"discord": "https://discord.gg/NhAbrrMQUQ",
+		"website": "https://isaeva.xyz"
+	},
 	"keyed": false
 }

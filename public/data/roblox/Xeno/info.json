@@ -8,11 +8,14 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["multi-instance", "decompiler"],
+	"tags": ["multi-instance","decompiler"],
 	"platforms": ["windows"],
-	"website": [
-		"https://www.xeno.now/",
-		"https://www.xeno.onl/"
-	],
+	"urls": {
+		"discord": "https://discord.gg/xe-no",
+		"website": [
+			"https://www.xeno.now/",
+			"https://www.xeno.onl/"
+		]
+	},
 	"keyed": false
 }

@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://realvelocity.xyz/",
+	"urls": {
+		"discord": "https://discord.gg/velocityide",
+		"website": "https://realvelocity.xyz"
+	},
 	"keyed": false
 }

@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
-	"website": "https://volcano.wtf",
+	"urls": {
+		"discord": "https://discord.com/invite/7Es9WeTF4K",
+		"website": "https://volcano.wtf"
+	},
 	"keyed": false
 }

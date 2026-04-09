@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "raknet"],
 	"platforms": ["windows"],
-	"website": "https://volt.bz/",
+	"urls": {
+		"discord": "https://discord.gg/voltbz",
+		"website": "https://volt.bz"
+	},
 	"keyed": false
 }

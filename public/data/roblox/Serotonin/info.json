@@ -5,6 +5,9 @@
 	"type": "external",
 	"tags": ["kernel"],
 	"platforms": ["windows"],
-	"website": "https://www.serotonin.win/",
+	"urls": {
+		"discord": "https://discord.gg/serotonin",
+		"website": "https://serotonin.win"
+	},
 	"keyed": false
 }

@@ -10,6 +10,9 @@
 	"type": "internal",
 	"tags": ["multi-instance", "decompiler", "raknet"],
 	"platforms": ["macos"],
-	"website": "https://www.raptor.fun/",
+	"urls": {
+		"discord": "https://discord.com/invite/macsploit",
+		"website": "https://raptor.fun"
+	},
 	"keyed": false
 }
