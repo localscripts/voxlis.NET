@@ -26,8 +26,8 @@
   --sunc-surface-strong: rgba(255, 255, 255, 0.02);
   --sunc-surface-card: var(--filter-option-background, rgba(0, 0, 0, 0.3));
   --sunc-border: var(--site-outline-color, var(--site-border-color, var(--sec-bdr)));
-  --sunc-accent-rgb: 96, 165, 250;
-  --sunc-accent-strong-rgb: 59, 130, 246;
+  --sunc-accent-rgb: var(--prim-rgb);
+  --sunc-accent-strong-rgb: var(--prim-rgb);
   --sunc-accent-bg: rgba(var(--sunc-accent-rgb), 0.12);
   --sunc-accent-border: var(--site-outline-color, var(--site-border-color, var(--sec-bdr)));
   --sunc-accent-text: rgb(var(--sunc-accent-rgb));

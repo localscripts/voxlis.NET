@@ -699,7 +699,7 @@
 }
 
 .ph-good-ico {
-  color: #60a5fa !important;
+  color: var(--prim) !important;
 }
 
 .ph-warn-ico {
@@ -720,8 +720,8 @@
 }
 
 .ph-rating {
-  --sunc-accent-rgb: 96, 165, 250;
-  --sunc-accent-strong-rgb: 59, 130, 246;
+  --sunc-accent-rgb: var(--prim-rgb);
+  --sunc-accent-strong-rgb: var(--prim-rgb);
   display: inline-flex;
   flex-direction: column;
   align-items: flex-end;
@@ -893,7 +893,8 @@
 }
 
 .exploit-card-placeholder.is-issue .ph-sponsor-btn.is-keyempire .ph-sponsor-base-image.is-keyempire-logo {
-  filter: brightness(0) saturate(100%) invert(74%) sepia(55%) saturate(2579%) hue-rotate(352deg) brightness(100%) contrast(95%);
+  background: rgba(249, 115, 22, 0.98);
+  filter: none;
   opacity: 1;
 }
 
@@ -1375,6 +1376,22 @@
 
 .ph-sponsor-btn.is-keyempire .ph-sponsor-base-image {
   opacity: 1;
+}
+
+.ph-sponsor-base-image.is-keyempire-logo {
+  background: var(--prim);
+  transition:
+    background var(--smooth-duration) var(--smooth-ease),
+    opacity var(--smooth-duration) var(--smooth-ease),
+    filter var(--smooth-duration) var(--smooth-ease);
+  -webkit-mask-image: url("/public/assets/icons/images/keyempire-logo.png");
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-image: url("/public/assets/icons/images/keyempire-logo.png");
+  mask-position: center;
+  mask-size: contain;
+  mask-repeat: no-repeat;
 }
 
 .ph-sponsor-overlay-image {

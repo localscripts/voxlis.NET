@@ -1,7 +1,5 @@
 (() => {
   const THEME_CHANGE_EVENT = "site-theme-change";
-  const FEATURED_TRANSPARENT_CARD_CLASS = "featured-card--transparent";
-  const TRANSPARENT_CARD_THEMES = new Set(["kawaii"]);
   const escapeHtml = (value = "") =>
     String(value).replace(/[&<>"']/g, (character) => ({
       "&": "&amp;",
@@ -11,20 +9,13 @@
       "'": "&#39;",
     })[character] || character);
   const featuredConfig = window.VOXLIS_CONFIG?.featured ?? {};
-  const shouldUseTransparentFeaturedCard = () =>
-    TRANSPARENT_CARD_THEMES.has(document.documentElement.dataset.theme || "");
-
-  const getFeaturedCardClassName = () =>
-    ["featured-card", shouldUseTransparentFeaturedCard() ? FEATURED_TRANSPARENT_CARD_CLASS : ""]
-      .filter(Boolean)
-      .join(" ");
 
   const buildFeaturedCardMarkup = () => {
     const cardConfig = featuredConfig;
 
     return `
     <section class="featured-section" aria-label="${escapeHtml(cardConfig.ariaLabel || "Featured sponsored card")}">
-      <div class="${getFeaturedCardClassName()}">
+      <div class="featured-card">
         <div class="featured-card-header">
           <h3 class="featured-card-title">${escapeHtml(cardConfig.title || "Featured")}</h3>
           <button

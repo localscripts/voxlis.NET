@@ -601,7 +601,7 @@
   z-index: 80;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
   box-shadow: none;
 }
 
@@ -620,7 +620,7 @@
   font-family: var(--font-family-ui, var(--font-family-base, "Open Sans", sans-serif));
   color: #fff;
   font-size: 0.76rem;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.4;
   letter-spacing: 0.02em;
   text-align: center;

@@ -1871,7 +1871,7 @@
           <span class="ph-sponsor-inline">
             <span class="ph-sponsor-copy">Buy on</span>
             <span class="ph-sponsor-stack" aria-hidden="true">
-              <img class="ph-sponsor-base-image is-keyempire-logo" src="/public/assets/icons/images/keyempire-logo.png" alt="">
+              <span class="ph-sponsor-base-image is-keyempire-logo"></span>
               <img class="ph-sponsor-base-image" src="/public/assets/icons/images/keyempire-text.png" alt="">
             </span>
             ${sponsorPriceSummary ? `<span class="ph-sponsor-price">${escapeHtml(sponsorPriceSummary)}</span>` : ""}

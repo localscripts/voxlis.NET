@@ -25,9 +25,11 @@
       hideToastPopups: "voxlis-hide-toast-popups",
       hideNavbarWarning: "voxlis-hide-navbar-warning",
       hideBottomFade: "voxlis-hide-bottom-fade",
+      customThemeColor: "voxlis-custom-accent-color",
     },
     ids: {
       default: "blue",
+      custom: "custom",
     },
     events: {
       change: "site-theme-change",
@@ -67,33 +69,13 @@
       default: 38,
       defaultHex: "#000000",
     },
-    kawaiiMobileTint: {
-      className: "theme-kawaii-mobile-tint",
-      mediaQuery: "(max-width: 980px)",
-      surfaceTint: "rgba(0, 0, 0, 0.82)",
-      footerTint: "rgba(0, 0, 0, 0.84)",
-      navbarTint: "rgba(0, 0, 0, 0.94)",
+    customAccent: {
+      defaultHex: "#22c55e",
     },
     groups: [
-      { id: "full", label: "Full Themes" },
       { id: "accent", label: "Color Variants" },
     ],
     options: [
-      {
-        id: "kawaii",
-        label: "Kawaii",
-        credit: "@voxlis",
-        previewFontFamily: "\"DynaPuff\", \"Baloo 2\", \"Open Sans\", sans-serif",
-        previewGradient:
-          "linear-gradient(90deg, rgba(255, 224, 242, 0.2) 0%, rgba(255, 154, 213, 0.18) 58%, rgba(196, 181, 253, 0.16) 100%)",
-        swatch: "#FF9AD5",
-        swatchImage:
-          "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/1213300/357ca832cca068f4febe5b5ea19cb23d16918896.gif",
-        group: "full",
-        surfaceBlurEnabled: true,
-        surfaceBlurStrength: 10,
-        hideFeaturedAds: true,
-      },
       {
         id: "blue",
         label: "Legacy",
@@ -106,45 +88,14 @@
         hideFeaturedAds: false,
       },
       {
-        id: "legacy",
-        label: "Supremacy",
-        credit: "@voxlis",
-        previewGradient:
-          "linear-gradient(90deg, rgba(248, 113, 113, 0.18) 0%, rgba(239, 68, 68, 0.14) 56%, rgba(220, 38, 38, 0.12) 100%)",
-        swatch: "#EF4444",
-        swatchImage:
-          "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2139460/ceac3f2dd323201409ff386df51811edefe515bb.gif",
-        group: "full",
-        surfaceBlurEnabled: false,
-        surfaceBlurStrength: 12,
-        hideFeaturedAds: false,
-      },
-      {
-        id: "weao",
-        label: "weao",
-        previewGradient:
-          "linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, rgba(90, 90, 90, 0.08) 52%, rgba(26, 26, 26, 0.12) 100%)",
-        swatch: "#1A1A1A",
+        id: "custom",
+        label: "Custom",
+        swatch: "#22C55E",
         group: "accent",
         surfaceBlurEnabled: false,
         surfaceBlurStrength: 12,
         hideFeaturedAds: false,
-      },
-      {
-        id: "nebula",
-        label: "Kawaii",
-        credit: "@zynox",
-        previewFontFamily: "\"DynaPuff\", \"Open Sans\", sans-serif",
-        previewGradient:
-          "linear-gradient(90deg, rgba(200, 200, 200, 0.12) 0%, rgba(130, 130, 130, 0.1) 52%, rgba(48, 48, 48, 0.2) 100%)",
-        swatch: "#ffffff",
-        swatchImage:
-          "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2194790/60472c275e62f3f4ff4d5aa98bc501accd86099f.gif",
-        swatchImageScale: 1.08,
-        group: "full",
-        surfaceBlurEnabled: true,
-        surfaceBlurStrength: 10,
-        hideFeaturedAds: true,
+        supportsCustomColor: true,
       },
     ],
   };

@@ -6,7 +6,7 @@
   const themeDrawerConfig = themeConfig.drawer ?? {};
   const surfaceBlurConfig = themeConfig.surfaceBlur ?? {};
   const surfaceTintConfig = themeConfig.surfaceTint ?? {};
-  const kawaiiMobileTintConfig = themeConfig.kawaiiMobileTint ?? {};
+  const customAccentConfig = themeConfig.customAccent ?? {};
 
   const THEME_STORAGE_KEY = storageKeys.theme ?? "voxlis-theme";
   const THEME_DRAWER_WIDTH_STORAGE_KEY = storageKeys.drawerWidth ?? "voxlis-theme-drawer-width";
@@ -15,7 +15,9 @@
   const HIDE_TOAST_POPUPS_STORAGE_KEY = storageKeys.hideToastPopups ?? "voxlis-hide-toast-popups";
   const HIDE_NAVBAR_WARNING_STORAGE_KEY = storageKeys.hideNavbarWarning ?? "voxlis-hide-navbar-warning";
   const HIDE_BOTTOM_FADE_STORAGE_KEY = storageKeys.hideBottomFade ?? "voxlis-hide-bottom-fade";
+  const CUSTOM_THEME_COLOR_STORAGE_KEY = storageKeys.customThemeColor ?? "voxlis-custom-accent-color";
   const DEFAULT_THEME_ID = themeIds.default ?? "blue";
+  const CUSTOM_THEME_ID = themeIds.custom ?? customAccentConfig.themeId ?? "custom";
   const THEME_CHANGE_EVENT = themeEvents.change ?? "site-theme-change";
   const THEME_DRAWER_EXIT_FALLBACK_MS = themeDrawerConfig.exitFallbackMs ?? 260;
   const THEME_DRAWER_DEFAULT_WIDTH = themeDrawerConfig.defaultWidth ?? 384;
@@ -28,40 +30,24 @@
   const SURFACE_BLUR_TINT_SCALE = surfaceBlurConfig.tintScale ?? 18 / 82;
   const SURFACE_TINT_POWER_DEFAULT = surfaceTintConfig.default ?? 82;
   const SURFACE_TINT_HEX_DEFAULT = surfaceTintConfig.defaultHex ?? "#000000";
-  const KAWAII_MOBILE_TINT_CLASS = kawaiiMobileTintConfig.className ?? "theme-kawaii-mobile-tint";
-  const KAWAII_MOBILE_TINT_MEDIA_QUERY = window.matchMedia(
-    kawaiiMobileTintConfig.mediaQuery ?? "(max-width: 980px)",
-  );
-  const KAWAII_MOBILE_SURFACE_TINT =
-    kawaiiMobileTintConfig.surfaceTint ?? "rgba(0, 0, 0, 0.82)";
-  const KAWAII_MOBILE_NAVBAR_TINT =
-    kawaiiMobileTintConfig.navbarTint ?? "rgba(0, 0, 0, 0.94)";
+  const CUSTOM_THEME_COLOR_DEFAULT = customAccentConfig.defaultHex ?? "#22c55e";
+  const CUSTOM_THEME_STYLE_PROPERTIES = [
+    "--theme-main-color",
+    "--theme-hover-color",
+    "--theme-gradient-start-color",
+    "--theme-gradient-end-color",
+    "--theme-rgb",
+  ];
   const THEME_GROUPS =
     Array.isArray(themeConfig.groups) && themeConfig.groups.length
       ? themeConfig.groups
-      : [
-          { id: "full", label: "Full Themes" },
-          { id: "accent", label: "Color Variants" },
-        ];
+      : [{ id: "accent", label: "Color Variants" }];
   const THEME_OPTIONS = (
     Array.isArray(themeConfig.options) && themeConfig.options.length
       ? themeConfig.options
-      : [
-          { id: "kawaii", label: "Kawaii", swatch: "#FF9AD5", group: "full", surfaceBlurEnabled: true, surfaceBlurStrength: 10, hideFeaturedAds: true },
-          { id: "blue", label: "Legacy", swatch: "#3B82F6", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
-          { id: "legacy", label: "Supremacy", swatch: "#EF4444", group: "full", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
-          { id: "weao", label: "weao", swatch: "#1A1A1A", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
-          {
-            id: "status",
-            label: "Kawaii",
-            swatch: "#FF9AD5",
-            swatchImage:
-              "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/2194790/60472c275e62f3f4ff4d5aa98bc501accd86099f.gif",
-            group: "full",
-            surfaceBlurEnabled: true,
-            surfaceBlurStrength: 10,
-            hideFeaturedAds: true,
-          },
+        : [
+            { id: "blue", label: "Legacy", swatch: "#3B82F6", group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false },
+            { id: CUSTOM_THEME_ID, label: "Custom", swatch: CUSTOM_THEME_COLOR_DEFAULT, group: "accent", surfaceBlurEnabled: false, surfaceBlurStrength: SURFACE_BLUR_DEFAULT, hideFeaturedAds: false, supportsCustomColor: true },
         ]
   ).map((option) => ({
     ...option,
@@ -144,6 +130,17 @@
   const normalizeTheme = (theme) => (VALID_THEMES.has(theme) ? theme : DEFAULT_THEME_ID);
   const normalizeBooleanPreference = (value) =>
     value === true || value === "true" || value === "1" || value === 1;
+  const normalizeHexColor = (value, fallback = CUSTOM_THEME_COLOR_DEFAULT) => {
+    const normalized = typeof value === "string" ? value.trim() : "";
+    if (/^#[0-9a-f]{6}$/i.test(normalized)) {
+      return normalized.toLowerCase();
+    }
+
+    const normalizedFallback = typeof fallback === "string" ? fallback.trim() : "";
+    return /^#[0-9a-f]{6}$/i.test(normalizedFallback)
+      ? normalizedFallback.toLowerCase()
+      : CUSTOM_THEME_COLOR_DEFAULT;
+  };
   const hexToRgb = (hex) => {
     const normalized = typeof hex === "string" ? hex.trim() : "";
     if (!/^#[0-9a-f]{6}$/i.test(normalized)) {
@@ -156,6 +153,27 @@
       b: Number.parseInt(normalized.slice(5, 7), 16),
     };
   };
+  const rgbToCss = (rgb) => {
+    if (!rgb) {
+      const fallbackRgb = hexToRgb(CUSTOM_THEME_COLOR_DEFAULT);
+      return fallbackRgb ? `${fallbackRgb.r}, ${fallbackRgb.g}, ${fallbackRgb.b}` : "34, 197, 94";
+    }
+
+    return `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+  };
+  const mixHex = (fromHex, toHex, ratio = 0) => {
+    const fromRgb = hexToRgb(normalizeHexColor(fromHex, CUSTOM_THEME_COLOR_DEFAULT));
+    const toRgb = hexToRgb(normalizeHexColor(toHex, "#000000"));
+    if (!fromRgb || !toRgb) {
+      return normalizeHexColor(fromHex, CUSTOM_THEME_COLOR_DEFAULT);
+    }
+
+    const normalizedRatio = clamp(Number.isFinite(ratio) ? ratio : 0, 0, 1);
+    const mixChannel = (from, to) => Math.round(from + (to - from) * normalizedRatio);
+    const toHexPair = (value) => value.toString(16).padStart(2, "0");
+
+    return `#${toHexPair(mixChannel(fromRgb.r, toRgb.r))}${toHexPair(mixChannel(fromRgb.g, toRgb.g))}${toHexPair(mixChannel(fromRgb.b, toRgb.b))}`;
+  };
   const rgba = (hex, alpha) => {
     const rgb = hexToRgb(hex);
     if (!rgb) {
@@ -164,15 +182,37 @@
 
     return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
   };
-  const shouldUseKawaiiMobileTintMode = () => {
-    const root = getThemeRoot();
-    return root.dataset.theme === "kawaii" && KAWAII_MOBILE_TINT_MEDIA_QUERY.matches;
+  const buildCustomThemePreviewGradient = (accentHex = CUSTOM_THEME_COLOR_DEFAULT) => {
+    const normalizedAccent = normalizeHexColor(accentHex, CUSTOM_THEME_COLOR_DEFAULT);
+    const gradientStart = mixHex(normalizedAccent, "#ffffff", 0.18);
+    const gradientEnd = mixHex(normalizedAccent, "#000000", 0.22);
+    return `linear-gradient(90deg, ${rgba(gradientStart, 0.18)} 0%, ${rgba(normalizedAccent, 0.13)} 56%, ${rgba(gradientEnd, 0.12)} 100%)`;
   };
-  const syncKawaiiMobileTintModeClass = () => {
+  const clearCustomThemeStyleOverrides = () => {
     const root = getThemeRoot();
-    const nextState = shouldUseKawaiiMobileTintMode();
-    root.classList.toggle(KAWAII_MOBILE_TINT_CLASS, nextState);
-    return nextState;
+    CUSTOM_THEME_STYLE_PROPERTIES.forEach((property) => {
+      root.style.removeProperty(property);
+    });
+  };
+  const applyCustomThemeStyleOverrides = (accentHex = CUSTOM_THEME_COLOR_DEFAULT, { persist = true } = {}) => {
+    const normalizedAccent = normalizeHexColor(accentHex, CUSTOM_THEME_COLOR_DEFAULT);
+    const hoverColor = mixHex(normalizedAccent, "#000000", 0.16);
+    const gradientStart = mixHex(normalizedAccent, "#ffffff", 0.18);
+    const gradientEnd = mixHex(normalizedAccent, "#000000", 0.12);
+    const accentRgb = hexToRgb(normalizedAccent);
+    const root = getThemeRoot();
+
+    root.style.setProperty("--theme-main-color", normalizedAccent);
+    root.style.setProperty("--theme-hover-color", hoverColor);
+    root.style.setProperty("--theme-gradient-start-color", gradientStart);
+    root.style.setProperty("--theme-gradient-end-color", gradientEnd);
+    root.style.setProperty("--theme-rgb", rgbToCss(accentRgb));
+
+    if (persist) {
+      window.localStorage.setItem(CUSTOM_THEME_COLOR_STORAGE_KEY, normalizedAccent);
+    }
+
+    return normalizedAccent;
   };
   const clearRemovedEditorArtifacts = () => {
     const root = getThemeRoot();
@@ -208,6 +248,8 @@
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_NAVBAR_WARNING_STORAGE_KEY));
   const getStoredHideBottomFade = () =>
     normalizeBooleanPreference(window.localStorage.getItem(HIDE_BOTTOM_FADE_STORAGE_KEY));
+  const getStoredCustomThemeColor = () =>
+    normalizeHexColor(window.localStorage.getItem(CUSTOM_THEME_COLOR_STORAGE_KEY), CUSTOM_THEME_COLOR_DEFAULT);
   const emitThemeChange = (theme) => {
     window.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT, { detail: { theme } }));
   };
@@ -217,17 +259,10 @@
     const solidTintAlpha = SURFACE_TINT_POWER_DEFAULT / 100;
     const blurTintAlpha = solidTintAlpha * SURFACE_BLUR_TINT_SCALE;
     const root = getThemeRoot();
-    const useKawaiiMobileTintMode = nextEnabled && syncKawaiiMobileTintModeClass();
-    const surfaceTint = useKawaiiMobileTintMode
-      ? KAWAII_MOBILE_SURFACE_TINT
-      : nextEnabled
-        ? rgba(SURFACE_TINT_HEX_DEFAULT, blurTintAlpha)
-        : rgba(SURFACE_TINT_HEX_DEFAULT, solidTintAlpha);
-    const navbarTint = useKawaiiMobileTintMode
-      ? KAWAII_MOBILE_NAVBAR_TINT
-      : nextEnabled
-        ? surfaceTint
-        : "#000000";
+    const surfaceTint = nextEnabled
+      ? rgba(SURFACE_TINT_HEX_DEFAULT, blurTintAlpha)
+      : rgba(SURFACE_TINT_HEX_DEFAULT, solidTintAlpha);
+    const navbarTint = nextEnabled ? surfaceTint : "#000000";
 
     root.style.setProperty("--card-surface-background", "#000000");
     root.style.setProperty("--card-surface-tint", "#000000");
@@ -295,6 +330,8 @@
     {
       persistTheme = true,
       persistPresetPreferences = true,
+      customColor = getStoredCustomThemeColor(),
+      persistCustomColor = true,
     } = {},
   ) => {
     const nextTheme = normalizeTheme(theme);
@@ -302,10 +339,14 @@
     const root = getThemeRoot();
 
     clearRemovedEditorArtifacts();
+    clearCustomThemeStyleOverrides();
     if (root.dataset.theme !== nextTheme) {
       root.dataset.theme = nextTheme;
     }
     applyPresetSurfaceStyle(nextTheme);
+    if (nextTheme === CUSTOM_THEME_ID) {
+      applyCustomThemeStyleOverrides(customColor, { persist: persistCustomColor });
+    }
 
     if (persistPresetPreferences) {
       applyFeaturedAdsVisibility(Boolean(preset?.hideFeaturedAds));
@@ -324,6 +365,8 @@
   const restoreThemeDefaults = (scope = document) => {
     clearRemovedEditorStorage();
     clearRemovedEditorArtifacts();
+    clearCustomThemeStyleOverrides();
+    window.localStorage.removeItem(CUSTOM_THEME_COLOR_STORAGE_KEY);
 
     const restoredTheme = applyPresetTheme(DEFAULT_THEME_ID);
     applyFeaturedAdsVisibility(false);
@@ -341,6 +384,29 @@
       .replace(/"/g, "&quot;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
+  const syncCustomThemeOptionUI = (scope = document, accentHex = getStoredCustomThemeColor()) => {
+    const customOption = scope.querySelector(`.footer-theme-option[data-theme="${CUSTOM_THEME_ID}"]`);
+    if (!customOption) {
+      return;
+    }
+
+    const normalizedAccent = normalizeHexColor(accentHex, CUSTOM_THEME_COLOR_DEFAULT);
+    const accentRgb = hexToRgb(normalizedAccent);
+    const swatchNode = customOption.querySelector(".footer-theme-swatch");
+    const pickerNode = customOption.querySelector("[data-theme-custom-picker]");
+
+    customOption.style.setProperty("--theme-option-accent-color", normalizedAccent);
+    customOption.style.setProperty("--theme-option-accent-rgb", rgbToCss(accentRgb));
+    customOption.style.setProperty("--theme-option-preview-gradient", buildCustomThemePreviewGradient(normalizedAccent));
+
+    if (swatchNode && !swatchNode.classList.contains("has-media")) {
+      swatchNode.style.backgroundColor = normalizedAccent;
+    }
+
+    if (pickerNode) {
+      pickerNode.value = normalizedAccent;
+    }
+  };
   const buildThemeOptionMarkup = ({
     id,
     label,
@@ -350,19 +416,26 @@
     swatchImage,
     swatchImageScale,
     previewFontFamily,
+    supportsCustomColor = false,
   }) => {
+    const resolvedSwatch = supportsCustomColor ? getStoredCustomThemeColor() : swatch;
+    const resolvedPreviewGradient = supportsCustomColor
+      ? buildCustomThemePreviewGradient(resolvedSwatch)
+      : previewGradient;
+    const resolvedRgb = hexToRgb(resolvedSwatch);
     const wrapperStyle = [
-      swatch ? ` --theme-option-accent-color: ${swatch};` : "",
+      resolvedSwatch ? ` --theme-option-accent-color: ${resolvedSwatch};` : "",
+      resolvedRgb ? ` --theme-option-accent-rgb: ${rgbToCss(resolvedRgb)};` : "",
       previewFontFamily ? ` --theme-option-preview-font: ${previewFontFamily};` : "",
-      previewGradient ? ` --theme-option-preview-gradient: ${previewGradient};` : "",
+      resolvedPreviewGradient ? ` --theme-option-preview-gradient: ${resolvedPreviewGradient};` : "",
     ].join("");
-    const swatchStyle = `${swatch ? `background-color: ${swatch};` : ""}${
+    const swatchStyle = `${resolvedSwatch ? `background-color: ${resolvedSwatch};` : ""}${
       swatchImageScale ? ` --theme-swatch-media-scale: ${swatchImageScale};` : ""
     }`;
 
     return `
       <div
-        class="footer-theme-option${swatchImage ? " has-media-swatch" : ""}${previewFontFamily ? " has-preview-font" : ""}${previewGradient ? " has-preview-gradient" : ""}"
+        class="footer-theme-option${swatchImage ? " has-media-swatch" : ""}${previewFontFamily ? " has-preview-font" : ""}${resolvedPreviewGradient ? " has-preview-gradient" : ""}${supportsCustomColor ? " is-custom-color" : ""}"
         data-theme="${escapeHtml(id)}"
         style="${escapeHtml(wrapperStyle)}"
       >
@@ -381,6 +454,18 @@
           <span class="footer-theme-option-title">${escapeHtml(label)}</span>
           ${credit ? `<span class="footer-theme-option-credit">${escapeHtml(credit)}</span>` : ""}
         </span>
+        ${
+          supportsCustomColor
+            ? `<input
+                class="footer-theme-custom-picker is-hidden"
+                data-theme-custom-picker
+                type="color"
+                value="${escapeHtml(resolvedSwatch || CUSTOM_THEME_COLOR_DEFAULT)}"
+                aria-hidden="true"
+                tabindex="-1"
+              >`
+            : ""
+        }
       </div>
     `;
   };
@@ -415,6 +500,7 @@
       return;
     }
 
+    syncCustomThemeOptionUI(scope);
     const activeOption = THEME_OPTION_MAP.get(activeTheme) || THEME_OPTION_MAP.get(DEFAULT_THEME_ID) || THEME_OPTIONS[0];
     options.forEach((option) => {
       const isSelected = option.dataset.theme === activeOption.id;
@@ -452,10 +538,6 @@
     if (hideBottomFadeInput) {
       hideBottomFadeInput.checked = getStoredHideBottomFade();
     }
-  };
-  const syncResponsiveThemeSurfaceMode = () => {
-    syncKawaiiMobileTintModeClass();
-    applyPresetSurfaceStyle(getStoredTheme());
   };
   const initSiteThemes = (scope = document) => {
     renderThemeOptions(scope);
@@ -500,6 +582,7 @@
     const activeTheme = applyTheme(getStoredTheme(), {
       persistTheme: false,
       persistPresetPreferences: false,
+      persistCustomColor: false,
     });
     applyPromoVisibility(getStoredHidePromo(), { persist: false });
     applyToastPopupVisibility(getStoredHideToastPopups(), { persist: false });
@@ -632,26 +715,86 @@
     };
 
     optionsRoot.querySelectorAll(".footer-theme-option").forEach((option) => {
+      const customColorPicker = option.querySelector("[data-theme-custom-picker]");
+      const themeId = option.dataset.theme || DEFAULT_THEME_ID;
+      const openCustomColorPicker = () => {
+        if (!customColorPicker) {
+          return false;
+        }
+
+        if (typeof customColorPicker.showPicker === "function") {
+          try {
+            customColorPicker.showPicker();
+            return true;
+          } catch (error) {
+            // Fall through to the click-based fallback below.
+          }
+        }
+
+        try {
+          customColorPicker.click();
+          return true;
+        } catch (error) {
+          return false;
+        }
+      };
       option.setAttribute("role", "button");
       option.setAttribute("tabindex", "0");
       option.setAttribute("aria-selected", "false");
 
       option.addEventListener("click", (event) => {
+        if (event.target.closest("[data-theme-custom-picker]")) {
+          return;
+        }
         event.preventDefault();
         event.stopPropagation();
         trackThemeEvent("preset-select");
-        applyTheme(option.dataset.theme || DEFAULT_THEME_ID);
+        applyTheme(themeId);
+        if (themeId === CUSTOM_THEME_ID) {
+          openCustomColorPicker();
+        }
       });
 
       option.addEventListener("keydown", (event) => {
+        if (event.target.closest("[data-theme-custom-picker]")) {
+          return;
+        }
         if (event.key !== "Enter" && event.key !== " ") {
           return;
         }
 
         event.preventDefault();
         trackThemeEvent("preset-select");
-        applyTheme(option.dataset.theme || DEFAULT_THEME_ID);
+        applyTheme(themeId);
+        if (themeId === CUSTOM_THEME_ID) {
+          openCustomColorPicker();
+        }
       });
+
+      if (customColorPicker) {
+        const applyCustomPickerTheme = ({ track = false } = {}) => {
+          const nextAccent = normalizeHexColor(customColorPicker.value, CUSTOM_THEME_COLOR_DEFAULT);
+          customColorPicker.value = nextAccent;
+          if (track) {
+            trackThemeEvent("custom-accent-change");
+          }
+          applyTheme(CUSTOM_THEME_ID, {
+            customColor: nextAccent,
+          });
+        };
+
+        customColorPicker.addEventListener("click", (event) => {
+          event.stopPropagation();
+        });
+        customColorPicker.addEventListener("input", (event) => {
+          event.stopPropagation();
+          applyCustomPickerTheme();
+        });
+        customColorPicker.addEventListener("change", (event) => {
+          event.stopPropagation();
+          applyCustomPickerTheme({ track: true });
+        });
+      }
     });
 
     hideFeaturedAdsInput?.addEventListener("change", () => {
@@ -739,18 +882,12 @@
   applyTheme(getStoredTheme(), {
     persistTheme: false,
     persistPresetPreferences: false,
+    persistCustomColor: false,
   });
   applyPromoVisibility(getStoredHidePromo(), { persist: false });
   applyToastPopupVisibility(getStoredHideToastPopups(), { persist: false });
   applyNavbarWarningVisibility(getStoredHideNavbarWarning(), { persist: false });
   applyBottomFadeVisibility(getStoredHideBottomFade(), { persist: false });
-  syncKawaiiMobileTintModeClass();
-
-  if (typeof KAWAII_MOBILE_TINT_MEDIA_QUERY.addEventListener === "function") {
-    KAWAII_MOBILE_TINT_MEDIA_QUERY.addEventListener("change", syncResponsiveThemeSurfaceMode);
-  } else if (typeof KAWAII_MOBILE_TINT_MEDIA_QUERY.addListener === "function") {
-    KAWAII_MOBILE_TINT_MEDIA_QUERY.addListener(syncResponsiveThemeSurfaceMode);
-  }
 
   window.initSiteThemes = initSiteThemes;
   window.initThemeSwitcher = initSiteThemes;
