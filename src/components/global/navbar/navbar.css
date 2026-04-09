@@ -601,7 +601,16 @@
   border-bottom: 1px solid var(--sec-hvr-bdr);
   box-shadow: var(--navbar-warning-shadow, 0 6px 20px rgba(0, 0, 0, 0.35));
   z-index: 80;
-  background: var(--navbar-warning-background, var(--warning-bg));
+  animation: warning-flash 2s step-end infinite;
+}
+
+@keyframes warning-flash {
+  0%, 0.01% {
+    background: #ff0000;
+  }
+  50% {
+    background: #0040ff;
+  }
 }
 
 .navbar-warning-content {
@@ -620,6 +629,15 @@
   line-height: 1.35;
   letter-spacing: 0.005em;
   text-align: center;
+}
+
+.navbar-warning-link {
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.navbar-warning-link:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 980px) {
