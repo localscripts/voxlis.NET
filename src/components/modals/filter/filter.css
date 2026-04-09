@@ -355,6 +355,19 @@
   background-image: linear-gradient(to top, #ca8a04, #fde047);
 }
 
+.filter-checkbox-icon.is-serverside {
+  color: #4ade80;
+}
+
+.filter-checkbox-icon.is-serverside .filter-asset-icon {
+  background-image: linear-gradient(to top, #16a34a, #86efac);
+}
+
+.filter-checkbox:hover .filter-checkbox-icon.is-serverside,
+.filter-checkbox:focus-within .filter-checkbox-icon.is-serverside {
+  color: #86efac;
+}
+
 .filter-checkbox-icon.is-usermode {
   color: #4ade80;
 }

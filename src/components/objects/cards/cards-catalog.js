@@ -79,6 +79,10 @@
     decompiler: "decompiler",
     kernel: "kernel",
   };
+  const TAG_SLUG_ALIASES = {
+    servside: "serverside",
+    serverside: "serverside",
+  };
   const HTML_ESCAPE_MAP = {
     "&": "&amp;",
     "<": "&lt;",
@@ -1042,6 +1046,18 @@
   };
 
   const normalizeLineText = (value = "") => String(value).replace(/\s+/g, " ").trim();
+  const normalizeTagKey = (value = "") => {
+    const normalized = normalizeLineText(value).toLowerCase();
+    if (!normalized) {
+      return "";
+    }
+
+    const compact = normalized.replace(/[^a-z0-9]+/g, "");
+    return TAG_SLUG_ALIASES[compact] || normalized;
+  };
+  const FILTERABLE_TAG_KEYS = new Set(
+    FILTERABLE_TAGS.map((tag) => normalizeTagKey(tag)).filter(Boolean),
+  );
   const buildSearchText = (parts = []) =>
     normalizeLineText(
       parts
@@ -1179,9 +1195,15 @@
       .filter(Boolean)
       .join(" ");
 
-  const hasInfoTag = (info = {}, tag = "") =>
-    Array.isArray(info.tags) && info.tags.includes(tag);
+  const hasInfoTag = (info = {}, tag = "") => {
+    const normalizedTag = normalizeTagKey(tag);
+    return Boolean(normalizedTag) &&
+      Array.isArray(info.tags) &&
+      info.tags.some((infoTag) => normalizeTagKey(infoTag) === normalizedTag);
+  };
 
+  const isServerSideInfo = (info = {}) =>
+    normalizeLineText(info?.type || "").toLowerCase() === "serverside" || hasInfoTag(info, "serverside");
   const isInsecureCard = (card) => hasInfoTag(card?.info, "insecure");
   const isInviteOnlyCard = (card) => hasInfoTag(card?.info, "inviteonly");
   const getCatalogStats = () => ({
@@ -1420,7 +1442,7 @@
   };
 
   const getTagEntry = (tag) => {
-    const normalizedTag = normalizeLineText(tag);
+    const normalizedTag = normalizeTagKey(tag);
     if (!normalizedTag) {
       return null;
     }
@@ -1442,18 +1464,18 @@
     };
   };
   const TAG_DISPLAY_ORDER = new Map(
-    FILTERABLE_TAGS.map((tag, index) => [normalizeLineText(tag).toLowerCase(), index]),
+    FILTERABLE_TAGS.map((tag, index) => [normalizeTagKey(tag), index]),
   );
   const sortTagsForDisplay = (tags = []) =>
     (Array.isArray(tags) ? tags : [])
       .map((tag, index) => ({
-        tag: normalizeLineText(tag),
+        tag: normalizeTagKey(tag),
         index,
       }))
       .filter(({ tag }) => Boolean(tag))
       .sort((left, right) => {
-        const leftOrder = TAG_DISPLAY_ORDER.get(left.tag.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
-        const rightOrder = TAG_DISPLAY_ORDER.get(right.tag.toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
+        const leftOrder = TAG_DISPLAY_ORDER.get(left.tag) ?? Number.MAX_SAFE_INTEGER;
+        const rightOrder = TAG_DISPLAY_ORDER.get(right.tag) ?? Number.MAX_SAFE_INTEGER;
         if (leftOrder !== rightOrder) {
           return leftOrder - rightOrder;
         }
@@ -1570,6 +1592,7 @@
         const extraButtonClasses = [
           tag === "kernel" ? "is-kernel-tag" : "",
           tag === "keysystem" ? "is-keysystem-tag" : "",
+          tag === "serverside" ? "is-serverside-tag" : "",
           tag === "usermode" ? "is-usermode-tag" : "",
           tag === "insecure" ? "is-insecure-tag" : "",
           tag === "freemium" ? "is-freemium-tag" : "",
@@ -1761,6 +1784,15 @@
         <div class="ph-rating ph-rating-external" aria-label="External">
           <span class="ph-rating-external-main">External</span>
           <span class="ph-rating-external-sub">Menu</span>
+        </div>
+      `;
+    }
+
+    if (isServerSideInfo(info)) {
+      return `
+        <div class="ph-rating ph-rating-external" aria-label="Server-side">
+          <span class="ph-rating-external-main">Server</span>
+          <span class="ph-rating-external-sub">Side</span>
         </div>
       `;
     }
@@ -2405,7 +2437,9 @@
             ...Object.entries(LEGACY_TAG_FILTERS)
               .filter(([legacyField]) => filters[legacyField])
               .map(([, tag]) => tag),
-          ].filter((tag) => FILTERABLE_TAGS.includes(tag)),
+          ]
+            .map((tag) => normalizeTagKey(tag))
+            .filter((tag) => FILTERABLE_TAG_KEYS.has(tag)),
         ),
       ],
       showInsecure: Boolean(filters.showInsecure),
@@ -2935,8 +2969,9 @@
             loadReviewDocument(reviewUrl, { optional: true }),
           ]);
 
+          const pricing = entry.pricing ?? {};
           const fallbackOffers = entry.isListedFree ? buildFreeLifetimeOffers(entry.info.platforms) : [];
-          const offers = flattenOffers(entry.pricing, fallbackOffers);
+          const offers = flattenOffers(pricing, fallbackOffers);
           const hasFreeOffer = offers.some((offer) => Number(offer.price) === 0);
           const hasPaidOffer = offers.some((offer) => Number(offer.price) > 0);
           const youtubeUrl = String(entry.info.youtube || reviewDocument?.metadata?.youtube || "").trim();

@@ -90,8 +90,16 @@
         label: "RakNet",
         info: "This product supports RakNet lib.",
       },
+      serverside: {
+        icon: "fas fa-server",
+        assetIcon: "icons/vectors/tag-serverside.svg",
+        toneClass: "is-serverside",
+        iconToneClass: "ph-serverside-ico",
+        label: "Server-side",
+        info: "This product supports server-side execution.",
+      },
     },
-    filterableTags: ["multi-instance", "decompiler", "raknet", "kernel", "keysystem"],
+    filterableTags: ["multi-instance", "decompiler", "raknet", "serverside", "kernel", "keysystem"],
     showOnlyFilters: ["verified", "trending", "warning"],
     segmentFilters: [
       {
@@ -139,6 +147,7 @@
     typeLabels: {
       internal: "Executor",
       external: "Cheat Menu",
+      serverside: "Server-side",
     },
     sortOptions: [
       { value: "random", label: "Random" },

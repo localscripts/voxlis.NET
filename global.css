@@ -64,7 +64,7 @@
   --theme-color: var(--theme-main-color);
 
   /* Footer */
-  --footer-bg: rgba(0, 0, 0, 0.8);
+  --footer-bg: #000000;
   --footer-border: var(--site-border-color);
   --footer-text: rgba(209, 213, 219, 1);
   --footer-muted: rgba(156, 163, 175, 1);
@@ -123,7 +123,7 @@
   --status-not-updated-color: var(--theme-status-muted-color-base);
   --status-not-updated-rgb: var(--theme-status-muted-rgb-base);
   --exploit-card-chrome: var(--site-border-color);
-  --card-surface-background: rgba(0, 0, 0, 0.82);
+  --card-surface-background: #000000;
   --card-surface-backdrop-blur: 0px;
   --card-action-button-tint-color: #000000;
   --card-action-button-tint-power: 34;

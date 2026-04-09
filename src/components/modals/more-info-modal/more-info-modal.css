@@ -270,7 +270,7 @@ body.has-video-background .info-modal {
   height: 1.14rem;
 }
 
-.info-modal-markdown .info-modal-notice-item[data-info-modal-key^="tag:"] .info-modal-notice-icon .ph-asset-icon:not(.ph-insecure-ico) {
+.info-modal-markdown .info-modal-notice-item[data-info-modal-key^="tag:"] .info-modal-notice-icon .ph-asset-icon:not(.ph-insecure-ico):not(.ph-serverside-ico) {
   background-image: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
 }
 
@@ -331,6 +331,11 @@ body.has-video-background .info-modal {
 
 .info-modal-markdown .info-modal-notice-icon .ph-insecure-ico {
   color: #f87171;
+}
+
+.info-modal-markdown .info-modal-notice-icon .ph-serverside-ico {
+  color: #4ade80;
+  background-image: linear-gradient(to top, #16a34a, #86efac);
 }
 
 .info-modal-markdown .info-modal-notice-icon .ph-meta-icon-stack.is-hybrid-tag .hybrid-user {

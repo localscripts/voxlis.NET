@@ -1,8 +1,8 @@
 .site-footer {
   position: relative;
   background-color: var(--footer-bg);
-  -webkit-backdrop-filter: blur(var(--footer-backdrop-blur, var(--card-surface-backdrop-blur, 0px)));
-  backdrop-filter: blur(var(--footer-backdrop-blur, var(--card-surface-backdrop-blur, 0px)));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   border-top: 1px solid var(--footer-border);
   padding: var(--footer-padding-block) 0;
   margin-top: auto;

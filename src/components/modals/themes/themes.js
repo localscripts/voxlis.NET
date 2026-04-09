@@ -25,7 +25,6 @@
   );
   const SURFACE_BLUR_DEFAULT = surfaceBlurConfig.default ?? 12;
   const SURFACE_BLUR_TINT_SCALE = surfaceBlurConfig.tintScale ?? 18 / 82;
-  const FOOTER_BLUR_TINT_SCALE = surfaceBlurConfig.footerTintScale ?? 16 / 82;
   const SURFACE_TINT_POWER_DEFAULT = surfaceTintConfig.default ?? 82;
   const SURFACE_TINT_HEX_DEFAULT = surfaceTintConfig.defaultHex ?? "#000000";
   const KAWAII_MOBILE_TINT_CLASS = kawaiiMobileTintConfig.className ?? "theme-kawaii-mobile-tint";
@@ -34,8 +33,6 @@
   );
   const KAWAII_MOBILE_SURFACE_TINT =
     kawaiiMobileTintConfig.surfaceTint ?? "rgba(0, 0, 0, 0.82)";
-  const KAWAII_MOBILE_FOOTER_TINT =
-    kawaiiMobileTintConfig.footerTint ?? "rgba(0, 0, 0, 0.84)";
   const KAWAII_MOBILE_NAVBAR_TINT =
     kawaiiMobileTintConfig.navbarTint ?? "rgba(0, 0, 0, 0.94)";
   const THEME_GROUPS =
@@ -146,14 +143,6 @@
   const normalizeTheme = (theme) => (VALID_THEMES.has(theme) ? theme : DEFAULT_THEME_ID);
   const normalizeBooleanPreference = (value) =>
     value === true || value === "true" || value === "1" || value === 1;
-  const normalizeSurfaceBlurStrength = (value) => {
-    const parsed = Number.parseInt(`${value ?? ""}`.trim(), 10);
-    if (!Number.isFinite(parsed)) {
-      return SURFACE_BLUR_DEFAULT;
-    }
-
-    return clamp(parsed, 0, surfaceBlurConfig.max ?? 24);
-  };
   const hexToRgb = (hex) => {
     const normalized = typeof hex === "string" ? hex.trim() : "";
     if (!/^#[0-9a-f]{6}$/i.test(normalized)) {
@@ -222,37 +211,29 @@
   const applyPresetSurfaceStyle = (theme) => {
     const preset = THEME_OPTION_MAP.get(normalizeTheme(theme)) || THEME_OPTION_MAP.get(DEFAULT_THEME_ID);
     const nextEnabled = Boolean(preset?.surfaceBlurEnabled);
-    const nextStrength = normalizeSurfaceBlurStrength(preset?.surfaceBlurStrength);
     const solidTintAlpha = SURFACE_TINT_POWER_DEFAULT / 100;
     const blurTintAlpha = solidTintAlpha * SURFACE_BLUR_TINT_SCALE;
-    const blurFooterAlpha = solidTintAlpha * FOOTER_BLUR_TINT_SCALE;
-    const solidFooterAlpha = Math.max(0, solidTintAlpha - 0.02);
     const root = getThemeRoot();
     const useKawaiiMobileTintMode = nextEnabled && syncKawaiiMobileTintModeClass();
-    const blurValue = useKawaiiMobileTintMode ? "0px" : nextEnabled ? `${nextStrength}px` : "0px";
     const surfaceTint = useKawaiiMobileTintMode
       ? KAWAII_MOBILE_SURFACE_TINT
       : nextEnabled
         ? rgba(SURFACE_TINT_HEX_DEFAULT, blurTintAlpha)
         : rgba(SURFACE_TINT_HEX_DEFAULT, solidTintAlpha);
-    const footerTint = useKawaiiMobileTintMode
-      ? KAWAII_MOBILE_FOOTER_TINT
-      : nextEnabled
-        ? rgba(SURFACE_TINT_HEX_DEFAULT, blurFooterAlpha)
-        : rgba(SURFACE_TINT_HEX_DEFAULT, solidFooterAlpha);
     const navbarTint = useKawaiiMobileTintMode
       ? KAWAII_MOBILE_NAVBAR_TINT
       : nextEnabled
         ? surfaceTint
         : "#000000";
 
-    root.style.setProperty("--card-surface-background", surfaceTint);
-    root.style.setProperty("--card-surface-tint", surfaceTint);
-    root.style.setProperty("--promo-card-background", surfaceTint);
-    root.style.setProperty("--footer-bg", footerTint);
+    root.style.setProperty("--card-surface-background", "#000000");
+    root.style.setProperty("--card-surface-tint", "#000000");
+    root.style.setProperty("--promo-card-background", "#000000");
+    root.style.setProperty("--footer-bg", "#000000");
     root.style.setProperty("--navbar-background", navbarTint);
     root.style.setProperty("--navbar-mobile-panel-background", navbarTint);
-    root.style.setProperty("--card-surface-backdrop-blur", blurValue);
+    root.style.setProperty("--card-surface-backdrop-blur", "0px");
+    root.style.setProperty("--footer-backdrop-blur", "0px");
   };
   const applyFeaturedAdsVisibility = (hidden, { persist = true } = {}) => {
     const nextHidden = Boolean(hidden);

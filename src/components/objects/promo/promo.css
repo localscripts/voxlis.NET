@@ -21,8 +21,8 @@
   margin: 0 auto;
   border: 1px solid var(--crd-bdr);
   background: var(--promo-card-background, var(--card-surface-tint, rgba(0, 0, 0, 0.82)));
-  -webkit-backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
-  backdrop-filter: blur(var(--card-surface-backdrop-blur, 0px));
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   padding: var(--promo-card-padding);
 }
 

@@ -17,6 +17,16 @@
       }
     ]
   },
+  "exoliner": {
+    "purchaseUrl": "https://key-empire.com/product/exoliner",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.99
+      }
+    ]
+  },
   "serotonin": {
     "purchaseUrl": "https://key-empire.com/product/serotonin",
     "offers": [
