@@ -5,23 +5,10 @@
     "xeno",
     "yub-x",
     "madium",
-    "milkers",
-    "cosmic",
-    "velocity",
-    "tomato"
+    "milkers"
   ],
   "matcha": {
     "purchaseUrl": "https://key-empire.com/product/matcha",
-    "offers": [
-      {
-        "platform": "windows",
-        "days": -1,
-        "price": 9.99
-      }
-    ]
-  },
-  "exoliner": {
-    "purchaseUrl": "https://key-empire.com/product/exoliner",
     "offers": [
       {
         "platform": "windows",
