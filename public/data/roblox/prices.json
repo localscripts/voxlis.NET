@@ -18,6 +18,16 @@
       }
     ]
   },
+    "cosmic": {
+    "purchaseUrl": "https://key-empire.com/product/cosmic",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.99
+      }
+    ]
+  },
   "serotonin": {
     "purchaseUrl": "https://key-empire.com/product/serotonin",
     "offers": [
