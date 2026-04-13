@@ -191,7 +191,7 @@
 
 <body>
 
-<video class="home-video-bg" src="https://shared.akamai.steamstatic.com/community_assets/images/items/1098340/ceafcbc9f8ebb39f1056e3c3eea8a9395a51b139.mp4" autoplay loop muted playsinline aria-hidden="true"></video>
+<video id="home-bg-legacy" class="home-video-bg" src="https://shared.akamai.steamstatic.com/community_assets/images/items/1098340/ceafcbc9f8ebb39f1056e3c3eea8a9395a51b139.mp4" autoplay loop muted playsinline aria-hidden="true"></video>
 <div class="home-overlay" aria-hidden="true"></div>
 
 
@@ -225,6 +225,26 @@
 
 <div id="themesMount"></div>
 
+<script>
+  (() => {
+    const LEGACY_ID = "blue";
+    const STORAGE_KEY = "voxlis-theme";
+    const el = () => document.getElementById("home-bg-legacy");
+    const apply = (theme) => {
+      const v = el();
+      if (!v) return;
+      const isLegacy = !theme || theme === LEGACY_ID;
+      v.style.display = isLegacy ? "" : "none";
+      if (isLegacy) { v.play?.(); } else { v.pause?.(); }
+    };
+    document.addEventListener("DOMContentLoaded", () => {
+      apply(localStorage.getItem(STORAGE_KEY));
+    });
+    window.addEventListener("site-theme-change", (e) => {
+      apply(e?.detail?.theme);
+    });
+  })();
+</script>
 <script src="/src/config/pages/global.js"></script>
 <script src="/src/config/global/logic.js"></script>
 <script src="/src/config/global/themes.js"></script>

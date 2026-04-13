@@ -11,7 +11,7 @@
   configSources.catalogs.cs2 = {
     key: "cs2",
     routeBasePath: "/cs2.html",
-    homePath: "/cs2.html",
+    homePath: "/",
     pageTitle: "CS2",
     searchPlaceholder: "Search CS2 cards...",
     dataRoot: "/public/data/cs2",

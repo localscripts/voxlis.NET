@@ -11,7 +11,7 @@
   configSources.catalogs.roblox = {
     key: "roblox",
     routeBasePath: "/roblox.html",
-    homePath: "/roblox.html",
+    homePath: "/",
     pageTitle: "Roblox",
     searchPlaceholder: "Search Roblox cards...",
     dataRoot: "/public/data/roblox",

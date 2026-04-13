@@ -9,7 +9,7 @@
    Video background
    ============================================================================ */
 /* URL is read by themes.js via getComputedStyle — change it here to update */
-:root[data-theme="supremacy"] {
+:root {
   --voxlis-video-bg: "https://shared.akamai.steamstatic.com/community_assets/images/items/2139460/c5e6a75b2e1671453b2c60bc0966b34a1fb9d5fb.webm";
 }
 

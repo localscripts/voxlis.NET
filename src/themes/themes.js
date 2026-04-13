@@ -186,7 +186,7 @@
   const THEME_CHANGE_EVENT =
     window.VOXLIS_CONFIG?.themes?.events?.change ?? "site-theme-change";
 
-  window.addEventListener(THEME_CHANGE_EVENT, (event) => {
+  const handleThemeChange = (event) => {
     const themeId = event?.detail?.theme ?? "";
 
     if (!FULL_THEME_IDS.has(themeId)) {
@@ -228,5 +228,17 @@
     } else {
       removeCss();
     }
-  });
+  };
+
+  window.addEventListener(THEME_CHANGE_EVENT, handleThemeChange);
+
+  // Fire immediately for the theme already active when this script loads.
+  // The built-in theme system applies and fires site-theme-change before this
+  // script is parsed, so we'd otherwise miss it and require a refresh.
+  const currentTheme = document.documentElement.dataset.theme
+    ?? localStorage.getItem(window.VOXLIS_CONFIG?.themes?.storageKeys?.theme ?? "voxlis-theme")
+    ?? "";
+  if (currentTheme) {
+    handleThemeChange({ detail: { theme: currentTheme } });
+  }
 })();
