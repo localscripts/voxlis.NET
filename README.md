@@ -1,89 +1,109 @@
-# voxlis
+# voxlis.NET
 
-Static frontend for the Voxlis site.
+Static frontend for [voxlis.net](https://voxlis.net) — a directory for Roblox and CS2 injectors.
 
-The project does not need a build step for local preview, but it does need to be served over HTTP because the site loads partial HTML files, JSON data, and Markdown reviews with `fetch()`.
+No build step. No npm. No bundler. Just HTML, CSS, and JS served over HTTP.
 
-## Run locally
+---
 
-### Python web server
+## Running locally
 
-From the project root:
+The site uses `fetch()` at runtime to load component HTML, JSON data, and Markdown files. Opening `index.html` directly in the browser will **not** work — it must be served over HTTP.
+
+### Option 1 — VS Code Live Server (recommended)
+
+1. Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension in VS Code
+2. Open the project folder in VS Code (`File → Open Folder`)
+3. Right-click `index.html` in the Explorer panel and choose **Open with Live Server**
+4. The browser opens at `http://127.0.0.1:5500`
+
+> To switch pages, navigate to `http://127.0.0.1:5500/roblox.html` or `http://127.0.0.1:5500/cs2.html`
+
+### Option 2 — Python (no extensions needed)
+
+If you have Python installed, run this from the project root in any terminal:
 
 ```bash
 python -m http.server 8000
 ```
 
-If you use the Windows Python launcher instead:
+On Windows with the Python launcher:
 
 ```bash
 py -m http.server 8000
 ```
 
-Then open:
+Then open `http://localhost:8000` in your browser. Press `Ctrl+C` to stop.
 
-```text
-http://localhost:8000
+---
+
+## Project structure
+
+```
+index.html              Landing / home page
+roblox.html             Roblox injector directory
+cs2.html                CS2 injector directory
+global.css              Global theme tokens and shared styles
+src/
+  main.js               Bootstraps the page and loads component HTML partials
+  components/           UI components (cards, navbar, footer, modals, etc.)
+  themes/               Custom theme CSS files (Supremacy, Mercy, etc.)
+  config/               Site-wide config constants (theme options, IDs, etc.)
+public/
+  assets/               Icons, images, overlay graphics
+  data/
+    roblox/             Per-exploit data (info, review, points, modals)
+    cs2/                CS2-specific data
+    misc/               Privacy policy, terms, etc.
 ```
 
-To stop the server, press `Ctrl+C` in the terminal.
+---
 
-## Important note
+## Exploit data
 
-Opening [index.html](./index.html) directly in the browser will not work correctly.
+Each exploit has its own folder under `public/data/roblox/`. The site reads these at runtime.
 
-This repo relies on runtime requests for files such as:
-
-- `src/components/*/*.html`
-- `public/data/roblox/*/*.json`
-- `public/data/roblox/*/review.md`
-
-Because of that, use a local web server while developing.
-
-## Project layout
-
-- `index.html`: main page shell
-- `ENDPOINTS_API.md`: public and admin `endpoints.php` API notes
-- `DATA_API.md`: public and admin `/data` API notes for bots/tools
-- `docs/`: MkDocs-style documentation source for future docs.voxlis.net pages
-- `global.css`: global theme variables and shared page styling
-- `src/main.js`: bootstraps the page and loads component partials
-- `src/components/`: UI components such as cards, filter modal, navbar, footer, and popups
-- `public/data/roblox/`: exploit data, reviews, points, and modal content
-
-## Editing exploit data
-
-Each exploit lives in its own folder inside `public/data/roblox/`.
-
-Common files:
-
-- `info.json`: main metadata
-- `review.md`: long-form review shown in the site
-- `points.json`: short summary lines for the card
-- `modals.json`: optional warning/modal data
+| File | Purpose |
+|---|---|
+| `info.json` | Name, status, links, tags, pricing tier |
+| `points.json` | Short bullet-point summary shown on the card |
+| `review.md` | Long-form review rendered in the info modal |
+| `modals.json` | Optional extra modal content (warnings, notes) |
 
 Example:
 
-```text
+```
 public/data/roblox/Potassium/
   info.json
-  review.md
   points.json
+  review.md
   modals.json
 ```
 
-## External assets
+---
 
-The page also loads a few libraries from CDNs, including:
+## Theming
 
-- Font Awesome
-- Marked
-- highlight.js
+Theme CSS files live in `src/themes/`. Each file is a self-contained set of CSS custom property overrides scoped to `:root[data-theme="<id>"]`.
 
-So for a fully accurate local preview, keep an internet connection available.
+- `src/themes/supremacy.css` — dark blood-red theme with video background and glass blur
+- `src/themes/mercy.css` — light white/gold theme
+- `src/config/global/themes.js` — registers available theme options shown in the theme picker
+
+To create a new theme, copy `src/themes/example.css` and register it in `themes.js`.
+
+---
+
+## External dependencies
+
+Loaded from CDN at runtime — an internet connection is needed for a fully accurate preview:
+
+- [Font Awesome](https://fontawesome.com/) — icons
+- [Marked](https://marked.js.org/) — Markdown rendering
+- [highlight.js](https://highlightjs.org/) — code syntax highlighting
+
+---
 
 ## License
 
-This repository is source-available, but not fully open-source.
-
-See [LICENSE](./LICENSE) for the current usage terms.
+Source-available, not open-source. See [LICENSE](./LICENSE) for usage terms.

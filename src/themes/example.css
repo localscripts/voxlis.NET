@@ -1,0 +1,134 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Emerald" example theme
+ *  Copy this file, rename it, and edit the values below to make it your own.
+ *
+ *  To activate:
+ *    1. Link this file in a page <head> (after global.css):
+ *         <link rel="stylesheet" href="src/themes/emerald.css" />
+ *    2. OR register it as a named preset in src/config/global/themes.js so
+ *       visitors can pick it from the Themes drawer (see README.md § 4).
+ * ============================================================================
+ */
+
+/* --------------------------------------------------------------------------
+   If you want a custom Google Font, paste the URL below and update
+   --font-family-base to use the font name.
+   -------------------------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ============================================================================
+   Core variables — override on :root to affect the whole site, or scope to
+   [data-theme="your-id"] to only activate when that preset is selected.
+   ============================================================================ */
+:root {
+
+  /* --------------------------------------------------------------------------
+     Accent / brand colours
+     RGB triplet must match the hex value (no # or spaces).
+     -------------------------------------------------------------------------- */
+  --theme-main-color: #10b981;
+  --theme-hover-color: #059669;
+  --theme-gradient-start-color: #34d399;
+  --theme-gradient-end-color: #065f46;
+  --theme-rgb: 16, 185, 129;
+
+  /* --------------------------------------------------------------------------
+     Page background
+     Use a solid colour, or set --theme-background-media-url to a wallpaper.
+     -------------------------------------------------------------------------- */
+  --bg: #050f0c;
+
+  /* Wallpaper — comment out the line below to disable */
+  /* --theme-background-media-url: url("/public/assets/misc/my-bg.jpg"); */
+  /* --background-media-overlay-color: #000000; */
+  /* --background-media-overlay-strength: 50; */
+
+  /* --------------------------------------------------------------------------
+     Card surfaces
+     Set --card-surface-backdrop-blur to a positive value (e.g. "12px") and a
+     semi-transparent --card-surface-background to get a frosted-glass look.
+     -------------------------------------------------------------------------- */
+  --card-surface-background: rgba(5, 20, 15, 0.55);
+  --card-surface-backdrop-blur: 14px;
+  --card-surface-tint: rgba(10, 30, 22, 0.6);
+
+  /* --------------------------------------------------------------------------
+     Global borders
+     -------------------------------------------------------------------------- */
+  --site-border-color: rgba(16, 185, 129, 0.12);
+
+  /* --------------------------------------------------------------------------
+     Typography
+     Change the font name here AND in @import above if using a custom font.
+     -------------------------------------------------------------------------- */
+  --font-family-base: "Inter", "Open Sans", sans-serif;
+
+  /* --------------------------------------------------------------------------
+     Border radius — bump this for a rounder look
+     -------------------------------------------------------------------------- */
+  --rad: 0.625rem;
+
+  /* --------------------------------------------------------------------------
+     Navbar
+     -------------------------------------------------------------------------- */
+  --navbar-background: rgba(5, 15, 10, 0.92);
+  --navbar-mobile-panel-background: rgba(5, 15, 10, 0.98);
+
+  /* --------------------------------------------------------------------------
+     Footer
+     -------------------------------------------------------------------------- */
+  --footer-bg: rgba(3, 10, 7, 0.96);
+  --footer-follow-global-surface: 1;   /* mirrors card surface settings */
+
+  /* --------------------------------------------------------------------------
+     Info modal
+     -------------------------------------------------------------------------- */
+  --info-modal-background: rgba(5, 20, 15, 0.92);
+  --info-modal-backdrop-blur: 16px;
+  --info-modal-follow-global-surface: 1;
+
+  /* --------------------------------------------------------------------------
+     Featured card
+     -------------------------------------------------------------------------- */
+  --featured-follow-global-surface: 1;
+
+  /* --------------------------------------------------------------------------
+     Filter drawer
+     -------------------------------------------------------------------------- */
+  --filter-panel-background: rgba(5, 16, 12, 0.97);
+
+  /* --------------------------------------------------------------------------
+     Scrollbar
+     Already driven by --prim-rgb ( = --theme-rgb ) — no changes needed here
+     unless you want a completely different scrollbar colour.
+     -------------------------------------------------------------------------- */
+
+  /* --------------------------------------------------------------------------
+     Motion — slow things down a touch
+     -------------------------------------------------------------------------- */
+  --smooth-duration: 0.38s;
+}
+
+/* ============================================================================
+   After the variables, add any extra CSS rules you want.
+   These go after global.css and its component files, so they take priority.
+   ============================================================================ */
+
+/* Example: slightly softer card borders */
+.exploit-card {
+  border-color: rgba(16, 185, 129, 0.14);
+}
+
+/* Example: give the page a subtle grid texture */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(16, 185, 129, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: -1;
+}

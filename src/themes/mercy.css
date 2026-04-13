@@ -1,0 +1,695 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Mercy" theme
+ *  Clean warm-white with gold accents. Light, airy, divine.
+ * ============================================================================ */
+
+/* ============================================================================
+   Core token overrides
+   ============================================================================ */
+:root[data-theme="mercy"] {
+
+  /* Accent — warm gold */
+  --theme-main-color: #d97706;
+  --theme-hover-color: #b45309;
+  --theme-gradient-start-color: #fbbf24;
+  --theme-gradient-end-color: #92400e;
+  --theme-rgb: 217, 119, 6;
+
+  /* Page */
+  --bg: #faf8f3;
+  --fg: #1c1917;
+
+  /* Alpha tints re-tuned for a light surface */
+  --theme-card-hover-alpha: 0.13;
+  --theme-glow-alpha: 0.4;
+  --theme-soft-tint-alpha: 0.09;
+  --theme-medium-tint-alpha: 0.18;
+  --theme-strong-tint-alpha: 0.35;
+  --theme-border-tint-alpha: 0.38;
+
+  /* Borders */
+  --site-border-color: rgba(180, 160, 120, 0.22);
+
+  /* Muted text */
+  --txt-mut: #78716c;
+
+  /* Legacy shared aliases */
+  --sec: rgba(255, 248, 235, 0.7);
+  --sec-bdr: rgba(180, 160, 120, 0.22);
+
+  /* Surfaces */
+  --surface-control-bg: rgba(245, 236, 210, 0.7);
+  --surface-control-bg-hover: rgba(235, 222, 188, 0.85);
+  --surface-overlay-bg: rgba(253, 250, 244, 0.98);
+
+  /* Card action buttons */
+  --card-action-button-tint-color: #faf8f3;
+  --card-action-button-background: rgba(245, 236, 210, 0.7);
+  --card-action-button-background-hover: rgba(235, 222, 188, 0.9);
+  --card-action-button-text: rgba(41, 37, 36, 0.85);
+  --card-sponsor-button-background: rgba(245, 236, 210, 0.7);
+  --card-sponsor-button-background-hover: rgba(235, 222, 188, 0.9);
+  --card-sponsor-button-text: rgba(28, 25, 23, 0.96);
+
+  /* Card surfaces */
+  --card-surface-background: rgba(255, 252, 245, 0.72) !important;
+  --card-surface-tint: rgba(255, 252, 245, 0.72) !important;
+  --card-surface-backdrop-blur: 0px !important;
+  --crd-bg: rgba(255, 252, 245, 0.72);
+
+  /* Status dot colours */
+  --status-updated-color: var(--theme-main-color);
+  --status-not-updated-color: #a8a29e;
+
+  /* Navbar */
+  --navbar-background: rgba(253, 250, 244, 0.96) !important;
+  --navbar-mobile-panel-background: rgba(253, 250, 244, 0.99) !important;
+  --navbar-search-background: rgba(245, 236, 210, 0.6);
+  --navbar-search-background-focus: rgba(235, 222, 188, 0.75);
+  --navbar-search-clear-color: #a8a29e;
+  --navbar-button-background: rgba(180, 155, 100, 0.12);
+  --navbar-mobile-link-background: rgba(245, 236, 210, 0.4);
+  --navbar-mobile-toggle-background: rgba(245, 236, 210, 0.4);
+  --navbar-mobile-toggle-background-hover: rgba(235, 222, 188, 0.65);
+
+  /* Footer */
+  --footer-bg: rgba(250, 244, 230, 0.98) !important;
+  --footer-backdrop-blur: 0px !important;
+  --footer-follow-global-surface: 1;
+  --footer-border: rgba(180, 160, 120, 0.2);
+  --footer-text: rgba(41, 37, 36, 0.9);
+  --footer-muted: #78716c;
+  --footer-theme-swatch-border: rgba(120, 100, 60, 0.3);
+  --footer-theme-option-hover-background: rgba(245, 236, 210, 0.7);
+  --footer-theme-option-selected-background: rgba(235, 222, 188, 0.55);
+  --footer-theme-menu-shadow: 0 -10px 25px rgba(180, 140, 60, 0.1);
+  --footer-theme-highlight-shadow:
+    0 0 0 1px rgba(217, 119, 6, 0.38),
+    0 0 1.25rem rgba(217, 119, 6, 0.2),
+    0 0 2.5rem rgba(217, 119, 6, 0.12);
+
+  /* Filter drawer */
+  --filter-panel-background: rgba(253, 250, 244, 0.98);
+  --filter-overlay-background: linear-gradient(
+    90deg,
+    rgba(200, 180, 130, 0.48) 0%,
+    rgba(200, 180, 130, 0.36) 56%,
+    rgba(200, 180, 130, 0.22) calc(100% - 460px),
+    rgba(200, 180, 130, 0.1) 100%
+  );
+  --filter-section-title-color: rgba(41, 37, 36, 0.85);
+  --filter-option-background: rgba(245, 236, 210, 0.6);
+  --filter-option-border: rgba(180, 155, 100, 0.22);
+  --filter-checkbox-background: rgba(253, 250, 244, 0.9);
+  --filter-checkbox-border: rgba(150, 120, 70, 0.25);
+  --filter-close-color: rgba(78, 70, 60, 0.8);
+  --filter-close-color-hover: rgba(28, 25, 23, 0.95);
+  --filter-reset-background: transparent;
+  --filter-reset-border: rgba(180, 155, 100, 0.28);
+  --filter-reset-color: #1c1917;
+
+  /* Info modal */
+  --info-modal-background: rgba(253, 250, 244, 0.96) !important;
+  --info-modal-backdrop-blur: 0px !important;
+  --info-modal-follow-global-surface: 1;
+
+  /* Featured card */
+  --featured-follow-global-surface: 1;
+  --featured-title-color: #1c1917;
+  --featured-action-color: rgba(78, 70, 60, 0.75);
+  --featured-action-hover-color: #1c1917;
+  --featured-card-border: rgba(180, 160, 120, 0.22);
+  --featured-card-header-border: rgba(180, 160, 120, 0.22);
+
+  /* Promo */
+  --promo-card-background: rgba(255, 252, 245, 0.72) !important;
+  --promo-description: #78716c;
+  --promo-muted-button-text: rgba(78, 70, 60, 0.9);
+  --promo-muted-button-icon: rgba(120, 113, 108, 0.9);
+
+  /* Promo/featured overlay art — keep gold gradient */
+  --featured-overlay-fill: linear-gradient(90deg, #fbbf24 0%, #d97706 46%, #ffffff 100%);
+  --banner-overlay-fill: linear-gradient(90deg, #fbbf24 0%, #d97706 70%, #b45309 100%);
+  --header-overlay-fill: linear-gradient(90deg, #fbbf24 0%, #d97706 70%, #b45309 100%);
+  --brand-gradient-color: #fbbf24;
+
+  /* Scrollbar */
+  scrollbar-color: rgba(217, 119, 6, 0.7) #f0e8d0;
+
+  /* Bottom fade — match the warm white bg */
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(250, 248, 243, 0) 0%,
+    rgba(250, 248, 243, 0.14) 22%,
+    rgba(250, 248, 243, 0.48) 52%,
+    rgba(250, 248, 243, 0.85) 82%,
+    #faf8f3 100%
+  );
+
+  /* Shadows */
+  --shd: 0 10px 25px rgba(160, 130, 80, 0.1);
+  --shd-hvr: 0 15px 30px rgba(160, 130, 80, 0.16);
+}
+
+/* ============================================================================
+   Scrollbar (webkit)
+   ============================================================================ */
+:root[data-theme="mercy"] *::-webkit-scrollbar-track {
+  background: #f0e8d0;
+}
+
+/* ============================================================================
+   Global — base text colour
+   ============================================================================ */
+:root[data-theme="mercy"] body {
+  color: #1c1917;
+}
+
+/* ============================================================================
+   Cards — all hardcoded white text replaced with dark equivalents
+   ============================================================================ */
+
+/* Pros / cons / neutral lines */
+:root[data-theme="mercy"] .ph-line {
+  color: rgba(41, 37, 36, 0.88) !important;
+}
+
+/* Tag chips — dark bg → warm beige, white text → dark */
+:root[data-theme="mercy"] .ph-tag {
+  background: rgba(235, 218, 180, 0.65) !important;
+  border-color: rgba(180, 155, 100, 0.25) !important;
+  color: rgba(41, 37, 36, 0.88) !important;
+}
+
+/* Key-Empire logo — orange accent colour */
+:root[data-theme="mercy"] .ph-sponsor-base-image.is-keyempire-logo {
+  background: #d97706 !important;
+}
+
+/* Key-Empire text image — invert the white PNG to near-black */
+:root[data-theme="mercy"] .ph-sponsor-btn.is-keyempire .ph-sponsor-base-image:not(.is-keyempire-logo) {
+  filter: invert(1) brightness(0.15) !important;
+}
+
+/* Key-Empire button text (Buy on / From $x.xx) — explicit dark */
+:root[data-theme="mercy"] .ph-sponsor-btn.is-keyempire .ph-sponsor-copy,
+:root[data-theme="mercy"] .ph-sponsor-btn.is-keyempire .ph-sponsor-price,
+:root[data-theme="mercy"] .ph-sponsor-btn.is-keyempire .ph-sponsor-note {
+  color: #1c1917 !important;
+}
+
+/* Count badges ("20 of 20") */
+:root[data-theme="mercy"] .fltrd-cnt,
+:root[data-theme="mercy"] .ttl-cnt {
+  color: #1c1917 !important;
+}
+
+/* "Updated 13 / Non updated 6" legend counts */
+:root[data-theme="mercy"] .sts-legend-count {
+  color: rgba(28, 25, 23, 0.94) !important;
+}
+
+/* Card title */
+:root[data-theme="mercy"] .ph-title {
+  color: rgba(28, 25, 23, 0.95) !important;
+}
+
+/* "Empty state" copy and loading copy */
+:root[data-theme="mercy"] .cards-empty-copy,
+:root[data-theme="mercy"] .cards-loading-copy {
+  color: rgba(28, 25, 23, 0.9) !important;
+}
+
+/* Empty-state / loading action buttons */
+:root[data-theme="mercy"] .cards-empty-action {
+  border-color: rgba(120, 100, 60, 0.18) !important;
+  background: rgba(245, 236, 210, 0.55) !important;
+  color: rgba(28, 25, 23, 0.92) !important;
+}
+:root[data-theme="mercy"] .cards-empty-action:hover {
+  color: rgba(28, 25, 23, 0.98) !important;
+  background: rgba(235, 218, 180, 0.7) !important;
+}
+
+/* Featured banner — invert dark photo to light for warm bg, leave logo as-is */
+:root[data-theme="mercy"] .featured-background-image {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Card hover glow */
+:root[data-theme="mercy"] .exploit-card:hover {
+  box-shadow: 0 0 0 1px rgba(217, 119, 6, 0.2), 0 8px 24px rgba(160, 130, 80, 0.14);
+}
+
+/* sUNC badge — "UNC" mask visible on light bg (dark by default) */
+:root[data-theme="mercy"] .ph-rating-logo-main {
+  background: rgba(28, 25, 23, 0.88) !important;
+}
+/* "External Menu" label — dark so it's readable on light bg */
+:root[data-theme="mercy"] .ph-rating-external-main {
+  color: rgba(28, 25, 23, 0.88) !important;
+}
+
+/* Issue cards only — sUNC badge + platform icon turn red */
+:root[data-theme="mercy"] .exploit-card-placeholder.is-issue .ph-rating {
+  --sunc-accent-rgb: 220, 38, 38;
+}
+:root[data-theme="mercy"] .exploit-card-placeholder.is-issue .ph-rating-logo-main {
+  background: rgba(220, 38, 38, 0.9) !important;
+}
+:root[data-theme="mercy"] .exploit-card-placeholder.is-issue .ph-title-meta-ico {
+  color: rgba(220, 38, 38, 0.9) !important;
+}
+
+/* sUNC brand-mark word (white SVG img) → invert to dark */
+:root[data-theme="mercy"] .sunc-widget-brand-mark-word {
+  filter: invert(1) brightness(0.15) !important;
+}
+
+/* ============================================================================
+   sUNC modal — dark text on light surfaces
+   ============================================================================ */
+:root[data-theme="mercy"] .sunc-modal {
+  --sunc-surface: rgb(253, 250, 244);
+  --sunc-surface-strong: rgba(217, 119, 6, 0.04);
+  --sunc-surface-card: rgba(245, 236, 210, 0.55);
+  --sunc-border: rgba(180, 155, 100, 0.28);
+  --sunc-muted: #1c1917;
+}
+/* Title "Test Result" */
+:root[data-theme="mercy"] .sunc-widget-brand-title {
+  color: #1c1917 !important;
+}
+/* Notice bar text */
+:root[data-theme="mercy"] .sunc-widget-notice {
+  color: rgba(28, 25, 23, 0.88) !important;
+}
+/* Search input */
+:root[data-theme="mercy"] .sunc-widget-search input {
+  color: #1c1917 !important;
+}
+/* Result card — function name */
+:root[data-theme="mercy"] .sunc-widget-result-copy strong {
+  color: #1c1917 !important;
+}
+/* Result card — sub text */
+:root[data-theme="mercy"] .sunc-widget-result-copy p {
+  color: rgba(41, 37, 36, 0.7) !important;
+}
+/* Ring percentage "98%" */
+:root[data-theme="mercy"] .sunc-widget-ring-percentage {
+  color: #1c1917 !important;
+}
+/* Metrics row — label icons + text */
+:root[data-theme="mercy"] .sunc-widget-summary-metrics span {
+  color: rgba(41, 37, 36, 0.75) !important;
+}
+/* Metrics row — values */
+:root[data-theme="mercy"] .sunc-widget-summary-metrics strong {
+  color: #1c1917 !important;
+}
+/* "View sUNC Link" button + close button */
+:root[data-theme="mercy"] .sunc-widget-summary-link,
+:root[data-theme="mercy"] .sunc-widget-inline-button,
+:root[data-theme="mercy"] .sunc-widget-inline-link {
+  color: #1c1917 !important;
+}
+/* Close (×) button */
+:root[data-theme="mercy"] .sunc-widget-close-btn {
+  color: rgba(41, 37, 36, 0.75) !important;
+  background: rgba(245, 236, 210, 0.55) !important;
+}
+/* Footer "Powered by Numelon" */
+:root[data-theme="mercy"] .sunc-widget-footer {
+  color: rgba(41, 37, 36, 0.65) !important;
+  background: rgba(217, 119, 6, 0.04) !important;
+}
+/* Ring track — light tan instead of near-invisible white */
+:root[data-theme="mercy"] .sunc-widget-ring-track {
+  stroke: rgba(180, 155, 100, 0.25) !important;
+}
+
+/* ============================================================================
+   Navbar — dark text on light surface
+   ============================================================================ */
+:root[data-theme="mercy"] .navbar-link {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .navbar-link.is-active {
+  color: var(--theme-main-color) !important;
+}
+:root[data-theme="mercy"] .navbar-button {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .navbar-search-input {
+  color: #1c1917;
+}
+:root[data-theme="mercy"] .navbar-search-input::placeholder {
+  color: #a8a29e;
+}
+:root[data-theme="mercy"] .site-navbar.is-scrolled {
+  border-bottom-color: rgba(180, 155, 100, 0.2);
+}
+/* Mobile nav links */
+:root[data-theme="mercy"] .mobile-menu-link,
+:root[data-theme="mercy"] .mobile-catalog-link {
+  color: #1c1917 !important;
+}
+
+/* ============================================================================
+   Filter drawer — dark text
+   ============================================================================ */
+:root[data-theme="mercy"] .filter-section-title,
+:root[data-theme="mercy"] .filter-title {
+  color: rgba(28, 25, 23, 0.7) !important;
+}
+:root[data-theme="mercy"] .filter-option-label,
+:root[data-theme="mercy"] .filter-option {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .custom-dropdown-selected,
+:root[data-theme="mercy"] .custom-dropdown-option {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .filter-apply-btn {
+  color: #ffffff !important;
+}
+
+/* ============================================================================
+   Themes drawer — dark text on light panel
+   ============================================================================ */
+:root[data-theme="mercy"] .footer-theme-drawer-title {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-tab {
+  color: rgba(28, 25, 23, 0.72) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-tab.is-active {
+  color: var(--theme-main-color) !important;
+}
+:root[data-theme="mercy"] .footer-theme-option-group-title {
+  color: rgba(28, 25, 23, 0.64) !important;
+}
+:root[data-theme="mercy"] .footer-theme-option {
+  color: rgba(28, 25, 23, 0.92) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-section-title {
+  color: rgba(28, 25, 23, 0.7) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-toggle-title {
+  color: rgba(28, 25, 23, 0.94) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-toggle-note {
+  color: rgba(120, 113, 108, 0.86) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-field-title {
+  color: rgba(28, 25, 23, 0.94) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-slider-head {
+  color: rgba(28, 25, 23, 0.88) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-reset {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-section-note {
+  color: rgba(120, 113, 108, 0.86) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-input,
+:root[data-theme="mercy"] .footer-theme-drawer-textarea {
+  color: #1c1917 !important;
+  background: rgba(245, 236, 210, 0.55) !important;
+}
+/* Close (×) button */
+:root[data-theme="mercy"] .footer-theme-drawer-close {
+  color: rgba(78, 70, 60, 0.8) !important;
+}
+:root[data-theme="mercy"] .footer-theme-drawer-close:hover {
+  color: rgba(28, 25, 23, 0.95) !important;
+}
+
+/* ============================================================================
+   Status legend swatch — no glow on light bg
+   ============================================================================ */
+:root[data-theme="mercy"] .sts-legend-swatch {
+  box-shadow: none !important;
+}
+
+/* ============================================================================
+   Toast notifications — dark text on light card surface
+   ============================================================================ */
+
+/* Solid opaque background — no transparency */
+:root[data-theme="mercy"] .site-toast {
+  background: rgb(253, 250, 244) !important;
+  border-color: rgba(180, 155, 100, 0.28) !important;
+  box-shadow:
+    0 16px 34px rgba(160, 130, 80, 0.14),
+    0 0 1.2rem rgba(217, 119, 6, 0.1) !important;
+}
+
+:root[data-theme="mercy"] .site-toast-title {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .site-toast-message,
+:root[data-theme="mercy"] .site-toast[data-toast-key="filters-prompt"] .site-toast-message,
+:root[data-theme="mercy"] .site-toast[data-toast-key="themes-prompt"] .site-toast-message,
+:root[data-theme="mercy"] .site-toast[data-toast-key^="card-icon-info:"] .site-toast-message {
+  color: rgba(78, 70, 60, 0.9) !important;
+}
+/* Close × on toasts */
+:root[data-theme="mercy"] .site-toast-close,
+:root[data-theme="mercy"] .site-toast[data-toast-key^="card-icon-info:"] .site-toast-close {
+  color: rgba(120, 100, 60, 0.7) !important;
+}
+:root[data-theme="mercy"] .site-toast-close:hover,
+:root[data-theme="mercy"] .site-toast[data-toast-key^="card-icon-info:"] .site-toast-close:hover {
+  color: rgba(28, 25, 23, 0.95) !important;
+}
+/* Secondary "Close" button in prompt toasts (transparent bg) */
+:root[data-theme="mercy"] .site-toast-action-secondary {
+  border-color: rgba(120, 100, 60, 0.2) !important;
+  background: rgba(245, 236, 210, 0.45) !important;
+  color: rgba(28, 25, 23, 0.85) !important;
+}
+:root[data-theme="mercy"] .site-toast-action-secondary:hover {
+  border-color: rgba(120, 100, 60, 0.35) !important;
+  background: rgba(235, 218, 180, 0.6) !important;
+}
+/* Regular toast action button */
+:root[data-theme="mercy"] .site-toast-action {
+  color: rgba(28, 25, 23, 0.9) !important;
+}
+/* Prompt-toast primary action ("Open filters" / "Try themes") uses prim-grd — white text is fine there */
+:root[data-theme="mercy"] .site-toast[data-toast-key="filters-prompt"] .site-toast-action:not(.site-toast-action-secondary),
+:root[data-theme="mercy"] .site-toast[data-toast-key="themes-prompt"] .site-toast-action:not(.site-toast-action-secondary) {
+  color: #ffffff !important;
+}
+
+/* ============================================================================
+   Info modal — dark text
+   ============================================================================ */
+:root[data-theme="mercy"] .info-modal-title,
+:root[data-theme="mercy"] .info-modal-section-title {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .info-modal-body,
+:root[data-theme="mercy"] .info-modal-text {
+  color: rgba(28, 25, 23, 0.92) !important;
+}
+:root[data-theme="mercy"] .info-modal-label {
+  color: #ffffff !important; /* labels sit on accent-coloured bg — keep white */
+}
+:root[data-theme="mercy"] .review-body,
+:root[data-theme="mercy"] .more-info-modal-text {
+  color: rgba(28, 25, 23, 0.88) !important;
+}
+
+/* ============================================================================
+   Footer — dark text
+   ============================================================================ */
+:root[data-theme="mercy"] .footer-link,
+:root[data-theme="mercy"] .footer-section-title,
+:root[data-theme="mercy"] .footer-nav-link {
+  color: rgba(28, 25, 23, 0.86) !important;
+}
+/* Logo PNG (white on transparent) → #DADAD2 */
+:root[data-theme="mercy"] .footer-brand-image,
+:root[data-theme="mercy"] .navbar-logo-base-image {
+  filter: brightness(0.855) !important;
+}
+
+/* ============================================================================
+   Subtle golden haze behind the page content
+   ============================================================================ */
+:root[data-theme="mercy"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(251, 191, 36, 0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 50% 100%, rgba(217, 119, 6, 0.07) 0%, transparent 70%);
+}
+
+/* ============================================================================
+   Toggle switch — keep knob visible on light bg
+   ============================================================================ */
+:root[data-theme="mercy"] .footer-theme-drawer-toggle-ui::before {
+  background: rgba(120, 100, 60, 0.5) !important;
+}
+
+/* ============================================================================
+   Info modal — detailed interior overrides
+   (the token --info-modal-background is already set in :root, but many
+   child elements have hardcoded dark-theme values)
+   ============================================================================ */
+
+/* Modal chrome */
+:root[data-theme="mercy"] .info-modal-title {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .info-modal-footer {
+  background-color: rgba(245, 236, 210, 0.5) !important;
+}
+
+/* Close button — was #000 bg / #fff text */
+:root[data-theme="mercy"] .info-modal-close-btn {
+  background: rgba(235, 218, 180, 0.6) !important;
+  color: #1c1917 !important;
+  border-color: rgba(120, 100, 60, 0.22) !important;
+}
+:root[data-theme="mercy"] .info-modal-close-btn:hover {
+  background: rgba(220, 200, 155, 0.75) !important;
+}
+
+/* Unverified / null-review box */
+:root[data-theme="mercy"] .info-modal-null-review-message {
+  color: rgba(28, 25, 23, 0.9) !important;
+}
+
+/* Exploit info + markdown content boxes */
+:root[data-theme="mercy"] .info-modal-exploit-info,
+:root[data-theme="mercy"] .info-modal-markdown {
+  background-color: rgba(245, 236, 210, 0.45) !important;
+  color: rgba(28, 25, 23, 0.9) !important;
+}
+:root[data-theme="mercy"] .info-modal-exploit-desc {
+  color: rgba(78, 70, 60, 0.92) !important;
+}
+
+/* Notice group container */
+:root[data-theme="mercy"] .info-modal-markdown .info-modal-notice-group-body {
+  background: rgba(245, 236, 210, 0.55) !important;
+}
+:root[data-theme="mercy"] .info-modal-markdown .info-modal-notice-heading {
+  color: rgba(120, 100, 60, 0.85) !important;
+}
+
+/* Notice item text */
+:root[data-theme="mercy"] .info-modal-markdown .info-modal-notice-title {
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .info-modal-markdown .info-modal-notice-text {
+  color: rgba(78, 70, 60, 0.9) !important;
+}
+
+/* Choice buttons */
+:root[data-theme="mercy"] .info-modal-markdown .info-modal-choice-btn {
+  background-color: rgba(245, 236, 210, 0.5) !important;
+  color: #1c1917 !important;
+}
+:root[data-theme="mercy"] .info-modal-markdown .info-modal-choice-label {
+  color: rgba(28, 25, 23, 0.96) !important;
+}
+:root[data-theme="mercy"] .info-modal-markdown .info-modal-choice-note {
+  color: rgba(78, 70, 60, 0.82) !important;
+}
+
+/* Markdown headings */
+:root[data-theme="mercy"] .info-modal-markdown h1,
+:root[data-theme="mercy"] .info-modal-markdown h2,
+:root[data-theme="mercy"] .info-modal-markdown h3,
+:root[data-theme="mercy"] .info-modal-markdown h4,
+:root[data-theme="mercy"] .info-modal-markdown h5,
+:root[data-theme="mercy"] .info-modal-markdown h6 {
+  color: #1c1917 !important;
+}
+
+/* Markdown code blocks */
+:root[data-theme="mercy"] .info-modal-markdown code,
+:root[data-theme="mercy"] .info-modal-markdown pre {
+  background-color: rgba(220, 200, 155, 0.35) !important;
+}
+
+/* Blockquote */
+:root[data-theme="mercy"] .info-modal-markdown blockquote {
+  color: rgba(78, 70, 60, 0.88) !important;
+}
+
+/* Hybrid tag icon text — keep readable */
+:root[data-theme="mercy"] .info-modal-markdown .ph-meta-icon-stack.is-hybrid-tag .hybrid-user {
+  color: rgba(28, 25, 23, 0.9) !important;
+}
+
+/* Mirror picker modal — override hardcoded dark values */
+:root[data-theme="mercy"] .info-modal-container.is-mirror-picker .info-modal-choice-btn {
+  border-color: rgba(180, 155, 100, 0.28) !important;
+  background-color: rgba(245, 236, 210, 0.45) !important;
+}
+:root[data-theme="mercy"] .info-modal-container.is-mirror-picker .info-modal-choice-btn:hover {
+  border-color: rgba(217, 119, 6, 0.4) !important;
+  background-color: rgba(217, 119, 6, 0.08) !important;
+}
+:root[data-theme="mercy"] .info-modal-container.is-mirror-picker .info-modal-choice-action {
+  color: rgba(28, 25, 23, 0.35) !important;
+}
+:root[data-theme="mercy"] .info-modal-container.is-mirror-picker .info-modal-close-btn {
+  border-color: rgba(180, 155, 100, 0.3) !important;
+  color: rgba(28, 25, 23, 0.65) !important;
+}
+:root[data-theme="mercy"] .info-modal-container.is-mirror-picker .info-modal-close-btn:hover {
+  background: rgba(217, 119, 6, 0.06) !important;
+  color: #1c1917 !important;
+}
+
+/* ============================================================================
+   Card warning modal — was fully black bg
+   ============================================================================ */
+
+/* Title */
+:root[data-theme="mercy"] .card-warning-title {
+  color: rgba(28, 25, 23, 0.96) !important;
+}
+
+/* Description text uses --txt-mut which inherits theme — nothing extra needed */
+
+/* Icon badge bg */
+:root[data-theme="mercy"] .card-warning-icon {
+  background: rgba(245, 236, 210, 0.7) !important;
+}
+
+/* Default (plain) button */
+:root[data-theme="mercy"] .card-warning-btn {
+  color: rgba(78, 70, 60, 0.85) !important;
+}
+
+/* Secondary "Cancel / Go back" button */
+:root[data-theme="mercy"] .card-warning-btn.is-secondary {
+  border-color: rgba(120, 100, 60, 0.2) !important;
+  background: rgba(235, 218, 180, 0.45) !important;
+}
+:root[data-theme="mercy"] .card-warning-btn.is-secondary:hover {
+  color: rgba(28, 25, 23, 0.96) !important;
+  background: rgba(220, 200, 155, 0.65) !important;
+}
+
+/* Primary action button */
+:root[data-theme="mercy"] .card-warning-btn.is-primary {
+  background: rgba(235, 218, 180, 0.5) !important;
+  color: rgba(28, 25, 23, 0.96) !important;
+}
+:root[data-theme="mercy"] .card-warning-btn.is-primary:hover {
+  background: rgba(var(--card-warning-accent-rgb), 0.15) !important;
+}

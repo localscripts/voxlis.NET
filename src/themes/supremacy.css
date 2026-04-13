@@ -1,0 +1,170 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Supremacy" theme
+ *  Dark blood-red aesthetic. Deep blacks with crimson accents.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   Video background
+   ============================================================================ */
+/* URL is read by themes.js via getComputedStyle — change it here to update */
+:root[data-theme="supremacy"] {
+  --voxlis-video-bg: "https://shared.akamai.steamstatic.com/community_assets/images/items/2139460/c5e6a75b2e1671453b2c60bc0966b34a1fb9d5fb.webm";
+}
+
+#voxlis-full-theme-video-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* ============================================================================
+   Accent & brand colours — scoped so they only activate for this theme
+   ============================================================================ */
+:root[data-theme="supremacy"] {
+  --theme-main-color: #dc2626;
+  --theme-hover-color: #b91c1c;
+  --theme-gradient-start-color: #ef4444;
+  --theme-gradient-end-color: #7f1d1d;
+  --theme-rgb: 220, 38, 38;
+
+  /* -------------------------------------------------------------------------
+     Page background — near-black with a faint red undertone
+     background is set on :root (html) directly so body can be transparent,
+     which is required for backdrop-filter to reach the fixed video element.
+     ------------------------------------------------------------------------- */
+  --bg: #060101;
+  --fg: #f5f0f0;
+  background: #060101;
+
+  /* -------------------------------------------------------------------------
+     Card surfaces — deep smoked glass
+     ------------------------------------------------------------------------- */
+  --card-surface-background: rgba(0, 0, 0, 0.6) !important;
+  --card-surface-tint: rgba(24, 4, 4, 0.65) !important;
+  --card-surface-backdrop-blur: 16px !important;
+
+  /* -------------------------------------------------------------------------
+     Borders
+     ------------------------------------------------------------------------- */
+  --site-border-color: rgba(220, 38, 38, 0.1);
+
+  /* -------------------------------------------------------------------------
+     Navbar
+     ------------------------------------------------------------------------- */
+  --navbar-background: rgba(6, 1, 1, 0.94) !important;
+  --navbar-mobile-panel-background: rgba(6, 1, 1, 0.98) !important;
+
+  /* -------------------------------------------------------------------------
+     Footer
+     ------------------------------------------------------------------------- */
+  --footer-bg: rgba(4, 0, 0, 0.97) !important;
+  --footer-backdrop-blur: 16px !important;
+  --footer-follow-global-surface: 1;
+
+  /* -------------------------------------------------------------------------
+     Featured card
+     ------------------------------------------------------------------------- */
+  --featured-follow-global-surface: 1;
+  --featured-surface-background: rgba(0, 0, 0, 0.6);
+
+  /* -------------------------------------------------------------------------
+     Promo card
+     ------------------------------------------------------------------------- */
+  --promo-card-background: rgba(0, 0, 0, 0.6) !important;
+
+  /* -------------------------------------------------------------------------
+     Bottom page fade — bleed into the red-black bg
+     ------------------------------------------------------------------------- */
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(6, 1, 1, 0) 0%,
+    rgba(6, 1, 1, 0.16) 22%,
+    rgba(6, 1, 1, 0.48) 52%,
+    rgba(6, 1, 1, 0.85) 82%,
+    #060101 100%
+  );
+
+  /* -------------------------------------------------------------------------
+     Scrollbar
+     ------------------------------------------------------------------------- */
+  scrollbar-color: rgba(220, 38, 38, 0.8) #060101;
+
+  /* -------------------------------------------------------------------------
+     Muted text — slightly warmer
+     ------------------------------------------------------------------------- */
+  --txt-mut: rgba(180, 150, 150, 1);
+}
+
+/* body must be transparent with no isolation so that backdrop-filter on
+   cards can reach the fixed video element in the root stacking context.
+   isolation: isolate on body creates a compositing boundary that blocks it. */
+:root[data-theme="supremacy"] body {
+  background: transparent !important;
+  isolation: auto !important;
+}
+
+/* ============================================================================
+   Scrollbar (webkit)
+   ============================================================================ */
+:root[data-theme="supremacy"] *::-webkit-scrollbar-track {
+  background: #060101;
+}
+
+/* ============================================================================
+   Glass blur — cards, promo, featured
+   (Components hardcode backdrop-filter: none so tokens alone don't work)
+   ============================================================================ */
+:root[data-theme="supremacy"] .exploit-card-placeholder {
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+}
+:root[data-theme="supremacy"] .promo-hero-card {
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+}
+/* will-change: opacity on .featured-section creates an isolated stacking
+   context that blocks backdrop-filter from reaching the video behind it.
+   Resetting to auto collapses that isolation so the blur works. */
+:root[data-theme="supremacy"] .featured-section {
+  will-change: auto !important;
+}
+:root[data-theme="supremacy"] .featured-card::before,
+:root[data-theme="supremacy"] .featured-card.featured-card--transparent::before {
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+/* ============================================================================
+   Subtle red vignette on the page edges
+   ============================================================================ */
+:root[data-theme="supremacy"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(220, 38, 38, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(127, 29, 29, 0.1) 0%, transparent 70%);
+}
+
+/* ============================================================================
+   Card — crimson top accent on hover / selected state
+   ============================================================================ */
+:root[data-theme="supremacy"] .exploit-card:hover {
+  box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.22), 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+/* ============================================================================
+   Navbar — faint red bottom border when scrolled
+   ============================================================================ */
+:root[data-theme="supremacy"] .site-navbar.is-scrolled {
+  border-bottom-color: rgba(220, 38, 38, 0.14);
+}
