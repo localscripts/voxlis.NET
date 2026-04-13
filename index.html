@@ -3,91 +3,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>voxlis - BETA</title>
+<title>voxlis - Home</title>
 <link rel="icon" href="/public/assets/icons/images/taskbar.ico" type="image/x-icon">
 <link rel="shortcut icon" href="/public/assets/icons/images/taskbar.ico" type="image/x-icon">
 
-    <meta property="og:title" content="voxlis.NET">
-    <meta property="og:description" content="voxlis.NET - The go-to source for injectors: everything you will need, all in one place.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://voxlis.net">
-    <meta property="og:image" content="https://media.discordapp.net/attachments/1467157694681972778/1491035484640641064/content.png?ex=69d63a81&is=69d4e901&hm=62d9dda5bbe1c49fe020d582443ae333fd5faf0df553ee8e603d07776e5fb638&=&format=webp&quality=lossless&width=1376&height=917">
-    <meta property="og:image:width" content="1920">
-    <meta property="og:image:height" content="1080">
+<meta property="og:title" content="voxlis.NET">
+<meta property="og:description" content="voxlis.NET - The go-to source for injectors: everything you will need, all in one place.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://voxlis.net">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=DynaPuff:wght@500;600;700&family=Open+Sans:wght@600;700&display=swap">
 <link rel="stylesheet" href="/global.css">
 <link rel="stylesheet" href="/src/components/global/navbar/navbar.css">
-<link rel="stylesheet" href="/src/components/modals/filter/filter.css">
 <link rel="stylesheet" href="/src/components/global/layout/layout.css">
-<link rel="stylesheet" href="/src/components/objects/promo/promo.css">
-<link rel="stylesheet" href="/src/components/objects/featured/featured.css">
-<link rel="stylesheet" href="/src/components/modals/more-info-modal/more-info-modal.css">
-<link rel="stylesheet" href="/src/components/modals/sunc-modal/sunc-modal.css">
-<link rel="stylesheet" href="/src/components/objects/cards/cards.css">
 <link rel="stylesheet" href="/src/components/modals/themes/themes.css">
-<link rel="stylesheet" href="/src/components/global/footer/footer.css">
 <link rel="stylesheet" href="/src/components/modals/notification/site-toast.css">
 <link rel="stylesheet" href="/src/components/global/loading/loading.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+
+<style>
+  /* Navbar blur on homepage */
+  .navbar-header {
+    background: rgba(0, 0, 0, 0.35) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    backdrop-filter: blur(18px) !important;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  }
+
+  /* Hide navbar warning, search bar, and filter button — not needed on homepage */
+  .navbar-warning-bar,
+  .navbar-search,
+  #filterButton,
+  #mobileQuickFilterButton,
+  #mobileTopFilterButton,
+  #mobileMenuFilterButton,
+  #mobQuickSearchBtn,
+  #mobSearchTgl,
+  #mobSearchPanel {
+    display: none !important;
+  }
+
+  /* Hide the bottom page fade — it shows as a dark strip with overflow: hidden */
+  body::after {
+    display: none !important;
+  }
+
+  /* Prevent any scrolling */
+  html, body {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  /* Image background */
+  .home-video-bg {
+    position: fixed;
+    inset: -20px;
+    width: calc(100% + 40px);
+    height: calc(100% + 40px);
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(2px);
+  }
+
+  /* Make body transparent so the fixed video behind it is visible */
+  body {
+    background: transparent !important;
+  }
+
+  /* Dark overlay */
+  .home-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.86);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Ensure hero content sits above the overlay */
+  .home-hero {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: calc(100vh - 4rem);
+    padding: 2rem;
+    gap: 1.25rem;
+  }
+
+  .home-hero-logo .navbar-logo-base-image {
+    height: 72px;
+  }
+
+  .home-hero-title {
+    margin: 0;
+    font-size: clamp(2.25rem, 6vw, 4rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 24px rgba(0,0,0,0.6);
+  }
+
+  .home-hero-title span {
+    color: var(--prim);
+  }
+
+  .home-hero-sub {
+    margin: 0;
+    font-size: clamp(0.95rem, 2vw, 1.125rem);
+    color: rgba(255,255,255,0.72);
+    max-width: 480px;
+    line-height: 1.6;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  }
+
+  .home-cta-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .home-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem 0.65rem 1rem;
+    border-radius: var(--rad);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+
+  .home-cta.is-primary {
+    background: var(--prim-grd);
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 0 0 var(--prim-glw);
+  }
+
+  .home-cta.is-primary:hover {
+    opacity: 0.9;
+    box-shadow: 0 0 16px var(--prim-glw);
+  }
+
+  .home-cta-icon {
+    width: 1.1em;
+    height: 1.1em;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 480px) {
+    .home-hero {
+      padding: 1.25rem;
+      gap: 1rem;
+    }
+
+    .home-hero-logo .navbar-logo-base-image {
+      height: 48px;
+    }
+
+    .home-hero-title {
+      font-size: 2rem;
+    }
+
+    .home-hero-sub {
+      font-size: 0.875rem;
+    }
+
+    .home-cta {
+      padding: 0.55rem 1.1rem 0.55rem 0.85rem;
+      font-size: 0.85rem;
+    }
+  }
+</style>
 </head>
 
-<body data-catalog-page="roblox">
+<body>
+
+<video class="home-video-bg" src="https://shared.akamai.steamstatic.com/community_assets/images/items/1098340/ceafcbc9f8ebb39f1056e3c3eea8a9395a51b139.mp4" autoplay loop muted playsinline aria-hidden="true"></video>
+<div class="home-overlay" aria-hidden="true"></div>
+
 
 <div id="loading-screen" aria-label="Loading">
   <img class="loading-gif" src="/public/assets/misc/loading.gif" alt="Loading…" draggable="false">
-<div class="loading-actions">
-    <button class="loading-skip-btn" type="button">Skip Loading </button>
+  <div class="loading-actions">
+    <button class="loading-skip-btn" type="button">Skip Loading</button>
   </div>
 </div>
 
 <div id="navbarMount"></div>
-<div id="filterMount"></div>
 
-<main class="cntr main-lyt">
-  <aside class="layout-left" aria-label="Left featured ads">
-    <div id="featuredMountLeft"></div>
-    <div id="featuredMountLeftSecondary"></div>
-  </aside>
-  <section class="layout-center">
-    <div id="promoMount"></div>
-    <div id="cardsMount"></div>
+<main>
+  <section class="home-hero">
+    <span class="navbar-logo-stack home-hero-logo" aria-hidden="true">
+      <img src="/public/assets/overlay/voxlis-1.png" alt="voxlis.NET" class="navbar-logo-base-image">
+      <span class="navbar-logo-overlay-image"></span>
+    </span>
+    <h1 class="home-hero-title">No limits. <span>No mercy.</span></h1>
+    <p class="home-hero-sub">The sharpest tools, reviewed and ranked daily. Pick your game and get ahead.</p>
+    <div class="home-cta-row">
+      <a class="home-cta is-primary" href="/roblox.html">
+        <svg class="home-cta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320.4 320.4" aria-hidden="true"><rect width="320.4" height="320.4" rx="54.8" fill="#3156ff"/><path fill="#fff" d="M99 56.5 266 99.5 223.2 266.6 56 223.7M180.2 193.5 193.5 144.6 144.6 131.4 131.4 180.2"/></svg>
+        View Roblox Page
+      </a>
+
+    </div>
   </section>
-  <aside class="layout-right" aria-label="Featured ads">
-    <div id="featuredMount"></div>
-    <div id="featuredMountSecondary"></div>
-  </aside>
+
 </main>
 
 <div id="themesMount"></div>
-<div id="footerMount"></div>
 
 <script src="/src/config/pages/global.js"></script>
-<script src="/src/config/pages/roblox.js"></script>
-<script src="/src/config/pages/cs2.js"></script>
 <script src="/src/config/global/logic.js"></script>
 <script src="/src/config/global/themes.js"></script>
 <script src="/src/themes/themes.js"></script>
+<script src="/src/components/global/loading/loading.js"></script>
 <script src="/src/components/global/navbar/navbar.js"></script>
-<script src="/src/components/modals/filter/filter.js"></script>
-<script src="/src/components/objects/featured/featured.js"></script>
-<script src="/src/components/objects/promo/promo.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-<script src="/src/components/modals/more-info-modal/more-info-modal.js"></script>
-<script src="/src/components/modals/warning-modal/warning-modal.js"></script>
-<script src="/src/components/modals/sunc-modal/sunc-modal.js"></script>
-<script src="/src/components/global/tracking/click-tracker.js"></script>
-<script src="/src/components/objects/cards/cards-catalog.js"></script>
 <script src="/src/components/modals/themes/themes.js"></script>
-<script src="/src/components/global/footer/footer.js"></script>
 <script src="/src/components/modals/notification/site-toast.js"></script>
 <script src="/src/main.js"></script>
-<script src="/src/components/global/loading/loading.js"></script>
 
 </body>
 </html>

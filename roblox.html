@@ -3,9 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>voxlis - Roblox</title>
+<title>voxlis - BETA</title>
 <link rel="icon" href="/public/assets/icons/images/taskbar.ico" type="image/x-icon">
 <link rel="shortcut icon" href="/public/assets/icons/images/taskbar.ico" type="image/x-icon">
+
+    <meta property="og:title" content="voxlis.NET">
+    <meta property="og:description" content="voxlis.NET - The go-to source for injectors: everything you will need, all in one place.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://voxlis.net">
+    <meta property="og:image" content="https://media.discordapp.net/attachments/1467157694681972778/1491035484640641064/content.png?ex=69d63a81&is=69d4e901&hm=62d9dda5bbe1c49fe020d582443ae333fd5faf0df553ee8e603d07776e5fb638&=&format=webp&quality=lossless&width=1376&height=917">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="1080">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,12 +30,20 @@
 <link rel="stylesheet" href="/src/components/modals/themes/themes.css">
 <link rel="stylesheet" href="/src/components/global/footer/footer.css">
 <link rel="stylesheet" href="/src/components/modals/notification/site-toast.css">
+<link rel="stylesheet" href="/src/components/global/loading/loading.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
 </head>
 
 <body data-catalog-page="roblox">
+
+<div id="loading-screen" aria-label="Loading">
+  <img class="loading-gif" src="/public/assets/misc/loading.gif" alt="Loading…" draggable="false">
+<div class="loading-actions">
+    <button class="loading-skip-btn" type="button">Skip Loading </button>
+  </div>
+</div>
 
 <div id="navbarMount"></div>
 <div id="filterMount"></div>
@@ -71,6 +87,7 @@
 <script src="/src/components/global/footer/footer.js"></script>
 <script src="/src/components/modals/notification/site-toast.js"></script>
 <script src="/src/main.js"></script>
+<script src="/src/components/global/loading/loading.js"></script>
 
 </body>
 </html>

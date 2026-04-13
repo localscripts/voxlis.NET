@@ -92,6 +92,8 @@ Theme CSS files live in `src/themes/`. Each file is a self-contained set of CSS 
 
 To create a new theme, copy `src/themes/example.css` and register it in `themes.js`.
 
+Full theming documentation is in [src/themes/README.md](./src/themes/README.md).
+
 ---
 
 ## External dependencies
