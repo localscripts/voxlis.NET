@@ -12,7 +12,10 @@
 	"platforms": ["windows"],
 	"urls": {
 		"discord": "https://discord.gg/potassium",
-		"website": "https://potassium.pro"
+		"website": [
+			"https://potassium.pro",
+			"https://www.potassium.pro"
+		]
 	},
 	"keyed": false
 }
