@@ -35,13 +35,6 @@
   const MIRROR_PICKER_TITLE = "Choose Your Mirror Site";
   const MIRROR_PICKER_NOTE =
     "All of the provided domains are official. Multiple domains are available because some may not function properly depending on your Internet Service Provider.";
-  const HTML_ESCAPE_MAP = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  };
   const MARKDOWN_CALLOUT_PATTERN =
     /^\s*\[!(TIP|NOTE|WARN|WARNING|INSECURE)(#[0-9a-fA-F]{3}|#[0-9a-fA-F]{6})?(?:\s+(BORDER))?\]/i;
   const MARKDOWN_CALLOUT_PREFIX_PATTERN =
@@ -92,8 +85,7 @@
   let markedConfigured = false;
   let modalPathResolver = null;
 
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => HTML_ESCAPE_MAP[character]);
+  const escapeHtml = window.VOXLIS_UTILS.escapeHtml;
   const startCase = (value = "") =>
     String(value)
       .replace(/[-_]+/g, " ")

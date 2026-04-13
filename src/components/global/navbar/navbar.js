@@ -387,35 +387,7 @@ const initNavbar = () => {
 (() => {
   const mount = byId("navbarMount");
   if (!mount) return;
-  const onDomReady = window.VOXLIS_UTILS?.onDomReady ?? ((callback) => callback?.());
-  const resolveSitePath =
-    window.VOXLIS_UTILS?.resolveSitePath ??
-    ((path = "") => {
-      const normalizedPath = String(path || "").trim();
-      if (!normalizedPath) {
-        return "";
-      }
-
-      if (
-        normalizedPath.startsWith("/") ||
-        normalizedPath.startsWith("#") ||
-        /^(?:[a-z]+:)?\/\//i.test(normalizedPath) ||
-        /^(?:data|blob):/i.test(normalizedPath)
-      ) {
-        return normalizedPath;
-      }
-
-      return `/${normalizedPath.replace(/^\/+/, "")}`;
-    });
-  const loadHtmlPartial =
-    window.VOXLIS_UTILS?.loadHtmlPartial ??
-    (async (target, path) => {
-      const resolvedPath = resolveSitePath(path);
-      const response = await fetch(resolvedPath, { cache: "no-cache" });
-      if (!response.ok) throw new Error(`Failed to load partial (${resolvedPath}): ${response.status}`);
-      target.innerHTML = await response.text();
-      return target;
-    });
+  const { onDomReady, resolveSitePath, loadHtmlPartial } = window.VOXLIS_UTILS;
 
   const loadNavbar = async () => {
     try {

@@ -1,13 +1,6 @@
 (() => {
   const THEME_CHANGE_EVENT = "site-theme-change";
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    })[character] || character);
+  const escapeHtml = window.VOXLIS_UTILS.escapeHtml;
   const featuredConfig = window.VOXLIS_CONFIG?.featured ?? {};
 
   const buildFeaturedCardMarkup = () => {

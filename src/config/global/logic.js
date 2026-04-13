@@ -567,12 +567,35 @@
     catalog: activeCatalogPage,
   });
 
+  const HTML_ESCAPE_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+  const escapeHtml = (value = "") =>
+    String(value).replace(/[&<>"']/g, (character) => HTML_ESCAPE_MAP[character] || character);
+
+  const fetchWithApiTimeout = (path, init = {}, options = {}) => {
+    const shouldMonitor =
+      options.monitor === true || (options.monitor !== false && isMonitoredApiUrl(path));
+    if (shouldMonitor) {
+      return fetchWithTimeout(path, init, { ...options, monitor: true });
+    }
+    return fetch(path, init);
+  };
+
+  const markApiResponseDown = (path, response) => {
+    if (response?.status < 500 || !isMonitoredApiUrl(path)) {
+      return;
+    }
+    markApiDown({ url: path, error: new Error(`API request failed (${response.status})`) });
+  };
+
   window.VOXLIS_UTILS = Object.freeze({
     onDomReady,
     loadHtmlPartial,
     resolveSitePath,
     checkAssetExists,
     fetchWithTimeout,
+    fetchWithApiTimeout,
+    markApiResponseDown,
+    escapeHtml,
     isMonitoredApiUrl,
     getActiveCatalogPageKey: () => frozenPage.key,
     getActiveCatalogPage: () => frozenPage.catalog,

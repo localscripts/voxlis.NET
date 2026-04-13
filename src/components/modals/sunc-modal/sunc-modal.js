@@ -29,37 +29,7 @@
     currentResult: null,
     searchQuery: "",
   };
-  const fetchWithApiTimeout = (path, init = {}, options = {}) => {
-    const apiHealth = window.VOXLIS_API_HEALTH;
-    const shouldMonitor =
-      options.monitor === true ||
-      (options.monitor !== false && apiHealth?.isMonitoredApiUrl?.(path));
-
-    if (shouldMonitor && typeof apiHealth?.fetchWithTimeout === "function") {
-      return apiHealth.fetchWithTimeout(path, init, { ...options, monitor: true });
-    }
-
-    return fetch(path, init);
-  };
-  const markApiResponseDown = (path, response) => {
-    if (response?.status < 500 || !window.VOXLIS_API_HEALTH?.isMonitoredApiUrl?.(path)) {
-      return;
-    }
-
-    window.VOXLIS_API_HEALTH.markDown?.({
-      url: path,
-      error: new Error(`API request failed (${response.status})`),
-    });
-  };
-
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    })[character] || character);
+  const { fetchWithApiTimeout, markApiResponseDown, escapeHtml } = window.VOXLIS_UTILS;
 
   const buildOfficialResultUrl = ({ scrapId = "", key = "" } = {}) => {
     const search = new URLSearchParams();

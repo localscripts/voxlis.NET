@@ -2,53 +2,7 @@
   const mount = document.getElementById("filterMount");
   if (!mount) return;
 
-  const onDomReady = window.VOXLIS_UTILS?.onDomReady ?? ((callback) => callback?.());
-  const resolveSitePath =
-    window.VOXLIS_UTILS?.resolveSitePath ??
-    ((path = "") => {
-      const normalizedPath = String(path || "").trim();
-      if (!normalizedPath) {
-        return "";
-      }
-
-      if (
-        normalizedPath.startsWith("/") ||
-        normalizedPath.startsWith("#") ||
-        /^(?:[a-z]+:)?\/\//i.test(normalizedPath) ||
-        /^(?:data|blob):/i.test(normalizedPath)
-      ) {
-        return normalizedPath;
-      }
-
-      return `/${normalizedPath.replace(/^\/+/, "")}`;
-    });
-  const loadHtmlPartial =
-    window.VOXLIS_UTILS?.loadHtmlPartial ??
-    (async (target, path) => {
-      const resolvedPath = resolveSitePath(path);
-      const response = await fetch(resolvedPath, { cache: "no-cache" });
-      if (!response.ok) {
-        throw new Error(`Failed to load partial (${resolvedPath}): ${response.status}`);
-      }
-
-      target.innerHTML = await response.text();
-      return target;
-    });
-  const checkAssetExists =
-    window.VOXLIS_UTILS?.checkAssetExists ??
-    (async (path = "") => {
-      const resolvedPath = resolveSitePath(path);
-      if (!resolvedPath) {
-        return false;
-      }
-
-      try {
-        const response = await fetch(resolvedPath, { cache: "force-cache" });
-        return response.ok;
-      } catch {
-        return false;
-      }
-    });
+  const { onDomReady, resolveSitePath, loadHtmlPartial, checkAssetExists } = window.VOXLIS_UTILS;
 
   const PAGE_KEY = window.VOXLIS_PAGE?.key || "roblox";
   const PAGE_CONFIG = window.VOXLIS_PAGE?.catalog ?? window.VOXLIS_CONFIG?.activeCatalogPage ?? {};
@@ -99,14 +53,7 @@
   const byId = (id) => document.getElementById(id);
   const query = (selector, root = document) => root.querySelector(selector);
   const queryAll = (selector, root = document) => Array.from(root.querySelectorAll(selector));
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    })[character] || character);
+  const escapeHtml = window.VOXLIS_UTILS.escapeHtml;
   const titleCase = (value = "") =>
     String(value)
       .replace(/[-_]+/g, " ")

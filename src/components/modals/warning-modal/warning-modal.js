@@ -3,15 +3,7 @@
     return;
   }
 
-  const HTML_ESCAPE_MAP = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  };
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => HTML_ESCAPE_MAP[character]);
+  const escapeHtml = window.VOXLIS_UTILS.escapeHtml;
 
   function closeCardWarningModal({ immediate = false } = {}) {
     const modal = document.getElementById("moreInfoModal");

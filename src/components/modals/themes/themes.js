@@ -357,12 +357,7 @@
     syncVisibilityPreferencesUI(scope);
     return restoredTheme;
   };
-  const escapeHtml = (value = "") =>
-    `${value}`
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+  const escapeHtml = window.VOXLIS_UTILS.escapeHtml;
   const syncCustomThemeOptionUI = (scope = document, accentHex = getStoredCustomThemeColor()) => {
     const customOption = scope.querySelector(`.footer-theme-option[data-theme="${CUSTOM_THEME_ID}"]`);
     if (!customOption) {

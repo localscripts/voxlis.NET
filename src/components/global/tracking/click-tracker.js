@@ -29,28 +29,7 @@
     String(value)
       .replace(/[-_]+/g, " ")
       .replace(/\b\w/g, (character) => character.toUpperCase());
-  const fetchWithApiTimeout = (path, init = {}, options = {}) => {
-    const apiHealth = window.VOXLIS_API_HEALTH;
-    const shouldMonitor =
-      options.monitor === true ||
-      (options.monitor !== false && apiHealth?.isMonitoredApiUrl?.(path));
-
-    if (shouldMonitor && typeof apiHealth?.fetchWithTimeout === "function") {
-      return apiHealth.fetchWithTimeout(path, init, { ...options, monitor: true });
-    }
-
-    return fetch(path, init);
-  };
-  const markApiResponseDown = (path, response) => {
-    if (response?.status < 500 || !window.VOXLIS_API_HEALTH?.isMonitoredApiUrl?.(path)) {
-      return;
-    }
-
-    window.VOXLIS_API_HEALTH.markDown?.({
-      url: path,
-      error: new Error(`API request failed (${response.status})`),
-    });
-  };
+  const { fetchWithApiTimeout, markApiResponseDown } = window.VOXLIS_UTILS;
 
   const TRACKED_CARD_ACTIONS = Array.isArray(trackingConfig.trackedActions)
     ? [...new Set(trackingConfig.trackedActions.map((action) => normalizeAction(action)).filter(Boolean))]

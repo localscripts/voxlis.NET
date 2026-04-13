@@ -1,12 +1,5 @@
 (() => {
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
-    })[character] || character);
+  const escapeHtml = window.VOXLIS_UTILS.escapeHtml;
   const promoConfig = window.VOXLIS_CONFIG?.promo ?? {};
   const PROMO_LINKS = Array.isArray(promoConfig.actions) && promoConfig.actions.length
     ? promoConfig.actions

@@ -1,36 +1,6 @@
 (() => {
-  const onReady = window.VOXLIS_UTILS?.onDomReady ?? ((fn) => fn?.());
+  const { onDomReady: onReady, loadHtmlPartial: loadInto } = window.VOXLIS_UTILS;
   const PROMPT_DELAY_MS = 10000;
-  const resolveSitePath =
-    window.VOXLIS_UTILS?.resolveSitePath ??
-    ((path = "") => {
-      const normalizedPath = String(path || "").trim();
-      if (!normalizedPath) {
-        return "";
-      }
-
-      if (
-        normalizedPath.startsWith("/") ||
-        normalizedPath.startsWith("#") ||
-        /^(?:[a-z]+:)?\/\//i.test(normalizedPath) ||
-        /^(?:data|blob):/i.test(normalizedPath)
-      ) {
-        return normalizedPath;
-      }
-
-      return `/${normalizedPath.replace(/^\/+/, "")}`;
-    });
-  const loadInto =
-    window.VOXLIS_UTILS?.loadHtmlPartial ??
-    (async (mount, path) => {
-      const resolvedPath = resolveSitePath(path);
-      const response = await fetch(resolvedPath, { cache: "no-cache" });
-      if (!response.ok) {
-        throw new Error(`Failed to load partial (${resolvedPath}): ${response.status}`);
-      }
-      mount.innerHTML = await response.text();
-      return mount;
-    });
   const trackToastEvent = (key = "") => {
     window.VOXLIS_CLICK_TRACKER?.trackUiEvent?.({
       group: "toasts",

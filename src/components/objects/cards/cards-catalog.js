@@ -93,13 +93,6 @@
     insecure: "is-insecure-tag",
     freemium: "is-freemium-tag",
   };
-  const HTML_ESCAPE_MAP = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  };
   const KEY_EMPIRE_HOSTNAME_PATTERN = /(^|\.)key-empire\.com$/i;
   const KEY_EMPIRE_PRODUCT_SLUG_ALIASES = {
     "matrix-hub": "matrix",
@@ -115,28 +108,7 @@
     return window.__voxlisSuncBatchRequestCache;
   };
   const suncRequestCache = getSharedSuncRequestCache();
-  const API_HEALTH = window.VOXLIS_API_HEALTH;
-  const fetchWithApiTimeout = (path, init = {}, options = {}) => {
-    const shouldMonitor =
-      options.monitor === true ||
-      (options.monitor !== false && API_HEALTH?.isMonitoredApiUrl?.(path));
-
-    if (shouldMonitor && typeof API_HEALTH?.fetchWithTimeout === "function") {
-      return API_HEALTH.fetchWithTimeout(path, init, { ...options, monitor: true });
-    }
-
-    return fetch(path, init);
-  };
-  const markApiResponseDown = (path, response) => {
-    if (response?.status < 500 || !API_HEALTH?.isMonitoredApiUrl?.(path)) {
-      return;
-    }
-
-    API_HEALTH.markDown?.({
-      url: path,
-      error: new Error(`API request failed (${response.status})`),
-    });
-  };
+  const { fetchWithApiTimeout, markApiResponseDown } = window.VOXLIS_UTILS;
   const catalogState = {
     mount: null,
     grid: null,
@@ -174,8 +146,7 @@
     return getCatalogSearchStore()[PAGE_KEY];
   };
 
-  const escapeHtml = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => HTML_ESCAPE_MAP[character]);
+  const escapeHtml = window.VOXLIS_UTILS.escapeHtml;
 
   const titleCase = (value = "") =>
     value
@@ -234,40 +205,7 @@
       `Failed to load info.json for slug "${slug}" using candidates: ${folderCandidates.join(", ")}`,
     );
   };
-  const resolveSitePath =
-    window.VOXLIS_UTILS?.resolveSitePath ??
-    ((path = "") => {
-      const normalizedPath = String(path || "").trim();
-      if (!normalizedPath) {
-        return "";
-      }
-
-      if (
-        normalizedPath.startsWith("/") ||
-        normalizedPath.startsWith("#") ||
-        /^(?:[a-z]+:)?\/\//i.test(normalizedPath) ||
-        /^(?:data|blob):/i.test(normalizedPath)
-      ) {
-        return normalizedPath;
-      }
-
-      return `/${normalizedPath.replace(/^\/+/, "")}`;
-    });
-  const checkAssetExists =
-    window.VOXLIS_UTILS?.checkAssetExists ??
-    (async (path = "") => {
-      const resolvedPath = resolveSitePath(path);
-      if (!resolvedPath) {
-        return false;
-      }
-
-      try {
-        const response = await fetch(resolvedPath, { cache: "force-cache" });
-        return response.ok;
-      } catch {
-        return false;
-      }
-    });
+  const { resolveSitePath, checkAssetExists } = window.VOXLIS_UTILS;
   const assetIconAvailability = new Map();
 
   const getAssetIconPath = (assetIcon = "") => {
