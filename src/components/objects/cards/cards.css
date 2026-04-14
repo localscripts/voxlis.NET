@@ -1254,10 +1254,7 @@
 }
 
 .ph-action-btn.has-youtube-indicator i {
-  background: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
+  color: var(--prim) !important;
 }
 
 .ph-action-btn.is-review.is-disabled .ph-action-label {
@@ -1266,10 +1263,6 @@
 
 .ph-action-btn.is-review.is-disabled i {
   color: rgba(148, 163, 184, 0.3) !important;
-}
-
-.ph-action-btn.has-youtube-indicator i {
-  color: var(--prim) !important;
 }
 
 .ph-sponsor-btn {
@@ -1523,7 +1516,7 @@
   border-radius: 0.52rem;
   border: 1px solid rgba(var(--prim-rgb), 0.5);
   background: rgba(0, 0, 0, 0.35);
-  color: rgba(147, 197, 253, 0.95);
+  color: var(--prim);
   font-size: 0.76rem;
   font-weight: 600;
   display: inline-flex;

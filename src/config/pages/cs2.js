@@ -17,8 +17,10 @@
     dataRoot: "/public/data/cs2",
     statusApiUrl: "",
     suncApiUrl: "",
-    warningModalEnabled: false,
-    cardNameOverrides: {},
+    warningModalEnabled: true,
+    cardNameOverrides: {
+      predatorsystems: "PredatorSystems",
+    },
     platformOrder: ["windows"],
     platformLabels: {
       windows: "Windows",
@@ -98,14 +100,18 @@
       showInsecure: false,
     },
     labels: {
-      itemPlural: "cards",
-      itemSingular: "card",
-      sectionAriaLabel: "CS2 cards",
+      itemPlural: "exploits",
+      itemSingular: "exploit",
+      sectionAriaLabel: "CS2 exploits",
       summaryAriaLabel: "CS2 catalog summary",
       loadingMessage: "Loading CS2 catalog...",
-      emptyLoadMessage: "The CS2 catalog is ready, but no cards have been added yet.",
-      emptyFilteredMessage: "No CS2 cards match the current filters.",
+      emptyLoadMessage: "The CS2 catalog is ready, but no exploits have been added yet.",
+      emptyFilteredMessage: "No CS2 exploits match the current filters.",
       statsShowingPrefix: "Showing",
+      statusLabels: {
+        updated: "Showing",
+        notUpdated: "Non updated",
+      },
     },
     prompts: {
       filters: {

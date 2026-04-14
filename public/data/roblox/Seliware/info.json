@@ -1,12 +1,12 @@
 {
 	"sunc": {
 		"windows": {
-			"key": "Nu3OcXqyq9kJnUSvFs6Kac9kG94uTv9v",
-			"scrapId": "tTRqgEkIh38zdyn8"
+			"key": "jA4nvLFvy2TomhDZgL1zIrXTn5p9ySbg",
+			"scrapId": "YGSnLlcFc9GJcx3t"
 		}
 	},
 	"badges": [],
-	"hidden": true,
+	"hidden": false,
 	"type": "internal",
 	"tags": ["decompiler", "multi-instance"],
 	"platforms": ["windows"],

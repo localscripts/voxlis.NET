@@ -1,1 +1,47 @@
-{}
+{
+  "memesense": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": []
+  },
+  "midnight": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": []
+  },
+  "iniuria": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": [
+      { "platform": "windows", "days": -1, "price": 95.00 }
+    ]
+  },
+  "nixware": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": [
+      { "platform": "windows", "days": 14, "price": 3.00 },
+      { "platform": "windows", "days": 30, "price": 4.50 },
+      { "platform": "windows", "days": 90, "price": 11.00 },
+      { "platform": "windows", "days": 365, "price": 40.00 }
+    ]
+  },
+  "neverlose": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": [
+      { "platform": "windows", "days": 30, "price": 29.00 }
+    ]
+  },
+  "aimware": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": [
+      { "platform": "windows", "days": -1, "price": 120.00 }
+    ]
+  },
+  "predatorsystems": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": []
+  },
+  "pelix": {
+    "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
+    "offers": [
+      { "platform": "windows", "days": 30, "price": 4.00 }
+    ]
+  }
+}
