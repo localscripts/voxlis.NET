@@ -1715,8 +1715,14 @@
     if (info.type === "external") {
       return `
         <div class="ph-rating ph-rating-external" aria-label="External">
-          <span class="ph-rating-external-main">External</span>
-          <span class="ph-rating-external-sub">Menu</span>
+          <button
+            class="ph-rating-external-btn"
+            type="button"
+            aria-label="External"
+            data-external-info="true"
+          >
+            <span class="ph-rating-external-icon" aria-hidden="true"></span>
+          </button>
         </div>
       `;
     }
@@ -2071,6 +2077,20 @@
     }
 
     handleTrackedActionClick(event);
+
+    const externalInfoBtn = event.target.closest("button[data-external-info]");
+    if (externalInfoBtn) {
+      event.preventDefault();
+      event.stopPropagation();
+      window.showSiteToast?.({
+        key: "card-external-info",
+        title: "External",
+        message: "This product uses an external overlay or tooling flow, meaning it does not inject into the game process.",
+        duration: 3000,
+        icon: "fa-computer-mouse",
+      });
+      return;
+    }
 
     handleTitleIconClick(event);
     if (event.defaultPrevented) {

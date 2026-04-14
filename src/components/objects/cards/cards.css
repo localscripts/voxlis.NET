@@ -136,6 +136,10 @@
   justify-content: flex-start;
 }
 
+.cards-sec.is-status-disabled .exploit-card-placeholder::before {
+  background: transparent;
+}
+
 .sts-legend-swatch {
   width: 0.95rem;
   height: 0.3rem;
@@ -351,12 +355,19 @@
   order: 5;
 }
 
-.exploit-card-placeholder.is-not-updated::before,
-.exploit-card-placeholder.is-down::before {
+.exploit-card-placeholder.is-not-updated::before {
   background: linear-gradient(
     to right,
     rgba(var(--status-not-updated-rgb), 0.95),
     rgba(var(--status-not-updated-rgb), 0.68)
+  );
+}
+
+.exploit-card-placeholder.is-down::before {
+  background: linear-gradient(
+    to right,
+    rgba(245, 158, 11, 0.96),
+    rgba(249, 115, 22, 0.72)
   );
 }
 
@@ -830,25 +841,24 @@
   padding: 0;
 }
 
-.ph-rating-external-main,
-.ph-rating-external-sub {
+.ph-rating-external-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ph-rating-external-icon {
   display: block;
-  width: 100%;
-  font-size: clamp(0.64rem, 0.42rem + 0.95cqi, 0.86rem);
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.ph-rating-external-main {
-  color: rgba(248, 250, 252, 0.96);
-}
-
-.ph-rating-external-sub {
-  color: rgba(var(--sunc-accent-rgb), 0.98);
+  width: 1.6rem;
+  height: 1.6rem;
+  -webkit-mask: url("/public/assets/icons/vectors/cards-external.svg") center / contain no-repeat;
+  mask: url("/public/assets/icons/vectors/cards-external.svg") center / contain no-repeat;
+  background-image: linear-gradient(to top, var(--theme-gradient-end-color), var(--theme-gradient-start-color));
 }
 
 .ph-rating.is-none .ph-rating-logo-main,
@@ -925,15 +935,23 @@
   background: rgba(248, 250, 252, 0.96);
 }
 
-.exploit-card-placeholder.is-not-updated .ph-rating-logo-s,
-.exploit-card-placeholder.is-down .ph-rating-logo-s {
+.exploit-card-placeholder.is-not-updated .ph-rating-logo-s {
   background: rgba(var(--status-not-updated-rgb), 0.82);
   opacity: 1;
 }
 
-.exploit-card-placeholder.is-not-updated .ph-rating-val,
-.exploit-card-placeholder.is-down .ph-rating-val {
+.exploit-card-placeholder.is-down .ph-rating-logo-s {
+  background: rgba(249, 115, 22, 0.98);
+  opacity: 1;
+}
+
+.exploit-card-placeholder.is-not-updated .ph-rating-val {
   color: rgba(var(--status-not-updated-rgb), 0.9);
+  opacity: 1;
+}
+
+.exploit-card-placeholder.is-down .ph-rating-val {
+  color: rgba(245, 158, 11, 0.98);
   opacity: 1;
 }
 
@@ -952,9 +970,7 @@
 .exploit-card-placeholder.is-not-updated .ph-title i,
 .exploit-card-placeholder.is-not-updated .ph-action-btn i,
 .exploit-card-placeholder.is-status-unknown .ph-title i,
-.exploit-card-placeholder.is-status-unknown .ph-action-btn i,
-.exploit-card-placeholder.is-down .ph-title i,
-.exploit-card-placeholder.is-down .ph-action-btn i {
+.exploit-card-placeholder.is-status-unknown .ph-action-btn i {
   color: rgba(156, 163, 175, 0.78) !important;
 }
 
