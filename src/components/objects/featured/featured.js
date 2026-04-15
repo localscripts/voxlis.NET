@@ -42,6 +42,15 @@
   const LAYOUT_CENTER_WIDTH_VAR = "--ads-hidden-center-width";
   const FEATURED_SECTION_SELECTOR = ".featured-section";
   const FEATURED_HIDING_CLASS = "is-hiding";
+  const FEATURED_TRANSPARENT_CARD_CLASS = "featured-card--transparent";
+
+  const shouldUseTransparentFeaturedCard = () => {
+    if (typeof window.shouldUseTransparentFeaturedCard === "function") {
+      return Boolean(window.shouldUseTransparentFeaturedCard());
+    }
+
+    return false;
+  };
 
   const getHideDuration = () => {
     const rawValue = window

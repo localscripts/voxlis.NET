@@ -7,6 +7,139 @@
       key,
     });
   };
+  const parseTimestamp = (value) => {
+    if (value instanceof Date && Number.isFinite(value.getTime())) {
+      return value;
+    }
+
+    if (typeof value === "number" && Number.isFinite(value)) {
+      const nextDate = new Date(value);
+      return Number.isFinite(nextDate.getTime()) ? nextDate : null;
+    }
+
+    const normalizedValue = String(value || "").trim();
+    if (!normalizedValue) {
+      return null;
+    }
+
+    const nextDate = new Date(normalizedValue);
+    return Number.isFinite(nextDate.getTime()) ? nextDate : null;
+  };
+  const formatTimestamp = (value) => {
+    const date = parseTimestamp(value);
+    if (!date) {
+      return "";
+    }
+
+    return new Intl.DateTimeFormat(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    }).format(date);
+  };
+  const formatRelativeElapsedTime = (value) => {
+    const date = parseTimestamp(value);
+    if (!date) {
+      return "";
+    }
+
+    const diffMs = Date.now() - date.getTime();
+    const tense = diffMs >= 0 ? -1 : 1;
+    const absDiffMs = Math.abs(diffMs);
+    const units = [
+      ["year", 1000 * 60 * 60 * 24 * 365],
+      ["month", 1000 * 60 * 60 * 24 * 30],
+      ["week", 1000 * 60 * 60 * 24 * 7],
+      ["day", 1000 * 60 * 60 * 24],
+      ["hour", 1000 * 60 * 60],
+      ["minute", 1000 * 60],
+      ["second", 1000],
+    ];
+
+    for (const [unit, unitMs] of units) {
+      if (absDiffMs >= unitMs || unit === "second") {
+        const valueForUnit = Math.max(1, Math.floor(absDiffMs / unitMs)) * tense;
+        return new Intl.RelativeTimeFormat(undefined, { numeric: "auto" }).format(valueForUnit, unit);
+      }
+    }
+
+    return "just now";
+  };
+  const getUpdateToastConfig = (activeCatalog = {}) =>
+    activeCatalog.updateToast && typeof activeCatalog.updateToast === "object"
+      ? activeCatalog.updateToast
+      : {};
+  const getRepositoryConfig = () => {
+    const repository = window.VOXLIS_CONFIG?.repository;
+    return repository && typeof repository === "object" ? repository : {};
+  };
+
+  const fetchRepositoryUpdatedAt = async () => {
+    const repository = getRepositoryConfig();
+    const commitEndpoint = String(repository.commitEndpoint || "").trim();
+    if (!commitEndpoint) {
+      return null;
+    }
+
+    try {
+      const response = await fetch(commitEndpoint);
+      if (!response.ok) {
+        throw new Error(`Commit endpoint responded with ${response.status}`);
+      }
+
+      const payload = await response.json();
+      return parseTimestamp(payload?.timestamp || "");
+    } catch (error) {
+      console.warn("Failed to load latest commit timestamp.", error);
+      return null;
+    }
+  };
+  const resolveUpdateToastTimestamp = async (activeCatalog = {}) => {
+    const updateToast = getUpdateToastConfig(activeCatalog);
+    const explicitTimestamp =
+      updateToast.timestamp ??
+      activeCatalog.lastUpdated ??
+      activeCatalog.lastModified ??
+      "";
+    const explicitDate = parseTimestamp(explicitTimestamp);
+    if (explicitDate) {
+      return explicitDate;
+    }
+
+    return fetchRepositoryUpdatedAt();
+  };
+  const queuePageUpdateToast = async (activeCatalog = {}) => {
+    const updateToast = getUpdateToastConfig(activeCatalog);
+    if (updateToast.enabled === false) {
+      return;
+    }
+
+    const updatedAt = await resolveUpdateToastTimestamp(activeCatalog);
+    if (!updatedAt) {
+      return;
+    }
+
+    const formattedTimestamp = formatTimestamp(updatedAt);
+    const relativeTimestamp = formatRelativeElapsedTime(updatedAt);
+    if (!formattedTimestamp && !relativeTimestamp) {
+      return;
+    }
+
+    const pageLabel = String(activeCatalog.pageTitle || document.title || "This page").trim();
+
+    window.showSiteToast?.({
+      key: `page-update:${window.location.pathname}`,
+      title: String(updateToast.title || "Latest Update"),
+      message: String(
+        updateToast.message ||
+          `voxlis.NET was last updated ${relativeTimestamp || formattedTimestamp}!`,
+      ),
+      duration: Number(updateToast.duration) > 0 ? Number(updateToast.duration) : 5200,
+      icon: String(updateToast.icon || "fa-clock-rotate-left"),
+    });
+  };
 
   const initCardChipOverflow = (root = document) => {
     const chipWraps = [...root.querySelectorAll(".ph-chips-wrap")];
@@ -197,6 +330,7 @@
           mount.innerHTML = html;
           mount.hidden = !html;
         });
+        window.syncFeaturedCardThemeClass?.();
         logStep(`featured slots ready (${featuredMounts.length})`, "ok");
       }
 
@@ -210,6 +344,7 @@
         logStep("catalog ready", "ok");
         initCardChipOverflow(cardsMount);
         queueFiltersPrompt(cardsMount);
+        void queuePageUpdateToast(activeCatalog);
       }
 
       logStep("loading themes...");

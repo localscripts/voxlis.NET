@@ -606,6 +606,35 @@
   box-shadow: none;
 }
 
+.navbar-warning-close {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.72rem;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 180ms ease;
+}
+
+.navbar-warning-close:hover {
+  color: #fff;
+}
+
+.navbar-warning-close:focus-visible {
+  outline: none;
+}
+
 .navbar-warning-content {
   display: flex;
   align-items: center;

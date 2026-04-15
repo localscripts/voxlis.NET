@@ -17,7 +17,7 @@
     String(
       window.VOXLIS_PAGE?.catalog?.suncApiUrl ??
         window.VOXLIS_CONFIG?.activeCatalogPage?.suncApiUrl ??
-        "https://api.voxlis.net/api/sunc",
+        "https://connect.voxlis.net/sunc",
     ).trim();
   const OFFICIAL_RESULT_URL = "https://sunc.rubis.app/";
   const suncModalState = {

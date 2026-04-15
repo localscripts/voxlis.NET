@@ -554,6 +554,10 @@
   existingConfig.badges = normalizedBadges;
   existingConfig.activeCatalogPageKey = activeCatalogPageKey;
   existingConfig.activeCatalogPage = activeCatalogPage;
+  existingConfig.repository =
+    globalSource.repository && typeof globalSource.repository === "object"
+      ? globalSource.repository
+      : existingConfig.repository || {};
   existingConfig.promo =
     globalSource.promo && typeof globalSource.promo === "object" ? globalSource.promo : existingConfig.promo || {};
   existingConfig.featured =

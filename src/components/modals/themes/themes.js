@@ -1,5 +1,9 @@
 (() => {
   const themeConfig = window.VOXLIS_CONFIG?.themes ?? {};
+  const pageThemeConfig =
+    window.VOXLIS_PAGE?.catalog?.theme && typeof window.VOXLIS_PAGE.catalog.theme === "object"
+      ? window.VOXLIS_PAGE.catalog.theme
+      : {};
   const storageKeys = themeConfig.storageKeys ?? {};
   const themeIds = themeConfig.ids ?? {};
   const themeEvents = themeConfig.events ?? {};
@@ -223,7 +227,9 @@
     }
   };
   const getStoredTheme = () =>
-    normalizeTheme(window.localStorage.getItem(THEME_STORAGE_KEY) || DEFAULT_THEME_ID);
+    pageThemeConfig.force
+      ? normalizeTheme(pageThemeConfig.force)
+      : normalizeTheme(window.localStorage.getItem(THEME_STORAGE_KEY) || DEFAULT_THEME_ID);
   const getStoredThemeDrawerWidth = () =>
     normalizeThemeDrawerWidth(window.localStorage.getItem(THEME_DRAWER_WIDTH_STORAGE_KEY));
   const getStoredHideFeaturedAds = () =>
@@ -334,7 +340,11 @@
     }
 
     if (persistTheme) {
-      window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+      if (pageThemeConfig.force) {
+        window.localStorage.removeItem(THEME_STORAGE_KEY);
+      } else {
+        window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+      }
     }
 
     emitThemeChange(nextTheme);
@@ -872,5 +882,5 @@
   window.applyFeaturedAdsVisibilityPreference = applyFeaturedAdsVisibility;
   window.applyPromoVisibilityPreference = applyPromoVisibility;
   window.applyBottomFadeVisibilityPreference = applyBottomFadeVisibility;
-  window.getActiveSiteTheme = getStoredTheme;
+  window.getActiveSiteTheme = () => document.documentElement.dataset.theme || getStoredTheme();
 })();

@@ -188,6 +188,19 @@
     return url.toString();
   };
   const buildEndpointUrl = () => new URL(ENDPOINT_URL, window.location.origin).toString();
+  const parseJsonBody = async (response, label = "response") => {
+    const rawBody = await response.text();
+    if (!rawBody.trim()) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(rawBody);
+    } catch {
+      const preview = rawBody.slice(0, 120).replace(/\s+/g, " ").trim();
+      throw new Error(`Failed to parse ${label} JSON: ${preview || "empty response"}`);
+    }
+  };
 
   const state = {
     cardActions: {},
@@ -288,7 +301,7 @@
           throw new Error(`Failed to load click counts (${response.status})`);
         }
 
-        const payload = await response.json();
+        const payload = await parseJsonBody(response, "click counts");
         const countsPayload = extractCountsPayload(payload);
         if (countsPayload) {
           return applyCounts(countsPayload);
@@ -351,7 +364,7 @@
       .then(async (response) => {
         let responsePayload = null;
         try {
-          responsePayload = await response.json();
+          responsePayload = await parseJsonBody(response, "tracking response");
         } catch {
           responsePayload = null;
         }
@@ -433,6 +446,18 @@
       {
         targetKey,
         onRejected: () => {
+          if (!state.cardActions[normalizedSlug] || typeof state.cardActions[normalizedSlug] !== "object") {
+            return;
+          }
+
+          if (previousCount <= 0) {
+            delete state.cardActions[normalizedSlug][normalizedAction];
+            if (!Object.keys(state.cardActions[normalizedSlug]).length) {
+              delete state.cardActions[normalizedSlug];
+            }
+            return;
+          }
+
           state.cardActions[normalizedSlug][normalizedAction] = previousCount;
         },
       },
@@ -482,6 +507,18 @@
       {
         targetKey,
         onRejected: () => {
+          if (!state.uiEvents[normalizedGroup] || typeof state.uiEvents[normalizedGroup] !== "object") {
+            return;
+          }
+
+          if (previousCount <= 0) {
+            delete state.uiEvents[normalizedGroup][normalizedKey];
+            if (!Object.keys(state.uiEvents[normalizedGroup]).length) {
+              delete state.uiEvents[normalizedGroup];
+            }
+            return;
+          }
+
           state.uiEvents[normalizedGroup][normalizedKey] = previousCount;
         },
       },

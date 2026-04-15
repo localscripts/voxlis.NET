@@ -15,7 +15,7 @@ const isVisible = (node) => {
 
 const readStoredNavbarWarningHidden = () => {
   try {
-    const stored = window.localStorage.getItem(NAVBAR_WARNING_STORAGE_KEY);
+    const stored = window.sessionStorage.getItem(NAVBAR_WARNING_STORAGE_KEY);
     return stored === "1" || stored === "true";
   } catch {
     return false;
@@ -41,7 +41,7 @@ const setNavbarWarningHidden = (nextHidden, { persist = true } = {}) => {
 
   if (persist && !forceVisible) {
     try {
-      window.localStorage.setItem(NAVBAR_WARNING_STORAGE_KEY, hidden ? "1" : "0");
+      window.sessionStorage.setItem(NAVBAR_WARNING_STORAGE_KEY, hidden ? "1" : "0");
     } catch {
       // Ignore storage failures and still honor the current UI state.
     }
@@ -319,9 +319,31 @@ const initNavbar = () => {
     bindSearchField(query(".mobile-search-panel-field"), elements.mobilePanelSearchInput, byId("mobPanelClrSrch")),
     bindSearchField(query(".mobile-menu-search"), elements.mobileMenuSearchInput, byId("mobClrSrch")),
   );
+  const navbarWarningOverride = activeCatalog.navbarWarning;
+  if (navbarWarningOverride && typeof navbarWarningOverride === "object" && navbarWarningOverride.text) {
+    const warningBar = byId("topWarningBar");
+    const warningText = query(".navbar-warning-text");
+    const warningLink = query(".navbar-warning-link");
+    if (warningText) {
+      warningText.textContent = navbarWarningOverride.text;
+      if (!warningText.dataset.defaultText) {
+        warningText.dataset.defaultText = navbarWarningOverride.text;
+      }
+    }
+    if (warningLink && navbarWarningOverride.href) {
+      warningLink.setAttribute("href", navbarWarningOverride.href);
+    }
+  }
+
   setNavbarWarningHidden(readStoredNavbarWarningHidden(), { persist: false });
   syncNavbarApiOutageWarning(getApiOutageState());
   syncSearchQuery(window.getActiveCatalogSearchQuery(), null);
+
+  on(byId("warningCloseBtn"), "click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setNavbarWarningHidden(true);
+  });
 
   on(elements.mobileMenuToggle, "click", () => (isMenuOpen() ? closeMenu() : openMenu()));
   on(elements.mobileSearchToggle, "click", () => (isSearchPanelOpen() ? closeMobileSearchPanel() : openMobileSearchPanel()));

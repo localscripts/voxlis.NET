@@ -3,8 +3,8 @@
   const ACTIVE_CATALOG = window.VOXLIS_PAGE?.catalog ?? window.VOXLIS_CONFIG?.activeCatalogPage ?? {};
   const {
     dataRoot: DATA_ROOT = "/public/data/roblox",
-    statusApiUrl: STATUS_API_URL = "https://api.voxlis.net/api/endpoints",
-    suncApiUrl: SUNC_API_URL = "https://api.voxlis.net/api/sunc",
+    statusApiUrl: STATUS_API_URL = "https://connect.voxlis.net/endpoints",
+    suncApiUrl: SUNC_API_URL = "https://connect.voxlis.net/sunc",
     pricingFallbackUrl: PRICING_FALLBACK_URL = "",
     warningModalEnabled: WARNING_MODAL_ENABLED = false,
     cardNameOverrides: CARD_NAME_OVERRIDES = {},
@@ -49,6 +49,7 @@
     ACTIVE_CATALOG.clickTracking && typeof ACTIVE_CATALOG.clickTracking === "object"
       ? ACTIVE_CATALOG.clickTracking
       : {};
+  const CLICK_TRACKING_ENABLED = CLICK_TRACKING_CONFIG.enabled === true;
   const POPULARITY_ENDPOINT_URL = String(CLICK_TRACKING_CONFIG.endpointUrl || "").trim();
   const BADGE_METADATA = window.VOXLIS_CONFIG?.badges ?? {};
   const ITEM_LABEL_SINGULAR = PAGE_LABELS.itemSingular || "entry";
@@ -60,6 +61,7 @@
   const LOADING_MESSAGE = PAGE_LABELS.loadingMessage || "Loading catalog...";
   const LOADING_RETRY_LABEL = PAGE_LABELS.loadingRetryLabel || "Retry";
   const STATS_SHOWING_PREFIX = PAGE_LABELS.statsShowingPrefix || "Showing";
+  const TRACKING_UNAVAILABLE_LABEL = PAGE_LABELS.trackingUnavailable || "No tracking available";
   const STATUS_LABELS = PAGE_LABELS.statusLabels || {};
   const SORT_OPTIONS_BY_VALUE = new Map(
     SORT_OPTIONS.filter((option) => option?.value).map((option) => [String(option.value), option]),
@@ -261,7 +263,17 @@
   const fetchJson = async (path, { optional = false } = {}) => {
     const response = await fetchWithApiTimeout(path, { cache: "no-cache" });
     if (response.ok) {
-      return response.json();
+      const rawBody = await response.text();
+      if (!rawBody.trim()) {
+        return null;
+      }
+
+      try {
+        return JSON.parse(rawBody);
+      } catch {
+        const preview = rawBody.slice(0, 120).replace(/\s+/g, " ").trim();
+        throw new Error(`Failed to parse JSON (${path}): ${preview || "empty response"}`);
+      }
     }
 
     markApiResponseDown(path, response);
@@ -604,7 +616,10 @@
         throw new Error(`Failed to load popularity leaderboard (${response.status})`);
       }
 
-      const payload = await response.json();
+      const rawBody = await response.text();
+      const payload = rawBody.trim()
+        ? JSON.parse(rawBody)
+        : {};
       if (requestToken !== catalogState.popularityRequestToken) {
         return;
       }
@@ -1188,10 +1203,12 @@
       lines.push({ className: "good", text: explicitGood });
     }
 
+    if (explicitNeutral) {
+      lines.push({ className: "warn", text: explicitNeutral });
+    }
+
     if (explicitCon) {
       lines.push({ className: "bad", text: explicitCon });
-    } else if (explicitNeutral) {
-      lines.push({ className: "warn", text: explicitNeutral });
     }
 
     return lines;
@@ -1556,19 +1573,14 @@
 
   const buildCardMetaMarkup = (card, statusMap) => {
     const platformText = buildPlatformText(card.info);
-    const typeText = buildTypeText(card.info);
     const tagMarkup = buildTagChipMarkup(card.info.tags, card.slug);
-    const textLabel =
-      platformText && !tagMarkup && typeText
-        ? `${platformText} | ${typeText}`
-        : platformText || typeText;
 
     return `
       <p class="ph-title-meta">
         <span class="ph-title-meta-main">
           ${buildPlatformIconMarkup(card, statusMap)}
-          ${textLabel ? `<span class="ph-title-meta-text">${escapeHtml(textLabel)}</span>` : ""}
-          ${textLabel && tagMarkup ? '<span class="ph-title-meta-sep" aria-hidden="true">|</span>' : ""}
+          ${platformText ? `<span class="ph-title-meta-text">${escapeHtml(platformText)}</span>` : ""}
+          ${platformText && tagMarkup ? '<span class="ph-title-meta-sep" aria-hidden="true">|</span>' : ""}
           ${tagMarkup}
         </span>
         ${card.priceSummary ? `<span class="ph-title-price">${escapeHtml(card.priceSummary)}</span>` : ""}
@@ -2765,7 +2777,11 @@
     }
     if (updatedStatusCount) updatedStatusCount.textContent = String(updatedCount);
     if (notUpdatedStatusCount) notUpdatedStatusCount.textContent = String(notUpdatedCount);
-    if (showingCount) showingCount.textContent = `${STATS_SHOWING_PREFIX} ${filtered}/${total}`;
+    if (showingCount) {
+      showingCount.textContent = CLICK_TRACKING_ENABLED
+        ? `${STATS_SHOWING_PREFIX} ${filtered}/${total}`
+        : TRACKING_UNAVAILABLE_LABEL;
+    }
 
     scheduleSummaryTextFit(mount);
   };

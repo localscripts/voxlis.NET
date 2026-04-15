@@ -135,8 +135,7 @@
 :root[data-theme="supremacy"] .featured-section {
   will-change: auto !important;
 }
-:root[data-theme="supremacy"] .featured-card::before,
-:root[data-theme="supremacy"] .featured-card.featured-card--transparent::before {
+:root[data-theme="supremacy"] .featured-card::before {
   -webkit-backdrop-filter: blur(16px) !important;
   backdrop-filter: blur(16px) !important;
 }

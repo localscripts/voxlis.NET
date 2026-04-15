@@ -127,17 +127,30 @@
   color: var(--txt-mut);
 }
 
+.cards-sec.is-status-disabled .sts-row {
+  justify-content: center;
+}
+
 .cards-sec.is-status-disabled .sts-main {
-  display: none;
+  display: none !important;
 }
 
 .cards-sec.is-status-disabled .sts-controls {
   width: 100%;
-  justify-content: flex-start;
+  justify-content: center;
+}
+
+.cards-sec.is-status-disabled .sts-legend {
+  display: flex;
+  justify-content: center;
 }
 
 .cards-sec.is-status-disabled .exploit-card-placeholder::before {
-  background: transparent;
+  background: linear-gradient(
+    to right,
+    rgba(var(--prim-rgb), 0.88),
+    rgba(var(--prim-rgb), 0.52)
+  );
 }
 
 .sts-legend-swatch {
@@ -848,12 +861,17 @@
   padding: 0;
   cursor: pointer;
   display: flex;
+  width: 100%;
+  min-height: 1.6rem;
+  line-height: 0;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: flex-end;
 }
 
 .ph-rating-external-icon {
   display: block;
+  flex: 0 0 1.6rem;
   width: 1.6rem;
   height: 1.6rem;
   -webkit-mask: url("/public/assets/icons/vectors/cards-external.svg") center / contain no-repeat;
@@ -1118,11 +1136,11 @@
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.03em;
+  padding: 0 0.52rem;
 }
 
 .ph-status-tag {
   gap: 0.28rem;
-  padding: 0 0.52rem;
 }
 
 .ph-status-tag i {
@@ -1142,7 +1160,6 @@
 }
 
 .ph-tag.ph-type {
-  padding: 0 0.62rem;
   color: rgba(148, 163, 184, 0.9);
 }
 

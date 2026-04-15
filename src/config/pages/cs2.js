@@ -1,4 +1,5 @@
 (() => {
+  const isLocalPreview = ["localhost", "127.0.0.1"].includes(String(window.location.hostname || "").toLowerCase());
   const configSources =
     window.VOXLIS_CONFIG_SOURCES && typeof window.VOXLIS_CONFIG_SOURCES === "object"
       ? window.VOXLIS_CONFIG_SOURCES
@@ -13,11 +14,18 @@
     routeBasePath: "/cs2.html",
     homePath: "/",
     pageTitle: "CS2",
+    theme: {
+      force: "blue",
+    },
     searchPlaceholder: "Search CS2 cards...",
     dataRoot: "/public/data/cs2",
     statusApiUrl: "",
     suncApiUrl: "",
     warningModalEnabled: true,
+    navbarWarning: {
+      text: "Buy Prime NFA Accounts for $0.45! Click to view",
+      href: "https://key-empire.com/product/counter-strike-2-prime-nfa",
+    },
     cardNameOverrides: {
       predatorsystems: "PredatorSystems",
     },
@@ -108,6 +116,7 @@
       emptyLoadMessage: "The CS2 catalog is ready, but no exploits have been added yet.",
       emptyFilteredMessage: "No CS2 exploits match the current filters.",
       statsShowingPrefix: "Showing",
+      trackingUnavailable: "No tracking available",
       statusLabels: {
         updated: "Showing",
         notUpdated: "Non updated",
@@ -117,6 +126,61 @@
       filters: {
         title: "Try filters?",
         message: "Want to narrow the CS2 list a bit faster?",
+      },
+    },
+    clickTracking: {
+      enabled: true,
+      endpointUrl: isLocalPreview
+        ? "http://localhost:8000/public_html/data.php"
+        : "https://connect.voxlis.net/data",
+      trackedActions: ["review", "more", "buy-keyempire", "tag", "website", "close"],
+      trackedUiEvents: {
+        navbar: [
+          "logo-home",
+          "desktop-home",
+          "desktop-github",
+          "desktop-themes",
+          "desktop-filter",
+          "mobile-quick-search",
+          "mobile-quick-github",
+          "mobile-quick-themes",
+          "mobile-quick-filter",
+          "mobile-top-search",
+          "mobile-top-filter",
+          "mobile-top-menu",
+          "mobile-menu-home",
+          "mobile-menu-github",
+          "mobile-menu-themes",
+          "mobile-menu-filter",
+        ],
+        themes: [
+          "drawer-open",
+          "drawer-close",
+          "preset-select",
+          "restore-defaults",
+          "hide-featured-ads",
+          "hide-promo",
+        ],
+        filters: ["drawer-open"],
+        featured: ["hide-ads", "request"],
+        promo: ["discord", "youtube", "trustpilot", "close"],
+        footer: ["contact", "policy", "privacy"],
+        toasts: [
+          "filters-prompt-show",
+          "filters-prompt-open",
+          "filters-prompt-close",
+          "themes-prompt-show",
+          "themes-prompt-open",
+          "themes-prompt-close",
+        ],
+      },
+      actionLabels: {
+        review: "Review",
+        more: "More",
+        "buy-keyempire": "Buy",
+        tag: "Tag",
+        website: "Website",
+        close: "Close",
       },
     },
     insecureToggle: {

@@ -1,10 +1,20 @@
 (() => {
+  const isLocalPreview = ["localhost", "127.0.0.1"].includes(String(window.location.hostname || "").toLowerCase());
+
   const configSources =
     window.VOXLIS_CONFIG_SOURCES && typeof window.VOXLIS_CONFIG_SOURCES === "object"
       ? window.VOXLIS_CONFIG_SOURCES
       : {};
 
   configSources.global = {
+    repository: {
+      owner: "localscripts",
+      name: "voxlis.NET",
+      branch: "main",
+      commitEndpoint: isLocalPreview
+        ? "http://localhost:8000/public_html/commit.php"
+        : "https://connect.voxlis.net/commit",
+    },
     statusLabels: {
       updated: "Updated",
       notUpdated: "Non updated",
