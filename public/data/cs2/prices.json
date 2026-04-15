@@ -38,7 +38,7 @@
     "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
     "offers": []
   },
-  "pelix": {
+  "pellix": {
     "purchaseUrl": "https://cs2nfashop.mysellauth.com/?a=keyempire",
     "offers": [
       { "platform": "windows", "days": 30, "price": 4.00 }
