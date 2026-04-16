@@ -37,6 +37,15 @@
       swatchRgb: "217, 119, 6",
       cssFile: "/src/themes/mercy.css",
     },
+    {
+      id: "empire",
+      label: "Testing",
+      author: "voxlis",
+      thumbnail: "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/65/656f85b33509454efe2e14a36c82af7c1dc9fc2a_full.jpg",
+      swatch: "#1D4ED8",
+      swatchRgb: "29, 78, 216",
+      cssFile: "/src/themes/empire.css",
+    },
     // Add more themes here — see README.md § 4 for the full guide:
     // {
     //   id: "kawaii",

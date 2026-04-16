@@ -404,7 +404,7 @@ body.has-custom-background {
   z-index: -1;
   isolation: isolate;
   overflow: hidden;
-  background: #000000;
+  background: var(--bg, #000000);
   pointer-events: none;
   opacity: 0;
   transition: opacity var(--smooth-duration) var(--smooth-ease);
@@ -457,7 +457,7 @@ body.has-custom-background {
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: rgba(var(--prim-rgb), 0.85) #000000;
+  scrollbar-color: rgba(var(--prim-rgb), 0.85) var(--bg, #000000);
 }
 
 *::-webkit-scrollbar {
@@ -466,7 +466,7 @@ html {
 }
 
 *::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--bg, #000000);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -480,7 +480,7 @@ html {
 }
 
 *::-webkit-scrollbar-corner {
-  background: #000000;
+  background: var(--bg, #000000);
 }
 
 a {

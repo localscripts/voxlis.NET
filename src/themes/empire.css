@@ -1,0 +1,405 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Empire" theme
+ *  Inspired by CSGOEmpire — deep dark background with blue accents.
+ *  Premium, clean, modern dark UI.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   All colours scoped to this theme — variables only, no selector overrides
+   ============================================================================ */
+:root[data-theme="empire"] {
+  --theme-main-color: #1D4ED8;
+  --theme-hover-color: #1a45c2;
+  --theme-gradient-start-color: #1D4ED8;
+  --theme-gradient-end-color: #1D4ED8;
+  --theme-rgb: 29, 78, 216;
+
+  /* Page background — near-black with subtle navy tint */
+  --bg: #0E0F14;
+  --fg: #e0e2e8;
+  --background-media-overlay-color: #0E0F14;
+  background: #0E0F14;
+
+  /* Alpha tints */
+  --theme-card-hover-alpha: 0.15;
+  --theme-glow-alpha: 0.45;
+  --theme-soft-tint-alpha: 0.1;
+  --theme-medium-tint-alpha: 0.25;
+  --theme-strong-tint-alpha: 0.4;
+  --theme-border-tint-alpha: 0.4;
+
+  /* Borders */
+  --site-border-color: transparent;
+  --exploit-card-chrome: #292A34;
+
+  /* Muted text */
+  --txt-mut: #7a7f8c;
+
+  /* Legacy aliases */
+  --sec: rgba(14, 15, 20, 0.5);
+  --sec-bdr: #292A34;
+
+  /* Card surfaces (!important to override applyPresetSurfaceStyle inline resets) */
+  --card-surface-background: #1D1E26 !important;
+  --card-surface-tint: #1D1E26 !important;
+  --card-surface-backdrop-blur: 0px !important;
+  --crd-bg: #1D1E26;
+
+  /* Card action buttons (Review / More) — grey */
+  --card-action-button-tint-color: #0A0B0F;
+  --card-action-button-background: #252733;
+  --card-action-button-background-hover: #2E2F3C;
+  --card-action-button-text: rgba(190, 194, 204, 0.85);
+
+  /* Card sponsor button (Key-Empire) — blue */
+  --card-sponsor-button-tint-color: #1E3A8A;
+  --card-sponsor-button-background: #1D4ED8;
+  --card-sponsor-button-background-hover: #2563EB;
+  --card-sponsor-button-text: rgba(255, 255, 255, 0.96);
+
+  /* Navbar */
+  --navbar-background: #191A21 !important;
+  --navbar-mobile-panel-background: #191A21 !important;
+  --navbar-scrolled-border: #292A34;
+  --navbar-search-background: #0E0F14;
+  --navbar-search-background-focus: #1D1E26;
+  --navbar-button-background: #252733;
+  --navbar-button-accent-background: #1D4ED8;
+  --navbar-button-accent-border: #1E3A8A;
+  --navbar-button-hover-shadow: none;
+  --navbar-mobile-link-background: rgba(255, 255, 255, 0.03);
+  --navbar-mobile-link-accent-background: #1D4ED8;
+  --navbar-mobile-toggle-background: rgba(255, 255, 255, 0.05);
+  --navbar-mobile-toggle-background-hover: rgba(255, 255, 255, 0.1);
+
+  /* Footer */
+  --footer-bg: #0E0F14 !important;
+  --footer-surface-tint-color: #0E0F14;
+  --footer-border: #292A34;
+  --footer-text: rgba(200, 204, 212, 1);
+  --footer-muted: #7a7f8c;
+  --footer-backdrop-blur: 0px !important;
+  --footer-follow-global-surface: 0;
+  --footer-theme-swatch-border: rgba(255, 255, 255, 0.2);
+  --footer-theme-option-hover-background: rgba(255, 255, 255, 0.08);
+  --footer-theme-option-selected-background: rgba(255, 255, 255, 0.04);
+  --footer-theme-menu-shadow: 0 -10px 25px rgba(0, 0, 0, 0.4);
+
+  /* Filter drawer */
+  --filter-panel-background: #191A21;
+  --filter-overlay-background: linear-gradient(
+    90deg,
+    rgba(14, 15, 20, 0.65) 0%,
+    rgba(14, 15, 20, 0.55) 56%,
+    rgba(14, 15, 20, 0.4) calc(100% - 460px),
+    rgba(14, 15, 20, 0.2) 100%
+  );
+  --filter-option-background: #1D1E26;
+  --filter-option-border: #292A34;
+  --filter-checkbox-background: #0E0F14;
+  --filter-checkbox-border: #292A34;
+  --filter-apply-background: #1D4ED8;
+
+  /* Info modal */
+  --info-modal-background: #191A21 !important;
+  --info-modal-surface-tint-color: #0E0F14;
+  --info-modal-follow-global-surface: 0;
+
+  /* Featured card */
+  --featured-follow-global-surface: 0;
+  --featured-surface-tint-color: #0E0F14;
+  --featured-surface-background: #1D1E26;
+  --featured-surface-outline-color: #292A34;
+  --featured-card-border: transparent;
+  --featured-card-header-border: transparent;
+
+  /* Promo card — blue action button */
+  --promo-card-background: #1D1E26 !important;
+  --promo-button-fill: #1D4ED8;
+  --promo-button-shadow: none;
+  --promo-button-hover-shadow: none;
+
+  /* Surfaces */
+  --surface-control-bg: #252733;
+  --surface-control-bg-hover: #2C2D3A;
+  --surface-overlay-bg: #191A21;
+
+  /* Bottom page fade */
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(14, 15, 20, 0) 0%,
+    rgba(14, 15, 20, 0.14) 22%,
+    rgba(14, 15, 20, 0.42) 52%,
+    rgba(14, 15, 20, 0.8) 82%,
+    #0E0F14 100%
+  );
+
+  /* Shadows */
+  --shd: 0 10px 25px rgba(0, 0, 0, 0.3);
+  --shd-hvr: 0 15px 30px rgba(0, 0, 0, 0.4);
+
+  /* Scrollbar */
+  scrollbar-color: rgba(29, 78, 216, 0.7) #0E0F14;
+
+  /* Rounded corners */
+  --rad: 0.6rem;
+
+  /* Overlay art */
+  --featured-overlay-fill: linear-gradient(90deg, #1D4ED8 0%, #1D4ED8 46%, #ffffff 100%);
+  --banner-overlay-fill: linear-gradient(90deg, #1D4ED8 0%, #1D4ED8 70%, #1E3A8A 100%);
+  --header-overlay-fill: linear-gradient(90deg, #1D4ED8 0%, #1D4ED8 100%);
+  --brand-gradient-color: #1D4ED8;
+}
+
+/* ============================================================================
+   Scrollbar (webkit)
+   ============================================================================ */
+:root[data-theme="empire"] *::-webkit-scrollbar-track {
+  background: #0E0F14;
+}
+
+/* ============================================================================
+   Subtle blue vignette
+   ============================================================================ */
+:root[data-theme="empire"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(29, 78, 216, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(14, 15, 20, 0.3) 0%, transparent 70%);
+}
+
+/* ============================================================================
+   Card hover glow + transparent outer border
+   ============================================================================ */
+:root[data-theme="empire"] .exploit-card:hover {
+  box-shadow: 0 0 0 1px rgba(29, 78, 216, 0.15), 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+:root[data-theme="empire"] .exploit-card-placeholder {
+  border-color: transparent;
+}
+
+/* ============================================================================
+   Navbar scrolled border
+   ============================================================================ */
+:root[data-theme="empire"] .site-navbar.is-scrolled {
+  border-bottom-color: rgba(29, 78, 216, 0.1);
+}
+
+/* ============================================================================
+   Card meta tag icons — bright blue
+   ============================================================================ */
+:root[data-theme="empire"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag) {
+  color: #1D4ED8;
+}
+:root[data-theme="empire"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag):hover {
+  color: #3B82F6;
+}
+
+/* ============================================================================
+   Key-Empire logo — white
+   ============================================================================ */
+:root[data-theme="empire"] .ph-sponsor-base-image.is-keyempire-logo {
+  background: #ffffff !important;
+}
+:root[data-theme="empire"] .ph-sponsor-btn.is-keyempire .ph-sponsor-base-image:not(.is-keyempire-logo) {
+  filter: brightness(0) invert(1) !important;
+}
+
+/* ============================================================================
+   Sponsor note (free to use) — green button
+   ============================================================================ */
+:root[data-theme="empire"] .ph-sponsor-note {
+  background: #16A34A !important;
+  border: none;
+  border-bottom: 3px solid #15803D;
+  box-shadow: none;
+  color: #ffffff;
+}
+:root[data-theme="empire"] .ph-sponsor-note-content i {
+  color: #ffffff;
+}
+
+/* ============================================================================
+   Button background overrides (only where variables don't reach)
+   ============================================================================ */
+
+/* Grey buttons whose base CSS uses accent colour / prim-rgb tints */
+:root[data-theme="empire"] .site-toast-action,
+:root[data-theme="empire"] .info-modal-website-btn,
+:root[data-theme="empire"] .info-modal-choice-action {
+  background: #252733;
+}
+:root[data-theme="empire"] .site-toast-action:hover,
+:root[data-theme="empire"] .info-modal-website-btn:hover,
+:root[data-theme="empire"] .info-modal-choice-action:hover {
+  background: #2E2F3C;
+}
+
+/* Blue accent hover (base doesn't change bg on hover) */
+:root[data-theme="empire"] .navbar-button.is-accent:hover,
+:root[data-theme="empire"] .filter-apply-button:hover,
+:root[data-theme="empire"] .footer-theme-drawer-background-btn.is-primary:hover,
+:root[data-theme="empire"] .mobile-nav-link.is-accent:hover,
+:root[data-theme="empire"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):hover {
+  background: #2563EB;
+}
+
+/* ============================================================================
+   CSGOEmpire-style 3D press effect
+   Colours handled by variables above. These rules add the border-bottom
+   depth and translateY press that the token system doesn't cover.
+   ============================================================================ */
+
+/* --- 2px depth (small interactive elements) --- */
+:root[data-theme="empire"] .ph-info-btn,
+:root[data-theme="empire"] .ph-chip,
+:root[data-theme="empire"] .filter-segment-button,
+:root[data-theme="empire"] .custom-dropdown-selected,
+:root[data-theme="empire"] .footer-theme-drawer-tab,
+:root[data-theme="empire"] .footer-theme-drawer-editor-tab,
+:root[data-theme="empire"] .footer-theme-drawer-toggle {
+  border-bottom: 2px solid #0A0B0F;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+/* --- 3px depth (bordered buttons — side border from base CSS) --- */
+:root[data-theme="empire"] .filter-reset-button,
+:root[data-theme="empire"] .card-warning-btn,
+:root[data-theme="empire"] .site-toast-action-secondary,
+:root[data-theme="empire"] .info-modal-close-btn,
+:root[data-theme="empire"] .info-modal-choice-btn,
+:root[data-theme="empire"] .sunc-widget-close-btn,
+:root[data-theme="empire"] .sunc-widget-summary-link,
+:root[data-theme="empire"] .sunc-widget-inline-button,
+:root[data-theme="empire"] .sunc-widget-inline-link,
+:root[data-theme="empire"] .footer-theme-drawer-close,
+:root[data-theme="empire"] .footer-theme-drawer-background-btn,
+:root[data-theme="empire"] .footer-theme-drawer-reset,
+:root[data-theme="empire"] .mobile-nav-link,
+:root[data-theme="empire"] .mobile-quick-button,
+:root[data-theme="empire"] .mobile-search-toggle,
+:root[data-theme="empire"] .cards-empty-action,
+:root[data-theme="empire"] .loading-skip-btn {
+  border-bottom: 3px solid #0A0B0F;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+/* Navbar button — visible side border (base is transparent) */
+:root[data-theme="empire"] .navbar-button {
+  border-color: #292A34;
+  border-bottom: 3px solid #0A0B0F;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+/* --- 3px flat grey (no side border) --- */
+:root[data-theme="empire"] .ph-action-btn,
+:root[data-theme="empire"] .site-toast-action,
+:root[data-theme="empire"] .info-modal-website-btn,
+:root[data-theme="empire"] .info-modal-choice-action {
+  border: none;
+  border-bottom: 3px solid #0A0B0F;
+  box-shadow: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+/* --- 3px flat blue (no side border, navy shadow) --- */
+:root[data-theme="empire"] .ph-sponsor-btn:not(.ph-sponsor-note),
+:root[data-theme="empire"] .navbar-button.is-accent,
+:root[data-theme="empire"] .filter-apply-button,
+:root[data-theme="empire"] .footer-theme-drawer-background-btn.is-primary,
+:root[data-theme="empire"] .mobile-nav-link.is-accent,
+:root[data-theme="empire"] .mobile-quick-button.is-accent,
+:root[data-theme="empire"] .mobile-filter-toggle,
+:root[data-theme="empire"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot) {
+  border: none;
+  border-bottom: 3px solid #1E3A8A;
+  box-shadow: none;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+/* Insecure toggle — red tinted bottom */
+:root[data-theme="empire"] .filter-insecure-button {
+  border-bottom: 3px solid rgba(127, 29, 29, 0.5);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+/* --- Hover: bordered buttons increase shadow depth --- */
+:root[data-theme="empire"] .navbar-button:hover,
+:root[data-theme="empire"] .filter-reset-button:hover,
+:root[data-theme="empire"] .card-warning-btn:hover,
+:root[data-theme="empire"] .site-toast-action-secondary:hover,
+:root[data-theme="empire"] .info-modal-close-btn:hover,
+:root[data-theme="empire"] .info-modal-choice-btn:hover,
+:root[data-theme="empire"] .sunc-widget-close-btn:hover,
+:root[data-theme="empire"] .sunc-widget-summary-link:hover,
+:root[data-theme="empire"] .sunc-widget-inline-button:hover,
+:root[data-theme="empire"] .sunc-widget-inline-link:hover,
+:root[data-theme="empire"] .footer-theme-drawer-background-btn:hover,
+:root[data-theme="empire"] .footer-theme-drawer-reset:hover,
+:root[data-theme="empire"] .mobile-nav-link:hover,
+:root[data-theme="empire"] .cards-empty-action:hover,
+:root[data-theme="empire"] .loading-skip-btn:hover {
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* --- Hover: small elements increase shadow depth --- */
+:root[data-theme="empire"] .filter-segment-button:hover,
+:root[data-theme="empire"] .footer-theme-drawer-tab:hover,
+:root[data-theme="empire"] .footer-theme-drawer-editor-tab:hover {
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* --- Active: 3px buttons press down --- */
+:root[data-theme="empire"] .ph-action-btn:active,
+:root[data-theme="empire"] .ph-sponsor-btn:active,
+:root[data-theme="empire"] .navbar-button:active,
+:root[data-theme="empire"] .filter-reset-button:active,
+:root[data-theme="empire"] .filter-apply-button:active,
+:root[data-theme="empire"] .filter-insecure-button:active,
+:root[data-theme="empire"] .card-warning-btn:active,
+:root[data-theme="empire"] .site-toast-action:active,
+:root[data-theme="empire"] .site-toast-action-secondary:active,
+:root[data-theme="empire"] .info-modal-website-btn:active,
+:root[data-theme="empire"] .info-modal-close-btn:active,
+:root[data-theme="empire"] .info-modal-choice-btn:active,
+:root[data-theme="empire"] .info-modal-choice-action:active,
+:root[data-theme="empire"] .sunc-widget-close-btn:active,
+:root[data-theme="empire"] .sunc-widget-summary-link:active,
+:root[data-theme="empire"] .sunc-widget-inline-button:active,
+:root[data-theme="empire"] .sunc-widget-inline-link:active,
+:root[data-theme="empire"] .footer-theme-drawer-close:active,
+:root[data-theme="empire"] .footer-theme-drawer-background-btn:active,
+:root[data-theme="empire"] .footer-theme-drawer-reset:active,
+:root[data-theme="empire"] .mobile-nav-link:active,
+:root[data-theme="empire"] .mobile-quick-button:active,
+:root[data-theme="empire"] .mobile-search-toggle:active,
+:root[data-theme="empire"] .mobile-filter-toggle:active,
+:root[data-theme="empire"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):active,
+:root[data-theme="empire"] .cards-empty-action:active,
+:root[data-theme="empire"] .loading-skip-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  box-shadow: none;
+}
+
+/* --- Active: 2px elements press down --- */
+:root[data-theme="empire"] .ph-info-btn:active,
+:root[data-theme="empire"] .filter-segment-button:active,
+:root[data-theme="empire"] .custom-dropdown-selected:active,
+:root[data-theme="empire"] .footer-theme-drawer-tab:active,
+:root[data-theme="empire"] .footer-theme-drawer-editor-tab:active,
+:root[data-theme="empire"] .footer-theme-drawer-toggle:active {
+  transform: translateY(1px);
+  border-bottom-width: 1px;
+  box-shadow: none;
+}
