@@ -345,14 +345,13 @@
 }
 
 .exploit-card-placeholder.is-not-updated,
-.exploit-card-placeholder.is-issue,
 .exploit-card-placeholder.is-down {
   border-color: var(--exploit-card-chrome);
   order: 3;
 }
 
 .exploit-card-placeholder.is-issue {
-  order: 2;
+  border-color: var(--exploit-card-chrome);
 }
 
 .exploit-card-placeholder.is-status-unknown {

@@ -167,3 +167,14 @@
 :root[data-theme="supremacy"] .site-navbar.is-scrolled {
   border-bottom-color: rgba(220, 38, 38, 0.14);
 }
+
+/* ============================================================================
+   Issue cards — amber icons on Review / More buttons
+   ============================================================================ */
+:root[data-theme="supremacy"] .exploit-card-placeholder.is-issue .ph-action-btn i {
+  color: rgba(245, 158, 11, 0.95) !important;
+}
+:root[data-theme="supremacy"] .exploit-card-placeholder.is-issue .ph-action-icon.is-info {
+  background-image: none;
+  background-color: rgba(245, 158, 11, 0.95);
+}

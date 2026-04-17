@@ -1,0 +1,352 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Y2K" theme
+ *  Boxy retro aesthetic. Zero border-radius, hard edges, inset/outset
+ *  button borders like classic desktop UI. Silver-blue palette.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   Variables
+   ============================================================================ */
+:root[data-theme="y2k"] {
+  --theme-main-color: #4A90D9;
+  --theme-hover-color: #3A7BC8;
+  --theme-gradient-start-color: #4A90D9;
+  --theme-gradient-end-color: #4A90D9;
+  --theme-rgb: 74, 144, 217;
+
+  /* Page background — dark charcoal */
+  --bg: #1A1A1F;
+  --fg: #D0D0D8;
+  --background-media-overlay-color: #1A1A1F;
+  background: #1A1A1F;
+
+  /* Alpha tints */
+  --theme-card-hover-alpha: 0.12;
+  --theme-glow-alpha: 0.3;
+  --theme-soft-tint-alpha: 0.08;
+  --theme-medium-tint-alpha: 0.18;
+  --theme-strong-tint-alpha: 0.3;
+  --theme-border-tint-alpha: 0.25;
+
+  /* Borders — visible hard lines */
+  --site-border-color: #3A3A42;
+  --exploit-card-chrome: #3A3A42;
+
+  /* Muted text */
+  --txt-mut: #808090;
+
+  /* Status dot */
+  --status-updated-color: #4A90D9;
+
+  /* Legacy aliases */
+  --sec: rgba(26, 26, 31, 0.6);
+  --sec-bdr: #3A3A42;
+
+  /* Card surfaces — solid, boxy */
+  --card-surface-background: #222228 !important;
+  --card-surface-tint: #222228 !important;
+  --card-surface-backdrop-blur: 0px !important;
+  --crd-bg: #222228;
+
+  /* Card action buttons — raised look */
+  --card-action-button-tint-color: #18181C;
+  --card-action-button-background: #2C2C34;
+  --card-action-button-background-hover: #36363E;
+  --card-action-button-text: rgba(180, 180, 195, 0.9);
+
+  /* Card sponsor button */
+  --card-sponsor-button-tint-color: #2A5A8A;
+  --card-sponsor-button-background: #4A90D9;
+  --card-sponsor-button-background-hover: #3A7BC8;
+  --card-sponsor-button-text: #ffffff;
+
+  /* Navbar — solid dark bar */
+  --navbar-background: #1E1E24 !important;
+  --navbar-mobile-panel-background: #1E1E24 !important;
+  --navbar-scrolled-border: #3A3A42;
+  --navbar-search-background: #18181C;
+  --navbar-search-background-focus: #222228;
+  --navbar-button-background: #2C2C34;
+  --navbar-button-accent-background: #4A90D9;
+  --navbar-button-accent-border: #2A5A8A;
+  --navbar-button-hover-shadow: none;
+  --navbar-mobile-link-background: rgba(255, 255, 255, 0.02);
+  --navbar-mobile-link-accent-background: #4A90D9;
+  --navbar-mobile-toggle-background: rgba(255, 255, 255, 0.04);
+  --navbar-mobile-toggle-background-hover: rgba(255, 255, 255, 0.08);
+
+  /* Footer */
+  --footer-bg: #1A1A1F !important;
+  --footer-surface-tint-color: #1A1A1F;
+  --footer-border: #3A3A42;
+  --footer-text: rgba(190, 190, 205, 1);
+  --footer-muted: #808090;
+  --footer-backdrop-blur: 0px !important;
+  --footer-follow-global-surface: 0;
+  --footer-theme-swatch-border: rgba(255, 255, 255, 0.15);
+  --footer-theme-option-hover-background: rgba(255, 255, 255, 0.06);
+  --footer-theme-option-selected-background: rgba(255, 255, 255, 0.03);
+  --footer-theme-menu-shadow: 2px -2px 0 #3A3A42;
+
+  /* Filter drawer */
+  --filter-panel-background: #1E1E24;
+  --filter-overlay-background: linear-gradient(
+    90deg,
+    rgba(26, 26, 31, 0.75) 0%,
+    rgba(26, 26, 31, 0.6) 56%,
+    rgba(26, 26, 31, 0.4) calc(100% - 460px),
+    rgba(26, 26, 31, 0.15) 100%
+  );
+  --filter-option-background: #2C2C34;
+  --filter-option-border: #3A3A42;
+  --filter-checkbox-background: #18181C;
+  --filter-checkbox-border: #4A4A52;
+  --filter-apply-background: #4A90D9;
+
+  /* Info modal */
+  --info-modal-background: #1E1E24 !important;
+  --info-modal-surface-tint-color: #1A1A1F;
+  --info-modal-follow-global-surface: 0;
+
+  /* Featured card */
+  --featured-follow-global-surface: 0;
+  --featured-surface-tint-color: #1A1A1F;
+  --featured-surface-background: #222228;
+  --featured-surface-outline-color: #3A3A42;
+  --featured-card-border: #3A3A42;
+  --featured-card-header-border: #3A3A42;
+
+  /* Promo card */
+  --promo-card-background: #222228 !important;
+  --promo-button-fill: #4A90D9;
+  --promo-button-shadow: none;
+  --promo-button-hover-shadow: none;
+
+  /* Surfaces */
+  --surface-control-bg: #2C2C34;
+  --surface-control-bg-hover: #36363E;
+  --surface-overlay-bg: #1E1E24;
+
+  /* Bottom page fade */
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(26, 26, 31, 0) 0%,
+    rgba(26, 26, 31, 0.16) 22%,
+    rgba(26, 26, 31, 0.46) 52%,
+    rgba(26, 26, 31, 0.82) 82%,
+    #1A1A1F 100%
+  );
+
+  /* Shadows — none or minimal, rely on borders */
+  --shd: none;
+  --shd-hvr: none;
+
+  /* Scrollbar */
+  scrollbar-color: #4A4A52 #1A1A1F;
+
+  /* Rounded corners — ZERO */
+  --rad: 0px;
+
+  /* Overlay art */
+  --featured-overlay-fill: linear-gradient(90deg, #4A90D9 0%, #4A90D9 46%, #ffffff 100%);
+  --banner-overlay-fill: linear-gradient(90deg, #4A90D9 0%, #4A90D9 70%, #2A5A8A 100%);
+  --header-overlay-fill: linear-gradient(90deg, #4A90D9 0%, #4A90D9 100%);
+  --brand-gradient-color: #4A90D9;
+}
+
+/* ============================================================================
+   Scrollbar (webkit) — square
+   ============================================================================ */
+:root[data-theme="y2k"] *::-webkit-scrollbar-track {
+  background: #1A1A1F;
+}
+:root[data-theme="y2k"] *::-webkit-scrollbar-thumb {
+  border-radius: 0;
+}
+
+/* ============================================================================
+   Force 0 radius on everything
+   ============================================================================ */
+:root[data-theme="y2k"] *,
+:root[data-theme="y2k"] *::before,
+:root[data-theme="y2k"] *::after {
+  border-radius: 0 !important;
+}
+
+/* ============================================================================
+   Cards — hard bordered boxes, highlight border on hover
+   ============================================================================ */
+:root[data-theme="y2k"] .exploit-card {
+  border: 1px solid #3A3A42;
+  transition: border-color 0.1s ease;
+}
+:root[data-theme="y2k"] .exploit-card:hover {
+  border-color: #4A90D9;
+  box-shadow: none;
+}
+:root[data-theme="y2k"] .exploit-card-placeholder {
+  border-color: #2A2A32;
+}
+
+/* ============================================================================
+   Navbar — hard bottom border when scrolled
+   ============================================================================ */
+:root[data-theme="y2k"] .site-navbar.is-scrolled {
+  border-bottom: 2px solid #3A3A42;
+}
+
+/* ============================================================================
+   Card meta tag icons
+   ============================================================================ */
+:root[data-theme="y2k"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag) {
+  color: #4A90D9;
+}
+:root[data-theme="y2k"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag):hover {
+  color: #6BA8E8;
+}
+
+/* ============================================================================
+   Sponsor note (free to use) — green box
+   ============================================================================ */
+:root[data-theme="y2k"] .ph-sponsor-note {
+  background: #2D6B3F !important;
+  border: 2px solid #3D8B52;
+  box-shadow: none;
+  color: #ffffff;
+}
+:root[data-theme="y2k"] .ph-sponsor-note-content i {
+  color: #ffffff;
+}
+
+/* ============================================================================
+   Button overrides
+   ============================================================================ */
+
+/* Grey buttons */
+:root[data-theme="y2k"] .site-toast-action,
+:root[data-theme="y2k"] .info-modal-website-btn,
+:root[data-theme="y2k"] .info-modal-choice-action {
+  background: #2C2C34;
+}
+:root[data-theme="y2k"] .site-toast-action:hover,
+:root[data-theme="y2k"] .info-modal-website-btn:hover,
+:root[data-theme="y2k"] .info-modal-choice-action:hover {
+  background: #36363E;
+}
+
+/* Accent hover */
+:root[data-theme="y2k"] .navbar-button.is-accent:hover,
+:root[data-theme="y2k"] .filter-apply-button:hover,
+:root[data-theme="y2k"] .footer-theme-drawer-background-btn.is-primary:hover,
+:root[data-theme="y2k"] .mobile-nav-link.is-accent:hover,
+:root[data-theme="y2k"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):hover {
+  background: #3A7BC8;
+}
+
+/* ============================================================================
+   Classic raised/sunken button effect — outset borders
+   Lighter top-left edge, darker bottom-right edge = raised look.
+   On :active the edges swap = sunken/pressed look.
+   ============================================================================ */
+
+/* Raised buttons — muted elements */
+:root[data-theme="y2k"] .ph-action-btn,
+:root[data-theme="y2k"] .ph-info-btn,
+:root[data-theme="y2k"] .ph-chip,
+:root[data-theme="y2k"] .navbar-button,
+:root[data-theme="y2k"] .filter-reset-button,
+:root[data-theme="y2k"] .filter-segment-button,
+:root[data-theme="y2k"] .card-warning-btn,
+:root[data-theme="y2k"] .site-toast-action,
+:root[data-theme="y2k"] .site-toast-action-secondary,
+:root[data-theme="y2k"] .info-modal-website-btn,
+:root[data-theme="y2k"] .info-modal-close-btn,
+:root[data-theme="y2k"] .info-modal-choice-btn,
+:root[data-theme="y2k"] .info-modal-choice-action,
+:root[data-theme="y2k"] .sunc-widget-close-btn,
+:root[data-theme="y2k"] .sunc-widget-summary-link,
+:root[data-theme="y2k"] .sunc-widget-inline-button,
+:root[data-theme="y2k"] .sunc-widget-inline-link,
+:root[data-theme="y2k"] .footer-theme-drawer-close,
+:root[data-theme="y2k"] .footer-theme-drawer-tab,
+:root[data-theme="y2k"] .footer-theme-drawer-editor-tab,
+:root[data-theme="y2k"] .footer-theme-drawer-toggle,
+:root[data-theme="y2k"] .footer-theme-drawer-background-btn,
+:root[data-theme="y2k"] .footer-theme-drawer-reset,
+:root[data-theme="y2k"] .mobile-nav-link,
+:root[data-theme="y2k"] .mobile-quick-button,
+:root[data-theme="y2k"] .mobile-search-toggle,
+:root[data-theme="y2k"] .mobile-filter-toggle,
+:root[data-theme="y2k"] .custom-dropdown-selected,
+:root[data-theme="y2k"] .cards-empty-action,
+:root[data-theme="y2k"] .loading-skip-btn {
+  border: none;
+  border-top: 2px solid #4A4A52;
+  border-left: 2px solid #4A4A52;
+  border-right: 2px solid #18181C;
+  border-bottom: 2px solid #18181C;
+  box-shadow: none;
+  transition: none;
+}
+
+/* Raised — accent/sponsor buttons */
+:root[data-theme="y2k"] .ph-sponsor-btn:not(.ph-sponsor-note),
+:root[data-theme="y2k"] .filter-apply-button,
+:root[data-theme="y2k"] .filter-insecure-button,
+:root[data-theme="y2k"] .navbar-button.is-accent,
+:root[data-theme="y2k"] .footer-theme-drawer-background-btn.is-primary,
+:root[data-theme="y2k"] .mobile-nav-link.is-accent,
+:root[data-theme="y2k"] .mobile-quick-button.is-accent,
+:root[data-theme="y2k"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot) {
+  border: none;
+  border-top: 2px solid #6BA8E8;
+  border-left: 2px solid #6BA8E8;
+  border-right: 2px solid #2A5A8A;
+  border-bottom: 2px solid #2A5A8A;
+  box-shadow: none;
+  transition: none;
+}
+
+/* Active/sunken — swap light/dark edges */
+:root[data-theme="y2k"] .ph-action-btn:active,
+:root[data-theme="y2k"] .ph-sponsor-btn:active,
+:root[data-theme="y2k"] .ph-info-btn:active,
+:root[data-theme="y2k"] .navbar-button:active,
+:root[data-theme="y2k"] .filter-reset-button:active,
+:root[data-theme="y2k"] .filter-apply-button:active,
+:root[data-theme="y2k"] .filter-segment-button:active,
+:root[data-theme="y2k"] .filter-insecure-button:active,
+:root[data-theme="y2k"] .card-warning-btn:active,
+:root[data-theme="y2k"] .site-toast-action:active,
+:root[data-theme="y2k"] .site-toast-action-secondary:active,
+:root[data-theme="y2k"] .info-modal-website-btn:active,
+:root[data-theme="y2k"] .info-modal-close-btn:active,
+:root[data-theme="y2k"] .info-modal-choice-btn:active,
+:root[data-theme="y2k"] .info-modal-choice-action:active,
+:root[data-theme="y2k"] .sunc-widget-close-btn:active,
+:root[data-theme="y2k"] .sunc-widget-summary-link:active,
+:root[data-theme="y2k"] .sunc-widget-inline-button:active,
+:root[data-theme="y2k"] .sunc-widget-inline-link:active,
+:root[data-theme="y2k"] .footer-theme-drawer-close:active,
+:root[data-theme="y2k"] .footer-theme-drawer-tab:active,
+:root[data-theme="y2k"] .footer-theme-drawer-editor-tab:active,
+:root[data-theme="y2k"] .footer-theme-drawer-toggle:active,
+:root[data-theme="y2k"] .footer-theme-drawer-background-btn:active,
+:root[data-theme="y2k"] .footer-theme-drawer-reset:active,
+:root[data-theme="y2k"] .mobile-nav-link:active,
+:root[data-theme="y2k"] .mobile-quick-button:active,
+:root[data-theme="y2k"] .mobile-search-toggle:active,
+:root[data-theme="y2k"] .mobile-filter-toggle:active,
+:root[data-theme="y2k"] .promo-action-button:active,
+:root[data-theme="y2k"] .custom-dropdown-selected:active,
+:root[data-theme="y2k"] .cards-empty-action:active,
+:root[data-theme="y2k"] .loading-skip-btn:active {
+  border-top: 2px solid #18181C;
+  border-left: 2px solid #18181C;
+  border-right: 2px solid #4A4A52;
+  border-bottom: 2px solid #4A4A52;
+  transform: none;
+  box-shadow: none;
+}

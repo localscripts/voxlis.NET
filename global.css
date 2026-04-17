@@ -360,6 +360,15 @@
   /* Uses the :root defaults. Keep this block so the preset remains explicit. */
 }
 
+/* Issue cards — amber icons on Review / More buttons (Legacy preset) */
+:root[data-theme="blue"] .exploit-card-placeholder.is-issue .ph-action-btn i {
+  color: rgba(245, 158, 11, 0.95) !important;
+}
+:root[data-theme="blue"] .exploit-card-placeholder.is-issue .ph-action-icon.is-info {
+  background-image: none;
+  background-color: rgba(245, 158, 11, 0.95);
+}
+
 /* ==========================================================================
    Base Document + Site Background Media
    ========================================================================== */

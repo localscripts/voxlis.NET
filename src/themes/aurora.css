@@ -1,0 +1,377 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Aurora" theme
+ *  Frosted glassmorphism with violet accents.
+ *  Translucent surfaces, backdrop blur, soft glow — no 3D press effects.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   Variables
+   ============================================================================ */
+:root[data-theme="aurora"] {
+  --theme-main-color: #8B5CF6;
+  --theme-hover-color: #7C3AED;
+  --theme-gradient-start-color: #A78BFA;
+  --theme-gradient-end-color: #7C3AED;
+  --theme-rgb: 139, 92, 246;
+
+  /* Page background — deep near-black with cool violet undertone */
+  --bg: #0B0A10;
+  --fg: #E8E5F0;
+  --background-media-overlay-color: #0B0A10;
+  background: #0B0A10;
+
+  /* Alpha tints — slightly higher than default for the glass look */
+  --theme-card-hover-alpha: 0.18;
+  --theme-glow-alpha: 0.5;
+  --theme-soft-tint-alpha: 0.12;
+  --theme-medium-tint-alpha: 0.28;
+  --theme-strong-tint-alpha: 0.45;
+  --theme-border-tint-alpha: 0.35;
+
+  /* Borders — visible thin purple-tinted lines */
+  --site-border-color: rgba(139, 92, 246, 0.12);
+  --exploit-card-chrome: rgba(139, 92, 246, 0.1);
+
+  /* Muted text */
+  --txt-mut: #8B86A0;
+
+  /* Status dot */
+  --status-updated-color: #8B5CF6;
+
+  /* Legacy aliases */
+  --sec: rgba(11, 10, 16, 0.5);
+  --sec-bdr: rgba(139, 92, 246, 0.12);
+
+  /* Card surfaces — frosted glass */
+  --card-surface-background: rgba(22, 20, 32, 0.55) !important;
+  --card-surface-tint: rgba(22, 20, 32, 0.55) !important;
+  --card-surface-backdrop-blur: 16px !important;
+  --crd-bg: rgba(22, 20, 32, 0.55);
+
+  /* Card action buttons — glass-like muted */
+  --card-action-button-tint-color: rgba(11, 10, 16, 0.4);
+  --card-action-button-background: rgba(255, 255, 255, 0.06);
+  --card-action-button-background-hover: rgba(255, 255, 255, 0.1);
+  --card-action-button-text: rgba(200, 195, 215, 0.85);
+
+  /* Card sponsor button — gradient purple */
+  --card-sponsor-button-tint-color: #5B21B6;
+  --card-sponsor-button-background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  --card-sponsor-button-background-hover: linear-gradient(135deg, #A78BFA, #8B5CF6);
+  --card-sponsor-button-text: rgba(255, 255, 255, 0.96);
+
+  /* Navbar — frosted glass */
+  --navbar-background: rgba(16, 14, 24, 0.72) !important;
+  --navbar-mobile-panel-background: rgba(16, 14, 24, 0.92) !important;
+  --navbar-scrolled-border: rgba(139, 92, 246, 0.12);
+  --navbar-search-background: rgba(255, 255, 255, 0.04);
+  --navbar-search-background-focus: rgba(255, 255, 255, 0.08);
+  --navbar-button-background: rgba(255, 255, 255, 0.06);
+  --navbar-button-accent-background: #8B5CF6;
+  --navbar-button-accent-border: #5B21B6;
+  --navbar-button-hover-shadow: 0 0 12px rgba(139, 92, 246, 0.15);
+  --navbar-mobile-link-background: rgba(255, 255, 255, 0.03);
+  --navbar-mobile-link-accent-background: #8B5CF6;
+  --navbar-mobile-toggle-background: rgba(255, 255, 255, 0.05);
+  --navbar-mobile-toggle-background-hover: rgba(255, 255, 255, 0.1);
+
+  /* Footer — frosted glass */
+  --footer-bg: rgba(11, 10, 16, 0.85) !important;
+  --footer-surface-tint-color: rgba(11, 10, 16, 0.6);
+  --footer-border: rgba(139, 92, 246, 0.1);
+  --footer-text: rgba(210, 205, 225, 1);
+  --footer-muted: #8B86A0;
+  --footer-backdrop-blur: 16px !important;
+  --footer-follow-global-surface: 0;
+  --footer-theme-swatch-border: rgba(255, 255, 255, 0.2);
+  --footer-theme-option-hover-background: rgba(255, 255, 255, 0.08);
+  --footer-theme-option-selected-background: rgba(255, 255, 255, 0.04);
+  --footer-theme-menu-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+
+  /* Filter drawer — frosted glass */
+  --filter-panel-background: rgba(16, 14, 24, 0.88);
+  --filter-overlay-background: linear-gradient(
+    90deg,
+    rgba(11, 10, 16, 0.7) 0%,
+    rgba(11, 10, 16, 0.55) 56%,
+    rgba(11, 10, 16, 0.35) calc(100% - 460px),
+    rgba(11, 10, 16, 0.15) 100%
+  );
+  --filter-option-background: rgba(255, 255, 255, 0.04);
+  --filter-option-border: rgba(139, 92, 246, 0.1);
+  --filter-checkbox-background: rgba(0, 0, 0, 0.3);
+  --filter-checkbox-border: rgba(139, 92, 246, 0.15);
+  --filter-apply-background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+
+  /* Info modal — frosted glass */
+  --info-modal-background: rgba(16, 14, 24, 0.82) !important;
+  --info-modal-surface-tint-color: rgba(11, 10, 16, 0.5);
+  --info-modal-follow-global-surface: 0;
+  --info-modal-backdrop-blur: 20px;
+
+  /* Featured card */
+  --featured-follow-global-surface: 0;
+  --featured-surface-tint-color: rgba(11, 10, 16, 0.5);
+  --featured-surface-background: rgba(22, 20, 32, 0.6);
+  --featured-surface-outline-color: rgba(139, 92, 246, 0.1);
+  --featured-card-border: rgba(139, 92, 246, 0.08);
+  --featured-card-header-border: rgba(139, 92, 246, 0.06);
+
+  /* Promo card — gradient action button */
+  --promo-card-background: rgba(22, 20, 32, 0.55) !important;
+  --promo-button-fill: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  --promo-button-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+  --promo-button-hover-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+
+  /* Surfaces */
+  --surface-control-bg: rgba(255, 255, 255, 0.06);
+  --surface-control-bg-hover: rgba(255, 255, 255, 0.1);
+  --surface-overlay-bg: rgba(16, 14, 24, 0.88);
+
+  /* Bottom page fade */
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(11, 10, 16, 0) 0%,
+    rgba(11, 10, 16, 0.14) 22%,
+    rgba(11, 10, 16, 0.42) 52%,
+    rgba(11, 10, 16, 0.8) 82%,
+    #0B0A10 100%
+  );
+
+  /* Shadows — soft diffused purple-tinted */
+  --shd: 0 10px 30px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(139, 92, 246, 0.05);
+  --shd-hvr: 0 15px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(139, 92, 246, 0.1);
+
+  /* Scrollbar */
+  scrollbar-color: rgba(139, 92, 246, 0.5) rgba(11, 10, 16, 0.5);
+
+  /* Rounded corners — larger for softer glass feel */
+  --rad: 0.75rem;
+
+  /* Overlay art */
+  --featured-overlay-fill: linear-gradient(90deg, #8B5CF6 0%, #7C3AED 46%, #ffffff 100%);
+  --banner-overlay-fill: linear-gradient(90deg, #8B5CF6 0%, #7C3AED 70%, #5B21B6 100%);
+  --header-overlay-fill: linear-gradient(90deg, #A78BFA 0%, #8B5CF6 100%);
+  --brand-gradient-color: #A78BFA;
+}
+
+/* ============================================================================
+   Scrollbar (webkit)
+   ============================================================================ */
+:root[data-theme="aurora"] *::-webkit-scrollbar-track {
+  background: rgba(11, 10, 16, 0.6);
+}
+
+/* ============================================================================
+   Ambient violet glow — top + bottom
+   ============================================================================ */
+:root[data-theme="aurora"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 90% 40% at 50% -5%, rgba(139, 92, 246, 0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 35% at 30% 100%, rgba(124, 58, 237, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 30% at 80% 100%, rgba(167, 139, 250, 0.03) 0%, transparent 50%);
+}
+
+/* ============================================================================
+   Card hover — purple glow ring
+   ============================================================================ */
+:root[data-theme="aurora"] .exploit-card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+:root[data-theme="aurora"] .exploit-card:hover {
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.2),
+    0 8px 30px rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(139, 92, 246, 0.08);
+}
+:root[data-theme="aurora"] .exploit-card-placeholder {
+  border-color: rgba(139, 92, 246, 0.06);
+}
+
+/* ============================================================================
+   Navbar — glass border when scrolled
+   ============================================================================ */
+:root[data-theme="aurora"] .site-navbar {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+:root[data-theme="aurora"] .site-navbar.is-scrolled {
+  border-bottom-color: rgba(139, 92, 246, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================================
+   Card meta tag icons — violet
+   ============================================================================ */
+:root[data-theme="aurora"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag) {
+  color: #8B5CF6;
+}
+:root[data-theme="aurora"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag):hover {
+  color: #A78BFA;
+}
+
+/* ============================================================================
+   Sponsor note (free to use) — teal accent (contrast from purple)
+   ============================================================================ */
+:root[data-theme="aurora"] .ph-sponsor-note {
+  background: rgba(16, 185, 129, 0.85) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
+  color: #ffffff;
+}
+:root[data-theme="aurora"] .ph-sponsor-note-content i {
+  color: #ffffff;
+}
+
+/* ============================================================================
+   Button overrides — glass style with glow hover
+   ============================================================================ */
+
+/* Grey glass buttons */
+:root[data-theme="aurora"] .site-toast-action,
+:root[data-theme="aurora"] .info-modal-website-btn,
+:root[data-theme="aurora"] .info-modal-choice-action {
+  background: rgba(255, 255, 255, 0.06);
+}
+:root[data-theme="aurora"] .site-toast-action:hover,
+:root[data-theme="aurora"] .info-modal-website-btn:hover,
+:root[data-theme="aurora"] .info-modal-choice-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.1);
+}
+
+/* Accent hover glow */
+:root[data-theme="aurora"] .navbar-button.is-accent:hover,
+:root[data-theme="aurora"] .filter-apply-button:hover,
+:root[data-theme="aurora"] .footer-theme-drawer-background-btn.is-primary:hover,
+:root[data-theme="aurora"] .mobile-nav-link.is-accent:hover,
+:root[data-theme="aurora"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):hover {
+  background: linear-gradient(135deg, #A78BFA, #8B5CF6);
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.25);
+}
+
+/* ============================================================================
+   Glow hover effect — all interactive buttons get a subtle violet glow
+   instead of Empire-style 3D press. Clean, modern, weightless.
+   ============================================================================ */
+
+/* All interactive buttons — smooth transition + glass border */
+:root[data-theme="aurora"] .ph-action-btn,
+:root[data-theme="aurora"] .ph-sponsor-btn,
+:root[data-theme="aurora"] .ph-info-btn,
+:root[data-theme="aurora"] .ph-chip,
+:root[data-theme="aurora"] .navbar-button,
+:root[data-theme="aurora"] .filter-reset-button,
+:root[data-theme="aurora"] .filter-apply-button,
+:root[data-theme="aurora"] .filter-segment-button,
+:root[data-theme="aurora"] .filter-insecure-button,
+:root[data-theme="aurora"] .card-warning-btn,
+:root[data-theme="aurora"] .site-toast-action,
+:root[data-theme="aurora"] .site-toast-action-secondary,
+:root[data-theme="aurora"] .info-modal-website-btn,
+:root[data-theme="aurora"] .info-modal-close-btn,
+:root[data-theme="aurora"] .info-modal-choice-btn,
+:root[data-theme="aurora"] .info-modal-choice-action,
+:root[data-theme="aurora"] .sunc-widget-close-btn,
+:root[data-theme="aurora"] .sunc-widget-summary-link,
+:root[data-theme="aurora"] .sunc-widget-inline-button,
+:root[data-theme="aurora"] .sunc-widget-inline-link,
+:root[data-theme="aurora"] .footer-theme-drawer-close,
+:root[data-theme="aurora"] .footer-theme-drawer-tab,
+:root[data-theme="aurora"] .footer-theme-drawer-editor-tab,
+:root[data-theme="aurora"] .footer-theme-drawer-toggle,
+:root[data-theme="aurora"] .footer-theme-drawer-background-btn,
+:root[data-theme="aurora"] .footer-theme-drawer-reset,
+:root[data-theme="aurora"] .mobile-nav-link,
+:root[data-theme="aurora"] .mobile-quick-button,
+:root[data-theme="aurora"] .mobile-search-toggle,
+:root[data-theme="aurora"] .mobile-filter-toggle,
+:root[data-theme="aurora"] .promo-action-button,
+:root[data-theme="aurora"] .custom-dropdown-selected,
+:root[data-theme="aurora"] .cards-empty-action,
+:root[data-theme="aurora"] .loading-skip-btn {
+  border: 1px solid rgba(139, 92, 246, 0.08);
+  transition: box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+}
+
+/* Hover glow — muted buttons */
+:root[data-theme="aurora"] .ph-action-btn:hover,
+:root[data-theme="aurora"] .ph-info-btn:hover,
+:root[data-theme="aurora"] .ph-chip:hover,
+:root[data-theme="aurora"] .navbar-button:hover,
+:root[data-theme="aurora"] .filter-reset-button:hover,
+:root[data-theme="aurora"] .filter-segment-button:hover,
+:root[data-theme="aurora"] .card-warning-btn:hover,
+:root[data-theme="aurora"] .site-toast-action-secondary:hover,
+:root[data-theme="aurora"] .info-modal-close-btn:hover,
+:root[data-theme="aurora"] .info-modal-choice-btn:hover,
+:root[data-theme="aurora"] .sunc-widget-close-btn:hover,
+:root[data-theme="aurora"] .sunc-widget-summary-link:hover,
+:root[data-theme="aurora"] .sunc-widget-inline-button:hover,
+:root[data-theme="aurora"] .sunc-widget-inline-link:hover,
+:root[data-theme="aurora"] .footer-theme-drawer-close:hover,
+:root[data-theme="aurora"] .footer-theme-drawer-tab:hover,
+:root[data-theme="aurora"] .footer-theme-drawer-editor-tab:hover,
+:root[data-theme="aurora"] .footer-theme-drawer-background-btn:hover,
+:root[data-theme="aurora"] .footer-theme-drawer-reset:hover,
+:root[data-theme="aurora"] .mobile-nav-link:hover,
+:root[data-theme="aurora"] .cards-empty-action:hover,
+:root[data-theme="aurora"] .loading-skip-btn:hover,
+:root[data-theme="aurora"] .custom-dropdown-selected:hover {
+  border-color: rgba(139, 92, 246, 0.18);
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.1);
+}
+
+/* Hover glow — accent / sponsor buttons (stronger glow) */
+:root[data-theme="aurora"] .ph-sponsor-btn:hover,
+:root[data-theme="aurora"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):hover,
+:root[data-theme="aurora"] .mobile-quick-button.is-accent:hover,
+:root[data-theme="aurora"] .mobile-filter-toggle:hover {
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 22px rgba(139, 92, 246, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Active — slight scale instead of translateY */
+:root[data-theme="aurora"] .ph-action-btn:active,
+:root[data-theme="aurora"] .ph-sponsor-btn:active,
+:root[data-theme="aurora"] .ph-info-btn:active,
+:root[data-theme="aurora"] .navbar-button:active,
+:root[data-theme="aurora"] .filter-reset-button:active,
+:root[data-theme="aurora"] .filter-apply-button:active,
+:root[data-theme="aurora"] .filter-segment-button:active,
+:root[data-theme="aurora"] .filter-insecure-button:active,
+:root[data-theme="aurora"] .card-warning-btn:active,
+:root[data-theme="aurora"] .site-toast-action:active,
+:root[data-theme="aurora"] .site-toast-action-secondary:active,
+:root[data-theme="aurora"] .info-modal-website-btn:active,
+:root[data-theme="aurora"] .info-modal-close-btn:active,
+:root[data-theme="aurora"] .info-modal-choice-btn:active,
+:root[data-theme="aurora"] .info-modal-choice-action:active,
+:root[data-theme="aurora"] .sunc-widget-close-btn:active,
+:root[data-theme="aurora"] .sunc-widget-summary-link:active,
+:root[data-theme="aurora"] .sunc-widget-inline-button:active,
+:root[data-theme="aurora"] .sunc-widget-inline-link:active,
+:root[data-theme="aurora"] .footer-theme-drawer-close:active,
+:root[data-theme="aurora"] .footer-theme-drawer-tab:active,
+:root[data-theme="aurora"] .footer-theme-drawer-editor-tab:active,
+:root[data-theme="aurora"] .footer-theme-drawer-toggle:active,
+:root[data-theme="aurora"] .footer-theme-drawer-background-btn:active,
+:root[data-theme="aurora"] .footer-theme-drawer-reset:active,
+:root[data-theme="aurora"] .mobile-nav-link:active,
+:root[data-theme="aurora"] .mobile-quick-button:active,
+:root[data-theme="aurora"] .mobile-search-toggle:active,
+:root[data-theme="aurora"] .mobile-filter-toggle:active,
+:root[data-theme="aurora"] .promo-action-button:active,
+:root[data-theme="aurora"] .custom-dropdown-selected:active,
+:root[data-theme="aurora"] .cards-empty-action:active,
+:root[data-theme="aurora"] .loading-skip-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.15);
+}

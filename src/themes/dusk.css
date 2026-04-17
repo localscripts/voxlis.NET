@@ -1,0 +1,384 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Dusk" theme
+ *  Warm twilight aesthetic. Amber accent on deep plum. Pill-shaped buttons,
+ *  lift-on-hover cards, serif brand font. Elegant and editorial.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   Variables
+   ============================================================================ */
+:root[data-theme="dusk"] {
+  --theme-main-color: #D97706;
+  --theme-hover-color: #B45309;
+  --theme-gradient-start-color: #F59E0B;
+  --theme-gradient-end-color: #D97706;
+  --theme-rgb: 217, 119, 6;
+
+  /* Page background — deep plum-black */
+  --bg: #110D13;
+  --fg: #E8E0E4;
+  --background-media-overlay-color: #110D13;
+  background: #110D13;
+
+  /* Alpha tints — warm tones */
+  --theme-card-hover-alpha: 0.12;
+  --theme-glow-alpha: 0.35;
+  --theme-soft-tint-alpha: 0.08;
+  --theme-medium-tint-alpha: 0.2;
+  --theme-strong-tint-alpha: 0.35;
+  --theme-border-tint-alpha: 0.25;
+
+  /* Borders — very subtle warm lines */
+  --site-border-color: rgba(217, 119, 6, 0.06);
+  --exploit-card-chrome: rgba(255, 255, 255, 0.04);
+
+  /* Muted text */
+  --txt-mut: #8A7E84;
+
+  /* Status dot */
+  --status-updated-color: #D97706;
+
+  /* Legacy aliases */
+  --sec: rgba(17, 13, 19, 0.5);
+  --sec-bdr: rgba(255, 255, 255, 0.06);
+
+  /* Card surfaces — dark warm, barely visible edges */
+  --card-surface-background: rgba(24, 18, 28, 0.85) !important;
+  --card-surface-tint: rgba(24, 18, 28, 0.85) !important;
+  --card-surface-backdrop-blur: 0px !important;
+  --crd-bg: #18121C;
+
+  /* Card action buttons — muted, warm tint */
+  --card-action-button-tint-color: #110D13;
+  --card-action-button-background: rgba(255, 255, 255, 0.04);
+  --card-action-button-background-hover: rgba(255, 255, 255, 0.08);
+  --card-action-button-text: rgba(200, 190, 195, 0.85);
+
+  /* Card sponsor button — amber filled */
+  --card-sponsor-button-tint-color: #78350F;
+  --card-sponsor-button-background: #D97706;
+  --card-sponsor-button-background-hover: #B45309;
+  --card-sponsor-button-text: #ffffff;
+
+  /* Navbar — near-invisible, blends into page */
+  --navbar-background: rgba(17, 13, 19, 0.95) !important;
+  --navbar-mobile-panel-background: rgba(17, 13, 19, 0.98) !important;
+  --navbar-scrolled-border: rgba(217, 119, 6, 0.08);
+  --navbar-search-background: rgba(255, 255, 255, 0.03);
+  --navbar-search-background-focus: rgba(255, 255, 255, 0.06);
+  --navbar-button-background: rgba(255, 255, 255, 0.04);
+  --navbar-button-accent-background: #D97706;
+  --navbar-button-accent-border: #78350F;
+  --navbar-button-hover-shadow: none;
+  --navbar-mobile-link-background: rgba(255, 255, 255, 0.02);
+  --navbar-mobile-link-accent-background: #D97706;
+  --navbar-mobile-toggle-background: rgba(255, 255, 255, 0.04);
+  --navbar-mobile-toggle-background-hover: rgba(255, 255, 255, 0.08);
+
+  /* Footer */
+  --footer-bg: #110D13 !important;
+  --footer-surface-tint-color: #110D13;
+  --footer-border: rgba(255, 255, 255, 0.05);
+  --footer-text: rgba(210, 200, 205, 1);
+  --footer-muted: #8A7E84;
+  --footer-backdrop-blur: 0px !important;
+  --footer-follow-global-surface: 0;
+  --footer-theme-swatch-border: rgba(255, 255, 255, 0.12);
+  --footer-theme-option-hover-background: rgba(217, 119, 6, 0.06);
+  --footer-theme-option-selected-background: rgba(217, 119, 6, 0.03);
+  --footer-theme-menu-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+
+  /* Filter drawer */
+  --filter-panel-background: #14101A;
+  --filter-overlay-background: linear-gradient(
+    90deg,
+    rgba(17, 13, 19, 0.75) 0%,
+    rgba(17, 13, 19, 0.55) 56%,
+    rgba(17, 13, 19, 0.35) calc(100% - 460px),
+    rgba(17, 13, 19, 0.1) 100%
+  );
+  --filter-option-background: rgba(255, 255, 255, 0.03);
+  --filter-option-border: rgba(255, 255, 255, 0.05);
+  --filter-checkbox-background: rgba(0, 0, 0, 0.3);
+  --filter-checkbox-border: rgba(255, 255, 255, 0.1);
+  --filter-apply-background: #D97706;
+
+  /* Info modal */
+  --info-modal-background: rgba(17, 13, 19, 0.95) !important;
+  --info-modal-surface-tint-color: #110D13;
+  --info-modal-follow-global-surface: 0;
+
+  /* Featured card */
+  --featured-follow-global-surface: 0;
+  --featured-surface-tint-color: #110D13;
+  --featured-surface-background: #18121C;
+  --featured-surface-outline-color: rgba(255, 255, 255, 0.04);
+  --featured-card-border: rgba(217, 119, 6, 0.06);
+  --featured-card-header-border: rgba(255, 255, 255, 0.04);
+
+  /* Promo card */
+  --promo-card-background: rgba(24, 18, 28, 0.85) !important;
+  --promo-button-fill: #D97706;
+  --promo-button-shadow: 0 4px 20px rgba(217, 119, 6, 0.12);
+  --promo-button-hover-shadow: 0 6px 28px rgba(217, 119, 6, 0.2);
+
+  /* Surfaces */
+  --surface-control-bg: rgba(255, 255, 255, 0.04);
+  --surface-control-bg-hover: rgba(255, 255, 255, 0.07);
+  --surface-overlay-bg: #14101A;
+
+  /* Bottom page fade */
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(17, 13, 19, 0) 0%,
+    rgba(17, 13, 19, 0.12) 22%,
+    rgba(17, 13, 19, 0.4) 52%,
+    rgba(17, 13, 19, 0.8) 82%,
+    #110D13 100%
+  );
+
+  /* Shadows — warm, diffused downward */
+  --shd: 0 12px 35px rgba(0, 0, 0, 0.25);
+  --shd-hvr: 0 20px 50px rgba(0, 0, 0, 0.35);
+
+  /* Scrollbar */
+  scrollbar-color: rgba(217, 119, 6, 0.35) #110D13;
+
+  /* Rounded corners — pill-shaped (very large) */
+  --rad: 50rem;
+
+  /* Font — serif for editorial feel */
+  --theme-font-import-url: url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap");
+  --font-family-ui: "Inter", system-ui, sans-serif;
+
+  /* Overlay art */
+  --featured-overlay-fill: linear-gradient(90deg, #D97706 0%, #B45309 46%, #ffffff 100%);
+  --banner-overlay-fill: linear-gradient(90deg, #D97706 0%, #B45309 70%, #78350F 100%);
+  --header-overlay-fill: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
+  --brand-gradient-color: #F59E0B;
+}
+
+/* ============================================================================
+   Scrollbar (webkit)
+   ============================================================================ */
+:root[data-theme="dusk"] *::-webkit-scrollbar-track {
+  background: #110D13;
+}
+
+/* ============================================================================
+   Warm ambient glow — top and side
+   ============================================================================ */
+:root[data-theme="dusk"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 70% 35% at 50% -5%, rgba(217, 119, 6, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 60% at 0% 50%, rgba(180, 83, 9, 0.02) 0%, transparent 50%),
+    radial-gradient(ellipse 30% 60% at 100% 50%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
+}
+
+/* ============================================================================
+   Brand text — serif font for titles
+   ============================================================================ */
+:root[data-theme="dusk"] .site-brand-text,
+:root[data-theme="dusk"] .promo-title,
+:root[data-theme="dusk"] .featured-card-title {
+  font-family: "DM Serif Display", Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================================
+   Cards — lift on hover, warm underglow
+   ============================================================================ */
+:root[data-theme="dusk"] .exploit-card {
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s ease;
+}
+:root[data-theme="dusk"] .exploit-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(217, 119, 6, 0.1);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(217, 119, 6, 0.06);
+}
+:root[data-theme="dusk"] .exploit-card-placeholder {
+  border-color: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================================================
+   Navbar
+   ============================================================================ */
+:root[data-theme="dusk"] .site-navbar.is-scrolled {
+  border-bottom-color: rgba(217, 119, 6, 0.06);
+}
+
+/* ============================================================================
+   Card meta tag icons — warm amber
+   ============================================================================ */
+:root[data-theme="dusk"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag) {
+  color: #D97706;
+}
+:root[data-theme="dusk"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag):hover {
+  color: #F59E0B;
+}
+
+/* ============================================================================
+   Sponsor note (free to use) — dark with amber border
+   ============================================================================ */
+:root[data-theme="dusk"] .ph-sponsor-note {
+  background: rgba(217, 119, 6, 0.08) !important;
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  box-shadow: none;
+  color: #F59E0B;
+}
+:root[data-theme="dusk"] .ph-sponsor-note-content i {
+  color: #F59E0B;
+}
+
+/* ============================================================================
+   Button overrides
+   ============================================================================ */
+
+/* Grey buttons */
+:root[data-theme="dusk"] .site-toast-action,
+:root[data-theme="dusk"] .info-modal-website-btn,
+:root[data-theme="dusk"] .info-modal-choice-action {
+  background: rgba(255, 255, 255, 0.04);
+}
+:root[data-theme="dusk"] .site-toast-action:hover,
+:root[data-theme="dusk"] .info-modal-website-btn:hover,
+:root[data-theme="dusk"] .info-modal-choice-action:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Accent hover */
+:root[data-theme="dusk"] .navbar-button.is-accent:hover,
+:root[data-theme="dusk"] .filter-apply-button:hover,
+:root[data-theme="dusk"] .footer-theme-drawer-background-btn.is-primary:hover,
+:root[data-theme="dusk"] .mobile-nav-link.is-accent:hover,
+:root[data-theme="dusk"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):hover {
+  background: #B45309;
+}
+
+/* ============================================================================
+   Pill button treatment — smooth hover with warm underline reveal
+   No 3D depth, no glow, no outlines. Clean fade + underline.
+   ============================================================================ */
+
+/* All interactive — smooth transitions */
+:root[data-theme="dusk"] .ph-action-btn,
+:root[data-theme="dusk"] .ph-sponsor-btn,
+:root[data-theme="dusk"] .ph-info-btn,
+:root[data-theme="dusk"] .ph-chip,
+:root[data-theme="dusk"] .navbar-button,
+:root[data-theme="dusk"] .filter-reset-button,
+:root[data-theme="dusk"] .filter-apply-button,
+:root[data-theme="dusk"] .filter-segment-button,
+:root[data-theme="dusk"] .filter-insecure-button,
+:root[data-theme="dusk"] .card-warning-btn,
+:root[data-theme="dusk"] .site-toast-action,
+:root[data-theme="dusk"] .site-toast-action-secondary,
+:root[data-theme="dusk"] .info-modal-website-btn,
+:root[data-theme="dusk"] .info-modal-close-btn,
+:root[data-theme="dusk"] .info-modal-choice-btn,
+:root[data-theme="dusk"] .info-modal-choice-action,
+:root[data-theme="dusk"] .sunc-widget-close-btn,
+:root[data-theme="dusk"] .sunc-widget-summary-link,
+:root[data-theme="dusk"] .sunc-widget-inline-button,
+:root[data-theme="dusk"] .sunc-widget-inline-link,
+:root[data-theme="dusk"] .footer-theme-drawer-close,
+:root[data-theme="dusk"] .footer-theme-drawer-tab,
+:root[data-theme="dusk"] .footer-theme-drawer-editor-tab,
+:root[data-theme="dusk"] .footer-theme-drawer-toggle,
+:root[data-theme="dusk"] .footer-theme-drawer-background-btn,
+:root[data-theme="dusk"] .footer-theme-drawer-reset,
+:root[data-theme="dusk"] .mobile-nav-link,
+:root[data-theme="dusk"] .mobile-quick-button,
+:root[data-theme="dusk"] .mobile-search-toggle,
+:root[data-theme="dusk"] .mobile-filter-toggle,
+:root[data-theme="dusk"] .promo-action-button,
+:root[data-theme="dusk"] .custom-dropdown-selected,
+:root[data-theme="dusk"] .cards-empty-action,
+:root[data-theme="dusk"] .loading-skip-btn {
+  border: none;
+  box-shadow: none;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* Muted button hover — warm tint appears */
+:root[data-theme="dusk"] .ph-action-btn:hover,
+:root[data-theme="dusk"] .ph-info-btn:hover,
+:root[data-theme="dusk"] .ph-chip:hover,
+:root[data-theme="dusk"] .navbar-button:hover,
+:root[data-theme="dusk"] .filter-reset-button:hover,
+:root[data-theme="dusk"] .filter-segment-button:hover,
+:root[data-theme="dusk"] .card-warning-btn:hover,
+:root[data-theme="dusk"] .site-toast-action-secondary:hover,
+:root[data-theme="dusk"] .info-modal-close-btn:hover,
+:root[data-theme="dusk"] .info-modal-choice-btn:hover,
+:root[data-theme="dusk"] .sunc-widget-close-btn:hover,
+:root[data-theme="dusk"] .sunc-widget-summary-link:hover,
+:root[data-theme="dusk"] .sunc-widget-inline-button:hover,
+:root[data-theme="dusk"] .sunc-widget-inline-link:hover,
+:root[data-theme="dusk"] .footer-theme-drawer-close:hover,
+:root[data-theme="dusk"] .footer-theme-drawer-tab:hover,
+:root[data-theme="dusk"] .footer-theme-drawer-editor-tab:hover,
+:root[data-theme="dusk"] .footer-theme-drawer-background-btn:hover,
+:root[data-theme="dusk"] .footer-theme-drawer-reset:hover,
+:root[data-theme="dusk"] .mobile-nav-link:hover,
+:root[data-theme="dusk"] .cards-empty-action:hover,
+:root[data-theme="dusk"] .loading-skip-btn:hover,
+:root[data-theme="dusk"] .custom-dropdown-selected:hover {
+  background: rgba(217, 119, 6, 0.06);
+}
+
+/* Sponsor / accent hover — warm shadow bloom */
+:root[data-theme="dusk"] .ph-sponsor-btn:not(.ph-sponsor-note):hover,
+:root[data-theme="dusk"] .mobile-quick-button.is-accent:hover,
+:root[data-theme="dusk"] .mobile-filter-toggle:hover,
+:root[data-theme="dusk"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):hover {
+  box-shadow: 0 6px 24px rgba(217, 119, 6, 0.18);
+}
+
+/* Active — gentle press */
+:root[data-theme="dusk"] .ph-action-btn:active,
+:root[data-theme="dusk"] .ph-sponsor-btn:active,
+:root[data-theme="dusk"] .ph-info-btn:active,
+:root[data-theme="dusk"] .navbar-button:active,
+:root[data-theme="dusk"] .filter-reset-button:active,
+:root[data-theme="dusk"] .filter-apply-button:active,
+:root[data-theme="dusk"] .filter-segment-button:active,
+:root[data-theme="dusk"] .filter-insecure-button:active,
+:root[data-theme="dusk"] .card-warning-btn:active,
+:root[data-theme="dusk"] .site-toast-action:active,
+:root[data-theme="dusk"] .site-toast-action-secondary:active,
+:root[data-theme="dusk"] .info-modal-website-btn:active,
+:root[data-theme="dusk"] .info-modal-close-btn:active,
+:root[data-theme="dusk"] .info-modal-choice-btn:active,
+:root[data-theme="dusk"] .info-modal-choice-action:active,
+:root[data-theme="dusk"] .sunc-widget-close-btn:active,
+:root[data-theme="dusk"] .sunc-widget-summary-link:active,
+:root[data-theme="dusk"] .sunc-widget-inline-button:active,
+:root[data-theme="dusk"] .sunc-widget-inline-link:active,
+:root[data-theme="dusk"] .footer-theme-drawer-close:active,
+:root[data-theme="dusk"] .footer-theme-drawer-tab:active,
+:root[data-theme="dusk"] .footer-theme-drawer-editor-tab:active,
+:root[data-theme="dusk"] .footer-theme-drawer-toggle:active,
+:root[data-theme="dusk"] .footer-theme-drawer-background-btn:active,
+:root[data-theme="dusk"] .footer-theme-drawer-reset:active,
+:root[data-theme="dusk"] .mobile-nav-link:active,
+:root[data-theme="dusk"] .mobile-quick-button:active,
+:root[data-theme="dusk"] .mobile-search-toggle:active,
+:root[data-theme="dusk"] .mobile-filter-toggle:active,
+:root[data-theme="dusk"] .promo-action-button:active,
+:root[data-theme="dusk"] .custom-dropdown-selected:active,
+:root[data-theme="dusk"] .cards-empty-action:active,
+:root[data-theme="dusk"] .loading-skip-btn:active {
+  transform: scale(0.96);
+  transition: transform 0.08s ease;
+}

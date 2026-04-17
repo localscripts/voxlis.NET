@@ -1,0 +1,418 @@
+/*
+ * ============================================================================
+ *  Voxlis — "Neon" theme
+ *  Cyberpunk-inspired. Sharp corners, neon outlines, hard shadows.
+ *  Buttons are outlined and fill on hover. No glass, no blur, no gradients.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   Variables
+   ============================================================================ */
+:root[data-theme="neon"] {
+  --theme-main-color: #00FF88;
+  --theme-hover-color: #00CC6A;
+  --theme-gradient-start-color: #00FF88;
+  --theme-gradient-end-color: #00FF88;
+  --theme-rgb: 0, 255, 136;
+
+  /* Page background — pure dark */
+  --bg: #08080A;
+  --fg: #D4D4D8;
+  --background-media-overlay-color: #08080A;
+  background: #08080A;
+
+  /* Alpha tints — lower, keep things sharp and contrasty */
+  --theme-card-hover-alpha: 0.1;
+  --theme-glow-alpha: 0.35;
+  --theme-soft-tint-alpha: 0.06;
+  --theme-medium-tint-alpha: 0.15;
+  --theme-strong-tint-alpha: 0.25;
+  --theme-border-tint-alpha: 0.3;
+
+  /* Borders — visible hard neon-tinted lines */
+  --site-border-color: #1A1A1E;
+  --exploit-card-chrome: #1A1A1E;
+
+  /* Muted text */
+  --txt-mut: #6B6B76;
+
+  /* Status dot */
+  --status-updated-color: #00FF88;
+
+  /* Legacy aliases */
+  --sec: rgba(8, 8, 10, 0.6);
+  --sec-bdr: #1A1A1E;
+
+  /* Card surfaces — opaque dark, no blur */
+  --card-surface-background: #0E0E12 !important;
+  --card-surface-tint: #0E0E12 !important;
+  --card-surface-backdrop-blur: 0px !important;
+  --crd-bg: #0E0E12;
+
+  /* Card action buttons — outlined style (transparent bg, border visible) */
+  --card-action-button-tint-color: #08080A;
+  --card-action-button-background: transparent;
+  --card-action-button-background-hover: rgba(0, 255, 136, 0.08);
+  --card-action-button-text: rgba(160, 160, 175, 0.9);
+
+  /* Card sponsor button — neon filled */
+  --card-sponsor-button-tint-color: #005C32;
+  --card-sponsor-button-background: #00FF88;
+  --card-sponsor-button-background-hover: #00CC6A;
+  --card-sponsor-button-text: #08080A;
+
+  /* Navbar — solid dark */
+  --navbar-background: #0C0C0F !important;
+  --navbar-mobile-panel-background: #0C0C0F !important;
+  --navbar-scrolled-border: #00FF88;
+  --navbar-search-background: #08080A;
+  --navbar-search-background-focus: #111114;
+  --navbar-button-background: transparent;
+  --navbar-button-accent-background: #00FF88;
+  --navbar-button-accent-border: #005C32;
+  --navbar-button-hover-shadow: none;
+  --navbar-mobile-link-background: rgba(255, 255, 255, 0.02);
+  --navbar-mobile-link-accent-background: #00FF88;
+  --navbar-mobile-toggle-background: rgba(255, 255, 255, 0.03);
+  --navbar-mobile-toggle-background-hover: rgba(255, 255, 255, 0.07);
+
+  /* Footer — solid dark */
+  --footer-bg: #08080A !important;
+  --footer-surface-tint-color: #08080A;
+  --footer-border: #1A1A1E;
+  --footer-text: rgba(180, 180, 195, 1);
+  --footer-muted: #6B6B76;
+  --footer-backdrop-blur: 0px !important;
+  --footer-follow-global-surface: 0;
+  --footer-theme-swatch-border: rgba(255, 255, 255, 0.15);
+  --footer-theme-option-hover-background: rgba(0, 255, 136, 0.05);
+  --footer-theme-option-selected-background: rgba(0, 255, 136, 0.03);
+  --footer-theme-menu-shadow: 4px -4px 0 rgba(0, 255, 136, 0.1);
+
+  /* Filter drawer */
+  --filter-panel-background: #0C0C0F;
+  --filter-overlay-background: linear-gradient(
+    90deg,
+    rgba(8, 8, 10, 0.8) 0%,
+    rgba(8, 8, 10, 0.6) 56%,
+    rgba(8, 8, 10, 0.4) calc(100% - 460px),
+    rgba(8, 8, 10, 0.15) 100%
+  );
+  --filter-option-background: transparent;
+  --filter-option-border: #1A1A1E;
+  --filter-checkbox-background: #08080A;
+  --filter-checkbox-border: #2A2A30;
+  --filter-apply-background: #00FF88;
+
+  /* Info modal */
+  --info-modal-background: #0C0C0F !important;
+  --info-modal-surface-tint-color: #08080A;
+  --info-modal-follow-global-surface: 0;
+
+  /* Featured card */
+  --featured-follow-global-surface: 0;
+  --featured-surface-tint-color: #08080A;
+  --featured-surface-background: #0E0E12;
+  --featured-surface-outline-color: #1A1A1E;
+  --featured-card-border: #1A1A1E;
+  --featured-card-header-border: #1A1A1E;
+
+  /* Promo card */
+  --promo-card-background: #0E0E12 !important;
+  --promo-button-fill: #00FF88;
+  --promo-button-shadow: none;
+  --promo-button-hover-shadow: none;
+
+  /* Surfaces */
+  --surface-control-bg: transparent;
+  --surface-control-bg-hover: rgba(0, 255, 136, 0.06);
+  --surface-overlay-bg: #0C0C0F;
+
+  /* Bottom page fade */
+  --site-bottom-fade-fill: linear-gradient(
+    to bottom,
+    rgba(8, 8, 10, 0) 0%,
+    rgba(8, 8, 10, 0.2) 22%,
+    rgba(8, 8, 10, 0.5) 52%,
+    rgba(8, 8, 10, 0.85) 82%,
+    #08080A 100%
+  );
+
+  /* Shadows — hard offset, no blur (brutalist) */
+  --shd: 3px 3px 0 rgba(0, 255, 136, 0.06);
+  --shd-hvr: 4px 4px 0 rgba(0, 255, 136, 0.1);
+
+  /* Scrollbar */
+  scrollbar-color: #00FF88 #08080A;
+
+  /* Rounded corners — sharp */
+  --rad: 0.15rem;
+
+  /* Overlay art */
+  --featured-overlay-fill: linear-gradient(90deg, #00FF88 0%, #00FF88 46%, #ffffff 100%);
+  --banner-overlay-fill: linear-gradient(90deg, #00FF88 0%, #00FF88 70%, #005C32 100%);
+  --header-overlay-fill: linear-gradient(90deg, #00FF88 0%, #00FF88 100%);
+  --brand-gradient-color: #00FF88;
+}
+
+/* ============================================================================
+   Scrollbar (webkit)
+   ============================================================================ */
+:root[data-theme="neon"] *::-webkit-scrollbar-track {
+  background: #08080A;
+}
+:root[data-theme="neon"] *::-webkit-scrollbar-thumb {
+  border-radius: 0;
+}
+
+/* ============================================================================
+   Scanline overlay — subtle CRT effect
+   ============================================================================ */
+:root[data-theme="neon"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 136, 0.5) 2px,
+    rgba(0, 255, 136, 0.5) 4px
+  );
+}
+
+/* ============================================================================
+   Ambient neon glow at top
+   ============================================================================ */
+:root[data-theme="neon"] body::after {
+  content: "";
+  position: fixed;
+  top: -50%;
+  left: 20%;
+  width: 60%;
+  height: 50%;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.04) 0%, transparent 70%);
+}
+
+/* ============================================================================
+   Cards — hard border, neon glow on hover
+   ============================================================================ */
+:root[data-theme="neon"] .exploit-card {
+  border: 1px solid #1A1A1E;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+:root[data-theme="neon"] .exploit-card:hover {
+  border-color: #00FF88;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.15), 3px 3px 0 rgba(0, 255, 136, 0.08);
+}
+:root[data-theme="neon"] .exploit-card-placeholder {
+  border-color: #1A1A1E;
+}
+
+/* ============================================================================
+   Navbar — neon bottom line when scrolled
+   ============================================================================ */
+:root[data-theme="neon"] .site-navbar.is-scrolled {
+  border-bottom: 1px solid #00FF88;
+  box-shadow: 0 1px 8px rgba(0, 255, 136, 0.12);
+}
+
+/* ============================================================================
+   Card meta tag icons — neon green
+   ============================================================================ */
+:root[data-theme="neon"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag) {
+  color: #00FF88;
+}
+:root[data-theme="neon"] .ph-meta-tag-btn:not(.is-kernel-tag):not(.is-keysystem-tag):not(.is-serverside-tag):not(.is-usermode-tag):not(.is-insecure-tag):not(.is-hybrid-tag):not(.is-freemium-tag):hover {
+  color: #66FFB3;
+}
+
+/* ============================================================================
+   Sponsor note (free to use) — neon outline style
+   ============================================================================ */
+:root[data-theme="neon"] .ph-sponsor-note {
+  background: transparent !important;
+  border: 1px solid #00FF88;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.1);
+  color: #00FF88;
+}
+:root[data-theme="neon"] .ph-sponsor-note-content i {
+  color: #00FF88;
+}
+
+/* ============================================================================
+   Button overrides — outlined by default, fill on hover
+   ============================================================================ */
+
+/* Grey buttons — outlined */
+:root[data-theme="neon"] .site-toast-action,
+:root[data-theme="neon"] .info-modal-website-btn,
+:root[data-theme="neon"] .info-modal-choice-action {
+  background: transparent;
+  border: 1px solid #2A2A30;
+}
+:root[data-theme="neon"] .site-toast-action:hover,
+:root[data-theme="neon"] .info-modal-website-btn:hover,
+:root[data-theme="neon"] .info-modal-choice-action:hover {
+  background: rgba(0, 255, 136, 0.06);
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+/* Accent button hover — brighter neon fill + dark text */
+:root[data-theme="neon"] .navbar-button.is-accent:hover,
+:root[data-theme="neon"] .filter-apply-button:hover,
+:root[data-theme="neon"] .footer-theme-drawer-background-btn.is-primary:hover,
+:root[data-theme="neon"] .mobile-nav-link.is-accent:hover,
+:root[data-theme="neon"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot):hover {
+  background: #00CC6A;
+  box-shadow: 0 0 14px rgba(0, 255, 136, 0.2);
+}
+
+/* Accent filled buttons — dark text on neon */
+:root[data-theme="neon"] .navbar-button.is-accent,
+:root[data-theme="neon"] .filter-apply-button,
+:root[data-theme="neon"] .footer-theme-drawer-background-btn.is-primary,
+:root[data-theme="neon"] .mobile-nav-link.is-accent,
+:root[data-theme="neon"] .mobile-quick-button.is-accent,
+:root[data-theme="neon"] .mobile-filter-toggle {
+  color: #08080A;
+  font-weight: 700;
+}
+
+/* ============================================================================
+   Outlined interactive style — all buttons get sharp border + fill-on-hover
+   ============================================================================ */
+
+/* Base state: outlined, transparent */
+:root[data-theme="neon"] .ph-action-btn,
+:root[data-theme="neon"] .ph-info-btn,
+:root[data-theme="neon"] .ph-chip,
+:root[data-theme="neon"] .navbar-button,
+:root[data-theme="neon"] .filter-reset-button,
+:root[data-theme="neon"] .filter-segment-button,
+:root[data-theme="neon"] .card-warning-btn,
+:root[data-theme="neon"] .site-toast-action-secondary,
+:root[data-theme="neon"] .info-modal-close-btn,
+:root[data-theme="neon"] .info-modal-choice-btn,
+:root[data-theme="neon"] .sunc-widget-close-btn,
+:root[data-theme="neon"] .sunc-widget-summary-link,
+:root[data-theme="neon"] .sunc-widget-inline-button,
+:root[data-theme="neon"] .sunc-widget-inline-link,
+:root[data-theme="neon"] .footer-theme-drawer-close,
+:root[data-theme="neon"] .footer-theme-drawer-tab,
+:root[data-theme="neon"] .footer-theme-drawer-editor-tab,
+:root[data-theme="neon"] .footer-theme-drawer-toggle,
+:root[data-theme="neon"] .footer-theme-drawer-background-btn,
+:root[data-theme="neon"] .footer-theme-drawer-reset,
+:root[data-theme="neon"] .mobile-nav-link,
+:root[data-theme="neon"] .mobile-quick-button,
+:root[data-theme="neon"] .mobile-search-toggle,
+:root[data-theme="neon"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot),
+:root[data-theme="neon"] .custom-dropdown-selected,
+:root[data-theme="neon"] .cards-empty-action,
+:root[data-theme="neon"] .loading-skip-btn {
+  border: 1px solid #2A2A30;
+  background: transparent;
+  transition: background 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease, color 0.12s ease;
+}
+
+/* Hover: neon border + subtle fill */
+:root[data-theme="neon"] .ph-action-btn:hover,
+:root[data-theme="neon"] .ph-info-btn:hover,
+:root[data-theme="neon"] .ph-chip:hover,
+:root[data-theme="neon"] .navbar-button:hover,
+:root[data-theme="neon"] .filter-reset-button:hover,
+:root[data-theme="neon"] .filter-segment-button:hover,
+:root[data-theme="neon"] .card-warning-btn:hover,
+:root[data-theme="neon"] .site-toast-action-secondary:hover,
+:root[data-theme="neon"] .info-modal-close-btn:hover,
+:root[data-theme="neon"] .info-modal-choice-btn:hover,
+:root[data-theme="neon"] .sunc-widget-close-btn:hover,
+:root[data-theme="neon"] .sunc-widget-summary-link:hover,
+:root[data-theme="neon"] .sunc-widget-inline-button:hover,
+:root[data-theme="neon"] .sunc-widget-inline-link:hover,
+:root[data-theme="neon"] .footer-theme-drawer-close:hover,
+:root[data-theme="neon"] .footer-theme-drawer-tab:hover,
+:root[data-theme="neon"] .footer-theme-drawer-editor-tab:hover,
+:root[data-theme="neon"] .footer-theme-drawer-background-btn:hover,
+:root[data-theme="neon"] .footer-theme-drawer-reset:hover,
+:root[data-theme="neon"] .mobile-nav-link:hover,
+:root[data-theme="neon"] .cards-empty-action:hover,
+:root[data-theme="neon"] .loading-skip-btn:hover,
+:root[data-theme="neon"] .custom-dropdown-selected:hover {
+  border-color: rgba(0, 255, 136, 0.4);
+  background: rgba(0, 255, 136, 0.05);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.08);
+}
+
+/* Sponsor button — neon filled, dark text */
+:root[data-theme="neon"] .ph-sponsor-btn:not(.ph-sponsor-note) {
+  border: 1px solid #00FF88;
+  color: #08080A;
+  font-weight: 700;
+}
+:root[data-theme="neon"] .ph-sponsor-btn:not(.ph-sponsor-note):hover {
+  border-color: #66FFB3;
+  box-shadow: 0 0 16px rgba(0, 255, 136, 0.2);
+}
+
+/* Promo action — neon filled, dark text */
+:root[data-theme="neon"] .promo-action-button:not(.promo-action-button-youtube):not(.promo-action-button-trustpilot) {
+  border-color: #00FF88;
+  color: #08080A;
+  font-weight: 700;
+}
+
+/* Active — instant snap, bright flash */
+:root[data-theme="neon"] .ph-action-btn:active,
+:root[data-theme="neon"] .ph-sponsor-btn:active,
+:root[data-theme="neon"] .ph-info-btn:active,
+:root[data-theme="neon"] .navbar-button:active,
+:root[data-theme="neon"] .filter-reset-button:active,
+:root[data-theme="neon"] .filter-apply-button:active,
+:root[data-theme="neon"] .filter-segment-button:active,
+:root[data-theme="neon"] .filter-insecure-button:active,
+:root[data-theme="neon"] .card-warning-btn:active,
+:root[data-theme="neon"] .site-toast-action:active,
+:root[data-theme="neon"] .site-toast-action-secondary:active,
+:root[data-theme="neon"] .info-modal-website-btn:active,
+:root[data-theme="neon"] .info-modal-close-btn:active,
+:root[data-theme="neon"] .info-modal-choice-btn:active,
+:root[data-theme="neon"] .info-modal-choice-action:active,
+:root[data-theme="neon"] .sunc-widget-close-btn:active,
+:root[data-theme="neon"] .sunc-widget-summary-link:active,
+:root[data-theme="neon"] .sunc-widget-inline-button:active,
+:root[data-theme="neon"] .sunc-widget-inline-link:active,
+:root[data-theme="neon"] .footer-theme-drawer-close:active,
+:root[data-theme="neon"] .footer-theme-drawer-tab:active,
+:root[data-theme="neon"] .footer-theme-drawer-editor-tab:active,
+:root[data-theme="neon"] .footer-theme-drawer-toggle:active,
+:root[data-theme="neon"] .footer-theme-drawer-background-btn:active,
+:root[data-theme="neon"] .footer-theme-drawer-reset:active,
+:root[data-theme="neon"] .mobile-nav-link:active,
+:root[data-theme="neon"] .mobile-quick-button:active,
+:root[data-theme="neon"] .mobile-search-toggle:active,
+:root[data-theme="neon"] .mobile-filter-toggle:active,
+:root[data-theme="neon"] .promo-action-button:active,
+:root[data-theme="neon"] .custom-dropdown-selected:active,
+:root[data-theme="neon"] .cards-empty-action:active,
+:root[data-theme="neon"] .loading-skip-btn:active {
+  background: rgba(0, 255, 136, 0.12);
+  border-color: #00FF88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.25);
+  transition: none;
+}
+
+/* ============================================================================
+   Filter apply / accent buttons — dark text override
+   ============================================================================ */
+:root[data-theme="neon"] .filter-apply-button {
+  color: #08080A;
+  font-weight: 700;
+}

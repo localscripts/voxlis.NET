@@ -632,8 +632,13 @@
       }
 
       catalogState.popularityRanks = new Map();
-      console.warn("Failed to load popularity leaderboard.", error);
+      console.warn("Failed to load popularity leaderboard. Retrying…", error);
       queueCatalogRender();
+      const retryMs = window.VOXLIS_API_HEALTH?.retryIntervalMs ?? 10000;
+      window.setTimeout(() => {
+        if (requestToken !== catalogState.popularityRequestToken) return;
+        void hydratePopularityLeaderboard({ forceRefresh: true });
+      }, retryMs);
     }
   };
 
@@ -904,8 +909,15 @@
       const request = fetchJson(requestUrl)
         .then((payload) => (payload && typeof payload === "object" ? payload : {}))
         .catch((error) => {
-          console.warn("Failed to load sUNC batch payload.", error);
-          return {};
+          console.warn("Failed to load sUNC batch payload. Retrying…", error);
+          suncRequestCache.delete(requestUrl);
+          suncRequestCache.delete(stableUrl);
+          const retryMs = window.VOXLIS_API_HEALTH?.retryIntervalMs ?? 10000;
+          return new Promise((resolve) => {
+            window.setTimeout(() => {
+              resolve(loadSuncPayloadMap({ forceRefresh: true, sources }));
+            }, retryMs);
+          });
         });
 
       suncRequestCache.set(requestUrl, request);
@@ -2237,6 +2249,15 @@
 
     catalogState.statusMap = statusMap;
     queueCatalogRender();
+
+    if (!Object.keys(statusMap).length) {
+      const retryMs = window.VOXLIS_API_HEALTH?.retryIntervalMs ?? 10000;
+      console.warn("Status feed empty — retrying in", retryMs, "ms");
+      window.setTimeout(() => {
+        if (requestToken !== catalogState.statusRequestToken) return;
+        void hydrateCatalogStatus({ forceRefresh: true });
+      }, retryMs);
+    }
   };
 
   const hasBadge = (card, badge) => Array.isArray(card.info.badges) && card.info.badges.includes(badge);
@@ -2284,9 +2305,8 @@
 
     switch (getCardStatusClass(card, statusMap)) {
       case "is-updated":
-        return 0;
       case "is-issue":
-        return 1;
+        return 0;
       case "is-not-updated":
         return 2;
       case "is-status-unknown":

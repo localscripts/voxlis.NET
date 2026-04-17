@@ -10,6 +10,7 @@
 	"type": "internal",
 	"tags": ["decompiler", "multi-instance"],
 	"platforms": ["windows"],
+	"youtube": "https://youtu.be/Rtl5Hgcfu4g?si=9z67rItNMT8eHUeW&t=50",
 	"website": "https://seliware.com",
 	"keyed": false
 }
