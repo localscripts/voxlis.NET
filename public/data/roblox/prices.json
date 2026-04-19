@@ -6,7 +6,8 @@
     "yub-x",
     "madium",
     "milkers",
-    "tomato"
+    "tomato",
+    "velocity"
   ],
   "matcha": {
     "purchaseUrl": "https://key-empire.com/product/matcha",
@@ -125,6 +126,16 @@
   },
   "yerba": {
     "purchaseUrl": "https://key-empire.com/product/yerba",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.99
+      }
+    ]
+  },
+    "exoliner": {
+    "purchaseUrl": "https://key-empire.com/product/exoliner",
     "offers": [
       {
         "platform": "windows",
