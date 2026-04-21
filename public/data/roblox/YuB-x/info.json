@@ -8,7 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["multi-instance", "decompiler", "freemium", "raknet", "insecure"],
+	"tags": ["multi-instance", "decompiler", "freemium", "raknet"],
 	"platforms": ["windows"],
 	"urls": {
 		"website": "https://yub-x.net/",
