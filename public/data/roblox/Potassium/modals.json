@@ -1,6 +1,6 @@
 {
 	"warning": {
-		"enabled": true,
+		"enabled": false,
 		"description": "voxlis.NET recommends reading more about this product before continuing with any purchases, so you know what you are getting."
 	}
 }
