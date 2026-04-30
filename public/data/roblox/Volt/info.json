@@ -6,7 +6,7 @@
 		}
 	},
 	"badges": ["trending", "verified"],
-	"hidden": true,
+	"hidden": false,
 	"type": "internal",
 	"tags": ["multi-instance", "raknet"],
 	"platforms": ["windows"],
