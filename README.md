@@ -2,7 +2,7 @@
 
 Static frontend for [voxlis.net](https://voxlis.net) — a directory for Roblox and CS2 injectors.
 
-No build step. No npm. No bundler. Just HTML, CSS, and JS served over HTTP.
+No build step. No npm. No bundler. Just HTML, CSS, and JS served over HTTP
 
 ---
 
