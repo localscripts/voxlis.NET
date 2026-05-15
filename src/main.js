@@ -2,8 +2,8 @@
 (() => {
   const { onDomReady: onReady, loadHtmlPartial: loadInto } = window.VOXLIS_UTILS;
 
-  const PROMPT_DELAY_MS = 10000;
-  const API_TIMEOUT_MS = 10000;
+  const PROMPT_DELAY_MS = 3000;
+  const API_TIMEOUT_MS = 3000;
 
   const trackToastEvent = (key = "") => {
     window.VOXLIS_CLICK_TRACKER?.trackUiEvent?.({
