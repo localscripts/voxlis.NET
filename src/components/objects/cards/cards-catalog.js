@@ -365,26 +365,334 @@
     return normalizeWebsiteTargetList(scopedUrls?.[normalizedKey] ?? info?.[normalizedKey]);
   };
   const normalizeKeyEmpireDuration = (value) => {
-    if (typeof value === "string" && value.toLowerCase() === "lifetime") {
+    const stringValue = String(value || "").trim().toLowerCase();
+    if (value === -1 || stringValue === "-1" || stringValue === "lifetime") {
       return -1;
     }
 
     const duration = Number(value);
     return Number.isFinite(duration) && duration > 0 ? duration : null;
   };
+  const normalizeKeyEmpirePrice = (value) => {
+    const price = Number(value);
+    return Number.isFinite(price) ? price : null;
+  };
+  const normalizeKeyEmpireBoolean = (value) => {
+    if (typeof value === "boolean") {
+      return value;
+    }
+
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value > 0;
+    }
+
+    const normalizedValue = String(value || "").trim().toLowerCase();
+    if (!normalizedValue) {
+      return null;
+    }
+
+    if (["1", "true", "yes", "y", "on"].includes(normalizedValue)) {
+      return true;
+    }
+
+    if (["0", "false", "no", "n", "off"].includes(normalizedValue)) {
+      return false;
+    }
+
+    return null;
+  };
+  const keyEmpireStockStateFromCount = (value) => {
+    if (typeof value === "string") {
+      const countMatch = value.match(/-?\d+(?:\.\d+)?/);
+      if (countMatch) {
+        return Number(countMatch[0]) > 0;
+      }
+    }
+
+    if (Number.isFinite(Number(value))) {
+      return Number(value) > 0;
+    }
+
+    return normalizeKeyEmpireBoolean(value);
+  };
+  const keyEmpireStockStateFromText = (value) => {
+    if (value && typeof value === "object") {
+      return null;
+    }
+
+    const boolState = normalizeKeyEmpireBoolean(value);
+    if (boolState !== null) {
+      return boolState;
+    }
+
+    const normalizedValue = String(value || "").trim().toLowerCase();
+    if (!normalizedValue) {
+      return null;
+    }
+
+    if (/(?:^|[^a-z])(out\s*of\s*stock|sold\s*out|unavailable|no\s*stock)(?:[^a-z]|$)/.test(normalizedValue)) {
+      return false;
+    }
+
+    if (/(?:^|[^a-z])(in\s*stock|available|limited\s*stock|low\s*stock|\d+\s*(?:left|available))(?:[^a-z]|$)/.test(normalizedValue)) {
+      return true;
+    }
+
+    return null;
+  };
+  const getKeyEmpireResellerStockState = (reseller = {}) => {
+    for (const field of [
+      "stock",
+      "aggregateStock",
+      "aggregate_stock",
+      "quantity",
+      "qty",
+      "inventory",
+      "inventoryCount",
+      "stockCount",
+      "remainingStock",
+      "remaining_stock",
+      "remainingQuantity",
+      "availableQuantity",
+    ]) {
+      if (Object.prototype.hasOwnProperty.call(reseller, field)) {
+        const state = keyEmpireStockStateFromCount(reseller[field]);
+        if (state !== null) {
+          return state;
+        }
+      }
+    }
+
+    for (const field of ["inStock", "in_stock", "available", "isAvailable", "hasStock", "hasInventory"]) {
+      if (Object.prototype.hasOwnProperty.call(reseller, field)) {
+        return normalizeKeyEmpireBoolean(reseller[field]);
+      }
+    }
+
+    for (const field of ["outOfStock", "out_of_stock", "soldOut", "sold_out", "isOutOfStock"]) {
+      if (Object.prototype.hasOwnProperty.call(reseller, field)) {
+        const state = normalizeKeyEmpireBoolean(reseller[field]);
+        return state === null ? null : !state;
+      }
+    }
+
+    for (const field of [
+      "stockStatus",
+      "stock_status",
+      "availability",
+      "availabilityStatus",
+      "availability_status",
+      "inventoryStatus",
+      "inventory_status",
+      "status",
+      "stockText",
+      "stock_text",
+      "availabilityText",
+      "availability_text",
+    ]) {
+      if (Object.prototype.hasOwnProperty.call(reseller, field)) {
+        const state = keyEmpireStockStateFromText(reseller[field]);
+        if (state !== null) {
+          return state;
+        }
+      }
+    }
+
+    return null;
+  };
+  const hasPositiveKeyEmpireStockCount = (reseller = {}) =>
+    [
+      "stock",
+      "aggregateStock",
+      "aggregate_stock",
+      "quantity",
+      "qty",
+      "inventory",
+      "inventoryCount",
+      "stockCount",
+      "remainingStock",
+      "remaining_stock",
+      "remainingQuantity",
+      "availableQuantity",
+    ].some((field) => {
+      if (!Object.prototype.hasOwnProperty.call(reseller, field)) {
+        return false;
+      }
+
+      return Number(reseller[field]) > 0;
+    });
+  const getKeyEmpireProductPayloadEntries = (payload = {}) => {
+    const sourceProducts = payload?.products;
+    if (Array.isArray(sourceProducts)) {
+      return sourceProducts.map((productPayload, index) => {
+        const product =
+          productPayload?.product && typeof productPayload.product === "object"
+            ? productPayload.product
+            : productPayload && typeof productPayload === "object"
+              ? productPayload
+              : {};
+        const sourceSlug =
+          product?.slug ||
+          productPayload?.slug ||
+          productPayload?.sourceSlug ||
+          productPayload?.id ||
+          `product-${index + 1}`;
+
+        return [sourceSlug, productPayload];
+      });
+    }
+
+    if (sourceProducts && typeof sourceProducts === "object") {
+      return Object.entries(sourceProducts);
+    }
+
+    if (
+      payload?.product ||
+      payload?.durations ||
+      payload?.resellers ||
+      payload?.tiers
+    ) {
+      const product =
+        payload?.product && typeof payload.product === "object"
+          ? payload.product
+          : payload;
+      return [[product?.slug || payload?.slug || payload?.sourceSlug || "product", payload]];
+    }
+
+    return [];
+  };
+  const getKeyEmpireNestedProduct = (productPayload = {}) =>
+    productPayload?.product && typeof productPayload.product === "object"
+      ? productPayload.product
+      : productPayload && typeof productPayload === "object"
+        ? productPayload
+        : {};
+  const getKeyEmpireResellerDuration = (reseller = {}) => {
+    const licenseType = String(reseller?.licenseType || "").trim().toUpperCase();
+    const tierKey = String(reseller?.tierKey || "").trim().toLowerCase();
+    if (licenseType === "LIFETIME" || tierKey === "lifetime") {
+      return -1;
+    }
+
+    const durationDays = Number(reseller?.durationDays);
+    if (Number.isFinite(durationDays) && durationDays > 0) {
+      return durationDays;
+    }
+
+    const licenseDuration = String(reseller?.licenseDuration || "").trim().toLowerCase();
+    if (licenseDuration === "lifetime") {
+      return -1;
+    }
+
+    const durationMatch = licenseDuration.match(/(\d+)/);
+    return durationMatch ? Number(durationMatch[1]) : null;
+  };
+  const getKeyEmpireDurationRank = (duration) => {
+    const normalizedDuration = normalizeKeyEmpireDuration(duration);
+    if (normalizedDuration === -1) {
+      return Number.MAX_SAFE_INTEGER;
+    }
+
+    return Number.isFinite(normalizedDuration) ? normalizedDuration : Number.MAX_SAFE_INTEGER - 1;
+  };
+  const setBestKeyEmpireDuration = (bestByDuration, duration, price, currency = "") => {
+    const normalizedDuration = normalizeKeyEmpireDuration(duration);
+    const normalizedPrice = normalizeKeyEmpirePrice(price);
+    if (normalizedDuration === null || normalizedPrice === null) {
+      return;
+    }
+
+    const durationKey = String(normalizedDuration);
+    const existingOffer = bestByDuration.get(durationKey);
+    if (existingOffer && existingOffer.price <= normalizedPrice) {
+      return;
+    }
+
+    bestByDuration.set(durationKey, {
+      duration: normalizedDuration === -1 ? "lifetime" : normalizedDuration,
+      price: normalizedPrice.toFixed(2),
+      ...(currency ? { currency } : {}),
+    });
+  };
+  const collectKeyEmpireDurationPrices = (productPayload = {}) => {
+    if (Array.isArray(productPayload?.durations)) {
+      return productPayload.durations;
+    }
+
+    const bestByDuration = new Map();
+    const product = getKeyEmpireNestedProduct(productPayload);
+    const banUserDiscounts = normalizeKeyEmpireBoolean(product?.ban_user_discounts) === true;
+    const resellers = Array.isArray(productPayload?.resellers) ? productPayload.resellers : [];
+
+    resellers.forEach((reseller) => {
+      if (!reseller || typeof reseller !== "object") {
+        return;
+      }
+
+      if (getKeyEmpireResellerStockState(reseller) === false) {
+        return;
+      }
+
+      const duration = getKeyEmpireResellerDuration(reseller);
+      const basePrice = normalizeKeyEmpirePrice(reseller.price);
+      if (basePrice === null) {
+        return;
+      }
+
+      const userDiscount = banUserDiscounts
+        ? 0
+        : Math.max(0, Math.min(100, normalizeKeyEmpirePrice(reseller.userDiscount) ?? 0));
+      const currency = String(reseller.currency || reseller.currencyCode || "").trim().toUpperCase();
+      setBestKeyEmpireDuration(
+        bestByDuration,
+        duration,
+        basePrice * (1 - userDiscount / 100),
+        currency,
+      );
+    });
+
+    const tiers = Array.isArray(productPayload?.tiers) ? productPayload.tiers : [];
+    tiers.forEach((tier) => {
+      if (!tier || typeof tier !== "object") {
+        return;
+      }
+
+      const duration = normalizeKeyEmpireBoolean(tier.is_lifetime) ? "lifetime" : tier.duration;
+      const currency = String(tier.currency || tier.currencyCode || "").trim().toUpperCase();
+      setBestKeyEmpireDuration(bestByDuration, duration, tier.min_price, currency);
+    });
+
+    return [...bestByDuration.values()].sort(
+      (left, right) =>
+        getKeyEmpireDurationRank(left.duration) - getKeyEmpireDurationRank(right.duration) ||
+        normalizeKeyEmpirePrice(left.price) - normalizeKeyEmpirePrice(right.price),
+    );
+  };
   const normalizeKeyEmpireProductMap = (payload = {}) => {
-    const sourceProducts =
-      payload?.products && typeof payload.products === "object" ? payload.products : {};
+    if (payload && typeof payload === "object") {
+      window.__voxlisKeyEmpirePricingResponse = payload;
+    }
 
     return Object.fromEntries(
-      Object.entries(sourceProducts)
-        .map(([sourceSlug, product]) => [
-          normalizeKeyEmpireSlug(sourceSlug),
-          {
-            sourceSlug: normalizeSlugKey(sourceSlug),
-            durations: Array.isArray(product?.durations) ? product.durations : [],
-          },
-        ])
+      getKeyEmpireProductPayloadEntries(payload)
+        .map(([sourceSlug, productPayload]) => {
+          const product =
+            productPayload && typeof productPayload === "object" ? productPayload : {};
+          const nestedProduct = getKeyEmpireNestedProduct(product);
+          const normalizedSourceSlug = normalizeSlugKey(
+            nestedProduct?.slug || product?.slug || product?.sourceSlug || sourceSlug,
+          );
+
+          return [
+            normalizeKeyEmpireSlug(normalizedSourceSlug),
+            {
+              ...product,
+              sourceSlug: normalizedSourceSlug,
+              name: String(nestedProduct?.name || product?.name || normalizedSourceSlug).trim(),
+              durations: collectKeyEmpireDurationPrices(product),
+            },
+          ];
+        })
         .filter(([slug]) => Boolean(slug)),
     );
   };
@@ -410,6 +718,7 @@
           platform,
           days,
           price,
+          ...(durationEntry?.currency ? { currency: durationEntry.currency } : {}),
         };
       })
       .filter(Boolean);
@@ -420,6 +729,8 @@
 
     return {
       purchaseUrl: buildKeyEmpireProductUrl(product?.sourceSlug),
+      keyEmpireName: String(product?.name || "").trim(),
+      keyEmpireProduct: product,
       offers,
     };
   };
@@ -1733,6 +2044,151 @@
       modalPath: getCardMoreInfoPath(card),
     };
   };
+  const VOXLIS_REFERRAL_CODE = "voxlis";
+  const REFERRAL_QUERY_KEYS = ["ref", "referral", "affiliate", "r"];
+  const INFINITY_CHEATS_RESELLER_PATTERN = /infinity\s*cheats|infinitycheats|infinitycheats\.gg/i;
+  const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set(["potassium"]);
+  const withVoxlisReferral = (href = "") => {
+    const normalizedHref = String(href || "").trim();
+    if (!normalizedHref) {
+      return "";
+    }
+
+    try {
+      const parsedUrl = new URL(normalizedHref, window.location.origin);
+      if (!/^https?:$/i.test(parsedUrl.protocol)) {
+        return normalizedHref;
+      }
+
+      const existingReferralKey = REFERRAL_QUERY_KEYS.find((key) => parsedUrl.searchParams.has(key));
+      parsedUrl.searchParams.set(existingReferralKey || "ref", VOXLIS_REFERRAL_CODE);
+      return parsedUrl.toString();
+    } catch {
+      return normalizedHref;
+    }
+  };
+  const getChoiceUrlDetail = (href = "") => {
+    try {
+      const parsedUrl = new URL(href, window.location.origin);
+      return `${parsedUrl.hostname.replace(/^www\./i, "")}${parsedUrl.pathname.replace(/\/$/, "")}`;
+    } catch {
+      return String(href || "").trim();
+    }
+  };
+  const getPurchaseChoiceProductName = (card = {}) =>
+    String(card?.title || card?.pricing?.keyEmpireProduct?.name || "this software").trim() || "this software";
+  const getResellerSortPrice = (reseller = {}) => {
+    const price = normalizeKeyEmpirePrice(reseller?.price);
+    return price === null ? Number.POSITIVE_INFINITY : price;
+  };
+  const compareKeyEmpireResellers = (left = {}, right = {}) => {
+    const priceRank = getResellerSortPrice(left) - getResellerSortPrice(right);
+    if (priceRank !== 0) {
+      return priceRank;
+    }
+
+    return (
+      getKeyEmpireDurationRank(getKeyEmpireResellerDuration(left)) -
+      getKeyEmpireDurationRank(getKeyEmpireResellerDuration(right))
+    );
+  };
+  const isInfinityCheatsReseller = (reseller = {}) =>
+    INFINITY_CHEATS_RESELLER_PATTERN.test(
+      [
+        reseller?.name,
+        reseller?.id,
+        reseller?.url,
+        reseller?.logo,
+        reseller?.productDescription,
+      ]
+        .map((value) => String(value || ""))
+        .join(" "),
+    );
+  const getKeyEmpireResellers = (card = {}) =>
+    Array.isArray(card?.pricing?.keyEmpireProduct?.resellers)
+      ? card.pricing.keyEmpireProduct.resellers.filter((reseller) => reseller && typeof reseller === "object")
+      : [];
+  const isInfinityCheatsDisabledProduct = (card = {}) => {
+    const keyEmpireProduct = card?.pricing?.keyEmpireProduct || {};
+    return [card?.slug, card?.title, keyEmpireProduct?.slug, keyEmpireProduct?.id, keyEmpireProduct?.name]
+      .map((value) => normalizeSlugKey(value))
+      .some((key) => INFINITY_CHEATS_DISABLED_PRODUCT_KEYS.has(key));
+  };
+  const getInfinityCheatsPurchaseEntry = (card = {}) => {
+    if (isInfinityCheatsDisabledProduct(card)) {
+      return null;
+    }
+
+    const reseller = getKeyEmpireResellers(card)
+      .filter((entry) => isInfinityCheatsReseller(entry))
+      .filter((entry) => String(entry?.url || "").trim())
+      .filter((entry) => hasPositiveKeyEmpireStockCount(entry))
+      .sort(compareKeyEmpireResellers)[0];
+
+    if (!reseller) {
+      return null;
+    }
+
+    const href = withVoxlisReferral(reseller.url);
+    if (!href) {
+      return null;
+    }
+
+    return {
+      href,
+      className: "is-sponsored-reseller",
+      label: "Buy from Reseller Directly",
+      detail: `Buy ${getPurchaseChoiceProductName(card)} from sponsored reseller`,
+    };
+  };
+  const buildKeyEmpirePurchaseChoiceContentHtml = (entries = [], title = "this product") => `
+    <p class="info-modal-choice-note">${escapeHtml(`Choose where to buy ${title}.`)}</p>
+    <div class="info-modal-choice-group">
+      ${entries
+        .map(
+          (entry) => `
+            <a
+              class="info-modal-choice-btn${entry.className ? ` ${escapeHtml(entry.className)}` : ""}"
+              href="${escapeHtml(entry.href)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-info-modal-choice-url="${escapeHtml(entry.href)}"
+              data-info-modal-choice-target="_blank"
+            >
+              <span class="info-modal-choice-head">
+                <span class="info-modal-choice-label">${escapeHtml(entry.label)}</span>
+                <span class="info-modal-choice-action" aria-hidden="true">
+                  <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                  <span>Visit</span>
+                </span>
+              </span>
+              <span class="info-modal-choice-url">${escapeHtml(entry.detail || getChoiceUrlDetail(entry.href))}</span>
+            </a>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+  const getKeyEmpirePurchaseChoices = (card = {}, keyEmpireHref = "") => {
+    const keyEmpireUrl = withVoxlisReferral(
+      keyEmpireHref || card?.pricing?.purchaseUrl || card?.pricing?.purchase_url || "",
+    );
+    const infinityCheatsEntry = getInfinityCheatsPurchaseEntry(card);
+    const productName = getPurchaseChoiceProductName(card);
+
+    if (!keyEmpireUrl || !infinityCheatsEntry) {
+      return [];
+    }
+
+    return [
+      infinityCheatsEntry,
+      {
+        href: keyEmpireUrl,
+        label: "View other sellers",
+        detail: `Compare ${productName} pricing in Key-Empire`,
+      },
+    ];
+  };
 
   const buildRatingMarkup = (card) => {
     const info = card?.info ?? {};
@@ -1839,9 +2295,10 @@
       WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
         ? ` data-card-website-warning-variant="${escapeHtml(warningConfig.variant || "")}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
         : "";
+    const keyEmpirePurchaseUrl = withVoxlisReferral(purchaseUrl);
     const sponsorMarkup = /key-empire\.com/i.test(purchaseUrl ?? "")
       ? `
-        <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire" data-click-track-action="buy-keyempire" data-click-track-slug="${escapeHtml(slug)}"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
+        <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(keyEmpirePurchaseUrl || purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire" data-click-track-action="buy-keyempire" data-click-track-slug="${escapeHtml(slug)}"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
           <span class="ph-sponsor-inline">
             <span class="ph-sponsor-copy">Buy on</span>
             <span class="ph-sponsor-stack" aria-hidden="true">
@@ -1952,6 +2409,43 @@
     }
 
     window.open(trigger.href, trigger.getAttribute("target") || "_blank", "noopener");
+  };
+  const handleKeyEmpirePurchaseClick = (event) => {
+    const trigger = event.target.closest("a.ph-sponsor-btn.is-keyempire[data-click-track-action='buy-keyempire']");
+    if (!trigger) {
+      return;
+    }
+
+    const article = trigger.closest("article[data-slug]");
+    const slug = trigger.dataset.clickTrackSlug || article?.dataset.slug || "";
+    const card = catalogState.cards.find((entry) => entry.slug === slug);
+    const choices = getKeyEmpirePurchaseChoices(card, trigger.href);
+    if (choices.length < 2) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const warningConfig = WARNING_MODAL_ENABLED ? getModalWarningConfig(card?.modals) : null;
+    const opened =
+      window.openMoreInfoModal?.({
+        title: card?.title ? `Buy ${card.title}` : "Choose Store",
+        contentHtml: buildKeyEmpirePurchaseChoiceContentHtml(choices, card?.title || "this product"),
+        preserveTitle: true,
+        hideWebsiteButton: true,
+        choiceWarningConfig: warningConfig,
+        choiceTarget: "_blank",
+        closeLabel: "Close",
+        modalVariant: "mirror-picker",
+        pushHistory: false,
+      }) ?? false;
+
+    if (opened) {
+      return;
+    }
+
+    window.open(choices[0].href, "_blank", "noopener");
   };
 
   const handleSuncActionClick = (event) => {
@@ -2127,6 +2621,11 @@
     }
 
     handleMoreInfoActionClick(event);
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    handleKeyEmpirePurchaseClick(event);
     if (event.defaultPrevented) {
       return;
     }
