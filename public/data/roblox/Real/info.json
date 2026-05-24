@@ -1,0 +1,18 @@
+{
+	"sunc": {
+		"windows": {
+			"key": "WhqryWUHeeYImTRuPljjUTTwlovMRdx2",
+			"scrapId": "WkPS1FKis0Hkmuzh"
+		}
+	},
+	"badges": [],
+	"hidden": false,
+	"type": "internal",
+	"tags": ["multi-instance", "decompiler", "insecure"],
+	"platforms": ["windows"],
+	"urls": {
+		"website": "https://projectreal.net",
+		"discord": "https://discord.gg/zkVwkEkXSg"
+	},
+	"keyed": true
+}
