@@ -2047,7 +2047,7 @@
   const VOXLIS_REFERRAL_CODE = "voxlis";
   const REFERRAL_QUERY_KEYS = ["ref", "referral", "affiliate", "r"];
   const INFINITY_CHEATS_RESELLER_PATTERN = /infinity\s*cheats|infinitycheats|infinitycheats\.gg/i;
-  const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set(["potassium", "volt"]);
+  const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set(["volt"]);
   const withVoxlisReferral = (href = "") => {
     const normalizedHref = String(href || "").trim();
     if (!normalizedHref) {
