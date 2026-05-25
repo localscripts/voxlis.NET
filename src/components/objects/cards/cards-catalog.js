@@ -2047,7 +2047,7 @@
   const VOXLIS_REFERRAL_CODE = "voxlis";
   const REFERRAL_QUERY_KEYS = ["ref", "referral", "affiliate", "r"];
   const INFINITY_CHEATS_RESELLER_PATTERN = /infinity\s*cheats|infinitycheats|infinitycheats\.gg/i;
-  const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set(["potassium"]);
+  const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set(["potassium", "volt"]);
   const withVoxlisReferral = (href = "") => {
     const normalizedHref = String(href || "").trim();
     if (!normalizedHref) {
@@ -2119,10 +2119,28 @@
       return null;
     }
 
-    const reseller = getKeyEmpireResellers(card)
-      .filter((entry) => isInfinityCheatsReseller(entry))
-      .filter((entry) => String(entry?.url || "").trim())
+    const infinityCheatsResellers = getKeyEmpireResellers(card).filter((entry) =>
+      isInfinityCheatsReseller(entry),
+    );
+
+    if (!infinityCheatsResellers.length) {
+      return null;
+    }
+
+    const cheapestReseller = [...infinityCheatsResellers]
+      .filter((entry) => Number.isFinite(normalizeKeyEmpirePrice(entry?.price)))
+      .sort(
+        (left, right) =>
+          normalizeKeyEmpirePrice(left.price) - normalizeKeyEmpirePrice(right.price),
+      )[0];
+
+    if (!cheapestReseller || !hasPositiveKeyEmpireStockCount(cheapestReseller)) {
+      return null;
+    }
+
+    const reseller = infinityCheatsResellers
       .filter((entry) => hasPositiveKeyEmpireStockCount(entry))
+      .filter((entry) => String(entry?.url || "").trim())
       .sort(compareKeyEmpireResellers)[0];
 
     if (!reseller) {
