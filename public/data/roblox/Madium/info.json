@@ -8,7 +8,7 @@
 	"badges": [],
 	"hidden": false,
 	"type": "internal",
-	"tags": ["multi-instance", "decompiler", "insecure"],
+	"tags": ["multi-instance", "decompiler"],
 	"platforms": ["windows"],
 	"youtube": "https://youtu.be/0Wc6K9pgpDo?si=46zZlmZPNG-tZHov&t=55",
 	"urls": {
