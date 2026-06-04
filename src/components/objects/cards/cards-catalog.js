@@ -2188,9 +2188,9 @@
     </div>
   `;
   const getKeyEmpirePurchaseChoices = (card = {}, keyEmpireHref = "") => {
-    const keyEmpireUrl = withVoxlisReferral(
+    const keyEmpireUrl = String(
       keyEmpireHref || card?.pricing?.purchaseUrl || card?.pricing?.purchase_url || "",
-    );
+    ).trim();
     const infinityCheatsEntry = getInfinityCheatsPurchaseEntry(card);
     const productName = getPurchaseChoiceProductName(card);
 
@@ -2313,7 +2313,7 @@
       WARNING_MODAL_ENABLED && warningConfig && websiteHref !== "#"
         ? ` data-card-website-warning-variant="${escapeHtml(warningConfig.variant || "")}" data-card-website-warning-title="${escapeHtml(warningConfig.title || "")}" data-card-website-warning-description="${escapeHtml(warningConfig.description || "")}"`
         : "";
-    const keyEmpirePurchaseUrl = withVoxlisReferral(purchaseUrl);
+    const keyEmpirePurchaseUrl = String(purchaseUrl || "").trim();
     const sponsorMarkup = /key-empire\.com/i.test(purchaseUrl ?? "")
       ? `
         <a class="ph-sponsor-btn is-keyempire" href="${escapeHtml(keyEmpirePurchaseUrl || purchaseUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Buy on Key-Empire" data-click-track-action="buy-keyempire" data-click-track-slug="${escapeHtml(slug)}"${WARNING_MODAL_ENABLED && warningConfig ? ` data-card-warning-slug="${escapeHtml(slug)}"` : ""}>
