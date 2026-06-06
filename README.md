@@ -106,6 +106,42 @@ Loaded from CDN at runtime — an internet connection is needed for a fully accu
 
 ---
 
+## PHP proxies
+
+`public_html/key-empire.php` refreshes live Key-Empire pricing through the local Voxlis API and caches the compacted result for one hour.
+
+Configure the API key with:
+
+```bash
+AFFILIATE_API_KEY=your_api_key_here
+AFFILIATE_API_BASE_URL=http://localhost:3000/api/voxlis
+```
+
+The script also accepts `KEY_EMPIRE_API_KEY`, `KEYEMPIRE_API_KEY`, or `VOXLIS_KEY_EMPIRE_API_KEY`. If your host does not support PHP environment variables, create `public_html/config/key-empire.php` using `public_html/config/key-empire.example.php` as the shape:
+
+```php
+<?php
+declare(strict_types=1);
+
+return [
+    'api_key' => 'your_api_key_here',
+    // Optional. Defaults to http://localhost:3000/api/voxlis.
+    'api_base_url' => '',
+];
+```
+
+Keep `public_html/config/key-empire.php` private. It is ignored by git.
+
+Useful query filters:
+
+```text
+/key-empire.php?exploit
+/key-empire.php?category=exploit
+/key-empire.php?slug=volt
+```
+
+---
+
 ## License
 
 Source-available, not open-source. See [LICENSE](./LICENSE) for usage terms.

@@ -55,6 +55,7 @@
       activeCatalog.statusApiUrl,
       activeCatalog.suncApiUrl,
       activeCatalog.pricingFallbackUrl,
+      ...(Array.isArray(activeCatalog.pricingFallbackUrls) ? activeCatalog.pricingFallbackUrls : []),
       activeCatalog.clickTracking?.endpointUrl,
     ].filter((url) => String(url || "").trim());
   };

@@ -6,6 +6,7 @@
     statusApiUrl: STATUS_API_URL = "https://connect.voxlis.net/endpoints",
     suncApiUrl: SUNC_API_URL = "https://connect.voxlis.net/sunc",
     pricingFallbackUrl: PRICING_FALLBACK_URL = "",
+    pricingFallbackUrls: PRICING_FALLBACK_URLS = [],
     warningModalEnabled: WARNING_MODAL_ENABLED = false,
     cardNameOverrides: CARD_NAME_OVERRIDES = {},
     cardFolderOverrides: CARD_FOLDER_OVERRIDES = {},
@@ -38,6 +39,13 @@
   } = ACTIVE_CATALOG;
   const STATUS_ENABLED = Boolean(String(STATUS_API_URL || "").trim());
   const SUNC_ENABLED = Boolean(String(SUNC_API_URL || "").trim());
+  const PRICING_FALLBACK_URL_LIST = [
+    PRICING_FALLBACK_URL,
+    ...(Array.isArray(PRICING_FALLBACK_URLS) ? PRICING_FALLBACK_URLS : []),
+  ]
+    .map((url) => String(url || "").trim())
+    .filter(Boolean)
+    .filter((url, index, urls) => urls.indexOf(url) === index);
   const FORCE_ISSUES =
     ACTIVE_CATALOG.forceissues && typeof ACTIVE_CATALOG.forceissues === "object"
       ? ACTIVE_CATALOG.forceissues
@@ -522,7 +530,22 @@
       return Number(reseller[field]) > 0;
     });
   const getKeyEmpireProductPayloadEntries = (payload = {}) => {
-    const sourceProducts = payload?.products;
+    const payloadData = payload?.data;
+    const payloadDataIsSingleProduct =
+      payloadData &&
+      typeof payloadData === "object" &&
+      !Array.isArray(payloadData) &&
+      (payloadData.product ||
+        payloadData.durations ||
+        payloadData.resellers ||
+        payloadData.cheapest ||
+        payloadData.tiers);
+    const sourceProducts =
+      payload?.products ??
+      (Array.isArray(payloadData) || (payloadData && typeof payloadData === "object" && !payloadDataIsSingleProduct)
+        ? payloadData
+        : null);
+
     if (Array.isArray(sourceProducts)) {
       return sourceProducts.map((productPayload, index) => {
         const product =
@@ -546,17 +569,24 @@
       return Object.entries(sourceProducts);
     }
 
+    const singleProductPayload = payloadDataIsSingleProduct ? payloadData : payload;
     if (
-      payload?.product ||
-      payload?.durations ||
-      payload?.resellers ||
-      payload?.tiers
+      singleProductPayload?.product ||
+      singleProductPayload?.durations ||
+      singleProductPayload?.resellers ||
+      singleProductPayload?.cheapest ||
+      singleProductPayload?.tiers
     ) {
       const product =
-        payload?.product && typeof payload.product === "object"
-          ? payload.product
-          : payload;
-      return [[product?.slug || payload?.slug || payload?.sourceSlug || "product", payload]];
+        singleProductPayload?.product && typeof singleProductPayload.product === "object"
+          ? singleProductPayload.product
+          : singleProductPayload;
+      return [
+        [
+          product?.slug || singleProductPayload?.slug || singleProductPayload?.sourceSlug || "product",
+          singleProductPayload,
+        ],
+      ];
     }
 
     return [];
@@ -570,13 +600,25 @@
   const getKeyEmpireResellerDuration = (reseller = {}) => {
     const licenseType = String(reseller?.licenseType || "").trim().toUpperCase();
     const tierKey = String(reseller?.tierKey || "").trim().toLowerCase();
-    if (licenseType === "LIFETIME" || tierKey === "lifetime") {
+    if (
+      licenseType === "LIFETIME" ||
+      tierKey === "lifetime" ||
+      normalizeKeyEmpireBoolean(reseller?.isLifetime) === true ||
+      normalizeKeyEmpireBoolean(reseller?.is_lifetime) === true
+    ) {
       return -1;
     }
 
     const durationDays = Number(reseller?.durationDays);
     if (Number.isFinite(durationDays) && durationDays > 0) {
       return durationDays;
+    }
+
+    const directDuration = normalizeKeyEmpireDuration(
+      reseller?.duration ?? reseller?.days ?? reseller?.duration_days,
+    );
+    if (directDuration !== null) {
+      return directDuration;
     }
 
     const licenseDuration = String(reseller?.licenseDuration || "").trim().toLowerCase();
@@ -622,7 +664,17 @@
     const bestByDuration = new Map();
     const product = getKeyEmpireNestedProduct(productPayload);
     const banUserDiscounts = normalizeKeyEmpireBoolean(product?.ban_user_discounts) === true;
-    const resellers = Array.isArray(productPayload?.resellers) ? productPayload.resellers : [];
+    const cheapestReseller =
+      productPayload?.cheapest && typeof productPayload.cheapest === "object"
+        ? {
+            ...productPayload.cheapest,
+            name: productPayload.cheapest.name || productPayload.cheapest.resellerName,
+          }
+        : null;
+    const resellers = [
+      ...(Array.isArray(productPayload?.resellers) ? productPayload.resellers : []),
+      ...(cheapestReseller ? [cheapestReseller] : []),
+    ];
 
     resellers.forEach((reseller) => {
       if (!reseller || typeof reseller !== "object") {
@@ -634,7 +686,9 @@
       }
 
       const duration = getKeyEmpireResellerDuration(reseller);
-      const basePrice = normalizeKeyEmpirePrice(reseller.price);
+      const basePrice = normalizeKeyEmpirePrice(
+        reseller.effectivePrice ?? reseller.effective_price ?? reseller.price,
+      );
       if (basePrice === null) {
         return;
       }
@@ -727,8 +781,9 @@
       return null;
     }
 
+    const remotePurchaseUrl = String(product?.purchaseUrl || product?.affiliateUrl || "").trim();
     return {
-      purchaseUrl: buildKeyEmpireProductUrl(product?.sourceSlug),
+      purchaseUrl: remotePurchaseUrl || buildKeyEmpireProductUrl(product?.sourceSlug),
       keyEmpireName: String(product?.name || "").trim(),
       keyEmpireProduct: product,
       offers,
@@ -767,7 +822,7 @@
       mergedPrices[slug] = {
         ...localEntry,
         ...remoteEntry,
-        purchaseUrl: localPurchaseUrl || remoteEntry.purchaseUrl,
+        purchaseUrl: remoteEntry.purchaseUrl || localPurchaseUrl,
       };
     });
 
@@ -779,9 +834,26 @@
         .map(([slug, product]) => [slug, buildKeyEmpirePricingEntry(product)])
         .filter(([, entry]) => Boolean(entry)),
     );
+  const loadRemotePricingCatalog = async () => {
+    let lastError = null;
+
+    for (const url of PRICING_FALLBACK_URL_LIST) {
+      try {
+        return normalizeKeyEmpireProductMap(await fetchJson(url));
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    if (lastError) {
+      throw lastError;
+    }
+
+    return {};
+  };
   const loadPricingCatalog = async () => {
-    const remotePricingRequest = PRICING_FALLBACK_URL
-      ? fetchJson(PRICING_FALLBACK_URL).then((payload) => normalizeKeyEmpireProductMap(payload))
+    const remotePricingRequest = PRICING_FALLBACK_URL_LIST.length
+      ? loadRemotePricingCatalog()
       : Promise.resolve({});
     const [localPricingResult, remotePricingResult] = await Promise.allSettled([
       fetchJson(`${DATA_ROOT}/prices.json`),
@@ -801,7 +873,7 @@
         ? remotePricingResult.value
         : {};
 
-    if (remotePricingResult.status === "rejected" && PRICING_FALLBACK_URL) {
+    if (remotePricingResult.status === "rejected" && PRICING_FALLBACK_URL_LIST.length) {
       console.warn("Failed to load Key-Empire pricing feed.", remotePricingResult.reason);
     }
 
@@ -2048,6 +2120,16 @@
   const REFERRAL_QUERY_KEYS = ["ref", "referral", "affiliate", "r"];
   const INFINITY_CHEATS_RESELLER_PATTERN = /infinity\s*cheats|infinitycheats|infinitycheats\.gg/i;
   const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set([null]);
+<<<<<<< Updated upstream
+=======
+  const INFINITY_CHEATS_ALWAYS_SHOW_PRODUCT_KEYS = new Set(["potassium", "volt", "matcha"]);
+  // Temporary direct links until Key-Empire exposes these InfinityCheats reseller rows.
+  const TEMP_INFINITY_CHEATS_PURCHASE_URLS = Object.freeze({
+    potassium: "https://infinitycheats.gg/product?id=3a1c9ed8-da95-4064-8333-17a4bdd8f037&ref=voxlis",
+    volt: "https://infinitycheats.gg/product?id=8904e9fe-5147-4a0d-9848-6726d6cf3602&ref=voxlis",
+    matcha: "https://infinitycheats.gg/product?id=0693595d-53a9-41bd-89ff-ba1cf253eeaf&ref=voxlis",
+  });
+>>>>>>> Stashed changes
   const withVoxlisReferral = (href = "") => {
     const normalizedHref = String(href || "").trim();
     if (!normalizedHref) {
@@ -2096,26 +2178,74 @@
     INFINITY_CHEATS_RESELLER_PATTERN.test(
       [
         reseller?.name,
+        reseller?.resellerName,
         reseller?.id,
         reseller?.url,
+        reseller?.affiliateUrl,
         reseller?.logo,
         reseller?.productDescription,
       ]
         .map((value) => String(value || ""))
         .join(" "),
     );
-  const getKeyEmpireResellers = (card = {}) =>
-    Array.isArray(card?.pricing?.keyEmpireProduct?.resellers)
-      ? card.pricing.keyEmpireProduct.resellers.filter((reseller) => reseller && typeof reseller === "object")
-      : [];
-  const isInfinityCheatsDisabledProduct = (card = {}) => {
+  const getKeyEmpireResellers = (card = {}) => {
     const keyEmpireProduct = card?.pricing?.keyEmpireProduct || {};
-    return [card?.slug, card?.title, keyEmpireProduct?.slug, keyEmpireProduct?.id, keyEmpireProduct?.name]
+    const cheapestReseller =
+      keyEmpireProduct?.cheapest && typeof keyEmpireProduct.cheapest === "object"
+        ? {
+            ...keyEmpireProduct.cheapest,
+            name: keyEmpireProduct.cheapest.name || keyEmpireProduct.cheapest.resellerName,
+          }
+        : null;
+
+    return [
+      ...(Array.isArray(keyEmpireProduct?.resellers) ? keyEmpireProduct.resellers : []),
+      ...(cheapestReseller ? [cheapestReseller] : []),
+    ].filter((reseller) => reseller && typeof reseller === "object");
+  };
+  const getCardProductKeys = (card = {}) => {
+    const keyEmpireProduct = card?.pricing?.keyEmpireProduct || {};
+    return [
+      card?.slug,
+      card?.title,
+      keyEmpireProduct?.slug,
+      keyEmpireProduct?.sourceSlug,
+      keyEmpireProduct?.id,
+      keyEmpireProduct?.name,
+    ]
       .map((value) => normalizeSlugKey(value))
-      .some((key) => INFINITY_CHEATS_DISABLED_PRODUCT_KEYS.has(key));
+      .filter(Boolean);
+  };
+  const isInfinityCheatsDisabledProduct = (card = {}) => {
+    return getCardProductKeys(card).some((key) => INFINITY_CHEATS_DISABLED_PRODUCT_KEYS.has(key));
+  };
+  const shouldAlwaysShowInfinityCheats = (card = {}) =>
+    getCardProductKeys(card).some((key) => INFINITY_CHEATS_ALWAYS_SHOW_PRODUCT_KEYS.has(key));
+  const getTemporaryInfinityCheatsPurchaseUrl = (card = {}) => {
+    const productKey = getCardProductKeys(card).find((key) =>
+      Object.prototype.hasOwnProperty.call(TEMP_INFINITY_CHEATS_PURCHASE_URLS, key),
+    );
+
+    return productKey ? TEMP_INFINITY_CHEATS_PURCHASE_URLS[productKey] : "";
+  };
+  const buildInfinityCheatsPurchaseEntry = (card = {}, href = "") => {
+    const normalizedHref = withVoxlisReferral(href);
+    if (!normalizedHref) {
+      return null;
+    }
+
+    return {
+      href: normalizedHref,
+      className: "is-sponsored-reseller",
+      label: "Buy from InfinityCheats",
+      detail: `Buy ${getPurchaseChoiceProductName(card)} from InfinityCheats`,
+    };
   };
   const getInfinityCheatsPurchaseEntry = (card = {}) => {
-    if (isInfinityCheatsDisabledProduct(card)) {
+    const alwaysShow = shouldAlwaysShowInfinityCheats(card);
+    const temporaryHref = getTemporaryInfinityCheatsPurchaseUrl(card);
+
+    if (!alwaysShow && isInfinityCheatsDisabledProduct(card)) {
       return null;
     }
 
@@ -2124,7 +2254,7 @@
     );
 
     if (!infinityCheatsResellers.length) {
-      return null;
+      return alwaysShow ? buildInfinityCheatsPurchaseEntry(card, temporaryHref) : null;
     }
 
     const cheapestReseller = [...infinityCheatsResellers]
@@ -2134,30 +2264,20 @@
           normalizeKeyEmpirePrice(left.price) - normalizeKeyEmpirePrice(right.price),
       )[0];
 
-    if (!cheapestReseller || !hasPositiveKeyEmpireStockCount(cheapestReseller)) {
+    if (!alwaysShow && (!cheapestReseller || !hasPositiveKeyEmpireStockCount(cheapestReseller))) {
       return null;
     }
 
     const reseller = infinityCheatsResellers
-      .filter((entry) => hasPositiveKeyEmpireStockCount(entry))
-      .filter((entry) => String(entry?.url || "").trim())
+      .filter((entry) => alwaysShow || hasPositiveKeyEmpireStockCount(entry))
+      .filter((entry) => String(entry?.url || entry?.affiliateUrl || "").trim())
       .sort(compareKeyEmpireResellers)[0];
 
     if (!reseller) {
-      return null;
+      return alwaysShow ? buildInfinityCheatsPurchaseEntry(card, temporaryHref) : null;
     }
 
-    const href = withVoxlisReferral(reseller.url);
-    if (!href) {
-      return null;
-    }
-
-    return {
-      href,
-      className: "is-sponsored-reseller",
-      label: "Buy from Reseller Directly",
-      detail: `Buy ${getPurchaseChoiceProductName(card)} from sponsored reseller`,
-    };
+    return buildInfinityCheatsPurchaseEntry(card, reseller.affiliateUrl || reseller.url || temporaryHref);
   };
   const buildKeyEmpirePurchaseChoiceContentHtml = (entries = [], title = "this product") => `
     <p class="info-modal-choice-note">${escapeHtml(`Choose where to buy ${title}.`)}</p>
@@ -3711,8 +3831,3 @@
   window.getRobloxCardsCatalogStats = getCatalogStats;
   window.initRobloxCardsCatalog = initActiveCatalog;
 })();
-
-
-
-
-

@@ -17,7 +17,8 @@
     dataRoot: "/public/data/roblox",
     statusApiUrl: "https://connect.voxlis.net/endpoints",
     suncApiUrl: "https://connect.voxlis.net/sunc",
-    pricingFallbackUrl: "https://connect.voxlis.net/key-empire",
+    pricingFallbackUrl: "https://connec.voxlis.net/key-empire.com",
+    pricingFallbackUrls: ["https://connect.voxlis.net/key-empire"],
     warningModalEnabled: false,
     cardNameOverrides: {
       arceusx: "Arceus X",
