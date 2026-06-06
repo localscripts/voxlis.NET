@@ -6,7 +6,6 @@
     statusApiUrl: STATUS_API_URL = "https://connect.voxlis.net/endpoints",
     suncApiUrl: SUNC_API_URL = "https://connect.voxlis.net/sunc",
     pricingFallbackUrl: PRICING_FALLBACK_URL = "",
-    pricingFallbackUrls: PRICING_FALLBACK_URLS = [],
     warningModalEnabled: WARNING_MODAL_ENABLED = false,
     cardNameOverrides: CARD_NAME_OVERRIDES = {},
     cardFolderOverrides: CARD_FOLDER_OVERRIDES = {},
@@ -39,13 +38,6 @@
   } = ACTIVE_CATALOG;
   const STATUS_ENABLED = Boolean(String(STATUS_API_URL || "").trim());
   const SUNC_ENABLED = Boolean(String(SUNC_API_URL || "").trim());
-  const PRICING_FALLBACK_URL_LIST = [
-    PRICING_FALLBACK_URL,
-    ...(Array.isArray(PRICING_FALLBACK_URLS) ? PRICING_FALLBACK_URLS : []),
-  ]
-    .map((url) => String(url || "").trim())
-    .filter(Boolean)
-    .filter((url, index, urls) => urls.indexOf(url) === index);
   const FORCE_ISSUES =
     ACTIVE_CATALOG.forceissues && typeof ACTIVE_CATALOG.forceissues === "object"
       ? ACTIVE_CATALOG.forceissues
@@ -781,9 +773,8 @@
       return null;
     }
 
-    const remotePurchaseUrl = String(product?.purchaseUrl || product?.affiliateUrl || "").trim();
     return {
-      purchaseUrl: remotePurchaseUrl || buildKeyEmpireProductUrl(product?.sourceSlug),
+      purchaseUrl: buildKeyEmpireProductUrl(product?.sourceSlug),
       keyEmpireName: String(product?.name || "").trim(),
       keyEmpireProduct: product,
       offers,
@@ -822,7 +813,7 @@
       mergedPrices[slug] = {
         ...localEntry,
         ...remoteEntry,
-        purchaseUrl: remoteEntry.purchaseUrl || localPurchaseUrl,
+        purchaseUrl: localPurchaseUrl || remoteEntry.purchaseUrl,
       };
     });
 
@@ -834,26 +825,9 @@
         .map(([slug, product]) => [slug, buildKeyEmpirePricingEntry(product)])
         .filter(([, entry]) => Boolean(entry)),
     );
-  const loadRemotePricingCatalog = async () => {
-    let lastError = null;
-
-    for (const url of PRICING_FALLBACK_URL_LIST) {
-      try {
-        return normalizeKeyEmpireProductMap(await fetchJson(url));
-      } catch (error) {
-        lastError = error;
-      }
-    }
-
-    if (lastError) {
-      throw lastError;
-    }
-
-    return {};
-  };
   const loadPricingCatalog = async () => {
-    const remotePricingRequest = PRICING_FALLBACK_URL_LIST.length
-      ? loadRemotePricingCatalog()
+    const remotePricingRequest = PRICING_FALLBACK_URL
+      ? fetchJson(PRICING_FALLBACK_URL).then((payload) => normalizeKeyEmpireProductMap(payload))
       : Promise.resolve({});
     const [localPricingResult, remotePricingResult] = await Promise.allSettled([
       fetchJson(`${DATA_ROOT}/prices.json`),
@@ -873,7 +847,7 @@
         ? remotePricingResult.value
         : {};
 
-    if (remotePricingResult.status === "rejected" && PRICING_FALLBACK_URL_LIST.length) {
+    if (remotePricingResult.status === "rejected" && PRICING_FALLBACK_URL) {
       console.warn("Failed to load Key-Empire pricing feed.", remotePricingResult.reason);
     }
 
@@ -2120,8 +2094,6 @@
   const REFERRAL_QUERY_KEYS = ["ref", "referral", "affiliate", "r"];
   const INFINITY_CHEATS_RESELLER_PATTERN = /infinity\s*cheats|infinitycheats|infinitycheats\.gg/i;
   const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set([null]);
-<<<<<<< Updated upstream
-=======
   const INFINITY_CHEATS_ALWAYS_SHOW_PRODUCT_KEYS = new Set(["potassium", "volt", "matcha"]);
   // Temporary direct links until Key-Empire exposes these InfinityCheats reseller rows.
   const TEMP_INFINITY_CHEATS_PURCHASE_URLS = Object.freeze({
@@ -2129,7 +2101,6 @@
     volt: "https://infinitycheats.gg/product?id=8904e9fe-5147-4a0d-9848-6726d6cf3602&ref=voxlis",
     matcha: "https://infinitycheats.gg/product?id=0693595d-53a9-41bd-89ff-ba1cf253eeaf&ref=voxlis",
   });
->>>>>>> Stashed changes
   const withVoxlisReferral = (href = "") => {
     const normalizedHref = String(href || "").trim();
     if (!normalizedHref) {
@@ -3831,3 +3802,8 @@
   window.getRobloxCardsCatalogStats = getCatalogStats;
   window.initRobloxCardsCatalog = initActiveCatalog;
 })();
+
+
+
+
+
