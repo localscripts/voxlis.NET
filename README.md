@@ -1,4 +1,4 @@
-# voxlis.NET!
+# voxlis.NET
 
 Static frontend for [voxlis.net](https://voxlis.net) — a directory for Roblox and CS2 injectors.
 
