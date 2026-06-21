@@ -2094,7 +2094,7 @@
   const REFERRAL_QUERY_KEYS = ["ref", "referral", "affiliate", "r"];
   const INFINITY_CHEATS_RESELLER_PATTERN = /infinity\s*cheats|infinitycheats|infinitycheats\.gg/i;
   const INFINITY_CHEATS_DISABLED_PRODUCT_KEYS = new Set([null]);
-  const INFINITY_CHEATS_ALWAYS_SHOW_PRODUCT_KEYS = new Set(["potassium", "volt", "matcha"]);
+  const INFINITY_CHEATS_ALWAYS_SHOW_PRODUCT_KEYS = new Set([]);
   // Temporary direct links until Key-Empire exposes these InfinityCheats reseller rows.
   const TEMP_INFINITY_CHEATS_PURCHASE_URLS = Object.freeze({
     potassium: "https://infinitycheats.gg/product?id=3a1c9ed8-da95-4064-8333-17a4bdd8f037&ref=voxlis",
