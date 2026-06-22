@@ -19,6 +19,16 @@
       }
     ]
   },
+    "real": {
+    "purchaseUrl": "https://key-empire.com/product/real",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 2.99
+      }
+    ]
+  },
     "cosmic": {
     "purchaseUrl": "https://key-empire.com/product/cosmic",
     "offers": [
