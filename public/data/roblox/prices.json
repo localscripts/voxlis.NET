@@ -26,6 +26,11 @@
         "platform": "windows",
         "days": 7,
         "price": 2.99
+      },
+       {
+        "platform": "windows",
+        "days": -1,
+        "price": 0
       }
     ]
   },
