@@ -22,15 +22,15 @@
     "real": {
     "purchaseUrl": "https://key-empire.com/product/real",
     "offers": [
+             {
+        "platform": "windows",
+        "days": 1,
+        "price": 0
+      },
       {
         "platform": "windows",
         "days": 7,
         "price": 2.99
-      },
-       {
-        "platform": "windows",
-        "days": -1,
-        "price": 0
       }
     ]
   },
