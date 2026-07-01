@@ -19,6 +19,21 @@
       }
     ]
   },
+    "rbxcli": {
+    "purchaseUrl": "https://key-empire.com/product/rbxcli",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": 7,
+        "price": 3.99
+      },
+      {
+        "platform": "windows",
+        "days": 30,
+        "price": 8.99
+      }
+    ]
+  },
     "real": {
     "purchaseUrl": "https://key-empire.com/product/real",
     "offers": [
