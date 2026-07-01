@@ -19,6 +19,16 @@
       }
     ]
   },
+    "lumen": {
+    "purchaseUrl": "https://key-empire.com/product/lumen",
+    "offers": [
+      {
+        "platform": "windows",
+        "days": -1,
+        "price": 9.99
+      }
+    ]
+  },
     "rbxcli": {
     "purchaseUrl": "https://key-empire.com/product/rbxcli",
     "offers": [
