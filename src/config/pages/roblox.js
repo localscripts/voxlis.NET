@@ -21,6 +21,7 @@
     warningModalEnabled: false,
     cardNameOverrides: {
       arceusx: "Arceus X",
+      rbxcli: "rbxCLI",
       sirhurt: "SirHurt",
       vegax: "Vega X",
       "yub-x": "YuB-X",
